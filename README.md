@@ -1,4 +1,4 @@
 Cryolite
 ========
 
-A great new openGL-3D Engine
+A great new openGL-3D Engine ;)
