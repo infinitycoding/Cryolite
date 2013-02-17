@@ -61,7 +61,7 @@ void draw_cube()
 
 int main(void){
 
-    screen = init_SDL(640,480,SDL_OPENGL,"Cryolite Enigen");
+    screen = init_SDL(640,480,SDL_OPENGL,"Cryolite Engine");
 
 
     glClearColor( 0.0, 0.0, 0.0, 0.0 );     // Sets the background color.
