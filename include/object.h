@@ -12,23 +12,23 @@
 #define vertex_t unsigned int
 #define color_t unsigned char
 
-typedef struct{
+struct color32{
     color_t red;
     color_t green;
     color_t blue;
     color_t transparency;
-}color32;
+};
 
-typedef struct{
+struct vertex{
     GLfloat x;
     GLfloat y;
     GLfloat z;
-}vertex;
+};
 
-typedef struct{
+struct triangle{
     vertex_t p[3];
     color32  c[3];
-}triangle;
+};
 
 struct ObjectFileHeader{
     uint32_t numofSpots;
@@ -38,15 +38,15 @@ struct ObjectFileHeader{
 struct object{
     uint32_t numofSpots;
     uint32_t numofTriangles;
-    vertex   *vertices;
-    triangle *triangles;
+    struct vertex   *vertices;
+    struct triangle *triangles;
 };
 
 struct triangle_expl{
     struct triangle_expl *prev;
     struct triangle_expl *next;
     vertex_t    p[3];
-    color32     c[3];
+    struct color32     c[3];
 };
 
 struct vertex_expl{

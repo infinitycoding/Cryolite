@@ -34,8 +34,8 @@ struct object *loadObject(const char *file){
     struct ObjectFileHeader *temp = (struct ObjectFileHeader*) buffer;
     obj->numofSpots = temp->numofSpots;
     obj->numofTriangles = temp->numofTriangles;
-    obj->vertices = (vertex*) (temp+sizeof(struct ObjectFileHeader));
-    obj->triangles = (triangle*) (obj->vertices+(obj->numofSpots*sizeof(vertex)));
+    obj->vertices = (struct vertex*) ((uint32_t)temp+sizeof(struct ObjectFileHeader));
+    obj->triangles = (struct triangle*) ((uint32_t)obj->vertices+(obj->numofSpots*sizeof(struct vertex)));
     return obj;
 }
 
