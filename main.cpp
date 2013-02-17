@@ -12,7 +12,7 @@
 #include "include/sdl.h"
 #include "include/modelview.h"
 
-void menue();
+void menue(void);
 
 SDL_Surface* screen = NULL;
 

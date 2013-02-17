@@ -42,7 +42,6 @@
 		<Unit filename="modelview.cpp" />
 		<Unit filename="object.cpp" />
 		<Unit filename="sdl.cpp" />
-		<Unit filename="createObject.cpp" />
 		<Extensions>
 			<envvars />
 			<code_completion />

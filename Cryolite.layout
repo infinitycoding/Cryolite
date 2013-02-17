@@ -10,16 +10,16 @@
 	<File name="include/sdl.h" open="1" top="0" tabpos="3">
 		<Cursor position="180" topLine="0" />
 	</File>
-	<File name="main.cpp" open="1" top="0" tabpos="1">
-		<Cursor position="1949" topLine="50" />
+	<File name="main.cpp" open="1" top="1" tabpos="2">
+		<Cursor position="244" topLine="0" />
 	</File>
 	<File name="modelview.cpp" open="1" top="0" tabpos="4">
 		<Cursor position="450" topLine="3" />
 	</File>
-	<File name="object.cpp" open="1" top="1" tabpos="7">
-		<Cursor position="693" topLine="0" />
+	<File name="object.cpp" open="1" top="0" tabpos="7">
+		<Cursor position="1239" topLine="2" />
 	</File>
-	<File name="sdl.cpp" open="1" top="0" tabpos="2">
+	<File name="sdl.cpp" open="1" top="0" tabpos="1">
 		<Cursor position="26" topLine="0" />
 	</File>
 </CodeBlocks_layout_file>
