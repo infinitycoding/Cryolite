@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1361118694 source:/home/simon/coding/Cryolite/main.cpp
+1361654886 source:/home/simon/coding/Cryolite/main.cpp
 	<SDL.h>
 	<GL/gl.h>
 	<GL/glu.h>
@@ -8,6 +8,7 @@
 	<string.h>
 	<time.h>
 	<SDL_thread.h>
+	<SDL_image.h>
 	"include/object.h"
 	"include/sdl.h"
 	"include/modelview.h"
@@ -222,7 +223,7 @@
 1361118349 source:/home/simon/coding/Cryolite/sdl.cpp
 	"include/sdl.h"
 
-1361118486 source:/home/simon/coding/Cryolite/object.cpp
+1361119318 source:/home/simon/coding/Cryolite/object.cpp
 	"include/object.h"
 
 1361118471 source:/home/simon/coding/Cryolite/createObject.cpp
