@@ -5,7 +5,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-void process_events( void );
+void process_events( );
 void rotation_handler();
 void handle_key_down( SDL_keysym *keysym );
 void handle_key_up( SDL_keysym *keysym );
