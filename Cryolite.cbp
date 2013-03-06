@@ -35,14 +35,16 @@
 		<Linker>
 			<Add option="`sdl-config --libs`" />
 		</Linker>
+		<Unit filename="createObject.cpp" />
 		<Unit filename="include/modelview.h" />
 		<Unit filename="include/object.h" />
 		<Unit filename="include/sdl.h" />
+		<Unit filename="include/SDL_GUI.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="modelview.cpp" />
 		<Unit filename="object.cpp" />
 		<Unit filename="sdl.cpp" />
-		<Unit filename="createObject.cpp" />
+		<Unit filename="SDL_GUI.cpp" />
 		<Extensions>
 			<envvars />
 			<code_completion />
