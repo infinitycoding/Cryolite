@@ -28,6 +28,8 @@ SDL_Surface* init_SDL(int width, int height, int flags, const char* caption){
     SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 5 );
     SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
     SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 
     screen = SDL_SetVideoMode( width, height, bpp, flags);
     if(  screen == NULL ) {

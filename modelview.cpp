@@ -4,7 +4,13 @@ bool right=false;
 bool left=false;
 bool up=false;
 bool down=false;
-bool run = true;
+bool move_right=false;
+bool move_left=false;
+bool move_up=false;
+bool move_down=false;
+bool move_foreward=false;
+bool move_backward=false;
+
 
 void process_events( void ){
     SDL_Event event;
@@ -28,7 +34,7 @@ void process_events( void ){
 
 }
 
-void rotation_handler(){
+void rotation_handler(){    // Rotates the object if a key is pressed.
     if(down)
         glRotatef(0.1,1,0,0);
     if(up)
@@ -37,6 +43,21 @@ void rotation_handler(){
         glRotatef(0.1,0,1,0);
     if(left)
         glRotatef(-0.1,0,1,0);
+}
+
+void move_handler(){
+    if(move_up)
+        glTranslatef(0, -0.01, 0);
+    if(move_down)
+        glTranslatef(0, 0.01, 0);
+    if(move_right)
+        glTranslatef(-0.01,0,0);
+    if(move_left)
+        glTranslatef(0.01,0,0);
+    if(move_foreward)
+        glTranslatef(0,0,-0.01);
+    if(move_backward)
+        glTranslatef(0,0,0.01);
 }
 
 void handle_key_down( SDL_keysym *keysym ){
@@ -55,6 +76,24 @@ void handle_key_down( SDL_keysym *keysym ){
             break;
         case SDLK_LEFT:
             left=true;
+            break;
+        case SDLK_w:
+            move_up=true;
+            break;
+        case SDLK_s:
+            move_down=true;
+            break;
+        case SDLK_a:
+            move_left=true;
+            break;
+        case SDLK_d:
+            move_right=true;
+            break;
+        case SDLK_1:
+            move_foreward=true;
+            break;
+        case SDLK_2:
+            move_backward=true;
             break;
         default:
             break;
@@ -76,6 +115,24 @@ void handle_key_up( SDL_keysym *keysym ){
             break;
         case SDLK_LEFT:
             left=false;
+            break;
+        case SDLK_w:
+            move_up=false;
+            break;
+        case SDLK_s:
+            move_down=false;
+            break;
+        case SDLK_a:
+            move_left=false;
+            break;
+        case SDLK_d:
+            move_right=false;
+            break;
+        case SDLK_1:
+            move_foreward=false;
+            break;
+        case SDLK_2:
+            move_backward=false;
             break;
         default:
             break;

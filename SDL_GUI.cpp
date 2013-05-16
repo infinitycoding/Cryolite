@@ -1,4 +1,4 @@
-#include "include/sdl_gui.h"
+#include "include/SDL_GUI.h"
 
 
 
