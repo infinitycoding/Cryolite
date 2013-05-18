@@ -13,6 +13,10 @@
 #include "include/sdl.h"
 #include "include/modelview.h"
 
+
+#define GROUND_SIZE 50
+
+
 void menue(void);
 
 SDL_Surface* screen = NULL;
@@ -26,13 +30,13 @@ glBindTexture( GL_TEXTURE_2D, Ground );
     glBegin( GL_QUADS );
 
         glTexCoord2i( 1, 0 );
-          glVertex3f( -30, -3, 30);
+          glVertex3f( -GROUND_SIZE, -3, GROUND_SIZE);
         glTexCoord2i( 0, 0 );
-          glVertex3f(-30, -3, -30);
+          glVertex3f(-GROUND_SIZE, -3, -GROUND_SIZE);
         glTexCoord2i( 0, 1 );
-          glVertex3f(30, -3, -30);
+          glVertex3f(GROUND_SIZE, -3, -GROUND_SIZE);
         glTexCoord2i( 1, 1 );
-          glVertex3f( 30, -3, 30);
+          glVertex3f( GROUND_SIZE, -3, GROUND_SIZE);
 
     glEnd();
 }
@@ -103,6 +107,69 @@ glBindTexture( GL_TEXTURE_2D, Ground);
 }
 
 
+void draw_another_cube()
+{
+   glBegin( GL_QUADS );
+
+        glColor3f(256, 0, 0);
+          glVertex3f( 1, 1, 5);
+        glColor3f(256, 0, 0);
+          glVertex3f(-1, 1, 5);
+        glColor3f(256, 0, 0);
+          glVertex3f(-1, -1, 5);
+        glColor3f(256, 0, 0);
+          glVertex3f( 1, -1, 5);
+
+        glColor3f(0, 256, 256);
+          glVertex3f( 1, 1, 3);
+        glColor3f(0, 256, 256);
+          glVertex3f( 1, -1, 3);
+        glColor3f(0, 256, 256);
+          glVertex3f(-1, -1, 3);
+        glColor3f(0, 256, 256);
+          glVertex3f(-1, 1, 3);
+
+        glColor3f(0, 256, 0);
+          glVertex3f( 1, 1, 3);
+        glColor3f(0, 256, 0);
+          glVertex3f( 1, 1, 5);
+        glColor3f(0, 256, 0);
+          glVertex3f( 1, -1, 5);
+        glColor3f(0, 256, 0);
+          glVertex3f( 1, -1, 3);
+
+        glColor3f(0, 0, 256);
+          glVertex3f( 1, -1, 3);
+        glColor3f(0, 0, 256);
+          glVertex3f( 1, -1, 5);
+        glColor3f(0, 0, 256);
+          glVertex3f(-1, -1, 5);
+        glColor3f(0, 0, 256);
+          glVertex3f(-1, -1, 3);
+
+        glColor3f(256, 256, 0);
+          glVertex3f(-1, -1, 3);
+        glColor3f(256, 256, 0);
+          glVertex3f(-1, -1, 5);
+        glColor3f(256, 256, 0);
+          glVertex3f(-1, 1, 5);
+        glColor3f(256, 256, 0);
+          glVertex3f(-1, 1, 3);
+
+        glColor3f(256, 256, 256);
+          glVertex3f( 1, 1, 5);
+        glColor3f(256, 256, 256);
+          glVertex3f( 1, 1, 3);
+        glColor3f(256, 256, 256);
+          glVertex3f(-1, 1, 3);
+        glColor3f(256, 256, 256);
+          glVertex3f(-1, 1, 5);
+
+  glEnd();
+
+}
+
+
 
 int main(int argc, char *argv[]){
 
@@ -118,14 +185,14 @@ int main(int argc, char *argv[]){
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
 
-    glFrustum( -1.6, 1.6, -1.2, 1.2, 1.5, 24 );
+    glFrustum( -1.6, 1.6, -1.2, 1.2, 1.5, 30 );
 
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
     glEnable(GL_BLEND);
 
 
-    glTranslatef(0,0,-3.5);
+    glTranslatef(0,0,-8.5);
     glEnable( GL_TEXTURE_2D );
 
     glEnable(GL_MULTISAMPLE);
@@ -144,10 +211,9 @@ int main(int argc, char *argv[]){
         process_events();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        //glFrustum( x1_left, x1_right, x2_left, x2_right, x3_left, x3_right );
-
         //renderObject(entity, &position);
         draw_cube();
+        draw_another_cube();
         draw_ground();
 
         rotation_handler();
