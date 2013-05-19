@@ -74,6 +74,9 @@ bool Material::loadTexture2D(const char* file)
     glGenTextures( 1, &this->textureGL );
     glBindTexture( GL_TEXTURE_2D, this->textureGL );
     glTexImage2D( GL_TEXTURE_2D, 0, nOfColors, this->BMPtexture->w, this->BMPtexture->h, 0,texture_format, GL_UNSIGNED_BYTE, this->BMPtexture->pixels );
+
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
     printf("texur %d %s loaded\n",this->textureGL,file);
     return true;
 }

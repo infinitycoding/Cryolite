@@ -18,6 +18,7 @@
 #define GROUND_SIZE 50
 
 //todo: textur klasse, scene klasse
+bool printFPS = false;
 
 
 void menue(void);
@@ -30,6 +31,7 @@ SDL_Surface *surface;	// This surface will tell us the details of the image
 
 void draw_ground()
 {
+glEnable(GL_TEXTURE_2D);
 glBindTexture( GL_TEXTURE_2D, floor );
 
     glBegin( GL_QUADS );
@@ -50,6 +52,7 @@ glBindTexture( GL_TEXTURE_2D, floor );
 
 void draw_cube()
 {
+    glEnable(GL_TEXTURE_2D);
 glBindTexture( GL_TEXTURE_2D, cube);
 
 
@@ -118,6 +121,7 @@ glBindTexture( GL_TEXTURE_2D, cube);
 
 void draw_another_cube()
 {
+
    glBegin( GL_QUADS );
 
         glColor3f(256, 0, 0);
@@ -188,12 +192,11 @@ int main(int argc, char *argv[]){
 
 
     glMatrixMode( GL_PROJECTION );
-    glLoadIdentity();
 
     glFrustum( -1.6, 1.6, -1.2, 1.2, 1.5, 30 );
+    //gluPerspective(90, 640/480, 0, 1.5 );
 
     glMatrixMode( GL_MODELVIEW );
-    glLoadIdentity();
     glEnable(GL_BLEND);
 
 
@@ -202,34 +205,52 @@ int main(int argc, char *argv[]){
 
     glEnable(GL_MULTISAMPLE);
 
+
+
     Material ground = Material("ground.bmp");   // Loads the ground texture
-    //Material IC = Material("textur.bmp");
-    //cube = IC.textureGL;
+    Material IC = Material("textur.bmp");
+    cube = IC.textureGL;
     floor = ground.textureGL;
 
     INIT_Controls(&mainwindow);
 
     // 2D Texute settings
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 
 
 
+    int lasttick = SDL_GetTicks();
+    int currenttick = 0;
 
     while(1){ //render
+
+        if(printFPS)
+        {
+            currenttick = SDL_GetTicks();
+            printf("%.1f FPS\n",(1000/(float)(currenttick-lasttick)));
+            lasttick = currenttick;
+        }
+
+
+
         mainwindow.pollEvents();    // Eventhandler
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        draw_cube();            // Draw a few objects
+
+
         draw_another_cube();
+        glPushMatrix();
+        glTranslatef(1,2,3);
+        draw_another_cube();
+        glPopMatrix();
+        draw_cube();            // Draw a few objects
         draw_ground();
 
         rotation_handler();     // Rotates the camera if mouse moved
         move_handler();         // Moves the camera if key pressed
 
-        SDL_GL_SwapBuffers();   // Changes frontbuffer and backbuffer
+        SDL_GL_SwapBuffers();   // Changes frontbuffer and backbuffera
+
 
     }
 
 }
-
