@@ -21,8 +21,14 @@ float position_x = 0;
 float position_y = 0;
 float position_z = -8.5;
 
+void endprogramm(SDL_Event *event)
+{
+    exit(0);
+}
+
 void INIT_Controls(SDL* window)
 {
+    window->addEvent(SDL_QUIT,endprogramm);
     window->addEvent(SDL_KEYDOWN,haldeKeydown);
     window->addEvent(SDL_KEYUP,haldeKeyup);
     SDL_ShowCursor(SDL_DISABLE); //mausanzeige deaktivieren

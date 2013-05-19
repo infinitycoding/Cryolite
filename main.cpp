@@ -172,11 +172,6 @@ void draw_another_cube()
 
 }
 
-void endprogramm(SDL_Event *event)
-{
-    exit(0);
-}
-
 int main(int argc, char *argv[]){
 
     //menue();
@@ -203,10 +198,6 @@ int main(int argc, char *argv[]){
 
     glEnable(GL_MULTISAMPLE);
 
-
-
-
-    mainwindow.addEvent(SDL_QUIT,endprogramm);
     Material ground = Material("ground.bmp");
     //Material IC = Material("textur.bmp");
     //cube = IC.textureGL;
