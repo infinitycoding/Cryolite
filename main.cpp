@@ -11,21 +11,24 @@
 
 #include "include/object.h"
 #include "include/sdl.h"
-#include "include/modelview.h"
+#include "include/controls.h"
+#include "include/material.h"
 
 
 #define GROUND_SIZE 50
+
+//todo: textur klasse, scene klasse
 
 
 void menue(void);
 
 SDL_Surface* screen = NULL;
-GLuint IC, Ground;			// This is a handle to our texture object
+GLuint cube, floor;			// This is a handle to our texture object
 SDL_Surface *surface;	// This surface will tell us the details of the image
 
 void draw_ground()
 {
-glBindTexture( GL_TEXTURE_2D, Ground );
+glBindTexture( GL_TEXTURE_2D, floor );
 
     glBegin( GL_QUADS );
 
@@ -43,7 +46,7 @@ glBindTexture( GL_TEXTURE_2D, Ground );
 
 void draw_cube()
 {
-glBindTexture( GL_TEXTURE_2D, Ground);
+glBindTexture( GL_TEXTURE_2D, cube);
 
 
     glBegin( GL_QUADS );
@@ -169,13 +172,16 @@ void draw_another_cube()
 
 }
 
-
+void endprogramm(SDL_Event *event)
+{
+    exit(0);
+}
 
 int main(int argc, char *argv[]){
 
     //menue();
 
-    screen = init_SDL(640,480,SDL_OPENGL,"Cryolite Engine");
+    SDL mainwindow = SDL(640,480,SDL_OPENGL,"Cryolite Engine");
 
 
     glClearColor( 0.0, 0.0, 0.0, 0.0 ); // Sets the background color.
@@ -199,16 +205,24 @@ int main(int argc, char *argv[]){
 
 
 
-    //IC = loadTexture2D("textur.bmp");
-    Ground = loadTexture2D("ground.bmp");
+
+    mainwindow.addEvent(SDL_QUIT,endprogramm);
+    Material ground = Material("ground.bmp");
+    //Material IC = Material("textur.bmp");
+    //cube = IC.textureGL;
+    floor = ground.textureGL;
+
+    INIT_Controls(&mainwindow);
 
     // 2D Texute settings
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 
 
+
+
     while(1){ //render
-        process_events();
+        mainwindow.pollEvents();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         //renderObject(entity, &position);

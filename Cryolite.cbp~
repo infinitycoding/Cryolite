@@ -42,7 +42,7 @@
 		<Unit filename="include/object.h" />
 		<Unit filename="include/scene.h" />
 		<Unit filename="include/sdl.h" />
-		<Unit filename="include/material.h" />
+		<Unit filename="include/texture.h" />
 		<Unit filename="include/types.h" />
 		<Unit filename="list.cpp" />
 		<Unit filename="main.cpp" />

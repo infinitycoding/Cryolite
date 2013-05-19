@@ -1,15 +1,18 @@
 #include "include/sdl.h"
 
-SDL_Surface* init_SDL(int width, int height, int flags, const char* caption){
+
+SDL::SDL(int width, int height, int flags, const char* caption)
+{
     const SDL_VideoInfo *info = NULL;
-    SDL_Surface* screen = NULL;
+    this->screen = NULL;
+    this->lock = false;
     if(SDL_Init( SDL_INIT_EVERYTHING ) < 0)
     {
         fprintf( stderr, "Video initialization failed: %s\n", SDL_GetError( ) );
         exit(-1);
     }
 
-    atexit(SDL_Quit);                   // Quit SDL if the programm ends.
+    atexit(SDL_Quit); // Quit SDL if the programm ends.
 
     info = SDL_GetVideoInfo();
 
@@ -31,50 +34,80 @@ SDL_Surface* init_SDL(int width, int height, int flags, const char* caption){
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 
-    screen = SDL_SetVideoMode( width, height, bpp, flags);
-    if(  screen == NULL ) {
+    this->screen = SDL_SetVideoMode( width, height, bpp, flags);
+    if( this->screen == NULL ) {
         fprintf( stderr, "Video mode set failed: %s\n", SDL_GetError());
         exit(-1);
     }
-    return screen;
+    this->events = ListCreate();
 }
 
-GLuint loadTexture2D(const char* file){
-    GLuint texture;
-    GLint  nOfColors;
-    GLenum texture_format;
-    SDL_Surface* textureBMP = IMG_Load(file);
-    if(textureBMP == 0)
-    {
-        printf("textur %s not found",file);
-        return 0;
-    }
-    	if ( (textureBMP->w & (textureBMP->w - 1)) != 0 ) {
-		printf("warning: %s's width is not a power of 2\n",file);
-	}
-	if ( (textureBMP->h & (textureBMP->h - 1)) != 0 ) {
-		printf("warning: %s's height is not a power of 2\n",file);
-	}
-        nOfColors = textureBMP->format->BytesPerPixel;
-        if (nOfColors == 4)     // contains an alpha channel
+SDL::~SDL()
+{
+    printf("Free Window buffer\n");
+    //todo: free event list+structs
+    SDL_FreeSurface(this->screen);
+    printf("shutting down Application...\n");
+    exit(0);
+}
+
+void SDL::addEvent(uint8_t event, void (*handle)(SDL_Event *event))
+{
+    struct eventHandler *newHandler = (struct eventHandler*) malloc(sizeof(struct eventHandler));
+    newHandler->event = event;
+    newHandler->handle = handle;
+    while(this->lock){}
+    this->lock = true;
+        ListPushFront(this->events,newHandler);
+    this->lock = false;
+}
+
+int SDL::removeEvent(uint8_t event, void (*handle)(SDL_Event *event))
+{
+    while(this->lock){}
+    this->lock = true;
+        while(!ListIsLast(this->events))
         {
-                if (textureBMP->format->Rmask == 0x000000ff)
-                        texture_format = GL_RGBA;
-                else
-                        texture_format = GL_BGRA;
-        } else if (nOfColors == 3)     // no alpha channel
-        {
-                if (textureBMP->format->Rmask == 0x000000ff)
-                        texture_format = GL_RGB;
-                else
-                        texture_format = GL_BGR;
-        } else {
-                printf("warning: %s is not truecolor..  this will probably break\n",file);
+            ListNext(this->events);
         }
-	glGenTextures( 1, &texture );
-	glBindTexture( GL_TEXTURE_2D, texture );
-	glTexImage2D( GL_TEXTURE_2D, 0, nOfColors, textureBMP->w, textureBMP->h, 0,texture_format, GL_UNSIGNED_BYTE, textureBMP->pixels );
+        ListNext(this->events);
+        while(!ListIsLast(this->events))
+        {
+            struct eventHandler* currentHandler = (struct eventHandler*) ListGetCurrent(this->events);
+            if(currentHandler->event == event && currentHandler->handle == handle)
+            {
+                ListRemove(this->events);
+            }
+            else
+            {
+                ListNext(this->events);
+            }
 
-    return texture;
+        }
+    this->lock = false;
+    return 0;
 }
+
+void SDL::pollEvents()
+{
+        SDL_Event event;
+
+    while( SDL_PollEvent( &event ) ) {
+        if(events)
+        {
+            ListNext(this->events);
+            while(!ListIsLast(this->events))
+            {
+                struct eventHandler* currentEvent = (struct eventHandler*) ListGetCurrent(this->events);
+                if(currentEvent->event == event.type)
+                {
+                    currentEvent->handle(&event);
+                }
+                ListNext(this->events);
+            }
+
+        }
+    }
+}
+
 
