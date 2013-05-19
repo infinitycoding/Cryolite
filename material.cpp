@@ -8,7 +8,6 @@ Material::Material(const char* textureFile)
     this->BMPbumpMap = NULL;
     this->BMPlightMap = NULL;
     this->textureGL = 0;
-    this->cliping = ListCreate();
     this->loadTexture2D(textureFile);
 }
 
@@ -19,7 +18,6 @@ Material::Material()
     this->BMPbumpMap = NULL;
     this->BMPlightMap = NULL;
     this->textureGL = 0;
-    this->cliping = ListCreate();
 }
 
 Material::~Material(){

@@ -27,5 +27,4 @@ class Material
         SDL_Surface* BMPlightMap;
         GLuint textureGL;
 
-        struct List* cliping;
 };
