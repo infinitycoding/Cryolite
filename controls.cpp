@@ -1,6 +1,8 @@
 #include "include/controls.h"
 #include "include/sdl.h"
 
+#define ANGLE 1
+
 bool right=false;
 bool left=false;
 bool up = false;
@@ -17,7 +19,7 @@ float head_z_position = 0;
 
 float position_x = 0;
 float position_y = 0;
-float position_z = -3.5;
+float position_z = -8.5;
 
 void INIT_Controls(SDL* window)
 {
@@ -117,17 +119,17 @@ void rotate_correctly(GLfloat angle, GLfloat rotate_x, GLfloat rotate_y, GLfloat
 void rotation_handler(){    // Rotates the object if a key is pressed.
     if(right)
     {
-        rotate_correctly(1,0,1,0);
+        rotate_correctly(ANGLE,0,1,0);
 
         if(move_direction_foreward <= 0)
-            move_direction_left += (float)1/90000;
+            move_direction_left += (float)1/(9000*(1/ANGLE));
         else
-            move_direction_left -=  (float)1/90000;
+            move_direction_left -=  (float)1/(9000*(1/ANGLE));
 
         if(move_direction_left <= 0)
-            move_direction_foreward -= (float)1/90000;
+            move_direction_foreward -= (float)1/(9000*(1/ANGLE));
         else
-            move_direction_foreward += (float)1/90000;
+            move_direction_foreward += (float)1/(9000*(1/ANGLE));
 
         right = false;
 
@@ -135,42 +137,21 @@ void rotation_handler(){    // Rotates the object if a key is pressed.
 
     if(left)
     {
-        rotate_correctly(-1,0,1,0);
+        rotate_correctly(-ANGLE,0,1,0);
 
         if(move_direction_foreward >= 0)
-            move_direction_left += (float)1/90000;
+            move_direction_left += (float)1/(9000*(1/ANGLE));
         else
-            move_direction_left -=  (float)1/90000;
+            move_direction_left -=  (float)1/(9000*(1/ANGLE));
 
         if(move_direction_left >= 0)
-            move_direction_foreward -= (float)1/90000;
+            move_direction_foreward -= (float)1/(9000*(1/ANGLE));
         else
-            move_direction_foreward += (float)1/90000;
+            move_direction_foreward += (float)1/(9000*(1/ANGLE));
 
         left = false;
     }
 
-    if(up)
-    {
-        if(head_z_position < 90)
-        {
-            rotate_correctly(-1,1,0,0);
-            head_z_position += 1;
-        }
-
-        up = false;
-    }
-
-    if(down)
-    {
-        if(head_z_position > -90)
-        {
-            rotate_correctly(-1,-1,0,0);
-            head_z_position -= 1;
-        }
-
-        down = false;
-    }
 }
 
 void move_handler(){        // Moves the object if a key is pressed
