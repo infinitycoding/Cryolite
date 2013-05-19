@@ -26,6 +26,8 @@ SDL_Surface* screen = NULL;
 GLuint cube, floor;			// This is a handle to our texture object
 SDL_Surface *surface;	// This surface will tell us the details of the image
 
+// draw the ground of the scene
+
 void draw_ground()
 {
 glBindTexture( GL_TEXTURE_2D, floor );
@@ -43,6 +45,8 @@ glBindTexture( GL_TEXTURE_2D, floor );
 
     glEnd();
 }
+
+// draw a cube with a texture
 
 void draw_cube()
 {
@@ -110,6 +114,8 @@ glBindTexture( GL_TEXTURE_2D, cube);
 }
 
 
+// draw a cube with colors instead of textures
+
 void draw_another_cube()
 {
    glBegin( GL_QUADS );
@@ -172,16 +178,9 @@ void draw_another_cube()
 
 }
 
-void endprogramm(SDL_Event *event)
-{
-    exit(0);
-}
-
 int main(int argc, char *argv[]){
 
-    //menue();
-
-    SDL mainwindow = SDL(640,480,SDL_OPENGL,"Cryolite Engine");
+    SDL mainwindow = SDL(640,480,SDL_OPENGL,"Cryolite Engine");     // Create the graphics window
 
 
     glClearColor( 0.0, 0.0, 0.0, 0.0 ); // Sets the background color.
@@ -198,16 +197,12 @@ int main(int argc, char *argv[]){
     glEnable(GL_BLEND);
 
 
-    glTranslatef(0,0,-8.5);
+    glTranslatef(0,0,-8.5);     // Move the camera to the starting position
     glEnable( GL_TEXTURE_2D );
 
     glEnable(GL_MULTISAMPLE);
 
-
-
-
-    mainwindow.addEvent(SDL_QUIT,endprogramm);
-    Material ground = Material("ground.bmp");
+    Material ground = Material("ground.bmp");   // Loads the ground texture
     //Material IC = Material("textur.bmp");
     //cube = IC.textureGL;
     floor = ground.textureGL;
@@ -222,18 +217,17 @@ int main(int argc, char *argv[]){
 
 
     while(1){ //render
-        mainwindow.pollEvents();
+        mainwindow.pollEvents();    // Eventhandler
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        //renderObject(entity, &position);
-        draw_cube();
+        draw_cube();            // Draw a few objects
         draw_another_cube();
         draw_ground();
 
-        rotation_handler();
-        move_handler();
+        rotation_handler();     // Rotates the camera if mouse moved
+        move_handler();         // Moves the camera if key pressed
 
-        SDL_GL_SwapBuffers();
+        SDL_GL_SwapBuffers();   // Changes frontbuffer and backbuffer
 
     }
 
