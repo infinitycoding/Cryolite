@@ -1,3 +1,6 @@
+#ifndef MATERIAL_H
+#define MATERIAL_H
+
 #include <SDL.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -28,3 +31,5 @@ class Material
         GLuint textureGL;
 
 };
+
+#endif
