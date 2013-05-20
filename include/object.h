@@ -10,29 +10,40 @@
 #include <stdlib.h>
 
 #include "types.h"
+#include "material.h"
+#include "list.h"
 
 
 
+struct triangle
+{
+    uint32_t vertex[3];
+};
 
-
-
-
-
+struct square
+{
+    uint32_t vertex[4];
+};
 
 class Object
 {
     public:
         Object();
+        Object(const char *);
         ~Object();
-        void addMaterial();
-        void addVertices();
+        void addVertices(struct vertex3D *);
+        void addTriangle(struct triangle *);
+        void addSquare(struct square *);
+        void loadMaterial(const char *);
+        void loadObjectFile(const char *);
 
         uint32_t numofSpots;
         uint32_t numofTriangles;
         uint32_t numofSquares;
         struct List *vertices;
         struct List *triangles;
-        struct List *Squares;
+        struct List *squares;
+        Material ObjectMaterial;
 };
 
 
