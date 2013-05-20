@@ -7,11 +7,6 @@
 #include "types.h"
 
 
-struct clip
-{
-    struct vertex3D ObjVert;
-    struct vertex2D TexVert;
-};
 
 class Material
 {
@@ -29,6 +24,8 @@ class Material
         SDL_Surface* BMPbumpMap;
         SDL_Surface* BMPlightMap;
         GLuint textureGL;
+        GLuint bumpmapGL;
+
 
 };
 
