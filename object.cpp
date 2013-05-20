@@ -26,15 +26,33 @@ Object::~Object()
 
 void Object::loadObjectFile(const char *objectFile)
 {
-    // TODO: write this function
+    FILE *f;
+
+    f = fopen(objectFile, "r");
+    if(f == NULL)
+    {
+        printf("Die Datei %s kann nicht geoeffnet werden.\n", objectFile);
+        return;
+    }
+
+
+    fclose(f);
 }
 
-void Object::addVertices(struct vertex3D *new_vertex)
+void Object::addObjectVertex(struct vertex3D *new_vertex)
 {
     numofSpots++;
 
     vertices = ListSetLast(vertices);
     vertices = ListInsertAfter(vertices, new_vertex);
+}
+
+void Object::addTextureVertex(struct vertex2D *new_tex_vertex)
+{
+    numofTextureSpots++;
+
+    texvertices = ListSetLast(texvertices);
+    texvertices = ListInsertAfter(texvertices, new_tex_vertex);
 }
 
 void Object::addTriangle(struct triangle *new_triangle)
