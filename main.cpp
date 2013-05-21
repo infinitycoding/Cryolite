@@ -21,13 +21,25 @@
 bool printFPS = false;
 
 
-void menue(void);
 
 SDL_Surface* screen = NULL;
 GLuint cube, floor;			// This is a handle to our texture object
 SDL_Surface *surface;	// This surface will tell us the details of the image
 
 // draw the ground of the scene
+
+void toggle_printFPS(SDL_Event *e)
+{
+    if(e->key.keysym.sym == SDLK_f)
+    {
+        if(printFPS)
+            printFPS = false;
+        else
+            printFPS = true;
+    }
+
+    return;
+}
 
 void draw_ground()
 {
@@ -213,6 +225,7 @@ int main(int argc, char *argv[]){
     floor = ground.textureGL;
 
     INIT_Controls(&mainwindow);
+    mainwindow.addEvent(SDL_KEYDOWN,toggle_printFPS);
 
     // 2D Texute settings
 
