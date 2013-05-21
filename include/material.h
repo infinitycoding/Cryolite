@@ -1,4 +1,4 @@
-#ifndef MATERIAL_H
+#https://github.com/tdotu/Cryolite/edit/master/include/material.h#ifndef MATERIAL_H
 #define MATERIAL_H
 
 #include <SDL.h>
@@ -18,7 +18,6 @@ class Material
         bool loadTexture2D(const char* file);
         bool loadBumpMap(const char* file);
         bool loadLightMap(const char* file);
-        bool loadCliping(const char* file);
 
         SDL_Surface* BMPtexture;
         SDL_Surface* BMPbumpMap;
