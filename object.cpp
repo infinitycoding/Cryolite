@@ -40,18 +40,20 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
     fclose(f);
 }
 
-void Object::addObjectVertex(struct vertex3D *new_vertex)
+struct vertex3D *Object::addObjectVertex(struct vertex3D *new_vertex)
 {
     numofSpots++;
 
     vertices = ListPushFront(vertices, new_vertex);
+    return new_vertex;
 }
 
-void Object::addTextureVertex(struct vertex2D *new_tex_vertex)
+struct vertex2D *Object::addTextureVertex(struct vertex2D *new_tex_vertex)
 {
     numofTextureSpots++;
 
     texvertices = ListPushFront(texvertices, new_tex_vertex);
+    return new_tex_vertex;
 }
 
 void Object::addTriangle(struct triangle *new_triangle)

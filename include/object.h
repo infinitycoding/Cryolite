@@ -17,14 +17,14 @@
 
 struct triangle
 {
-    uint32_t objVertex[3];
-    uint32_t texVertex[3];
+    struct vertex3D *objVertex[3];
+    struct vertex2D *texVertex[3];
 };
 
 struct square
 {
-    uint32_t objVertex[4];
-    uint32_t texVertex[4];
+    struct vertex3D *objVertex[4];
+    struct vertex2D *texVertex[4];
 };
 
 class Object
@@ -34,8 +34,8 @@ class Object
         Object(const char *, const char *);
         ~Object();
 
-        void addObjectVertex(struct vertex3D *);
-        void addTextureVertex(struct vertex2D *);
+        struct vertex3D *addObjectVertex(struct vertex3D *);
+        struct vertex2D *addTextureVertex(struct vertex2D *);
         void addTriangle(struct triangle *);
         void addSquare(struct square *);
         void loadMaterial(const char *);
@@ -50,7 +50,8 @@ class Object
 
         uint32_t scale;
         struct vertex3D position;
-        GLfloat rotation[3];
+        struct vertex3D rotationAxis;
+        GLfloat rotationAngle;
 
         struct vertex3D movement;
         float velocity;
