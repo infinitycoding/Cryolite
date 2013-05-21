@@ -37,6 +37,7 @@
 		</Linker>
 		<Unit filename="controls.cpp" />
 		<Unit filename="include/controls.h" />
+		<Unit filename="include/general_def.h" />
 		<Unit filename="include/list.h" />
 		<Unit filename="include/material.h" />
 		<Unit filename="include/models.h" />
