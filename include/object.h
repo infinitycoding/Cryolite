@@ -31,14 +31,17 @@ class Object
 {
     public:
         Object();
-        Object(const char *);
+        Object(const char *, const char *);
         ~Object();
+
         void addObjectVertex(struct vertex3D *);
         void addTextureVertex(struct vertex2D *);
         void addTriangle(struct triangle *);
         void addSquare(struct square *);
         void loadMaterial(const char *);
-        void loadObjectFile(const char *);
+        void loadObjectFile(const char *, const char *);
+
+        char objectname[20];
 
         uint32_t numofTextureSpots;
         uint32_t numofSpots;
