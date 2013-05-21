@@ -23,6 +23,7 @@
 //todo: textur klasse, scene klasse
 bool printFPS = false;
 int fpslenght = 0;
+bool render = true;
 
 
 
@@ -89,7 +90,7 @@ int main(int argc, char *argv[]){
     int lasttick = SDL_GetTicks();
     int currenttick = 0;
 
-    while(1){ //render
+    while(render){ //render
 
         if(printFPS)
         {
