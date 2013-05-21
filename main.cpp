@@ -138,7 +138,7 @@ int main(int argc, char *argv[]){
         glMatrixMode(GL_PROJECTION);
         glPushMatrix();
         glLoadIdentity();
-        glOrtho(0, WIDTH, HEIGHT, 0, -1, 1);
+        glOrtho(0, WIDTH, HEIGHT, 0, 0, 1);
 
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
