@@ -14,6 +14,7 @@
 #include "include/controls.h"
 #include "include/material.h"
 #include "include/models.h"
+#include "include/general_def.h"
 
 
 
@@ -48,7 +49,7 @@ void toggle_printFPS(SDL_Event *e)
 
 int main(int argc, char *argv[]){
 
-    SDL mainwindow = SDL(640,480,SDL_OPENGL,"Cryolite Engine");     // Create the graphics window
+    SDL mainwindow = SDL(WIDTH,HEIGHT,SDL_OPENGL,"Cryolite Engine");     // Create the graphics window
 
 
     glClearColor( 0.0, 0.0, 0.0, 0.0 ); // Sets the background color.
@@ -58,7 +59,7 @@ int main(int argc, char *argv[]){
     glMatrixMode( GL_PROJECTION );
 
     //glFrustum( -1.6, 1.6, -1.2, 1.2, 1.5, 30 );
-    gluPerspective(FOV, 640/480, 1.5, 30 );
+    gluPerspective(FOV, WIDTH/HEIGHT, 1.5, 30 );
 
     glMatrixMode( GL_MODELVIEW );
     glEnable(GL_BLEND);
@@ -128,7 +129,7 @@ int main(int argc, char *argv[]){
         glMatrixMode(GL_PROJECTION);
         glPushMatrix();
         glLoadIdentity();
-        glOrtho(0, 640, 480, 0, -1, 1);
+        glOrtho(0, WIDTH, HEIGHT, 0, -1, 1);
 
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
