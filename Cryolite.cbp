@@ -36,7 +36,6 @@
 			<Add option="`sdl-config --libs`" />
 		</Linker>
 		<Unit filename="controls.cpp" />
-		<Unit filename="createObject.cpp" />
 		<Unit filename="include/controls.h" />
 		<Unit filename="include/list.h" />
 		<Unit filename="include/material.h" />
