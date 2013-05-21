@@ -36,6 +36,7 @@ void Object::loadObjectFile(const char *objectFile)
     }
 
 
+
     fclose(f);
 }
 
@@ -43,32 +44,28 @@ void Object::addObjectVertex(struct vertex3D *new_vertex)
 {
     numofSpots++;
 
-    vertices = ListSetLast(vertices);
-    vertices = ListInsertAfter(vertices, new_vertex);
+    vertices = ListPushFront(vertices, new_vertex);
 }
 
 void Object::addTextureVertex(struct vertex2D *new_tex_vertex)
 {
     numofTextureSpots++;
 
-    texvertices = ListSetLast(texvertices);
-    texvertices = ListInsertAfter(texvertices, new_tex_vertex);
+    texvertices = ListPushFront(texvertices, new_tex_vertex);
 }
 
 void Object::addTriangle(struct triangle *new_triangle)
 {
     numofTriangles++;
 
-    triangles = ListSetLast(triangles);
-    triangles = ListInsertAfter(triangles, new_triangle);
+    triangles = ListPushFront(triangles, new_triangle);
 }
 
 void Object::addSquare(struct square *new_square)
 {
     numofSquares++;
 
-    squares = ListSetLast(squares);
-    squares = ListInsertAfter(squares, new_square);
+    squares = ListPushFront(squares, new_square);
 }
 
 void Object::loadMaterial(const char *file)

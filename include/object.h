@@ -44,6 +44,15 @@ class Object
         uint32_t numofSpots;
         uint32_t numofTriangles;
         uint32_t numofSquares;
+
+        uint32_t scale;
+        struct vertex3D position;
+        GLfloat rotation[3];
+
+        struct vertex3D movement;
+        float velocity;
+        uint32_t remaining_movement;
+
         struct List *vertices;
         struct List *texvertices;
         struct List *triangles;
