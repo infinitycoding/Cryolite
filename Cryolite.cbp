@@ -39,17 +39,19 @@
 		<Unit filename="createObject.cpp" />
 		<Unit filename="include/controls.h" />
 		<Unit filename="include/list.h" />
+		<Unit filename="include/material.h" />
+		<Unit filename="include/models.h" />
 		<Unit filename="include/object.h" />
 		<Unit filename="include/scene.h" />
 		<Unit filename="include/sdl.h" />
-		<Unit filename="include/material.h" />
 		<Unit filename="include/types.h" />
 		<Unit filename="list.cpp" />
 		<Unit filename="main.cpp" />
+		<Unit filename="material.cpp" />
+		<Unit filename="models.cpp" />
 		<Unit filename="object.cpp" />
 		<Unit filename="scene.cpp" />
 		<Unit filename="sdl.cpp" />
-		<Unit filename="material.cpp" />
 		<Extensions>
 			<envvars />
 			<code_completion />
