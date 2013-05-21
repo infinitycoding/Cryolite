@@ -8,13 +8,13 @@ Object::Object()
     squares = ListCreate();
 }
 
-Object::Object(const char *filename)
+Object::Object(const char *filename, const char *objname)
 {
     vertices = ListCreate();
     triangles = ListCreate();
     squares = ListCreate();
 
-    loadObjectFile(filename);
+    loadObjectFile(filename, objname);
 }
 
 Object::~Object()
@@ -24,7 +24,7 @@ Object::~Object()
     // TODO: integrate list destruction function when implemented
 }
 
-void Object::loadObjectFile(const char *objectFile)
+void Object::loadObjectFile(const char *objectFile, const char *objectName)
 {
     FILE *f;
 
