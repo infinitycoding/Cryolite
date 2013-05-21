@@ -1,6 +1,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include "include/models.h"
+#include "include/general_def.h"
 
 extern GLuint cube, floor;
 
@@ -162,10 +163,15 @@ void draw_another_cube()
 void drawHUD(void)
 {
     glBegin(GL_QUADS);
-    glColor3f(1.0f, 0.0f, 0.0);
-    glVertex2f(0.0, 0.0);
-    glVertex2f(10.0, 0.0);
-    glVertex2f(10.0, 10.0);
-    glVertex2f(0.0, 10.0);
-glEnd();
+        glColor3f(1.0f, 1.0f, 1.0f);
+            glVertex2f((WIDTH/2)-2.5, (HEIGHT/2)-15.0);
+            glVertex2f((WIDTH/2)+2.5, (HEIGHT/2)-15.0);
+            glVertex2f((WIDTH/2)+2.5, (HEIGHT/2)+15.0);
+            glVertex2f((WIDTH/2)-2.5, (HEIGHT/2)+15.0);
+        glColor3f(1.0f, 1.0f, 1.0f);
+            glVertex2f((WIDTH/2)-15.0, (HEIGHT/2)-2.5);
+            glVertex2f((WIDTH/2)-15.0, (HEIGHT/2)+2.5);
+            glVertex2f((WIDTH/2)+15.0, (HEIGHT/2)+2.5);
+            glVertex2f((WIDTH/2)+15.0, (HEIGHT/2)-2.5);
+    glEnd();
 }
