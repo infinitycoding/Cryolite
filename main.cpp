@@ -19,6 +19,7 @@
 
 //todo: textur klasse, scene klasse
 bool printFPS = false;
+int fpslenght = 0;
 
 
 
@@ -239,7 +240,13 @@ int main(int argc, char *argv[]){
         if(printFPS)
         {
             currenttick = SDL_GetTicks();
-            printf("%.1f FPS\n",(1000/(float)(currenttick-lasttick)));
+            for(int i =0;i<fpslenght;i++)
+            {
+                printf("\b");
+            }
+            char buffer[10] = {0,0,0,0,0,0,0,0,0,0};
+            fpslenght = sprintf (buffer,"%.1f FPS",(1000/(float)(currenttick-lasttick)));
+            printf("%s",buffer);
             lasttick = currenttick;
         }
 
