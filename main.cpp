@@ -14,6 +14,7 @@
 #include "include/controls.h"
 #include "include/material.h"
 #include "include/models.h"
+#include "include/general_def.h"
 
 
 
@@ -22,6 +23,7 @@
 //todo: textur klasse, scene klasse
 bool printFPS = false;
 int fpslenght = 0;
+bool render = true;
 
 
 
@@ -48,7 +50,7 @@ void toggle_printFPS(SDL_Event *e)
 
 int main(int argc, char *argv[]){
 
-    SDL mainwindow = SDL(640,480,SDL_OPENGL,"Cryolite Engine");     // Create the graphics window
+    SDL mainwindow = SDL(WIDTH,HEIGHT,SDL_OPENGL,"Cryolite Engine");     // Create the graphics window
 
 
     glClearColor( 0.0, 0.0, 0.0, 0.0 ); // Sets the background color.
@@ -58,7 +60,7 @@ int main(int argc, char *argv[]){
     glMatrixMode( GL_PROJECTION );
 
     //glFrustum( -1.6, 1.6, -1.2, 1.2, 1.5, 30 );
-    gluPerspective(FOV, 640/480, 1.5, 30 );
+    gluPerspective(FOV, WIDTH/HEIGHT, 1.5, 30 );
 
     glMatrixMode( GL_MODELVIEW );
     glEnable(GL_BLEND);
@@ -88,7 +90,7 @@ int main(int argc, char *argv[]){
     int lasttick = SDL_GetTicks();
     int currenttick = 0;
 
-    while(1){ //render
+    while(render){ //render
 
         if(printFPS)
         {
@@ -117,10 +119,18 @@ int main(int argc, char *argv[]){
         move_handler();         // Moves the camera if key pressed
 
         draw_another_cube();
+
         glPushMatrix();
         glTranslatef(1,2,3);
         draw_another_cube();
         glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-5, 3, 0);
+        glScalef(2, 2, 2);
+        draw_cube();
+        glPopMatrix();
+
         draw_cube();            // Draw a few objects
         draw_ground();
 
@@ -128,7 +138,7 @@ int main(int argc, char *argv[]){
         glMatrixMode(GL_PROJECTION);
         glPushMatrix();
         glLoadIdentity();
-        glOrtho(0, 640, 480, 0, -1, 1);
+        glOrtho(0, WIDTH, HEIGHT, 0, -1, 1);
 
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
