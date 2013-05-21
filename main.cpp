@@ -13,9 +13,11 @@
 #include "include/sdl.h"
 #include "include/controls.h"
 #include "include/material.h"
+#include "include/models.h"
 
 
-#define GROUND_SIZE 50
+
+#define FOV 80
 
 //todo: textur klasse, scene klasse
 bool printFPS = false;
@@ -42,158 +44,7 @@ void toggle_printFPS(SDL_Event *e)
     return;
 }
 
-void draw_ground()
-{
-glEnable(GL_TEXTURE_2D);
-glBindTexture( GL_TEXTURE_2D, floor );
 
-    glBegin( GL_QUADS );
-
-        glTexCoord2i( 1, 0 );
-          glVertex3f( -GROUND_SIZE, -3, GROUND_SIZE);
-        glTexCoord2i( 0, 0 );
-          glVertex3f(-GROUND_SIZE, -3, -GROUND_SIZE);
-        glTexCoord2i( 0, 1 );
-          glVertex3f(GROUND_SIZE, -3, -GROUND_SIZE);
-        glTexCoord2i( 1, 1 );
-          glVertex3f( GROUND_SIZE, -3, GROUND_SIZE);
-
-    glEnd();
-}
-
-// draw a cube with a texture
-
-void draw_cube()
-{
-    glEnable(GL_TEXTURE_2D);
-glBindTexture( GL_TEXTURE_2D, cube);
-
-
-    glBegin( GL_QUADS );
-
-        glTexCoord2i( 1, 0 );
-          glVertex3f( 1, 1, 1);
-        glTexCoord2i( 0, 0 );
-          glVertex3f(-1, 1, 1);
-          glTexCoord2i( 0, 1 );
-          glVertex3f(-1, -1, 1);
-          glTexCoord2i( 1, 1 );
-          glVertex3f( 1, -1, 1);
-
-        glTexCoord2i( 1, 0 );
-          glVertex3f( 1, 1, -1);
-        glTexCoord2i( 0, 0 );
-          glVertex3f( 1, -1, -1);
-        glTexCoord2i( 0, 1 );
-          glVertex3f(-1, -1, -1);
-        glTexCoord2i( 1, 1 );
-          glVertex3f(-1, 1, -1);
-
-        glTexCoord2i( 1, 0 );
-          glVertex3f( 1, 1, -1);
-        glTexCoord2i( 0, 0 );
-          glVertex3f( 1, 1, 1);
-        glTexCoord2i( 0, 1 );
-          glVertex3f( 1, -1, 1);
-        glTexCoord2i( 1, 1 );
-          glVertex3f( 1, -1, -1);
-
-        glTexCoord2i( 1, 0 );
-          glVertex3f( 1, -1, -1);
-        glTexCoord2i( 0, 0 );
-          glVertex3f( 1, -1, 1);
-        glTexCoord2i( 0, 1 );
-          glVertex3f(-1, -1, 1);
-        glTexCoord2i( 1, 1 );
-          glVertex3f(-1, -1, -1);
-
-        glTexCoord2i( 1, 0 );
-          glVertex3f(-1, -1, -1);
-        glTexCoord2i( 0, 0 );
-          glVertex3f(-1, -1, 1);
-        glTexCoord2i( 0, 1 );
-          glVertex3f(-1, 1, 1);
-        glTexCoord2i( 1, 1 );
-          glVertex3f(-1, 1, -1);
-
-        glTexCoord2i( 1, 0 );
-          glVertex3f( 1, 1, 1);
-        glTexCoord2i( 0, 0 );
-          glVertex3f( 1, 1, -1);
-        glTexCoord2i( 0, 1 );
-          glVertex3f(-1, 1, -1);
-          glTexCoord2i( 1, 1 );
-          glVertex3f(-1, 1, 1);
-
-  glEnd();
-
-}
-
-
-// draw a cube with colors instead of textures
-
-void draw_another_cube()
-{
-
-   glBegin( GL_QUADS );
-
-        glColor3f(256, 0, 0);
-          glVertex3f( 1, 1, 5);
-        glColor3f(256, 0, 0);
-          glVertex3f(-1, 1, 5);
-        glColor3f(256, 0, 0);
-          glVertex3f(-1, -1, 5);
-        glColor3f(256, 0, 0);
-          glVertex3f( 1, -1, 5);
-
-        glColor3f(0, 256, 256);
-          glVertex3f( 1, 1, 3);
-        glColor3f(0, 256, 256);
-          glVertex3f( 1, -1, 3);
-        glColor3f(0, 256, 256);
-          glVertex3f(-1, -1, 3);
-        glColor3f(0, 256, 256);
-          glVertex3f(-1, 1, 3);
-
-        glColor3f(0, 256, 0);
-          glVertex3f( 1, 1, 3);
-        glColor3f(0, 256, 0);
-          glVertex3f( 1, 1, 5);
-        glColor3f(0, 256, 0);
-          glVertex3f( 1, -1, 5);
-        glColor3f(0, 256, 0);
-          glVertex3f( 1, -1, 3);
-
-        glColor3f(0, 0, 256);
-          glVertex3f( 1, -1, 3);
-        glColor3f(0, 0, 256);
-          glVertex3f( 1, -1, 5);
-        glColor3f(0, 0, 256);
-          glVertex3f(-1, -1, 5);
-        glColor3f(0, 0, 256);
-          glVertex3f(-1, -1, 3);
-
-        glColor3f(256, 256, 0);
-          glVertex3f(-1, -1, 3);
-        glColor3f(256, 256, 0);
-          glVertex3f(-1, -1, 5);
-        glColor3f(256, 256, 0);
-          glVertex3f(-1, 1, 5);
-        glColor3f(256, 256, 0);
-          glVertex3f(-1, 1, 3);
-
-        glColor3f(256, 256, 256);
-          glVertex3f( 1, 1, 5);
-        glColor3f(256, 256, 256);
-          glVertex3f( 1, 1, 3);
-        glColor3f(256, 256, 256);
-          glVertex3f(-1, 1, 3);
-        glColor3f(256, 256, 256);
-          glVertex3f(-1, 1, 5);
-
-  glEnd();
-
-}
 
 int main(int argc, char *argv[]){
 
@@ -206,8 +57,8 @@ int main(int argc, char *argv[]){
 
     glMatrixMode( GL_PROJECTION );
 
-    glFrustum( -1.6, 1.6, -1.2, 1.2, 1.5, 30 );
-    //gluPerspective(90, 640/480, 0, 1.5 );
+    //glFrustum( -1.6, 1.6, -1.2, 1.2, 1.5, 30 );
+    gluPerspective(FOV, 640/480, 1.5, 30 );
 
     glMatrixMode( GL_MODELVIEW );
     glEnable(GL_BLEND);
@@ -227,6 +78,8 @@ int main(int argc, char *argv[]){
 
     INIT_Controls(&mainwindow);
     mainwindow.addEvent(SDL_KEYDOWN,toggle_printFPS);
+
+
 
     // 2D Texute settings
 
@@ -253,9 +106,15 @@ int main(int argc, char *argv[]){
 
 
         mainwindow.pollEvents();    // Eventhandler
+
+
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        glMatrixMode(GL_MODELVIEW);
 
+        rotation_handler();     // Rotates the camera if mouse moved
+        move_handler();         // Moves the camera if key pressed
 
         draw_another_cube();
         glPushMatrix();
@@ -265,8 +124,27 @@ int main(int argc, char *argv[]){
         draw_cube();            // Draw a few objects
         draw_ground();
 
-        rotation_handler();     // Rotates the camera if mouse moved
-        move_handler();         // Moves the camera if key pressed
+
+        glMatrixMode(GL_PROJECTION);
+        glPushMatrix();
+        glLoadIdentity();
+        glOrtho(0, 640, 480, 0, -1, 1);
+
+        glMatrixMode(GL_MODELVIEW);
+        glPushMatrix();
+
+        glLoadIdentity();
+
+        drawHUD();
+
+        glPopMatrix();
+
+        glMatrixMode(GL_PROJECTION);
+
+        glPopMatrix();
+
+
+
 
         SDL_GL_SwapBuffers();   // Changes frontbuffer and backbuffera
 
