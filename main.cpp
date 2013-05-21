@@ -119,10 +119,18 @@ int main(int argc, char *argv[]){
         move_handler();         // Moves the camera if key pressed
 
         draw_another_cube();
+
         glPushMatrix();
         glTranslatef(1,2,3);
         draw_another_cube();
         glPopMatrix();
+
+        glPushMatrix();
+        glTranslatef(-5, 3, 0);
+        glScalef(2, 2, 2);
+        draw_cube();
+        glPopMatrix();
+
         draw_cube();            // Draw a few objects
         draw_ground();
 
