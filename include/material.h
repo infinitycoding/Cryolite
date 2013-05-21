@@ -1,4 +1,4 @@
-#https://github.com/tdotu/Cryolite/edit/master/include/material.h#ifndef MATERIAL_H
+#ifndef MATERIAL_H
 #define MATERIAL_H
 
 #include <SDL.h>
