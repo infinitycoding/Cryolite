@@ -29,12 +29,12 @@ bool render = true;
 
 
 
-
-
 SDL_Surface* screen = NULL;
 GLuint cube, floor;			// This is a handle to our texture object
 SDL_Surface *surface;	// This surface will tell us the details of the image
 Scene scene;
+
+
 
 // draw the ground of the scene
 
@@ -54,6 +54,7 @@ void toggle_printFPS(SDL_Event *e)
 
 
 int main(int argc, char *argv[]){
+
 
     SDL mainwindow = SDL(WIDTH,HEIGHT,SDL_OPENGL|SDL_HWSURFACE,"Cryolite Engine");     // Create the graphics window
 
@@ -91,6 +92,7 @@ int main(int argc, char *argv[]){
     mainwindow.addEvent(SDL_KEYDOWN,toggle_printFPS);
 
     createObjectTriangle(&IC, &scene);
+    createObjectCube(&IC, &scene);
 
     // 2D Texute settings
 
@@ -127,22 +129,8 @@ int main(int argc, char *argv[]){
         rotation_handler();     // Rotates the camera if mouse moved
         move_handler();         // Moves the camera if key pressed
 
-        draw_another_cube();
-
-        glPushMatrix();
-        glTranslatef(1,2,3);
-        draw_another_cube();
-        glPopMatrix();
-
-        glPushMatrix();
-        glTranslatef(-5, 3, 0);
-        glScalef(2, 2, 2);
-        draw_cube();
-        glPopMatrix();
-
         scene.render();
 
-        draw_cube();            // Draw a few objects
         draw_ground();
 
 
