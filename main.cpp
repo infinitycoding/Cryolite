@@ -89,7 +89,6 @@ int main(int argc, char *argv[]){
     INIT_Controls(&mainwindow);
     mainwindow.addEvent(SDL_KEYDOWN,toggle_printFPS);
 
-    createObjectTriangle(&IC, &scene);
     createObjectCube(&IC, &scene);
     createObjectGround(&ground, &scene);
 

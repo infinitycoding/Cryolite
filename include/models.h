@@ -23,7 +23,6 @@
 
     void drawHUD();
     void createObjectGround(Material *mat, Scene *sce);
-    void createObjectTriangle(Material *mat, Scene *sce);
     void createObjectCube(Material *mat, Scene *sce);
 
 
