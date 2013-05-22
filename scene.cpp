@@ -12,7 +12,13 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-
+    ListSetFirst(this->objectList);
+    while(!ListIsLast(this->objectList))
+    {
+        ListRemove(this->objectList);
+        ListNext(this->objectList);
+    }
+    free(this->objectList);
 }
 
 
@@ -23,7 +29,35 @@ void Scene::addObject(Object *obj)
 
 int Scene::removeObject(char *name)
 {
-    return 0;
+    int delObj = 0;
+    ListSetFirst(this->objectList);
+    while(!ListIsLast(this->objectList))
+    {
+        Object *currentObject = (Object *)ListGetCurrent(this->objectList);
+        if(strncmp(currentObject->objectname,name,20))
+        {
+            ListRemove(this->objectList);
+            delObj++;
+        }
+        ListNext(this->objectList);
+    }
+    return delObj;
+}
+
+int Scene::removeObject(Object *obj)
+{
+    int delObj = 0;
+    ListSetFirst(this->objectList);
+    while(!ListIsLast(this->objectList))
+    {
+        if(ListGetCurrent(this->objectList) == obj)
+        {
+            ListRemove(this->objectList);
+            delObj++;
+        }
+        ListNext(this->objectList);
+    }
+    return delObj;
 }
 
 void Scene::render()
@@ -43,7 +77,7 @@ void Scene::render()
                     //Modify Model Matrix
                     glTranslatef(currentObject->position.x,currentObject->position.y,currentObject->position.z); //move to local (0/0/0)
                     glRotatef(currentObject->rotationAngle, currentObject->rotationAxis.x, currentObject->rotationAxis.y, currentObject->rotationAxis.z);
-                    //Todo: Scale
+                    glScalef(currentObject->scale.x,currentObject->scale.z,currentObject->scale.z);
 
                     //Render Triangles
                     if(!ListIsEmpty(currentObject->triangles))

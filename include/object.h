@@ -48,7 +48,7 @@ class Object
         uint32_t numofTriangles;
         uint32_t numofSquares;
 
-        uint32_t scale;
+        struct vertex3D scale;
         struct vertex3D position;
         struct vertex3D rotationAxis;
         GLfloat rotationAngle;

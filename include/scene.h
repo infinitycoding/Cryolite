@@ -10,6 +10,7 @@ class Scene
         ~Scene(void);
         void addObject(Object *obj);
         int removeObject(char *name);
+        int removeObject(Object *obj);
         void render(void);
 
         struct List *objectList;
