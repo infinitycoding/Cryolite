@@ -32,5 +32,5 @@ struct List *ListPrevious(struct List *list);
 bool ListIsLast(struct List *list);
 struct List *ListSetLast(struct List *list);
 struct List *ListSetFirst(struct List *list);
-bool ListIsEmpty();
+bool ListIsEmpty(struct List *list);
 #endif
