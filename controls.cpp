@@ -3,7 +3,7 @@
 #include <math.h>
 
 #define ANGLE 1
-#define SPEED 1
+#define SPEED 2
 
 bool right=false;
 bool left=false;
@@ -54,9 +54,6 @@ void haldeKeydown(SDL_Event *e)
             break;
         case SDLK_d:
             move_right=true;
-            break;
-        case SDLK_SPACE:
-            printf("%f\n", move_direction_foreward);
             break;
         default:
             break;
@@ -160,18 +157,6 @@ void rotation_handler(){    // Rotates the object if a key is pressed.
 
         left = false;
     }
-
-    if(move_direction_foreward > (float)SPEED/100)
-        move_direction_foreward -= (float) 2*(SPEED/100);
-
-    if(move_direction_foreward < (float)-(SPEED/100))
-        move_direction_foreward += (float) 2*(SPEED/100);
-
-    if(move_direction_left > (float)SPEED/100)
-        move_direction_left -= (float) 2*(SPEED/100);
-
-    if(move_direction_left < (float)-(SPEED/100))
-        move_direction_left += (float) 2*(SPEED/100);
 
 }
 
