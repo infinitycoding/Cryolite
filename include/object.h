@@ -30,16 +30,16 @@ struct square
 class Object
 {
     public:
-        Object(const char *);
-        Object(const char *, const char *);
+        Object(const char *objname);
+        Object(const char *filename, const char *objname);
         ~Object();
 
-        struct vertex3D *addObjectVertex(struct vertex3D *);
-        struct vertex2D *addTextureVertex(struct vertex2D *);
-        void addTriangle(struct triangle *);
-        void addSquare(struct square *);
-        void loadMaterial(const char *);
-        void loadObjectFile(const char *, const char *);
+        struct vertex3D *addObjectVertex(struct vertex3D *new_vertex);
+        struct vertex2D *addTextureVertex(struct vertex2D *new_tex_vertex);
+        void addTriangle(struct triangle *new_triangle);
+        void addSquare(struct square *new_square);
+        void loadMaterial(const char *file);
+        void Object::loadObjectFile(const char *objectFile, const char *objectName);
 
         char objectname[20];
 
@@ -63,6 +63,8 @@ class Object
         struct List *triangles;
         struct List *squares;
         Material *ObjectMaterial;
+
+
     private:
         void initObject();
 };
