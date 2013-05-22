@@ -71,6 +71,9 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 {
     FILE *f;
     char line[40];
+    char string[20];            // string can be many things
+    int i;                      // i can too be many things
+    bool correct_object=false;
 
     f = fopen(objectFile, "r");
     if(f == NULL)
@@ -103,8 +106,54 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
             exit(-1);
         }
 
-        if(line[0] == 'u' && line[1] == 's' && line[2] == 'e' && line[3] == 'm' && line[4] == 't' && line[5] == 'l')
+        if(strncmp(line, "usemtl", 6))
             continue;
+
+        if(line[0] == '\n')
+            continue;
+
+        if(line[0] == 'o')
+        {
+            for(i = 2; line[i] != '\n'; i++)
+                string[i-2] = line[i];
+
+            string[i+1] = '\0';
+
+            if(strncmp(string, objectName, i-2))
+                correct_object = true;
+            else
+                correct_object = false;
+        }
+
+        if(line[0] == 'v' && line[1] == 't')
+        {
+            if(correct_object == false)
+                continue;
+            else
+            {
+                // TODO: Write possibility to load texture vertices
+            }
+        }
+
+        if(line[0] == 'v' && line[1] == ' ')
+        {
+            if(correct_object == false)
+                continue;
+            else
+            {
+                // TODO: Write possibility to load object vertices
+            }
+        }
+
+        if(line[0] == 'f')
+        {
+            if(correct_object == false)
+                continue;
+            else
+            {
+                // TODO: Write possibility to load polygones
+            }
+        }
     }
 
     fclose(f);
