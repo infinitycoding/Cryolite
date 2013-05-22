@@ -3,49 +3,21 @@
 
 Object::Object(const char *objname)
 {
-    vertices = ListCreate();
-    triangles = ListCreate();
-    squares = ListCreate();
-    texvertices = ListCreate();
-
-    scale.x = 1;
-    scale.y = 1;
-    scale.z = 1;
-
-    position.x = 0;
-    position.y = 0;
-    position.z = 0;
-
-    movement.x = 0;
-    movement.y = 0;
-    movement.z = 0;
-
-    rotationAxis.x = 0;
-    rotationAxis.y = 0;
-    rotationAxis.z = 0;
-
-    colorKey.red = 1.0f;
-    colorKey.green = 1.0f;
-    colorKey.blue = 1.0f;
-    colorKey.transparency = 1.0f;
-
-    rotationAngle = 0;
-
-    velocity = 0;
-
-    remaining_movement = 0;
-
-    numofTextureSpots = 0;
-    numofSpots = 0;
-    numofTriangles = 0;
-    numofSquares = 0;
-
-    ObjectMaterial = NULL;
+    initObject();
 
     strncpy(objectname, objname, 20);
 }
 
 Object::Object(const char *filename, const char *objname)
+{
+    initObject();
+
+    strncpy(objectname, objname, 20);
+
+    loadObjectFile(filename, objname);
+}
+
+void Object::initObject()
 {
     vertices = ListCreate();
     triangles = ListCreate();
@@ -85,10 +57,6 @@ Object::Object(const char *filename, const char *objname)
     numofSquares = 0;
 
     ObjectMaterial = NULL;
-
-    strncpy(objectname, objname, 20);
-
-    loadObjectFile(filename, objname);
 }
 
 Object::~Object()
