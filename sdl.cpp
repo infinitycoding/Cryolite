@@ -32,7 +32,8 @@ SDL::SDL(int width, int height, int flags, const char* caption)
     SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
     SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16);
+
 
     this->screen = SDL_SetVideoMode( width, height, bpp, flags);
     if( this->screen == NULL ) {
@@ -66,11 +67,7 @@ int SDL::removeEvent(uint8_t event, void (*handle)(SDL_Event *event))
 {
     while(this->lock){}
     this->lock = true;
-        while(!ListIsLast(this->events))
-        {
-            ListNext(this->events);
-        }
-        ListNext(this->events);
+        ListSetFirst(this->events);
         while(!ListIsLast(this->events))
         {
             struct eventHandler* currentHandler = (struct eventHandler*) ListGetCurrent(this->events);
@@ -95,7 +92,7 @@ void SDL::pollEvents()
     while( SDL_PollEvent( &event ) ) {
         if(events)
         {
-            ListNext(this->events);
+            ListSetFirst(this->events);
             while(!ListIsLast(this->events))
             {
                 struct eventHandler* currentEvent = (struct eventHandler*) ListGetCurrent(this->events);
