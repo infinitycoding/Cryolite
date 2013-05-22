@@ -1,5 +1,6 @@
 #include "include/controls.h"
 #include "include/sdl.h"
+#include "include/general_def.h"
 #include <math.h>
 
 #define ANGLE 1
@@ -17,9 +18,9 @@ bool move_backward=false;
 float move_direction_foreward=(float)SPEED/100;
 float move_direction_left=0;
 
-float position_x = 0;
-float position_y = 0;
-float position_z = 0;
+float position_x = STARTING_X;
+float position_y = STARTING_Y;
+float position_z = STARTING_Z;
 
 extern bool printFPS;
 
