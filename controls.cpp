@@ -3,7 +3,7 @@
 #include <math.h>
 
 #define ANGLE 1
-#define SPEED 1
+#define SPEED 10
 
 bool right=false;
 bool left=false;

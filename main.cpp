@@ -55,7 +55,7 @@ void toggle_printFPS(SDL_Event *e)
 
 int main(int argc, char *argv[]){
 
-    SDL mainwindow = SDL(WIDTH,HEIGHT,SDL_OPENGL|SDL_FULLSCREEN|SDL_HWSURFACE,"Cryolite Engine");     // Create the graphics window
+    SDL mainwindow = SDL(WIDTH,HEIGHT,SDL_OPENGL|SDL_HWSURFACE,"Cryolite Engine");     // Create the graphics window
 
 
     glClearColor( 0.0, 0.0, 0.0, 0.0 ); // Sets the background color.
