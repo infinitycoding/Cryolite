@@ -3,7 +3,7 @@
 #include <math.h>
 
 #define ANGLE 1
-#define SPEED 2
+#define SPEED 1
 
 bool right=false;
 bool left=false;
@@ -54,6 +54,9 @@ void haldeKeydown(SDL_Event *e)
             break;
         case SDLK_d:
             move_right=true;
+            break;
+        case SDLK_SPACE:
+            printf("%f\n", move_direction_foreward);
             break;
         default:
             break;
@@ -122,12 +125,6 @@ void rotate_correctly(GLfloat angle, GLfloat rotate_x, GLfloat rotate_y, GLfloat
     glTranslatef(position_x, position_y, position_z);
 }
 
-void handler()
-{
-    glLoadIdentity();
-    rotation_handler();
-}
-
 void rotation_handler(){    // Rotates the object if a key is pressed.
     if(right)
     {
@@ -152,17 +149,29 @@ void rotation_handler(){    // Rotates the object if a key is pressed.
         rotate_correctly(-ANGLE,0,1,0);
 
         if(move_direction_foreward >= 0)
-            move_direction_left += (float)1/((9000/SPEED)*100*(1/ANGLE));
+            move_direction_left += (float)1/((9000/SPEED)*(1/ANGLE));
         else
-            move_direction_left -=  (float)1/((9000/SPEED)*100*(1/ANGLE));
+            move_direction_left -=  (float)1/((9000/SPEED)*(1/ANGLE));
 
         if(move_direction_left >= 0)
-            move_direction_foreward -= (float)1/((9000/SPEED)*100*(1/ANGLE));
+            move_direction_foreward -= (float)1/((9000/SPEED)*(1/ANGLE));
         else
             move_direction_foreward += (float)1/((9000/SPEED)*(1/ANGLE));
 
         left = false;
     }
+
+    if(move_direction_foreward > (float)SPEED/100)
+        move_direction_foreward -= (float) 2*(SPEED/100);
+
+    if(move_direction_foreward < (float)-(SPEED/100))
+        move_direction_foreward += (float) 2*(SPEED/100);
+
+    if(move_direction_left > (float)SPEED/100)
+        move_direction_left -= (float) 2*(SPEED/100);
+
+    if(move_direction_left < (float)-(SPEED/100))
+        move_direction_left += (float) 2*(SPEED/100);
 
 }
 
