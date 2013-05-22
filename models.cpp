@@ -162,16 +162,19 @@ void draw_another_cube()
 
 void drawHUD(void)
 {
+    glEnable(GL_TEXTURE_2D);
+
+    glBindTexture( GL_TEXTURE_2D, 0);
+
     glBegin(GL_QUADS);
-        glColor3f(1.0f, 1.0f, 1.0f);
-            glVertex2f((WIDTH/2)-2.5, (HEIGHT/2)-15.0);
-            glVertex2f((WIDTH/2)+2.5, (HEIGHT/2)-15.0);
-            glVertex2f((WIDTH/2)+2.5, (HEIGHT/2)+15.0);
-            glVertex2f((WIDTH/2)-2.5, (HEIGHT/2)+15.0);
-        glColor3f(1.0f, 1.0f, 1.0f);
-            glVertex2f((WIDTH/2)-15.0, (HEIGHT/2)-2.5);
-            glVertex2f((WIDTH/2)-15.0, (HEIGHT/2)+2.5);
-            glVertex2f((WIDTH/2)+15.0, (HEIGHT/2)+2.5);
-            glVertex2f((WIDTH/2)+15.0, (HEIGHT/2)-2.5);
+            glVertex2f((WIDTH/2)-1, (HEIGHT/2)-15.0);
+            glVertex2f((WIDTH/2)+1, (HEIGHT/2)-15.0);
+            glVertex2f((WIDTH/2)+1, (HEIGHT/2)+15.0);
+            glVertex2f((WIDTH/2)-1, (HEIGHT/2)+15.0);
+
+            glVertex2f((WIDTH/2)-15.0, (HEIGHT/2)-1);
+            glVertex2f((WIDTH/2)-15.0, (HEIGHT/2)+1);
+            glVertex2f((WIDTH/2)+15.0, (HEIGHT/2)+1);
+            glVertex2f((WIDTH/2)+15.0, (HEIGHT/2)-1);
     glEnd();
 }
