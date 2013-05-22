@@ -63,6 +63,8 @@ class Object
         struct List *triangles;
         struct List *squares;
         Material *ObjectMaterial;
+    private:
+        void initObject();
 };
 
 
