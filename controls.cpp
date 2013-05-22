@@ -3,7 +3,7 @@
 #include <math.h>
 
 #define ANGLE 1
-#define SPEED 2
+#define SPEED 1
 
 bool right=false;
 bool left=false;
@@ -19,7 +19,7 @@ float move_direction_left=0;
 
 float position_x = 0;
 float position_y = 0;
-float position_z = -8.5;
+float position_z = 0;
 
 void endprogramm(SDL_Event *event)
 {
@@ -128,14 +128,14 @@ void rotation_handler(){    // Rotates the object if a key is pressed.
         rotate_correctly(ANGLE,0,1,0);
 
         if(move_direction_foreward <= 0)
-            move_direction_left += (float)1/((9000/SPEED)*(1/ANGLE));
+            move_direction_left += (float)1/((9000/SPEED)*(1.0f/ANGLE));
         else
-            move_direction_left -=  (float)1/((9000/SPEED)*(1/ANGLE));
+            move_direction_left -=  (float)1/((9000/SPEED)*(1.0f/ANGLE));
 
         if(move_direction_left <= 0)
-            move_direction_foreward -= (float)1/((9000/SPEED)*(1/ANGLE));
+            move_direction_foreward -= (float)1/((9000/SPEED)*(1.0f/ANGLE));
         else
-            move_direction_foreward += (float)1/((9000/SPEED)*(1/ANGLE));
+            move_direction_foreward += (float)1/((9000/SPEED)*(1.0f/ANGLE));
 
         right = false;
 
@@ -146,14 +146,14 @@ void rotation_handler(){    // Rotates the object if a key is pressed.
         rotate_correctly(-ANGLE,0,1,0);
 
         if(move_direction_foreward >= 0)
-            move_direction_left += (float)1/((9000/SPEED)*(1/ANGLE));
+            move_direction_left += (float)1/((9000/SPEED)*(1.0f/ANGLE));
         else
-            move_direction_left -=  (float)1/((9000/SPEED)*(1/ANGLE));
+            move_direction_left -=  (float)1/((9000/SPEED)*(1.0f/ANGLE));
 
         if(move_direction_left >= 0)
-            move_direction_foreward -= (float)1/((9000/SPEED)*(1/ANGLE));
+            move_direction_foreward -= (float)1/((9000/SPEED)*(1.0f/ANGLE));
         else
-            move_direction_foreward += (float)1/((9000/SPEED)*(1/ANGLE));
+            move_direction_foreward += (float)1/((9000/SPEED)*(1.0f/ANGLE));
 
         left = false;
     }
