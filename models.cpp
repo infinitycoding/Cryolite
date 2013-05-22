@@ -1,7 +1,17 @@
 #include "include/models.h"
+#include "include/material.h"
 
 
-extern GLuint cube, floor;
+
+
+void INIT_Models(Scene *sce)
+{
+    Material *ground = new Material("blacktile.jpg");   // Loads the ground texture
+    Material *IC = new Material("textur.bmp");
+    Material *MAN = new Material("man.png");
+    createObjectCube(IC, sce);
+    createObjectGround(ground, sce);
+}
 
 
 void createObjectGround(Material *mat, Scene *sce)
@@ -232,6 +242,10 @@ void drawHUD(void)
             glVertex2f(WIDTH-10, HEIGHT-((HEIGHT/100)*VERT));
 
             glColor4f(1.0, 1.0, 1.0, 1.0);
+    glEnd();
+
+    glBegin(GL_LINE);
+
     glEnd();
 
 }

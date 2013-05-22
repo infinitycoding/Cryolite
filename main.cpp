@@ -24,15 +24,12 @@
 
 //todo: textur klasse, scene klasse
 bool printFPS = false;
-int fpslenght = 0;
 bool render = true;
 
 
 
-SDL_Surface* screen = NULL;
-GLuint cube, floor;			// This is a handle to our texture object
-SDL_Surface *surface;	// This surface will tell us the details of the image
-Scene scene;
+
+
 
 
 
@@ -67,31 +64,21 @@ int main(int argc, char *argv[]){
     glEnable(GL_MULTISAMPLE_ARB);
 
     glLineWidth (LINEWIDTH);
-
-
     glTranslatef(STARTING_X, STARTING_Y, STARTING_Z);
 
 
 
     INIT_Controls(&mainwindow);
 
+    Scene *mainScene = new Scene();
+    INIT_Models(mainScene);
 
 
-
-    Material ground = Material("blacktile.jpg");   // Loads the ground texture
-    Material IC = Material("textur.bmp");
-    //Material MAN = Material("man.png");
-
-
-
-    createObjectCube(&IC, &scene);
-    createObjectGround(&ground, &scene);
 
     // 2D Texute settings
 
-
-
     int lasttick = SDL_GetTicks();
+    int fpslenght = 0;
     int currenttick = 0;
 
     while(render){ //render
@@ -122,7 +109,7 @@ int main(int argc, char *argv[]){
         rotation_handler();     // Rotates the camera if mouse moved
         move_handler();         // Moves the camera if key pressed
 
-        scene.render();
+        mainScene->render();
 
 
         glMatrixMode(GL_PROJECTION);
