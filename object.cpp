@@ -84,7 +84,27 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
         if(line[0] == '#')
             continue;
 
+        if(line[0] == 's')
+        {
+            printf("warning: smoothing groups aren't supported yet by cryolite engine.\n");
+            continue;
+        }
 
+        if(line[0] == 'g')
+        {
+            printf("warning: polygone groups aren't supported yet by cryolite engine.\n");
+            continue;
+        }
+
+        if(line[0] == 'v' && line[1] == 'n')
+        {
+            printf("error: normals aren't supported yet by cryolite engine.\n");
+            printf("       it's impossible to load object. programm will be ended.\n");
+            exit(-1);
+        }
+
+        if(line[0] == 'u' && line[1] == 's' && line[2] == 'e' && line[3] == 'm' && line[4] == 't' && line[5] == 'l')
+            continue;
     }
 
     fclose(f);
