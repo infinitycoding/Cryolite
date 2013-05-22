@@ -61,7 +61,8 @@ void Object::initObject()
 
 Object::~Object()
 {
-    ObjectMaterial->~Material();
+    if(ObjectMaterial != NULL)
+        ObjectMaterial->~Material();
 
     // TODO: integrate list destruction function when implemented
 }
@@ -69,6 +70,7 @@ Object::~Object()
 void Object::loadObjectFile(const char *objectFile, const char *objectName)
 {
     FILE *f;
+    char line[40];
 
     f = fopen(objectFile, "r");
     if(f == NULL)
@@ -77,7 +79,13 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
         return;
     }
 
+    while(fgets(line, 40, f))
+    {
+        if(line[0] == '#')
+            continue;
 
+
+    }
 
     fclose(f);
 }
