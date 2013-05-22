@@ -39,7 +39,7 @@ class Object
         void addTriangle(struct triangle *new_triangle);
         void addSquare(struct square *new_square);
         void loadMaterial(const char *file);
-        void Object::loadObjectFile(const char *objectFile, const char *objectName);
+        void loadObjectFile(const char *objectFile, const char *objectName);
 
         char objectname[20];
 
