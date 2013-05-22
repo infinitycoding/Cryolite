@@ -71,7 +71,6 @@ int main(int argc, char *argv[]){
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
-    glTranslatef(0,0,-8.5);     // Move the camera to the starting position
     glEnable( GL_TEXTURE_2D );
 
     glEnable(GL_MULTISAMPLE);
