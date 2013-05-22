@@ -1,11 +1,42 @@
 #include "include/object.h"
 
 
-Object::Object()
+Object::Object(const char *objname)
 {
     vertices = ListCreate();
     triangles = ListCreate();
     squares = ListCreate();
+
+    scale.x = 1;
+    scale.y = 1;
+    scale.z = 1;
+
+    position.x = 0;
+    position.y = 0;
+    position.z = 0;
+
+    movement.x = 0;
+    movement.y = 0;
+    movement.z = 0;
+
+    rotationAxis.x = 0;
+    rotationAxis.y = 0;
+    rotationAxis.z = 0;
+
+    rotationAngle = 0;
+
+    velocity = 0;
+
+    remaining_movement = 0;
+
+    numofTextureSpots = 0;
+    numofSpots = 0;
+    numofTriangles = 0;
+    numofSquares = 0;
+
+    ObjectMaterial = Material();
+
+    strncpy(objectname, objname, 20);
 }
 
 Object::Object(const char *filename, const char *objname)
@@ -13,6 +44,37 @@ Object::Object(const char *filename, const char *objname)
     vertices = ListCreate();
     triangles = ListCreate();
     squares = ListCreate();
+
+    scale.x = 1;
+    scale.y = 1;
+    scale.z = 1;
+
+    position.x = 0;
+    position.y = 0;
+    position.z = 0;
+
+    movement.x = 0;
+    movement.y = 0;
+    movement.z = 0;
+
+    rotationAxis.x = 0;
+    rotationAxis.y = 0;
+    rotationAxis.z = 0;
+
+    rotationAngle = 0;
+
+    velocity = 0;
+
+    remaining_movement = 0;
+
+    numofTextureSpots = 0;
+    numofSpots = 0;
+    numofTriangles = 0;
+    numofSquares = 0;
+
+    ObjectMaterial = Material();
+
+    strncpy(objectname, objname, 20);
 
     loadObjectFile(filename, objname);
 }
@@ -72,5 +134,7 @@ void Object::addSquare(struct square *new_square)
 
 void Object::loadMaterial(const char *file)
 {
-    ObjectMaterial = Material(file);
+    ObjectMaterial.loadTexture2D(file);
 }
+
+

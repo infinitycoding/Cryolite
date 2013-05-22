@@ -30,7 +30,7 @@ struct square
 class Object
 {
     public:
-        Object();
+        Object(const char *);
         Object(const char *, const char *);
         ~Object();
 
