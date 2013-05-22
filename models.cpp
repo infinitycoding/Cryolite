@@ -1,14 +1,14 @@
 #include "include/models.h"
 #include "include/material.h"
 
-
+Material *MAN;
 
 
 void INIT_Models(Scene *sce)
 {
     Material *ground = new Material("blacktile.jpg");   // Loads the ground texture
     Material *IC = new Material("textur.bmp");
-    Material *MAN = new Material("man.png");
+    MAN = new Material("man.png");
     createObjectCube(IC, sce);
     createObjectGround(ground, sce);
 }
@@ -211,6 +211,8 @@ void createObjectCube(Material *mat, Scene *sce)
 
     iccube->ObjectMaterial = mat;
 
+
+
     sce->addObject(iccube);
 
 
@@ -219,8 +221,16 @@ void createObjectCube(Material *mat, Scene *sce)
 
 void drawHUD(void)
 {
-    glEnable(GL_TEXTURE_2D);
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    glOrtho(0, WIDTH, HEIGHT, 0, 0, 1);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
 
+
+    glEnable(GL_TEXTURE_2D);
     glBindTexture( GL_TEXTURE_2D, 0);
 
     glBegin(GL_QUADS);
@@ -234,18 +244,35 @@ void drawHUD(void)
             glVertex2f((WIDTH/2)+((WIDTH/100)*SCOPE), (HEIGHT/2)+1);
             glVertex2f((WIDTH/2)+((WIDTH/100)*SCOPE), (HEIGHT/2)-1);
 
+
+    glEnd();
+
+glBindTexture( GL_TEXTURE_2D, MAN->textureGL);
+glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,  GL_MODULATE);
+
+
+    glBegin(GL_QUADS);
+
             glColor4f(0, 0, 0.5f,0.5f);
-
+            glTexCoord2i( 1,  0);
             glVertex2f(WIDTH-((WIDTH/100)*HOR), HEIGHT-((HEIGHT/100)*VERT));
+            glTexCoord2i( 1,  1);
             glVertex2f(WIDTH-((WIDTH/100)*HOR), HEIGHT-10);
+            glTexCoord2i( 0,  1);
             glVertex2f(WIDTH-10, HEIGHT-10);
+            glTexCoord2i( 0,  0);
             glVertex2f(WIDTH-10, HEIGHT-((HEIGHT/100)*VERT));
+            glColor4f(1, 1, 1,1);
 
-            glColor4f(1.0, 1.0, 1.0, 1.0);
-    glEnd();
-
-    glBegin(GL_LINE);
 
     glEnd();
+    glBindTexture( GL_TEXTURE_2D, 0);
 
+
+
+
+
+    glPopMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
 }
