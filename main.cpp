@@ -38,25 +38,14 @@ Scene scene;
 
 // draw the ground of the scene
 
-void toggle_printFPS(SDL_Event *e)
-{
-    if(e->key.keysym.sym == SDLK_f)
-    {
-        if(printFPS)
-            printFPS = false;
-        else
-            printFPS = true;
-    }
 
-    return;
-}
 
 
 
 int main(int argc, char *argv[]){
 
 
-    SDL mainwindow = SDL(WIDTH,HEIGHT,SDL_OPENGL|SDL_HWSURFACE,"Cryolite Engine");     // Create the graphics window
+    SDL mainwindow = SDL(WIDTH,HEIGHT,SDL_OPENGL|SDL_HWSURFACE|SDL_FULLSCREEN,"Cryolite Engine");     // Create the graphics window
 
 
     glClearColor( 0.0, 0.0, 0.0, 0.0 ); // Sets the background color.
@@ -77,17 +66,20 @@ int main(int argc, char *argv[]){
 
     glEnable(GL_MULTISAMPLE_ARB);
 
+    glLineWidth (LINEWIDTH);
 
 
+
+    INIT_Controls(&mainwindow);
 
 
 
 
     Material ground = Material("blacktile.jpg");   // Loads the ground texture
     Material IC = Material("textur.bmp");
+    Material MAN = Material("man.png");
 
-    INIT_Controls(&mainwindow);
-    mainwindow.addEvent(SDL_KEYDOWN,toggle_printFPS);
+
 
     createObjectCube(&IC, &scene);
     createObjectGround(&ground, &scene);
@@ -134,18 +126,14 @@ int main(int argc, char *argv[]){
         glPushMatrix();
         glLoadIdentity();
         glOrtho(0, WIDTH, HEIGHT, 0, 0, 1);
-
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
-
         glLoadIdentity();
 
         drawHUD();
 
         glPopMatrix();
-
         glMatrixMode(GL_PROJECTION);
-
         glPopMatrix();
 
 

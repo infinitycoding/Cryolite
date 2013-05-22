@@ -21,6 +21,8 @@ float position_x = 0;
 float position_y = 0;
 float position_z = 0;
 
+extern bool printFPS;
+
 void endprogramm(SDL_Event *event)
 {
     exit(0);
@@ -34,6 +36,7 @@ void INIT_Controls(SDL* window)
     SDL_ShowCursor(SDL_DISABLE); //mausanzeige deaktivieren
     SDL_WM_GrabInput( SDL_GRAB_ON );// Maus einfangen
     window->addEvent(SDL_MOUSEMOTION,haldeMouse);
+    window->addEvent(SDL_KEYDOWN,toggle_printFPS);
 }
 
 void haldeKeydown(SDL_Event *e)
@@ -169,4 +172,17 @@ void move_handler(){        // Moves the object if a key is pressed
         move_camera(move_direction_left,0,move_direction_foreward);
     if(move_backward)
         move_camera(-move_direction_left,0,-move_direction_foreward);
+}
+
+void toggle_printFPS(SDL_Event *e)
+{
+    if(e->key.keysym.sym == SDLK_f)
+    {
+        if(printFPS)
+            printFPS = false;
+        else
+            printFPS = true;
+    }
+
+    return;
 }
