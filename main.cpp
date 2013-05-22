@@ -100,8 +100,6 @@ int main(int argc, char *argv[]){
 
         mainwindow.pollEvents();    // Eventhandler
 
-
-
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glMatrixMode(GL_MODELVIEW);
@@ -111,24 +109,7 @@ int main(int argc, char *argv[]){
 
         mainScene->render();
 
-
-        glMatrixMode(GL_PROJECTION);
-        glPushMatrix();
-        glLoadIdentity();
-        glOrtho(0, WIDTH, HEIGHT, 0, 0, 1);
-        glMatrixMode(GL_MODELVIEW);
-        glPushMatrix();
-        glLoadIdentity();
-
         drawHUD();
-
-        glPopMatrix();
-        glMatrixMode(GL_PROJECTION);
-        glPopMatrix();
-
-
-
-
 
         SDL_GL_SwapBuffers();   // Changes frontbuffer and backbuffera
 
