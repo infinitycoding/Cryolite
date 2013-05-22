@@ -9,6 +9,7 @@
 #include <SDL_thread.h>
 #include <SDL_image.h>
 
+
 #include "include/object.h"
 #include "include/sdl.h"
 #include "include/controls.h"
@@ -54,7 +55,7 @@ void toggle_printFPS(SDL_Event *e)
 
 int main(int argc, char *argv[]){
 
-    SDL mainwindow = SDL(WIDTH,HEIGHT,SDL_OPENGL,"Cryolite Engine");     // Create the graphics window
+    SDL mainwindow = SDL(WIDTH,HEIGHT,SDL_OPENGL|SDL_FULLSCREEN|SDL_HWSURFACE,"Cryolite Engine");     // Create the graphics window
 
 
     glClearColor( 0.0, 0.0, 0.0, 0.0 ); // Sets the background color.
@@ -63,8 +64,8 @@ int main(int argc, char *argv[]){
 
     glMatrixMode( GL_PROJECTION );
 
-    //glFrustum( -1.6, 1.6, -1.2, 1.2, 1.5, 30 );
-    gluPerspective(FOV, WIDTH/HEIGHT, 1.5, 30 );
+    glFrustum( -1.6, 1.6, -1.2, 1.2, 1.5, 100 );
+    //gluPerspective(FOV, WIDTH/HEIGHT, 1.5, 100 );
 
     glMatrixMode( GL_MODELVIEW );
     glEnable(GL_BLEND);
@@ -74,11 +75,15 @@ int main(int argc, char *argv[]){
     glTranslatef(0,0,-8.5);     // Move the camera to the starting position
     glEnable( GL_TEXTURE_2D );
 
-    glEnable(GL_MULTISAMPLE);
+    glEnable(GL_MULTISAMPLE_ARB);
 
 
 
-    Material ground = Material("ground.bmp");   // Loads the ground texture
+
+
+
+
+    Material ground = Material("blacktile.jpg");   // Loads the ground texture
     Material IC = Material("textur.bmp");
     cube = IC.textureGL;
     floor = ground.textureGL;
@@ -159,6 +164,8 @@ int main(int argc, char *argv[]){
         glMatrixMode(GL_PROJECTION);
 
         glPopMatrix();
+
+
 
 
 

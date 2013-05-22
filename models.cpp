@@ -11,13 +11,13 @@ glBindTexture( GL_TEXTURE_2D, floor );
 
     glBegin( GL_QUADS );
 
-        glTexCoord2i( 1, 0 );
+        glTexCoord2i( 50, 0 );
           glVertex3f( -GROUND_SIZE, -3, GROUND_SIZE);
         glTexCoord2i( 0, 0 );
           glVertex3f(-GROUND_SIZE, -3, -GROUND_SIZE);
-        glTexCoord2i( 0, 1 );
+        glTexCoord2i( 0, 50 );
           glVertex3f(GROUND_SIZE, -3, -GROUND_SIZE);
-        glTexCoord2i( 1, 1 );
+        glTexCoord2i( 50, 50 );
           glVertex3f( GROUND_SIZE, -3, GROUND_SIZE);
 
     glEnd();
@@ -158,24 +158,6 @@ void draw_another_cube()
 }
 
 
-void drawHUD(void)
-{
-    glEnable(GL_TEXTURE_2D);
-
-    glBindTexture( GL_TEXTURE_2D, 0);
-
-    glBegin(GL_QUADS);
-            glVertex2f((WIDTH/2)-1, (HEIGHT/2)-15.0);
-            glVertex2f((WIDTH/2)+1, (HEIGHT/2)-15.0);
-            glVertex2f((WIDTH/2)+1, (HEIGHT/2)+15.0);
-            glVertex2f((WIDTH/2)-1, (HEIGHT/2)+15.0);
-
-            glVertex2f((WIDTH/2)-15.0, (HEIGHT/2)-1);
-            glVertex2f((WIDTH/2)-15.0, (HEIGHT/2)+1);
-            glVertex2f((WIDTH/2)+15.0, (HEIGHT/2)+1);
-            glVertex2f((WIDTH/2)+15.0, (HEIGHT/2)-1);
-    glEnd();
-}
 
 
 void createObjectTriangle(Material *mat, Scene *sce)
@@ -219,4 +201,37 @@ void createObjectTriangle(Material *mat, Scene *sce)
     sce->addObject(triangle);
 
     return;
+}
+
+
+#define HOR 8
+#define VERT 16
+#define SCOPE 1
+
+
+void drawHUD(void)
+{
+    glEnable(GL_TEXTURE_2D);
+
+    glBindTexture( GL_TEXTURE_2D, 0);
+
+    glBegin(GL_QUADS);
+            glVertex2f((WIDTH/2)-1, (HEIGHT/2)-((WIDTH/100)*SCOPE));
+            glVertex2f((WIDTH/2)+1, (HEIGHT/2)-((WIDTH/100)*SCOPE));
+            glVertex2f((WIDTH/2)+1, (HEIGHT/2)+((WIDTH/100)*SCOPE));
+            glVertex2f((WIDTH/2)-1, (HEIGHT/2)+((WIDTH/100)*SCOPE));
+
+            glVertex2f((WIDTH/2)-((WIDTH/100)*SCOPE), (HEIGHT/2)-1);
+            glVertex2f((WIDTH/2)-((WIDTH/100)*SCOPE), (HEIGHT/2)+1);
+            glVertex2f((WIDTH/2)+((WIDTH/100)*SCOPE), (HEIGHT/2)+1);
+            glVertex2f((WIDTH/2)+((WIDTH/100)*SCOPE), (HEIGHT/2)-1);
+
+            glColor4f(0, 0, 0.5f,0.5f);
+
+            glVertex2f(WIDTH-((WIDTH/100)*HOR), HEIGHT-((HEIGHT/100)*VERT));
+            glVertex2f(WIDTH-((WIDTH/100)*HOR), HEIGHT-10);
+            glVertex2f(WIDTH-10, HEIGHT-10);
+            glVertex2f(WIDTH-10, HEIGHT-((HEIGHT/100)*VERT));
+    glEnd();
+
 }
