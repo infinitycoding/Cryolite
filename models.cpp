@@ -1,7 +1,5 @@
-#include <GL/gl.h>
-#include <GL/glu.h>
 #include "include/models.h"
-#include "include/general_def.h"
+
 
 extern GLuint cube, floor;
 
@@ -177,4 +175,48 @@ void drawHUD(void)
             glVertex2f((WIDTH/2)+15.0, (HEIGHT/2)+1);
             glVertex2f((WIDTH/2)+15.0, (HEIGHT/2)-1);
     glEnd();
+}
+
+
+void createObjectTriangle(Material *mat, Scene *sce)
+{
+    struct vertex3D *vertex = (struct vertex3D *)malloc(3*sizeof(struct vertex3D));
+    struct vertex2D *texvertex = (struct vertex2D *)malloc(3*sizeof(struct vertex3D));
+    struct triangle *first_triangle = (struct triangle *)malloc(sizeof(struct triangle));
+
+    vertex[0].x = 0.0;
+    vertex[0].y = 0.0;
+    vertex[0].z = 0.0;
+
+    vertex[1].x = 5.0;
+    vertex[1].y = 0.0;
+    vertex[1].z = 0.0;
+
+    vertex[2].x = 5.0;
+    vertex[2].y = 5.0;
+    vertex[2].z = 0.0;
+
+    texvertex[0].x = 0.0;
+    texvertex[0].y = 0.0;
+
+    texvertex[1].x = 1.0;
+    texvertex[1].y = 0.0;
+
+    texvertex[2].x = 1.0;
+    texvertex[2].y = 1.0;
+
+    Object *triangle = new Object("triangle");
+
+    first_triangle->objVertex[0] = triangle->addObjectVertex(&vertex[0]);
+    first_triangle->objVertex[1] = triangle->addObjectVertex(&vertex[1]);
+    first_triangle->objVertex[2] = triangle->addObjectVertex(&vertex[2]);
+    first_triangle->texVertex[0] = triangle->addTextureVertex(&texvertex[0]);
+    first_triangle->texVertex[1] = triangle->addTextureVertex(&texvertex[1]);
+    first_triangle->texVertex[2] = triangle->addTextureVertex(&texvertex[2]);
+
+    triangle->addTriangle(first_triangle);
+    triangle->ObjectMaterial = mat;
+    sce->addObject(triangle);
+
+    return;
 }

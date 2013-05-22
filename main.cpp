@@ -33,6 +33,7 @@ bool render = true;
 SDL_Surface* screen = NULL;
 GLuint cube, floor;			// This is a handle to our texture object
 SDL_Surface *surface;	// This surface will tell us the details of the image
+Scene scene;
 
 // draw the ground of the scene
 
@@ -52,55 +53,6 @@ void toggle_printFPS(SDL_Event *e)
 
 
 int main(int argc, char *argv[]){
-
-
-    struct vertex3D vertex1;
-    struct vertex3D vertex2;
-    struct vertex3D vertex3;
-
-    struct vertex2D texvertex1;
-    struct vertex2D texvertex2;
-    struct vertex2D texvertex3;
-
-    struct triangle first_triangle;
-
-    vertex1.x = 0.0;
-    vertex1.y = 0.0;
-    vertex1.z = 0.0;
-
-    vertex2.x = 5.0;
-    vertex2.y = 0.0;
-    vertex2.z = 0.0;
-
-    vertex3.x = 5.0;
-    vertex3.y = 5.0;
-    vertex3.z = 0.0;
-
-    texvertex1.x = 0.0;
-    texvertex1.y = 0.0;
-
-    texvertex2.x = 1.0;
-    texvertex2.y = 0.0;
-
-    texvertex3.x = 1.0;
-    texvertex3.y = 1.0;
-
-    Object triangle = Object("triangle");
-    Scene scene;
-
-    first_triangle.objVertex[0] = triangle.addObjectVertex(&vertex1);
-    first_triangle.objVertex[1] = triangle.addObjectVertex(&vertex2);
-    first_triangle.objVertex[2] = triangle.addObjectVertex(&vertex3);
-
-    first_triangle.texVertex[0] = triangle.addTextureVertex(&texvertex1);
-    first_triangle.texVertex[1] = triangle.addTextureVertex(&texvertex2);
-    first_triangle.texVertex[2] = triangle.addTextureVertex(&texvertex3);
-
-    triangle.addTriangle(&first_triangle);
-    scene.addObject(&triangle);
-
-
-
 
     SDL mainwindow = SDL(WIDTH,HEIGHT,SDL_OPENGL,"Cryolite Engine");     // Create the graphics window
 
@@ -127,14 +79,13 @@ int main(int argc, char *argv[]){
 
     Material ground = Material("ground.bmp");   // Loads the ground texture
     Material IC = Material("textur.bmp");
-    triangle.ObjectMaterial = &IC;
     cube = IC.textureGL;
     floor = ground.textureGL;
 
     INIT_Controls(&mainwindow);
     mainwindow.addEvent(SDL_KEYDOWN,toggle_printFPS);
 
-
+    createObjectTriangle(&IC, &scene);
 
     // 2D Texute settings
 
