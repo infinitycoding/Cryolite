@@ -4,23 +4,62 @@
 extern GLuint cube, floor;
 
 
-void draw_ground()
+void createObjectGround(Material *mat, Scene *sce)
 {
-glEnable(GL_TEXTURE_2D);
-glBindTexture( GL_TEXTURE_2D, floor );
+    struct vertex3D *vertex = (struct vertex3D *)malloc(4*sizeof(struct vertex3D));
+    struct vertex2D *texvertex = (struct vertex2D *)malloc(4*sizeof(struct vertex2D));
+    struct square *square = (struct square *)malloc(sizeof(struct square));
 
-    glBegin( GL_QUADS );
+    Object *ground = new Object("ground");
 
-        glTexCoord2i( 50, 0 );
-          glVertex3f( -GROUND_SIZE, -3, GROUND_SIZE);
-        glTexCoord2i( 0, 0 );
-          glVertex3f(-GROUND_SIZE, -3, -GROUND_SIZE);
-        glTexCoord2i( 0, 50 );
-          glVertex3f(GROUND_SIZE, -3, -GROUND_SIZE);
-        glTexCoord2i( 50, 50 );
-          glVertex3f( GROUND_SIZE, -3, GROUND_SIZE);
+    vertex[0].x = -GROUND_SIZE;
+    vertex[0].y = -3.0;
+    vertex[0].z = GROUND_SIZE;
 
-    glEnd();
+    vertex[1].x = -GROUND_SIZE;
+    vertex[1].y = -3.0;
+    vertex[1].z = -GROUND_SIZE;
+
+    vertex[2].x = GROUND_SIZE;
+    vertex[2].y = -3.0;
+    vertex[2].z = -GROUND_SIZE;
+
+    vertex[3].x = GROUND_SIZE;
+    vertex[3].y = -3.0;
+    vertex[3].z = GROUND_SIZE;
+
+
+    texvertex[0].x = 0.0;
+    texvertex[0].y = 0.0;
+
+    texvertex[1].x = 50.0;
+    texvertex[1].y = 0.0;
+
+    texvertex[2].x = 50.0;
+    texvertex[2].y = 50.0;
+
+    texvertex[3].x = 0.0;
+    texvertex[3].y = 50.0;
+
+
+    square->objVertex[0] = ground->addObjectVertex(&vertex[0]);
+    square->objVertex[1] = ground->addObjectVertex(&vertex[1]);
+    square->objVertex[2] = ground->addObjectVertex(&vertex[2]);
+    square->objVertex[3] = ground->addObjectVertex(&vertex[3]);
+
+    square->texVertex[0] = ground->addTextureVertex(&texvertex[0]);
+    square->texVertex[1] = ground->addTextureVertex(&texvertex[1]);
+    square->texVertex[2] = ground->addTextureVertex(&texvertex[2]);
+    square->texVertex[3] = ground->addTextureVertex(&texvertex[3]);
+
+    ground->addSquare(square);
+
+    ground->ObjectMaterial = mat;
+
+    sce->addObject(ground);
+
+    return;
+
 }
 
 // draw a cube with a texture

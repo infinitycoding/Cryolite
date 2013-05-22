@@ -85,14 +85,13 @@ int main(int argc, char *argv[]){
 
     Material ground = Material("blacktile.jpg");   // Loads the ground texture
     Material IC = Material("textur.bmp");
-    cube = IC.textureGL;
-    floor = ground.textureGL;
 
     INIT_Controls(&mainwindow);
     mainwindow.addEvent(SDL_KEYDOWN,toggle_printFPS);
 
     createObjectTriangle(&IC, &scene);
     createObjectCube(&IC, &scene);
+    createObjectGround(&ground, &scene);
 
     // 2D Texute settings
 
@@ -130,8 +129,6 @@ int main(int argc, char *argv[]){
         move_handler();         // Moves the camera if key pressed
 
         scene.render();
-
-        draw_ground();
 
 
         glMatrixMode(GL_PROJECTION);
