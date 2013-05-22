@@ -62,7 +62,7 @@ class Object
         struct List *texvertices;
         struct List *triangles;
         struct List *squares;
-        Material ObjectMaterial;
+        Material *ObjectMaterial;
 };
 
 

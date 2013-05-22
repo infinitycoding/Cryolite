@@ -127,10 +127,9 @@ int main(int argc, char *argv[]){
 
     Material ground = Material("ground.bmp");   // Loads the ground texture
     Material IC = Material("textur.bmp");
+    triangle.ObjectMaterial = &IC;
     cube = IC.textureGL;
     floor = ground.textureGL;
-
-    triangle.ObjectMaterial.textureGL = cube;
 
     INIT_Controls(&mainwindow);
     mainwindow.addEvent(SDL_KEYDOWN,toggle_printFPS);

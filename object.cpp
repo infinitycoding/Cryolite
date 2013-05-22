@@ -40,7 +40,7 @@ Object::Object(const char *objname)
     numofTriangles = 0;
     numofSquares = 0;
 
-    ObjectMaterial = Material();
+    ObjectMaterial = NULL;
 
     strncpy(objectname, objname, 20);
 }
@@ -84,7 +84,7 @@ Object::Object(const char *filename, const char *objname)
     numofTriangles = 0;
     numofSquares = 0;
 
-    ObjectMaterial = Material();
+    ObjectMaterial = NULL;
 
     strncpy(objectname, objname, 20);
 
@@ -93,7 +93,7 @@ Object::Object(const char *filename, const char *objname)
 
 Object::~Object()
 {
-    ObjectMaterial.~Material();
+    ObjectMaterial->~Material();
 
     // TODO: integrate list destruction function when implemented
 }
@@ -146,7 +146,7 @@ void Object::addSquare(struct square *new_square)
 
 void Object::loadMaterial(const char *file)
 {
-    ObjectMaterial.loadTexture2D(file);
+    ObjectMaterial = new Material(file);
 }
 
 

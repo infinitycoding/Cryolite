@@ -73,7 +73,7 @@ void Scene::render()
             {
                 glPushMatrix();
                     glEnable(GL_TEXTURE_2D);
-                    glBindTexture( GL_TEXTURE_2D, currentObject->ObjectMaterial.textureGL);
+                    glBindTexture( GL_TEXTURE_2D, currentObject->ObjectMaterial->textureGL);
                     //Modify Model Matrix
                     glTranslatef(currentObject->position.x,currentObject->position.y,currentObject->position.z); //move to local (0/0/0)
                     glRotatef(currentObject->rotationAngle, currentObject->rotationAxis.x, currentObject->rotationAxis.y, currentObject->rotationAxis.z);
@@ -93,7 +93,7 @@ void Scene::render()
                             struct triangle *currentTriangle = (struct triangle *)ListGetCurrent(currentObject->triangles);
                             for(int i=0;i<3;i++)
                             {
-                                if(currentObject->ObjectMaterial.textureGL)
+                                if(currentObject->ObjectMaterial->textureGL)
                                     glTexCoord2i( currentTriangle->texVertex[i]->x, currentTriangle->texVertex[i]->y );
                                 glVertex3f( currentTriangle->objVertex[i]->x, currentTriangle->objVertex[i]->y, currentTriangle->objVertex[i]->z);
 
