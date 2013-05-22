@@ -69,6 +69,9 @@ int main(int argc, char *argv[]){
     glLineWidth (LINEWIDTH);
 
 
+    glTranslatef(STARTING_X, STARTING_Y, STARTING_Z);
+
+
 
     INIT_Controls(&mainwindow);
 
@@ -77,7 +80,7 @@ int main(int argc, char *argv[]){
 
     Material ground = Material("blacktile.jpg");   // Loads the ground texture
     Material IC = Material("textur.bmp");
-    Material MAN = Material("man.png");
+    //Material MAN = Material("man.png");
 
 
 
