@@ -1,7 +1,9 @@
 #include "include/controls.h"
 #include "include/sdl.h"
+#include <math.h>
 
 #define ANGLE 1
+#define SPEED 2
 
 bool right=false;
 bool left=false;
@@ -12,10 +14,8 @@ bool move_left=false;
 bool move_foreward=false;
 bool move_backward=false;
 
-float move_direction_foreward=0.01;
+float move_direction_foreward=(float)SPEED/100;
 float move_direction_left=0;
-
-float head_z_position = 0;
 
 float position_x = 0;
 float position_y = 0;
@@ -122,20 +122,26 @@ void rotate_correctly(GLfloat angle, GLfloat rotate_x, GLfloat rotate_y, GLfloat
     glTranslatef(position_x, position_y, position_z);
 }
 
+void handler()
+{
+    glLoadIdentity();
+    rotation_handler();
+}
+
 void rotation_handler(){    // Rotates the object if a key is pressed.
     if(right)
     {
         rotate_correctly(ANGLE,0,1,0);
 
         if(move_direction_foreward <= 0)
-            move_direction_left += (float)1/(9000*(1/ANGLE));
+            move_direction_left += (float)1/((9000/SPEED)*(1/ANGLE));
         else
-            move_direction_left -=  (float)1/(9000*(1/ANGLE));
+            move_direction_left -=  (float)1/((9000/SPEED)*(1/ANGLE));
 
         if(move_direction_left <= 0)
-            move_direction_foreward -= (float)1/(9000*(1/ANGLE));
+            move_direction_foreward -= (float)1/((9000/SPEED)*(1/ANGLE));
         else
-            move_direction_foreward += (float)1/(9000*(1/ANGLE));
+            move_direction_foreward += (float)1/((9000/SPEED)*(1/ANGLE));
 
         right = false;
 
@@ -146,14 +152,14 @@ void rotation_handler(){    // Rotates the object if a key is pressed.
         rotate_correctly(-ANGLE,0,1,0);
 
         if(move_direction_foreward >= 0)
-            move_direction_left += (float)1/(9000*(1/ANGLE));
+            move_direction_left += (float)1/((9000/SPEED)*100*(1/ANGLE));
         else
-            move_direction_left -=  (float)1/(9000*(1/ANGLE));
+            move_direction_left -=  (float)1/((9000/SPEED)*100*(1/ANGLE));
 
         if(move_direction_left >= 0)
-            move_direction_foreward -= (float)1/(9000*(1/ANGLE));
+            move_direction_foreward -= (float)1/((9000/SPEED)*100*(1/ANGLE));
         else
-            move_direction_foreward += (float)1/(9000*(1/ANGLE));
+            move_direction_foreward += (float)1/((9000/SPEED)*(1/ANGLE));
 
         left = false;
     }
