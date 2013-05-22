@@ -6,6 +6,7 @@ Object::Object(const char *objname)
     vertices = ListCreate();
     triangles = ListCreate();
     squares = ListCreate();
+    texvertices = ListCreate();
 
     scale.x = 1;
     scale.y = 1;
@@ -22,6 +23,11 @@ Object::Object(const char *objname)
     rotationAxis.x = 0;
     rotationAxis.y = 0;
     rotationAxis.z = 0;
+
+    colorKey.red = 1.0f;
+    colorKey.green = 1.0f;
+    colorKey.blue = 1.0f;
+    colorKey.transparency = 1.0f;
 
     rotationAngle = 0;
 
@@ -44,6 +50,7 @@ Object::Object(const char *filename, const char *objname)
     vertices = ListCreate();
     triangles = ListCreate();
     squares = ListCreate();
+    texvertices = ListCreate();
 
     scale.x = 1;
     scale.y = 1;
@@ -60,6 +67,11 @@ Object::Object(const char *filename, const char *objname)
     rotationAxis.x = 0;
     rotationAxis.y = 0;
     rotationAxis.z = 0;
+
+    colorKey.red = 1.0f;
+    colorKey.green = 1.0f;
+    colorKey.blue = 1.0f;
+    colorKey.transparency = 1.0f;
 
     rotationAngle = 0;
 

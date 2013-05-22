@@ -34,7 +34,7 @@ int Scene::removeObject(char *name)
     while(!ListIsLast(this->objectList))
     {
         Object *currentObject = (Object *)ListGetCurrent(this->objectList);
-        if(strncmp(currentObject->objectname,name,20))
+        if(!strncmp(currentObject->objectname,name,20))
         {
             ListRemove(this->objectList);
             delObj++;
@@ -83,13 +83,18 @@ void Scene::render()
                     if(!ListIsEmpty(currentObject->triangles))
                     {
                         glBegin( GL_TRIANGLES );
+
+                        glColor4f(currentObject->colorKey.red, currentObject->colorKey.green, currentObject->colorKey.blue, currentObject->colorKey.transparency);
+
                         ListSetFirst(currentObject->triangles);
                         while(!ListIsLast(currentObject->triangles))
                         {
+
                             struct triangle *currentTriangle = (struct triangle *)ListGetCurrent(currentObject->triangles);
                             for(int i=0;i<3;i++)
                             {
-                                glTexCoord2i( currentTriangle->texVertex[i]->x, currentTriangle->texVertex[i]->y );
+                                if(currentObject->ObjectMaterial.textureGL)
+                                    glTexCoord2i( currentTriangle->texVertex[i]->x, currentTriangle->texVertex[i]->y );
                                 glVertex3f( currentTriangle->objVertex[i]->x, currentTriangle->objVertex[i]->y, currentTriangle->objVertex[i]->z);
 
                             }
@@ -100,7 +105,7 @@ void Scene::render()
                     }
 
                     //Render Quads
-                    if(!!ListIsEmpty(currentObject->squares))
+                    if(!ListIsEmpty(currentObject->squares))
                     {
                         glBegin( GL_QUADS );
                         ListSetFirst(currentObject->squares);

@@ -15,6 +15,7 @@
 #include "include/material.h"
 #include "include/models.h"
 #include "include/general_def.h"
+#include "include/scene.h"
 
 
 
@@ -24,6 +25,8 @@
 bool printFPS = false;
 int fpslenght = 0;
 bool render = true;
+
+
 
 
 
@@ -49,6 +52,55 @@ void toggle_printFPS(SDL_Event *e)
 
 
 int main(int argc, char *argv[]){
+
+
+    struct vertex3D vertex1;
+    struct vertex3D vertex2;
+    struct vertex3D vertex3;
+
+    struct vertex2D texvertex1;
+    struct vertex2D texvertex2;
+    struct vertex2D texvertex3;
+
+    struct triangle first_triangle;
+
+    vertex1.x = 0.0;
+    vertex1.y = 0.0;
+    vertex1.z = 0.0;
+
+    vertex2.x = 5.0;
+    vertex2.y = 0.0;
+    vertex2.z = 0.0;
+
+    vertex3.x = 5.0;
+    vertex3.y = 5.0;
+    vertex3.z = 0.0;
+
+    texvertex1.x = 0.0;
+    texvertex1.y = 0.0;
+
+    texvertex2.x = 1.0;
+    texvertex2.y = 0.0;
+
+    texvertex3.x = 1.0;
+    texvertex3.y = 1.0;
+
+    Object triangle = Object("triangle");
+    Scene scene;
+
+    first_triangle.objVertex[0] = triangle.addObjectVertex(&vertex1);
+    first_triangle.objVertex[1] = triangle.addObjectVertex(&vertex2);
+    first_triangle.objVertex[2] = triangle.addObjectVertex(&vertex3);
+
+    first_triangle.texVertex[0] = triangle.addTextureVertex(&texvertex1);
+    first_triangle.texVertex[1] = triangle.addTextureVertex(&texvertex2);
+    first_triangle.texVertex[2] = triangle.addTextureVertex(&texvertex3);
+
+    triangle.addTriangle(&first_triangle);
+    scene.addObject(&triangle);
+
+
+
 
     SDL mainwindow = SDL(WIDTH,HEIGHT,SDL_OPENGL,"Cryolite Engine");     // Create the graphics window
 
@@ -77,6 +129,8 @@ int main(int argc, char *argv[]){
     Material IC = Material("textur.bmp");
     cube = IC.textureGL;
     floor = ground.textureGL;
+
+    triangle.ObjectMaterial.textureGL = cube;
 
     INIT_Controls(&mainwindow);
     mainwindow.addEvent(SDL_KEYDOWN,toggle_printFPS);
@@ -131,6 +185,8 @@ int main(int argc, char *argv[]){
         draw_cube();
         glPopMatrix();
 
+        scene.render();
+
         draw_cube();            // Draw a few objects
         draw_ground();
 
@@ -152,7 +208,6 @@ int main(int argc, char *argv[]){
         glMatrixMode(GL_PROJECTION);
 
         glPopMatrix();
-
 
 
 

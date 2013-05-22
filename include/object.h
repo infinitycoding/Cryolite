@@ -51,6 +51,7 @@ class Object
         struct vertex3D scale;
         struct vertex3D position;
         struct vertex3D rotationAxis;
+        struct colorRGBA colorKey;
         GLfloat rotationAngle;
 
         struct vertex3D movement;
