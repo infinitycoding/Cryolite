@@ -25,12 +25,7 @@
 //todo: textur klasse, scene klasse
 bool printFPS = false;
 bool render = true;
-
-
-
-
-
-
+float averageFPS = 0;
 
 
 // draw the ground of the scene
@@ -41,8 +36,9 @@ bool render = true;
 
 int main(int argc, char *argv[]){
 
+glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,  GL_MODULATE);
 
-    SDL mainwindow = SDL(WIDTH,HEIGHT,SDL_OPENGL|SDL_HWSURFACE|SDL_FULLSCREEN,"Cryolite Engine");     // Create the graphics window
+    SDL mainwindow = SDL(WIDTH,HEIGHT,SDL_OPENGL|SDL_HWSURFACE,"Cryolite Engine");     // Create the graphics window
 
 
     glClearColor( 0.0, 0.0, 0.0, 0.0 ); // Sets the background color.
@@ -80,21 +76,39 @@ int main(int argc, char *argv[]){
     int lasttick = SDL_GetTicks();
     int fpslenght = 0;
     int currenttick = 0;
+    int ticcount = 0;
+    float sum = 0;
 
     while(render){ //render
 
+
+        currenttick = SDL_GetTicks();
+        if(ticcount==200)
+        {
+            averageFPS = sum/200;
+            sum = 0;
+            ticcount = 0;
+        }
+        else
+        {
+            sum +=(1000/(float)(currenttick-lasttick));
+            ticcount++;
+        }
+        lasttick = currenttick;
+
         if(printFPS)
         {
-            currenttick = SDL_GetTicks();
             for(int i =0;i<fpslenght;i++)
             {
                 printf("\b");
             }
             char buffer[10] = {0,0,0,0,0,0,0,0,0,0};
-            fpslenght = sprintf (buffer,"%.1f FPS",(1000/(float)(currenttick-lasttick)));
+            fpslenght = sprintf (buffer,"%.1f FPS",averageFPS);
             printf("%s",buffer);
-            lasttick = currenttick;
+
         }
+
+
 
 
 
