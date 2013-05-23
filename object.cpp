@@ -47,7 +47,7 @@ void Object::initObject()
     colorKey.blue = 1.0f;
     colorKey.transparency = 1.0f;
 
-    rotationAngle = 0;
+    Angle = 0;
 
     velocity = 0;
     acceleration = 0;
@@ -467,6 +467,21 @@ void Object::moveObject(float v,float a , struct vector3D motion)
     this->destPos.x = motion.x+this->position.x;
     this->destPos.y = motion.y+this->position.y;
     this->destPos.z = motion.z+this->position.z;
+}
+
+void Object::rotateObject(float angle,float v,float a, struct vector3D rotationAxis)
+{
+    this->startRotationTime = SDL_GetTicks();
+    this->remeaningAngle = angle;
+    if(angle<0)
+        this->remAngleSing = -1;
+    else
+        this->remAngleSing = 1;
+    this->rotationVelocity = v;
+    this->rotationAcceleration = a;
+    this->rotationAxis = rotationAxis;
+    this->destAngle = this->Angle+angle;
+
 }
 
 

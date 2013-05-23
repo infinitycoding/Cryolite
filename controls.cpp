@@ -40,6 +40,7 @@ void INIT_Controls(SDL* window)
     window->addEvent(SDL_MOUSEMOTION,haldeMouse);
     window->addEvent(SDL_KEYDOWN,toggle_printFPS);
     window->addEvent(SDL_KEYDOWN,moveCube);
+    window->addEvent(SDL_KEYDOWN,rotateCube);
 }
 
 void haldeKeydown(SDL_Event *e)
@@ -197,6 +198,17 @@ void moveCube(SDL_Event *e)
     {
         struct vector3D direction = {0,0,30};
         iccube->moveObject(1,0.002,direction);
+    }
+
+    return;
+}
+
+void rotateCube(SDL_Event *e)
+{
+    if(e->key.keysym.sym == SDLK_r)
+    {
+        struct vector3D direction = {0,0,1};
+        iccube->rotateObject(360,2,0.05,direction);
     }
 
     return;

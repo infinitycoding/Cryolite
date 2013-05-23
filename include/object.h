@@ -41,6 +41,7 @@ class Object
         void loadMaterial(const char *file);
         void loadObjectFile(const char *objectFile, const char *objectName);
         void moveObject(float v,float a , struct vector3D motion);
+        void rotateObject(float angle,float v,float a, struct vector3D rotationAxis);
 
         char objectname[20];
 
@@ -51,9 +52,17 @@ class Object
 
         struct vertex3D scale;
         struct vertex3D position;
-        struct vertex3D rotationAxis;
         struct colorRGBA colorKey;
-        GLfloat rotationAngle;
+
+        struct vector3D rotationAxis;
+        GLfloat Angle;
+        GLfloat remeaningAngle;
+        GLfloat destAngle;
+        float rotationVelocity;
+        float rotationAcceleration;
+        int startRotationTime;
+        int remAngleSing;
+
 
         struct vector3D distance;
         float velocity;

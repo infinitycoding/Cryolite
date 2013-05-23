@@ -114,8 +114,25 @@ void Scene::render()
                         currentObject->velocity = 0;
                         printf("FPS:%.1f RemF: 0 X: %f Y: %f Z: %f\n",averageFPS,currentObject->position.x,currentObject->position.y,currentObject->position.z);
                     }
+
+                    if(currentObject->remeaningAngle*currentObject->remAngleSing>0)
+                    {
+                        double APF = (double)(currentObject->rotationVelocity+currentObject->rotationAcceleration*(SDL_GetTicks()-currentObject->startRotationTime))/averageFPS;
+                        currentObject->remeaningAngle -=APF;
+                        currentObject->Angle += APF;
+                    }
+                    else if(currentObject->rotationVelocity)
+                    {
+                        currentObject->Angle = currentObject->destAngle;
+                        currentObject->rotationVelocity = 0;
+                        currentObject->rotationAcceleration = 0;
+                        currentObject->remeaningAngle = 0;
+                        printf("FPS: %f Angle %f\n",averageFPS,currentObject->Angle);
+
+                    }
+
+                    glRotatef(currentObject->Angle, currentObject->rotationAxis.x, currentObject->rotationAxis.y, currentObject->rotationAxis.z);
                     glTranslatef(currentObject->position.x,currentObject->position.y,currentObject->position.z); //move to local (0/0/0)
-                    glRotatef(currentObject->rotationAngle, currentObject->rotationAxis.x, currentObject->rotationAxis.y, currentObject->rotationAxis.z);
                     glScalef(currentObject->scale.x,currentObject->scale.z,currentObject->scale.z);
                     //Render Triangles
                     if(!ListIsEmpty(currentObject->triangles))
