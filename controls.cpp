@@ -195,8 +195,8 @@ void moveCube(SDL_Event *e)
 {
     if(e->key.keysym.sym == SDLK_e)
     {
-        struct vector3D direction = {0,0,10};
-        iccube->moveObject(1,direction);
+        struct vector3D direction = {0,0,30};
+        iccube->moveObject(1,0.002,direction);
     }
 
     return;

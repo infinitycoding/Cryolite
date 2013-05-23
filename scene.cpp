@@ -83,7 +83,7 @@ void Scene::render()
                     //Modify Model Matrix
                     if(currentObject->distance.x>0 || currentObject->distance.z>0 || currentObject->distance.z>0)
                     {
-                        int remFrames = ((int)((double)(sqrt((currentObject->distance.x*currentObject->distance.x)+(currentObject->distance.y*currentObject->distance.y)+(currentObject->distance.z*currentObject->distance.z))/currentObject->velocity)*averageFPS));
+                        int remFrames = ((int)((double)(sqrt((currentObject->distance.x*currentObject->distance.x)+(currentObject->distance.y*currentObject->distance.y)+(currentObject->distance.z*currentObject->distance.z))/(currentObject->velocity+currentObject->acceleration*(SDL_GetTicks()-currentObject->startTime)))*averageFPS));
 
                         double motion[3] = {currentObject->distance.x/remFrames,currentObject->distance.y/remFrames,currentObject->distance.z/remFrames};
 

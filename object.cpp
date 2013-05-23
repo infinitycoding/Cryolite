@@ -50,6 +50,8 @@ void Object::initObject()
     rotationAngle = 0;
 
     velocity = 0;
+    acceleration = 0;
+    startTime = 0;
     destPos.x = 0;
     destPos.y = 0;
     destPos.z = 0;
@@ -455,11 +457,12 @@ void Object::loadMaterial(const char *file)
 }
 
 
-void Object::moveObject(float velocity, struct vector3D motion)
+void Object::moveObject(float v,float a , struct vector3D motion)
 {
-
+    this->startTime = SDL_GetTicks();
+    this->acceleration = a;
     this->distance = motion;
-    this->velocity = velocity;
+    this->velocity = v;
     this->destPos.x = motion.x+this->position.x;
     this->destPos.y = motion.y+this->position.y;
     this->destPos.z = motion.z+this->position.z;

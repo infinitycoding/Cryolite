@@ -40,7 +40,7 @@ class Object
         void addSquare(struct square *new_square);
         void loadMaterial(const char *file);
         void loadObjectFile(const char *objectFile, const char *objectName);
-        void moveObject(float velocity, struct vector3D motion);
+        void moveObject(float v,float a , struct vector3D motion);
 
         char objectname[20];
 
@@ -57,6 +57,8 @@ class Object
 
         struct vector3D distance;
         float velocity;
+        float acceleration;
+        int startTime;
 
 
         struct List *vertices;
