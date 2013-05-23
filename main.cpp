@@ -63,15 +63,10 @@ glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,  GL_MODULATE);
     glLineWidth (LINEWIDTH);
     glTranslatef(STARTING_X, STARTING_Y, STARTING_Z);
 
-    Object *testobject = new Object("cube.obj", "cube.001");
-
     INIT_Controls(&mainwindow);
 
     Scene *mainScene = new Scene();
     INIT_Models(mainScene);
-
-
-    mainScene->addObject(testobject);
 
 
     // 2D Texute settings

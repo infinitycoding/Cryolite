@@ -12,6 +12,9 @@ void INIT_Models(Scene *sce)
     MAN = new Material("man.png");
     createObjectCube(IC, sce);
     createObjectGround(ground, sce);
+    Object *testobject = new Object("cube.obj", "cube.001");
+    testobject->position.x = 3;
+    sce->addObject(testobject);
 }
 
 
