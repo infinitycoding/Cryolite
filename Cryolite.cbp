@@ -35,7 +35,9 @@
 		<Linker>
 			<Add option="`sdl-config --libs`" />
 		</Linker>
+		<Unit filename="PhysicsEngine.cpp" />
 		<Unit filename="controls.cpp" />
+		<Unit filename="include/PhysicsEngine.h" />
 		<Unit filename="include/controls.h" />
 		<Unit filename="include/general_def.h" />
 		<Unit filename="include/list.h" />
