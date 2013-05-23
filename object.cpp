@@ -1,5 +1,5 @@
 #include "include/object.h"
-#include "math.h"
+#include <math.h>
 
 
 
@@ -76,28 +76,40 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
     FILE *f;
     char line[40];
     char string[20];                                // string can be many things
-    int i , j;                                      // i and j can too be many things
+    int h, i , j;                                    // h, i and j can too be many things
     int counter = 0;
     int numofotherVertices = 0, numofotherTexVertices = 0;  // counting the vertices and texture vertices not belonging to my object
+    int numofmyVertices = 0, numofmyTexVertices = 0;
+    int vert_id[4], tex_id[4];
+    int debug_linecounter = 0;
     bool correct_object = false;
     bool triangle_or_square;                        // triangle == false, square == true
     bool texture_coordinates = false;
-    struct vertex2D *texvertex_ptr;
-    struct vertex3D *objvertex_ptr;
-    struct triangle *triangle_ptr;
-    struct square *square_ptr;
+    struct vertex2D *texvertex_ptr = NULL;
+    struct vertex3D *objvertex_ptr = NULL;
+    struct triangle *triangle_ptr = NULL;
+    struct square *square_ptr = NULL;
+    struct vertex2D *texvertex_ptrs[50];
+    struct vertex3D *objvertex_ptrs[50];
 
     f = fopen(objectFile, "r");
     if(f == NULL)
     {
         printf("Die Datei %s kann nicht geoeffnet werden.\n", objectFile);
-        return;
+        exit(-1);
     }
 
-    while(fgets(line, 40, f))
+    while(*fgets(line, 40, f) != EOF)
     {
+        debug_linecounter++;
+        printf("line %d:\n", debug_linecounter);
+
         if(line[0] == '#')
+        {
+            printf("found a comment, will ignore it.\n");
             continue;
+        }
+
 
         if(line[0] == 's')
         {
@@ -118,25 +130,46 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
             exit(-1);
         }
 
-        if(strncmp(line, "usemtl", 6))
+        if(!strncmp(line, "usemtl", 6))
+        {
+            printf("found a usemtl, will ignore it.\n");
             continue;
+        }
+
+        if(!strncmp(line, "mtllib", 6))
+        {
+            printf("found a mtllib, will ignore it.\n");
+            continue;
+        }
+
 
         if(line[0] == '\n')
+        {
+            printf("found a newline, will ignore it.\n");
             continue;
+        }
 
         if(line[0] == 'o')
         {
             for(i = 2, j = 0; line[i] != '\n'; i++, j++)
                 string[j] = line[i];
 
-            string[j+1] = '\0';
+            string[j] = '\0';
 
-            if(strncmp(string, objectName, j))
+            if(!strncmp(string, objectName, strlen(string)))
+            {
                 correct_object = true;
+                printf("Found right object.\n");
+            }
             else
+            {
                 correct_object = false;
+                printf("End of right object reached.\n");
+                break;
+            }
 
-                continue;
+
+            continue;
         }
 
         if(line[0] == 'v' && line[1] == 't')
@@ -148,6 +181,8 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
             }
             else
             {
+                printf("Found a texture vertex.\n");
+
                 texvertex_ptr = (struct vertex2D *)malloc(sizeof(struct vertex2D));
 
                 for(i = 2, j = 0; line[i] != ' ' && line[i] != '\0' && line[i] != '\n'; i++, j++)
@@ -171,6 +206,9 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                 texvertex_ptr->y = atof(string);
 
                 this->addTextureVertex(texvertex_ptr);
+
+                texvertex_ptrs[numofmyTexVertices] = texvertex_ptr;
+                numofmyTexVertices++;
             }
 
             continue;
@@ -185,6 +223,8 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
             }
             else
             {
+                printf("Found a Vertex.\n");
+
                 objvertex_ptr = (struct vertex3D *)malloc(sizeof(struct vertex3D));
 
                 for(i = 2, j = 0; line[i] != ' ' && line[i] != '\0' && line[i] != '\n'; i++, j++)
@@ -221,6 +261,11 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                 objvertex_ptr->z = atof(string);
 
                 this->addObjectVertex(objvertex_ptr);
+
+                objvertex_ptrs[numofmyVertices] = objvertex_ptr;
+                numofmyVertices++;
+
+                printf("the coordinates of the vertex are: %f %f %f\n", objvertex_ptr->x, objvertex_ptr->y, objvertex_ptr->z);
             }
         }
 
@@ -230,14 +275,22 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                 continue;
             else
             {
-                for(i = 2; line[i] != '\n' && line[i] != '\0'; i++)     // check if it is a triangle or a square
+                printf("Found a polygone.\n");
+
+                for(i = 2, counter = 0; line[i] != '\n' && line[i] != '\0'; i++)     // check if it is a triangle or a square
                     if(line[i] == ' ')
                         counter++;
 
                 if(counter == 2)
+                {
+                    printf("it's a triangle.\n");
                     triangle_or_square = false;
+                }
                 else if(counter == 3)
+                {
+                    printf("it's a square.\n");
                     triangle_or_square = true;
+                }
                 else
                 {
                     printf("error: File is corrupted. programm will be ended.\n");
@@ -254,23 +307,98 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                     }
                 }
 
-
                 if(triangle_or_square)
-                    square_ptr = (struct square *)malloc(sizeof(struct square));
+                {
+                     square_ptr = (struct square *)malloc(sizeof(struct square));
+
+                     if(square_ptr == NULL)
+                     {
+                         printf("error: unable to malloc enought ram. programm will be ended.\n");
+                         exit(-1);
+                     }
+
+                     this->addSquare(square_ptr);
+                }
                 else
+                {
                     triangle_ptr = (struct triangle *)malloc(sizeof(struct triangle));
 
+                    if(triangle_ptr == NULL)
+                     {
+                         printf("error: unable to malloc enought ram. programm will be ended.\n");
+                         exit(-1);
+                     }
 
-                // TODO: Write the rest of the function
+                    this->addTriangle(triangle_ptr);
+                }
 
+                i = 1;
+
+                for(h = 0; h < (triangle_or_square ? 4 : 3); h++)
+                {
+
+                    for(++i, j = 0; line[i] != ' ' && line[i] != '/' && line[i] != '\n' && line[i] != '\0'; i++, j++)
+                    {
+                        string[j] = line[i];
+                    }
+
+                    string[j] = '\0';
+
+                    vert_id[h] = atoi(string);
+                    vert_id[h] -= numofotherVertices+1;
+
+                    if(texture_coordinates)
+                    {
+                        for(i++, j = 0; line[i] != ' '; i++, j++)
+                            string[j] = line[i];
+
+                        string[j+1] = '\0';
+
+                        tex_id[h] = atoi(string);
+                        tex_id[h] -= numofotherTexVertices+1;
+                    }
+
+                }
+
+                if(triangle_or_square)
+                {
+
+                    for(i = 0; i < 4; i++)
+                    {
+
+                        square_ptr->objVertex[i] = objvertex_ptrs[vert_id[i]];
+
+                        if(texture_coordinates)
+                            square_ptr->texVertex[i] = texvertex_ptrs[tex_id[i]];
+                    }
+                }
+                else
+                {
+
+                    for(i = 0; i < 3; i++)
+                    {
+                        triangle_ptr->objVertex[i] = objvertex_ptrs[vert_id[i]];
+
+                        if(texture_coordinates)
+                            triangle_ptr->texVertex[i] = texvertex_ptrs[tex_id[i]];
+                    }
+                }
+
+                printf("one polygone is finished, be happy!!!\n");
 
                 continue;
+
+                printf("this should never be displayed.\n");
             }
         }
     }
 
+    printf("end of file reached.\n");
+
     fclose(f);
+
 }
+
 
 struct vertex3D *Object::addObjectVertex(struct vertex3D *new_vertex)
 {

@@ -68,14 +68,18 @@ void Scene::render()
     {
         glMatrixMode(GL_MODELVIEW);
         ListSetFirst(this->objectList);
+
         while(!ListIsLast(this->objectList))
         {
             Object *currentObject = (Object *)ListGetCurrent(this->objectList);
             if(!ListIsEmpty(currentObject->vertices))
             {
                 glPushMatrix();
-                    glEnable(GL_TEXTURE_2D);
-                    glBindTexture( GL_TEXTURE_2D, currentObject->ObjectMaterial->textureGL);
+                glEnable(GL_TEXTURE_2D);
+                    if(currentObject->ObjectMaterial)
+                        glBindTexture( GL_TEXTURE_2D, currentObject->ObjectMaterial->textureGL);
+                    else
+                        glBindTexture( GL_TEXTURE_2D, 0);
                     //Modify Model Matrix
                     if(currentObject->distance.x>0 || currentObject->distance.z>0 || currentObject->distance.z>0)
                     {
@@ -113,7 +117,6 @@ void Scene::render()
                     glTranslatef(currentObject->position.x,currentObject->position.y,currentObject->position.z); //move to local (0/0/0)
                     glRotatef(currentObject->rotationAngle, currentObject->rotationAxis.x, currentObject->rotationAxis.y, currentObject->rotationAxis.z);
                     glScalef(currentObject->scale.x,currentObject->scale.z,currentObject->scale.z);
-
                     //Render Triangles
                     if(!ListIsEmpty(currentObject->triangles))
                     {
@@ -128,8 +131,9 @@ void Scene::render()
                             struct triangle *currentTriangle = (struct triangle *)ListGetCurrent(currentObject->triangles);
                             for(int i=0;i<3;i++)
                             {
-                                if(currentObject->ObjectMaterial->textureGL)
-                                    glTexCoord2i( currentTriangle->texVertex[i]->x, currentTriangle->texVertex[i]->y );
+                                if(currentObject->ObjectMaterial)
+                                    if(currentObject->ObjectMaterial->textureGL)
+                                        glTexCoord2i( currentTriangle->texVertex[i]->x, currentTriangle->texVertex[i]->y );
                                 glVertex3f( currentTriangle->objVertex[i]->x, currentTriangle->objVertex[i]->y, currentTriangle->objVertex[i]->z);
 
                             }
@@ -139,7 +143,6 @@ void Scene::render()
                         glEnd();
 
                     }
-
                     //Render Quads
                     if(!ListIsEmpty(currentObject->squares))
                     {
@@ -150,7 +153,9 @@ void Scene::render()
                             struct square *currentSquare = (struct square *)ListGetCurrent(currentObject->squares);
                             for(int i=0;i<4;i++)
                             {
-                                glTexCoord2i( currentSquare->texVertex[i]->x, currentSquare->texVertex[i]->y );
+                                if(currentObject->ObjectMaterial)
+                                    if(currentObject->ObjectMaterial->textureGL)
+                                        glTexCoord2i( currentSquare->texVertex[i]->x, currentSquare->texVertex[i]->y );
                                 glVertex3f( currentSquare->objVertex[i]->x, currentSquare->objVertex[i]->y, currentSquare->objVertex[i]->z);
                             }
                             ListNext(currentObject->squares);
@@ -158,7 +163,6 @@ void Scene::render()
                         glEnd();
 
                     }
-
 
 
                 glPopMatrix();

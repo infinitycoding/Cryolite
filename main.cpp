@@ -62,13 +62,15 @@ glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,  GL_MODULATE);
     glLineWidth (LINEWIDTH);
     glTranslatef(STARTING_X, STARTING_Y, STARTING_Z);
 
-
+    Object *testobject = new Object("threecubes.obj", "Cube.002");
 
     INIT_Controls(&mainwindow);
 
     Scene *mainScene = new Scene();
     INIT_Models(mainScene);
 
+
+    mainScene->addObject(testobject);
 
 
     // 2D Texute settings
@@ -77,7 +79,9 @@ glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,  GL_MODULATE);
     int fpslenght = 0;
     int currenttick = 0;
     int ticcount = 0;
-    float sum = 0;
+    double sum = 0;
+
+    printf("entering main loop...\n");
 
     while(render){ //render
 
@@ -91,7 +95,9 @@ glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,  GL_MODULATE);
         }
         else
         {
-            sum +=(1000/(float)(currenttick-lasttick));
+            if(currenttick-lasttick > 0)
+                sum +=(1000.0/(float)(currenttick-lasttick));
+
             ticcount++;
         }
         lasttick = currenttick;
@@ -121,7 +127,11 @@ glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,  GL_MODULATE);
         rotation_handler();     // Rotates the camera if mouse moved
         move_handler();         // Moves the camera if key pressed
 
+        printf("will render...\n");
+
         mainScene->render();
+
+        printf("rendered!\n");
 
         drawHUD();
 
