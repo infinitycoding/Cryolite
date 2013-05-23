@@ -68,6 +68,8 @@ class Object
         Material *ObjectMaterial;
         struct vector3D destPos;
 
+        bool isPhysicalActor;
+
 
     private:
 

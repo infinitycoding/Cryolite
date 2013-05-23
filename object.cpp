@@ -61,6 +61,7 @@ void Object::initObject()
     numofTriangles = 0;
     numofSquares = 0;
 
+    isPhysicalActor = false;
 
     ObjectMaterial = NULL;
 }

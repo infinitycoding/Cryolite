@@ -12,6 +12,7 @@
 
 #define LINEWIDTH 1
 
+#define STANDARD_SIZED_CACHE 100
 
 
 #endif
