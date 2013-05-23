@@ -17,8 +17,9 @@
 #include "include/models.h"
 #include "include/general_def.h"
 #include "include/scene.h"
-
-
+#ifdef _WIN32
+#undef main
+#endif
 
 #define FOV 80
 
