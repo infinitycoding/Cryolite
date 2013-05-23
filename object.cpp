@@ -81,7 +81,6 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
     int numofotherVertices = 0, numofotherTexVertices = 0;  // counting the vertices and texture vertices not belonging to my object
     int numofmyVertices = 0, numofmyTexVertices = 0;
     int vert_id[4], tex_id[4];
-    int debug_linecounter = 0;
     bool correct_object = false;
     bool triangle_or_square;                        // triangle == false, square == true
     bool texture_coordinates = false;
@@ -92,6 +91,8 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
     struct vertex2D *texvertex_ptrs[50];
     struct vertex3D *objvertex_ptrs[50];
 
+    printf("loading file %s...\n", objectFile);
+
     f = fopen(objectFile, "r");
     if(f == NULL)
     {
@@ -101,14 +102,9 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
     while(*fgets(line, 40, f) != EOF)
     {
-        debug_linecounter++;
-        printf("line %d:\n", debug_linecounter);
 
         if(line[0] == '#')
-        {
-            printf("found a comment, will ignore it.\n");
             continue;
-        }
 
 
         if(line[0] == 's')
@@ -131,23 +127,14 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
         }
 
         if(!strncmp(line, "usemtl", 6))
-        {
-            printf("found a usemtl, will ignore it.\n");
             continue;
-        }
 
         if(!strncmp(line, "mtllib", 6))
-        {
-            printf("found a mtllib, will ignore it.\n");
             continue;
-        }
 
 
         if(line[0] == '\n')
-        {
-            printf("found a newline, will ignore it.\n");
             continue;
-        }
 
         if(line[0] == 'o')
         {
@@ -157,14 +144,10 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
             string[j] = '\0';
 
             if(!strncmp(string, objectName, strlen(string)))
-            {
                 correct_object = true;
-                printf("Found right object.\n");
-            }
             else
             {
                 correct_object = false;
-                printf("End of right object reached.\n");
                 break;
             }
 
@@ -181,7 +164,6 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
             }
             else
             {
-                printf("Found a texture vertex.\n");
 
                 texvertex_ptr = (struct vertex2D *)malloc(sizeof(struct vertex2D));
 
@@ -223,7 +205,6 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
             }
             else
             {
-                printf("Found a Vertex.\n");
 
                 objvertex_ptr = (struct vertex3D *)malloc(sizeof(struct vertex3D));
 
@@ -264,8 +245,6 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
                 objvertex_ptrs[numofmyVertices] = objvertex_ptr;
                 numofmyVertices++;
-
-                printf("the coordinates of the vertex are: %f %f %f\n", objvertex_ptr->x, objvertex_ptr->y, objvertex_ptr->z);
             }
         }
 
@@ -275,22 +254,14 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                 continue;
             else
             {
-                printf("Found a polygone.\n");
-
                 for(i = 2, counter = 0; line[i] != '\n' && line[i] != '\0'; i++)     // check if it is a triangle or a square
                     if(line[i] == ' ')
                         counter++;
 
                 if(counter == 2)
-                {
-                    printf("it's a triangle.\n");
                     triangle_or_square = false;
-                }
                 else if(counter == 3)
-                {
-                    printf("it's a square.\n");
                     triangle_or_square = true;
-                }
                 else
                 {
                     printf("error: File is corrupted. programm will be ended.\n");
@@ -384,8 +355,6 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                     }
                 }
 
-                printf("one polygone is finished, be happy!!!\n");
-
                 continue;
 
                 printf("this should never be displayed.\n");
@@ -393,7 +362,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
         }
     }
 
-    printf("end of file reached.\n");
+    printf("file successfully loaded.\n");
 
     fclose(f);
 

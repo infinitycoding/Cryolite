@@ -81,8 +81,6 @@ glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,  GL_MODULATE);
     int ticcount = 0;
     double sum = 0;
 
-    printf("entering main loop...\n");
-
     while(render){ //render
 
 
@@ -127,11 +125,7 @@ glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,  GL_MODULATE);
         rotation_handler();     // Rotates the camera if mouse moved
         move_handler();         // Moves the camera if key pressed
 
-        printf("will render...\n");
-
         mainScene->render();
-
-        printf("rendered!\n");
 
         drawHUD();
 
