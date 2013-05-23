@@ -100,7 +100,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
         exit(-1);
     }
 
-    while(*fgets(line, 40, f) != EOF)
+    while(fgets(line, 40, f))
     {
         if(line[0] == 'o')
         {
@@ -170,7 +170,17 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
             continue;
 
         if(!strncmp(line, "mtllib", 6))
+        {
+            for(i = 7, j = 0; line[i] != '\n'; i++, j++)
+                string[j] = line[i];
+
+            string[j] = '\0';
+
+            printf("loading texture %s...\n", string);
+
+            loadMaterial(string);
             continue;
+        }
 
 
         if(line[0] == '\n')
