@@ -2,6 +2,7 @@
 #include "include/material.h"
 
 Material *MAN;
+Object *iccube;
 
 
 void INIT_Models(Scene *sce)
@@ -80,7 +81,7 @@ void createObjectCube(Material *mat, Scene *sce)
     struct vertex2D *texvertex = (struct vertex2D *)malloc(4*sizeof(struct vertex2D));
     struct square *square = (struct square *)malloc(6*sizeof(struct square));
 
-    Object *iccube = new Object("iccube");
+    iccube = new Object("iccube");
 
 
     texvertex[0].x = 1.0f;
