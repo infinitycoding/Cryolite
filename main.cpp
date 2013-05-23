@@ -62,7 +62,7 @@ glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,  GL_MODULATE);
     glLineWidth (LINEWIDTH);
     glTranslatef(STARTING_X, STARTING_Y, STARTING_Z);
 
-    Object *testobject = new Object("threecubes.obj", "Cube.002");
+    Object *testobject = new Object("cube.obj", "cube.001");
 
     INIT_Controls(&mainwindow);
 
