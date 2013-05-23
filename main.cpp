@@ -22,6 +22,7 @@
 #endif
 
 #define FOV 80
+#define FPS_ACCURACY 200
 
 //todo: textur klasse, scene klasse
 bool printFPS = false;
@@ -36,8 +37,7 @@ float averageFPS = 0;
 
 
 int main(int argc, char *argv[]){
-
-glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,  GL_MODULATE);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,  GL_MODULATE);
 
     SDL mainwindow = SDL(WIDTH,HEIGHT,SDL_OPENGL|SDL_HWSURFACE,"Cryolite Engine");     // Create the graphics window
 
@@ -81,9 +81,9 @@ glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,  GL_MODULATE);
 
 
         currenttick = SDL_GetTicks();
-        if(ticcount==200)
+        if(ticcount==FPS_ACCURACY)
         {
-            averageFPS = sum/200;
+            averageFPS = sum/FPS_ACCURACY;
             sum = 0;
             ticcount = 0;
         }
