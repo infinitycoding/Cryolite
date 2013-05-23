@@ -73,17 +73,17 @@ Object::~Object()
 
 void Object::loadObjectFile(const char *objectFile, const char *objectName)
 {
-    FILE *f;
-    char line[40];
-    char string[20];                                // string can be many things
-    int h, i , j;                                    // h, i and j can too be many things
-    int counter = 0;
+    FILE *f;                                                 // the file handle
+    char line[40];                                          // a line of the file
+    char string[20];                                        // string can be many things
+    int h, i , j;                                           // h, i and j can too be many things
+    int counter = 0;                                        // a general counter, counting what is to count
     int numofotherVertices = 0, numofotherTexVertices = 0;  // counting the vertices and texture vertices not belonging to my object
-    int numofmyVertices = 0, numofmyTexVertices = 0;
-    int ObjectVertexCounter = 0, TextureVertexCounter = 0;
-    int vert_id[4], tex_id[4];
-    bool correct_object = false;
-    bool triangle_or_square;                        // triangle == false, square == true
+    int numofmyVertices = 0, numofmyTexVertices = 0;        // counting the vertices and texture vertices created until now to know the new arrey index
+    int ObjectVertexCounter = 0, TextureVertexCounter = 0;  // counting the vertices and texture vertices before main parser, to set the array size
+    int vert_id[4], tex_id[4];                              // temponary variables
+    bool correct_object = false;                           // says if i have found the correct object yet
+    bool triangle_or_square;                                // triangle == false, square == true
     bool texture_coordinates = false;
     struct vertex2D *texvertex_ptr = NULL;
     struct vertex3D *objvertex_ptr = NULL;
@@ -96,7 +96,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
     if(f == NULL)
     {
-        printf("Die Datei %s kann nicht geoeffnet werden.\n", objectFile);
+        printf("the file %s could not be opened.\n", objectFile);
         exit(-1);
     }
 
