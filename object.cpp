@@ -80,6 +80,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
     int counter = 0;
     int numofotherVertices = 0, numofotherTexVertices = 0;  // counting the vertices and texture vertices not belonging to my object
     int numofmyVertices = 0, numofmyTexVertices = 0;
+    int ObjectVertexCounter = 0, TextureVertexCounter = 0;
     int vert_id[4], tex_id[4];
     bool correct_object = false;
     bool triangle_or_square;                        // triangle == false, square == true
@@ -88,17 +89,56 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
     struct vertex3D *objvertex_ptr = NULL;
     struct triangle *triangle_ptr = NULL;
     struct square *square_ptr = NULL;
-    struct vertex2D *texvertex_ptrs[50];
-    struct vertex3D *objvertex_ptrs[50];
 
     printf("loading file %s...\n", objectFile);
 
     f = fopen(objectFile, "r");
+
     if(f == NULL)
     {
         printf("Die Datei %s kann nicht geoeffnet werden.\n", objectFile);
         exit(-1);
     }
+
+    while(*fgets(line, 40, f) != EOF)
+    {
+        if(line[0] == 'o')
+        {
+            for(i = 2, j = 0; line[i] != '\n'; i++, j++)
+                string[j] = line[i];
+
+            string[j] = '\0';
+
+            if(!strncmp(string, objectName, strlen(string)))
+                correct_object = true;
+            else
+            {
+                correct_object = false;
+                break;
+            }
+        }
+        else if(line[0] == 'v' && line[1] == ' ')
+        {
+            if(correct_object == true)
+                ObjectVertexCounter++;
+        }
+        else if(line[0] == 'v' && line[1]== 't')
+        {
+            if(correct_object == true)
+                TextureVertexCounter++;
+        }
+        else
+            continue;
+    }
+
+    correct_object = false;
+
+    printf("Found %d Vertices and %d Texturevertices.\n", ObjectVertexCounter, TextureVertexCounter);
+
+    struct vertex2D *texvertex_ptrs[TextureVertexCounter];
+    struct vertex3D *objvertex_ptrs[ObjectVertexCounter];
+
+    fseek(f, 0, SEEK_SET);
 
     while(*fgets(line, 40, f) != EOF)
     {
