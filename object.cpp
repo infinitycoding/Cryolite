@@ -75,9 +75,17 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 {
     FILE *f;
     char line[40];
-    char string[20];            // string can be many things
-    int i;                      // i can too be many things
-    bool correct_object=false;
+    char string[20];                                // string can be many things
+    int i , j;                                      // i and j can too be many things
+    int counter = 0;
+    int numofotherVertices = 0, numofotherTexVertices = 0;  // counting the vertices and texture vertices not belonging to my object
+    bool correct_object = false;
+    bool triangle_or_square;                        // triangle == false, square == true
+    bool texture_coordinates = false;
+    struct vertex2D *texvertex_ptr;
+    struct vertex3D *objvertex_ptr;
+    struct triangle *triangle_ptr;
+    struct square *square_ptr;
 
     f = fopen(objectFile, "r");
     if(f == NULL)
@@ -118,34 +126,101 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
         if(line[0] == 'o')
         {
-            for(i = 2; line[i] != '\n'; i++)
-                string[i-2] = line[i];
+            for(i = 2, j = 0; line[i] != '\n'; i++, j++)
+                string[j] = line[i];
 
-            string[i+1] = '\0';
+            string[j+1] = '\0';
 
-            if(strncmp(string, objectName, i-2))
+            if(strncmp(string, objectName, j))
                 correct_object = true;
             else
                 correct_object = false;
+
+                continue;
         }
 
         if(line[0] == 'v' && line[1] == 't')
         {
             if(correct_object == false)
+            {
+                numofotherTexVertices++;
                 continue;
+            }
             else
             {
-                // TODO: Write possibility to load texture vertices
+                texvertex_ptr = (struct vertex2D *)malloc(sizeof(struct vertex2D));
+
+                for(i = 2, j = 0; line[i] != ' ' && line[i] != '\0' && line[i] != '\n'; i++, j++)
+                    string[j] = line[i];
+
+                if(line[i] == '\0' || line[i] == '\n')
+                {
+                    printf("error: File is corrupted. programm will be ended.\n");
+                    exit(-1);
+                }
+
+                string[j+1] = '\0';
+
+                texvertex_ptr->x = atof(string);
+
+                for(i++, j = 0; line[i] != '\n' && line[i] != '\0'; i++, j++)
+                    string[j] = line[i];
+
+                string[j+1] = '\0';
+
+                texvertex_ptr->y = atof(string);
+
+                this->addTextureVertex(texvertex_ptr);
             }
+
+            continue;
         }
 
         if(line[0] == 'v' && line[1] == ' ')
         {
             if(correct_object == false)
+            {
+                numofotherVertices++;
                 continue;
+            }
             else
             {
-                // TODO: Write possibility to load object vertices
+                objvertex_ptr = (struct vertex3D *)malloc(sizeof(struct vertex3D));
+
+                for(i = 2, j = 0; line[i] != ' ' && line[i] != '\0' && line[i] != '\n'; i++, j++)
+                    string[j] = line[i];
+
+                if(line[i] == '\0' || line[i] == '\n')
+                {
+                    printf("error: File is corrupted. programm will be ended.\n");
+                    exit(-1);
+                }
+
+                string[j+1] = '\0';
+
+                objvertex_ptr->x = atof(string);
+
+                for(i++, j = 0; line[i] != ' ' && line[i] != '\0' && line[i] != '\n'; i++, j++)
+                    string[j] = line[i];
+
+                if(line[i] == '\0' || line[i] == '\n')
+                {
+                    printf("error: File is corrupted. programm will be ended.\n");
+                    exit(-1);
+                }
+
+                string[j+1] = '\0';
+
+                objvertex_ptr->y = atof(string);
+
+                for(i++, j = 0; line[i] != '\n' && line[i] != '\0'; i++, j++)
+                    string[j] = line[i];
+
+                string[j+1] = '\0';
+
+                objvertex_ptr->z = atof(string);
+
+                this->addObjectVertex(objvertex_ptr);
             }
         }
 
@@ -155,7 +230,41 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                 continue;
             else
             {
-                // TODO: Write possibility to load polygones
+                for(i = 2; line[i] != '\n' && line[i] != '\0'; i++)     // check if it is a triangle or a square
+                    if(line[i] == ' ')
+                        counter++;
+
+                if(counter == 2)
+                    triangle_or_square = false;
+                else if(counter == 3)
+                    triangle_or_square = true;
+                else
+                {
+                    printf("error: File is corrupted. programm will be ended.\n");
+                    exit(-1);
+                }
+
+
+                for(i = 2; line[i] != '\n' && line[i] != '\0'; i++)     // check if there are texture coordinates
+                {
+                    if(line[i] == '/')
+                    {
+                        texture_coordinates = true;
+                        break;
+                    }
+                }
+
+
+                if(triangle_or_square)
+                    square_ptr = (struct square *)malloc(sizeof(struct square));
+                else
+                    triangle_ptr = (struct triangle *)malloc(sizeof(struct triangle));
+
+
+                // TODO: Write the rest of the function
+
+
+                continue;
             }
         }
     }
