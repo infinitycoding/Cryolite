@@ -2,7 +2,9 @@
 #include <GL/glu.h>
 #include "include/scene.h"
 #include "include/object.h"
+#include <math.h>
 
+extern float averageFPS;
 
 
 Scene::Scene()
@@ -75,6 +77,39 @@ void Scene::render()
                     glEnable(GL_TEXTURE_2D);
                     glBindTexture( GL_TEXTURE_2D, currentObject->ObjectMaterial->textureGL);
                     //Modify Model Matrix
+                    if(currentObject->distance.x>0 || currentObject->distance.z>0 || currentObject->distance.z>0)
+                    {
+                        int remFrames = ((int)((double)(sqrt((currentObject->distance.x*currentObject->distance.x)+(currentObject->distance.y*currentObject->distance.y)+(currentObject->distance.z*currentObject->distance.z))/currentObject->velocity)*averageFPS));
+
+                        double motion[3] = {currentObject->distance.x/remFrames,currentObject->distance.y/remFrames,currentObject->distance.z/remFrames};
+
+                        if(motion[0]<0)
+                            currentObject->distance.x += motion[0];
+                        else
+                            currentObject->distance.x -= motion[0];
+
+                        if(motion[1]<0)
+                            currentObject->distance.y += motion[1];
+                        else
+                            currentObject->distance.y -= motion[1];
+
+                        if(motion[2]<0)
+                            currentObject->distance.z += motion[2];
+                        else
+                            currentObject->distance.z -= motion[2];
+
+                        currentObject->position.x +=motion[0];
+                        currentObject->position.y +=motion[1];
+                        currentObject->position.z +=motion[2];
+                    }
+                    else if(currentObject->velocity)
+                    {
+                        currentObject->position.x = currentObject->destPos.x;
+                        currentObject->position.y = currentObject->destPos.y;
+                        currentObject->position.z = currentObject->destPos.z;
+                        currentObject->velocity = 0;
+                        printf("FPS:%.1f RemF: 0 X: %f Y: %f Z: %f\n",averageFPS,currentObject->position.x,currentObject->position.y,currentObject->position.z);
+                    }
                     glTranslatef(currentObject->position.x,currentObject->position.y,currentObject->position.z); //move to local (0/0/0)
                     glRotatef(currentObject->rotationAngle, currentObject->rotationAxis.x, currentObject->rotationAxis.y, currentObject->rotationAxis.z);
                     glScalef(currentObject->scale.x,currentObject->scale.z,currentObject->scale.z);
@@ -100,6 +135,7 @@ void Scene::render()
                             }
                             ListNext(currentObject->triangles);
                         }
+
                         glEnd();
 
                     }

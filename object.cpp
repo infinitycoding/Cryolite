@@ -1,4 +1,6 @@
 #include "include/object.h"
+#include "math.h"
+
 
 
 Object::Object(const char *objname)
@@ -32,9 +34,9 @@ void Object::initObject()
     position.y = 0;
     position.z = 0;
 
-    movement.x = 0;
-    movement.y = 0;
-    movement.z = 0;
+    distance.x = 0;
+    distance.y = 0;
+    distance.z = 0;
 
     rotationAxis.x = 0;
     rotationAxis.y = 0;
@@ -48,13 +50,15 @@ void Object::initObject()
     rotationAngle = 0;
 
     velocity = 0;
-
-    remaining_movement = 0;
+    destPos.x = 0;
+    destPos.y = 0;
+    destPos.z = 0;
 
     numofTextureSpots = 0;
     numofSpots = 0;
     numofTriangles = 0;
     numofSquares = 0;
+
 
     ObjectMaterial = NULL;
 }
@@ -192,6 +196,17 @@ void Object::addSquare(struct square *new_square)
 void Object::loadMaterial(const char *file)
 {
     ObjectMaterial = new Material(file);
+}
+
+
+void Object::moveObject(float velocity, struct vector3D motion)
+{
+
+    this->distance = motion;
+    this->velocity = velocity;
+    this->destPos.x = motion.x+this->position.x;
+    this->destPos.y = motion.y+this->position.y;
+    this->destPos.z = motion.z+this->position.z;
 }
 
 

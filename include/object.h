@@ -40,6 +40,7 @@ class Object
         void addSquare(struct square *new_square);
         void loadMaterial(const char *file);
         void loadObjectFile(const char *objectFile, const char *objectName);
+        void moveObject(float velocity, struct vector3D motion);
 
         char objectname[20];
 
@@ -54,18 +55,20 @@ class Object
         struct colorRGBA colorKey;
         GLfloat rotationAngle;
 
-        struct vertex3D movement;
+        struct vector3D distance;
         float velocity;
-        uint32_t remaining_movement;
+
 
         struct List *vertices;
         struct List *texvertices;
         struct List *triangles;
         struct List *squares;
         Material *ObjectMaterial;
+        struct vector3D destPos;
 
 
     private:
+
         void initObject();
 };
 

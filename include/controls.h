@@ -13,6 +13,7 @@ void haldeKeydown(SDL_Event *e);
 void haldeKeyup(SDL_Event *e);
 void haldeMouse(SDL_Event *e);
 void toggle_printFPS(SDL_Event *e);
+void moveCube(SDL_Event *e);
 
 
 #endif

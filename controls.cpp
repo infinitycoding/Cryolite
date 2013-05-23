@@ -1,6 +1,7 @@
 #include "include/controls.h"
 #include "include/sdl.h"
 #include "include/general_def.h"
+#include "include/object.h"
 #include <math.h>
 
 #define ANGLE 1
@@ -38,6 +39,7 @@ void INIT_Controls(SDL* window)
     SDL_WM_GrabInput( SDL_GRAB_ON );// Maus einfangen
     window->addEvent(SDL_MOUSEMOTION,haldeMouse);
     window->addEvent(SDL_KEYDOWN,toggle_printFPS);
+    window->addEvent(SDL_KEYDOWN,moveCube);
 }
 
 void haldeKeydown(SDL_Event *e)
@@ -183,6 +185,18 @@ void toggle_printFPS(SDL_Event *e)
             printFPS = false;
         else
             printFPS = true;
+    }
+
+    return;
+}
+extern Object *iccube;
+
+void moveCube(SDL_Event *e)
+{
+    if(e->key.keysym.sym == SDLK_e)
+    {
+        struct vector3D direction = {0,0,10};
+        iccube->moveObject(1,direction);
     }
 
     return;
