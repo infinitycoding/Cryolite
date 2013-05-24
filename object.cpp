@@ -230,7 +230,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
                 texvertex_ptr = (struct vertex2D *)malloc(sizeof(struct vertex2D));
 
-                for(i = 2, j = 0; line[i] != ' ' && line[i] != '\0' && line[i] != '\n'; i++, j++)
+                for(i = 3, j = 0; line[i] != ' ' && line[i] != '\0' && line[i] != '\n'; i++, j++)
                     string[j] = line[i];
 
                 if(line[i] == '\0' || line[i] == '\n')
