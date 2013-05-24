@@ -4,12 +4,18 @@
 #include "include/object.h"
 #include <math.h>
 
-extern float averageFPS;
 
 
 Scene::Scene()
 {
     this->objectList = ListCreate();
+    currenttick = 0;
+    ticcount = 0;
+    tickbundle = 3;
+    sum = 0;
+    lasttick = 0;
+    accuracy = 60;
+
 }
 
 Scene::~Scene()
@@ -64,6 +70,7 @@ int Scene::removeObject(Object *obj)
 
 void Scene::render()
 {
+    this->calculateFPS();
     if(!ListIsEmpty(this->objectList))
     {
         glMatrixMode(GL_MODELVIEW);
@@ -112,7 +119,7 @@ void Scene::render()
                         currentObject->position.y = currentObject->destPos.y;
                         currentObject->position.z = currentObject->destPos.z;
                         currentObject->velocity = 0;
-                        printf("FPS:%.1f RemF: 0 X: %f Y: %f Z: %f\n",averageFPS,currentObject->position.x,currentObject->position.y,currentObject->position.z);
+                        printf("RemF: 0 X: %f Y: %f Z: %f\n",currentObject->position.x,currentObject->position.y,currentObject->position.z);
                     }
 
                     if(currentObject->remeaningAngle*currentObject->remAngleSing>0)
@@ -127,7 +134,7 @@ void Scene::render()
                         currentObject->rotationVelocity = 0;
                         currentObject->rotationAcceleration = 0;
                         currentObject->remeaningAngle = 0;
-                        printf("FPS: %f Angle %f\n",averageFPS,currentObject->Angle);
+                        printf("Angle: %f\n",currentObject->Angle);
 
                     }
 
@@ -150,7 +157,7 @@ void Scene::render()
                             {
                                 if(currentObject->ObjectMaterial)
                                     if(currentObject->ObjectMaterial->textureGL)
-                                        glTexCoord2i( currentTriangle->texVertex[i]->x, currentTriangle->texVertex[i]->y );
+                                        glTexCoord2f( currentTriangle->texVertex[i]->x, currentTriangle->texVertex[i]->y );
                                 glVertex3f( currentTriangle->objVertex[i]->x, currentTriangle->objVertex[i]->y, currentTriangle->objVertex[i]->z);
 
                             }
@@ -172,7 +179,7 @@ void Scene::render()
                             {
                                 if(currentObject->ObjectMaterial)
                                     if(currentObject->ObjectMaterial->textureGL)
-                                        glTexCoord2i( currentSquare->texVertex[i]->x, currentSquare->texVertex[i]->y );
+                                        glTexCoord2f( currentSquare->texVertex[i]->x, currentSquare->texVertex[i]->y );
                                 glVertex3f( currentSquare->objVertex[i]->x, currentSquare->objVertex[i]->y, currentSquare->objVertex[i]->z);
                             }
                             ListNext(currentObject->squares);
@@ -187,4 +194,24 @@ void Scene::render()
             }
         }
     }
+}
+
+
+void Scene::calculateFPS(void)
+{
+    currenttick = SDL_GetTicks();
+    if(ticcount==tickbundle)
+    {
+        averageFPS = sum/tickbundle;
+        sum = 0;
+        ticcount = 0;
+        tickbundle = accuracy;
+    }
+    else
+    {
+        if(currenttick-lasttick > 0)
+            sum +=(1000.0/(float)(currenttick-lasttick));
+            ticcount++;
+    }
+    lasttick = currenttick;
 }

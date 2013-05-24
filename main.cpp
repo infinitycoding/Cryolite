@@ -10,6 +10,7 @@
 #include <SDL_image.h>
 
 
+
 #include "include/object.h"
 #include "include/sdl.h"
 #include "include/controls.h"
@@ -22,7 +23,6 @@
 #endif
 
 #define FOV 80
-#define FPS_ACCURACY 200
 
 //todo: textur klasse, scene klasse
 bool printFPS = false;
@@ -70,46 +70,19 @@ int main(int argc, char *argv[]){
 
 
     // 2D Texute settings
+    float lastFPS = 0;
 
-    int lasttick = SDL_GetTicks();
-    int fpslenght = 0;
-    int currenttick = 0;
-    int ticcount = 0;
-    double sum = 0;
+    mainScene->lasttick = SDL_GetTicks(); //better calculation
 
     while(render){ //render
 
 
-        currenttick = SDL_GetTicks();
-        if(ticcount==FPS_ACCURACY)
+        if(printFPS && (lastFPS<=mainScene->averageFPS-0.05 || lastFPS>=mainScene->averageFPS+0.05))
         {
-            averageFPS = sum/FPS_ACCURACY;
-            sum = 0;
-            ticcount = 0;
+
+            printf ("%.1f FPS\n",mainScene->averageFPS);
+            lastFPS = mainScene->averageFPS;
         }
-        else
-        {
-            if(currenttick-lasttick > 0)
-                sum +=(1000.0/(float)(currenttick-lasttick));
-
-            ticcount++;
-        }
-        lasttick = currenttick;
-
-        if(printFPS)
-        {
-            for(int i =0;i<fpslenght;i++)
-            {
-                printf("\b");
-            }
-            char buffer[10] = {0,0,0,0,0,0,0,0,0,0};
-            fpslenght = sprintf (buffer,"%.1f FPS",averageFPS);
-            printf("%s",buffer);
-
-        }
-
-
-
 
 
         mainwindow.pollEvents();    // Eventhandler

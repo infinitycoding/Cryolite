@@ -14,6 +14,18 @@ class Scene
         void render(void);
 
         struct List *objectList;
+
+        int lasttick;
+        int accuracy;
+        float averageFPS;
+
+    private:
+        void calculateFPS(void);
+        int currenttick;
+        int ticcount;
+        int tickbundle;
+        double sum;
+
 };
 
 

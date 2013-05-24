@@ -47,7 +47,17 @@ void Object::initObject()
     colorKey.blue = 1.0f;
     colorKey.transparency = 1.0f;
 
+
+    rotationAxis.x = 0;
+    rotationAxis.y = 0;
+    rotationAxis.z = 0;
     Angle = 0;
+    remeaningAngle = 0;
+    destAngle = 0;
+    rotationVelocity = 0;
+    rotationAcceleration = 0;
+    startRotationTime = 0;
+    remAngleSing = 0;
 
     velocity = 0;
     acceleration = 0;
