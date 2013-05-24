@@ -87,8 +87,8 @@ Object::~Object()
 void Object::loadObjectFile(const char *objectFile, const char *objectName)
 {
     FILE *f;                                                 // the file handle
-    char line[40];                                          // a line of the file
-    char string[40];                                        // string can be many things
+    char line[50];                                          // a line of the file
+    char string[50];                                        // string can be many things
     int h, i , j;                                           // h, i and j can too be many things
     int counter = 0;                                        // a general counter, counting what is to count
     int numofotherVertices = 0, numofotherTexVertices = 0;  // counting the vertices and texture vertices not belonging to my object
@@ -318,7 +318,6 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                 continue;
             else
             {
-
                 for(i = 2, counter = 0; line[i] != '\n' && line[i] != '\0'; i++)     // check if it is a triangle or a square
                     if(line[i] == ' ')
                         counter++;
@@ -384,13 +383,18 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
                     if(texture_coordinates)
                     {
-                        for(i++, j = 0; line[i] != ' '; i++, j++)
+
+                        for(i++, j = 0; line[i] != ' ' && line[i] != '\n'; i++, j++)
+                        {
                             string[j] = line[i];
+                        }
+
 
                         string[j+1] = '\0';
 
                         tex_id[h] = atoi(string);
                         tex_id[h] -= numofotherTexVertices+1;
+
                     }
 
                 }
