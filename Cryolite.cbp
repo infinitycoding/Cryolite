@@ -16,7 +16,7 @@
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="bin/Release/Cryolite" prefix_auto="1" extension_auto="1" />
+				<Option output="Cryolite" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
 				<Option type="0" />
 				<Option compiler="gcc" />
@@ -31,12 +31,13 @@
 		<Compiler>
 			<Add option="`sdl-config --cflags`" />
 			<Add option="-Wall" />
+			<Add option="-I include" />
 		</Compiler>
 		<Linker>
 			<Add option="`sdl-config --libs`" />
 		</Linker>
-		<Unit filename="PhysicsEngine.cpp" />
-		<Unit filename="controls.cpp" />
+		<Unit filename="src/physics/PhysicsEngine.cpp" />
+		<Unit filename="src/render/controls.cpp" />
 		<Unit filename="include/PhysicsEngine.h" />
 		<Unit filename="include/controls.h" />
 		<Unit filename="include/general_def.h" />
@@ -47,13 +48,15 @@
 		<Unit filename="include/scene.h" />
 		<Unit filename="include/sdl.h" />
 		<Unit filename="include/types.h" />
-		<Unit filename="list.cpp" />
-		<Unit filename="main.cpp" />
-		<Unit filename="material.cpp" />
-		<Unit filename="models.cpp" />
-		<Unit filename="object.cpp" />
-		<Unit filename="scene.cpp" />
-		<Unit filename="sdl.cpp" />
+		<Unit filename="include/font.h" />
+		<Unit filename="src/render/list.cpp" />
+		<Unit filename="src/render/main.cpp" />
+		<Unit filename="src/render/material.cpp" />
+		<Unit filename="src/render/models.cpp" />
+		<Unit filename="src/render/object.cpp" />
+		<Unit filename="src/render/scene.cpp" />
+		<Unit filename="src/render/sdl.cpp" />
+		<Unit filename="src/render/font.cpp" />
 		<Extensions>
 			<envvars />
 			<code_completion />

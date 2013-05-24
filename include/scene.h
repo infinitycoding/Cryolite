@@ -21,6 +21,7 @@ class Scene
 
     private:
         void calculateFPS(void);
+        void renderQuad(void);
         int currenttick;
         int ticcount;
         int tickbundle;

@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1368980931 source:/home/simon/coding/Cryolite/main.cpp
+1369401958 source:/home/simon/coding/Cryolite/main.cpp
 	<SDL.h>
 	<GL/gl.h>
 	<GL/glu.h>
@@ -13,6 +13,9 @@
 	"include/sdl.h"
 	"include/controls.h"
 	"include/material.h"
+	"include/models.h"
+	"include/general_def.h"
+	"include/scene.h"
 
 1327665706 /usr/include/SDL/SDL.h
 	"SDL_main.h"
@@ -200,15 +203,17 @@
 	"begin_code.h"
 	"close_code.h"
 
-1368980493 /home/simon/coding/Cryolite/include/object.h
+1369349698 /home/simon/coding/Cryolite/include/object.h
 	<SDL.h>
 	<GL/gl.h>
 	<GL/glu.h>
 	<stdio.h>
 	<stdlib.h>
 	"types.h"
+	"material.h"
+	"list.h"
 
-1368978463 /home/simon/coding/Cryolite/include/sdl.h
+1369336526 /home/simon/coding/Cryolite/include/sdl.h
 	<SDL.h>
 	<GL/gl.h>
 	<GL/glu.h>
@@ -220,11 +225,12 @@
 1368973747 source:/home/simon/coding/Cryolite/modelview.cpp
 	"include/modelview.h"
 
-1368979531 source:/home/simon/coding/Cryolite/sdl.cpp
+1369339633 source:/home/simon/coding/Cryolite/sdl.cpp
 	"include/sdl.h"
 
-1368898620 source:/home/simon/coding/Cryolite/object.cpp
+1369401667 source:/home/simon/coding/Cryolite/object.cpp
 	"include/object.h"
+	<math.h>
 
 1368900400 source:/home/simon/coding/Cryolite/createObject.cpp
 
@@ -237,35 +243,125 @@
 	<SDL.h>
 	<SDL_image.h>
 
-1368820342 source:/home/simon/coding/Cryolite/scene.cpp
+1369401568 source:/home/simon/coding/Cryolite/scene.cpp
+	<GL/gl.h>
+	<GL/glu.h>
+	"include/scene.h"
+	"include/object.h"
+	<math.h>
+	<SDL.h>
 
-1368979482 source:/home/simon/coding/Cryolite/list.cpp
+1369336526 source:/home/simon/coding/Cryolite/list.cpp
 	<stdlib.h>
 	<stdint.h>
 	"include/list.h"
 
-1368980647 /home/simon/coding/Cryolite/include/types.h
+1369336526 /home/simon/coding/Cryolite/include/types.h
 
-1368912909 /home/simon/coding/Cryolite/include/list.h
+1369336526 /home/simon/coding/Cryolite/include/list.h
 
-1368980087 source:/home/simon/coding/Cryolite/controls.cpp
+1369349479 source:/home/simon/coding/Cryolite/controls.cpp
 	"include/controls.h"
 	"include/sdl.h"
+	"include/general_def.h"
+	"include/object.h"
+	<math.h>
 
-1368973976 /home/simon/coding/Cryolite/include/controls.h
+1369348606 /home/simon/coding/Cryolite/include/controls.h
 	<SDL.h>
 	<GL/gl.h>
 	<GL/glu.h>
 	"sdl.h"
 
-1368980402 source:/home/simon/coding/Cryolite/material.cpp
+1369336526 source:/home/simon/coding/Cryolite/material.cpp
 	"include/material.h"
 	"include/list.h"
 	<SDL_image.h>
 
-1368978000 /home/simon/coding/Cryolite/include/material.h
+1369336526 /home/simon/coding/Cryolite/include/material.h
 	<SDL.h>
 	<GL/gl.h>
 	<GL/glu.h>
 	"types.h"
+
+1369349608 /home/simon/coding/Cryolite/include/general_def.h
+
+1369401667 source:/home/simon/coding/Cryolite/models.cpp
+	"include/models.h"
+	"include/material.h"
+
+1369350155 /home/simon/coding/Cryolite/include/models.h
+	<GL/gl.h>
+	<GL/glu.h>
+	"general_def.h"
+	"types.h"
+	"object.h"
+	"scene.h"
+
+1369399710 /home/simon/coding/Cryolite/include/scene.h
+	"object.h"
+	"list.h"
+
+1369349608 source:/home/simon/coding/Cryolite/PhysicsEngine.cpp
+	"general_def.h"
+
+1369402851 source:/home/simon/coding/Cryolite/src/render/controls.cpp
+	"controls.h"
+	"sdl.h"
+	"general_def.h"
+	"object.h"
+	<math.h>
+
+1369402856 source:/home/simon/coding/Cryolite/src/render/font.cpp
+	"font.h"
+
+1369402861 source:/home/simon/coding/Cryolite/src/render/list.cpp
+	<stdlib.h>
+	<stdint.h>
+	"list.h"
+
+1369402880 source:/home/simon/coding/Cryolite/src/render/main.cpp
+	<SDL.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<time.h>
+	<SDL_thread.h>
+	<SDL_image.h>
+	"object.h"
+	"sdl.h"
+	"controls.h"
+	"material.h"
+	"models.h"
+	"general_def.h"
+	"scene.h"
+
+1369405297 source:/home/simon/coding/Cryolite/src/render/material.cpp
+	"material.h"
+	"list.h"
+	<SDL_image.h>
+
+1369404776 source:/home/simon/coding/Cryolite/src/render/models.cpp
+	"models.h"
+	<material.h>
+
+1369406551 source:/home/simon/coding/Cryolite/src/render/object.cpp
+	"object.h"
+	<math.h>
+
+1369402980 source:/home/simon/coding/Cryolite/src/render/scene.cpp
+	<GL/gl.h>
+	<GL/glu.h>
+	"scene.h"
+	"object.h"
+	<math.h>
+	<SDL.h>
+
+1369403012 source:/home/simon/coding/Cryolite/src/render/sdl.cpp
+	"sdl.h"
+
+1369349608 source:/home/simon/coding/Cryolite/src/physics/PhysicsEngine.cpp
+	"general_def.h"
 

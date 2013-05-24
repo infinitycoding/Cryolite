@@ -13,7 +13,7 @@
 
 
 
-    #define HOR 8
+    #define HOR 6
     #define VERT 16
     #define SCOPE 1
     #define GROUND_SIZE 50

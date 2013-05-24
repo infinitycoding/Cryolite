@@ -14,5 +14,15 @@
 
 #define STANDARD_SIZED_CACHE 100
 
+#define OBJECT_PATH  "resource/objects/"
+#define IMAGE_PATH  "resource/images/"
+#define RESOURCE_PATH "resource/"
+
+#define OBJECT(FILE) OBJECT_PATH #FILE
+#define RESOURCE(FILE) RESOURCE_PATH #FILE
+#define IMAGE(FILE) IMAGE_PATH #FILE
+
+
+
 
 #endif
