@@ -67,6 +67,7 @@ int main(int argc, char *argv[]){
 
     Scene *mainScene = new Scene();
     INIT_Models(mainScene);
+    GLUquadric *q =gluNewQuadric();
 
 
     // 2D Texute settings
@@ -98,6 +99,10 @@ int main(int argc, char *argv[]){
         move_handler();         // Moves the camera if key pressed
 
         mainScene->render();
+        glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+        gluSphere(q,5,20,20);
+        glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+
 
         drawHUD();
 
