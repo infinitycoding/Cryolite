@@ -78,6 +78,7 @@ class Object
         struct vector3D destPos;
 
         bool isPhysicalActor;
+        bool automatical_texturing;
 
 
     private:

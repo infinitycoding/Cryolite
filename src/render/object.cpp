@@ -72,6 +72,7 @@ void Object::initObject()
     numofSquares = 0;
 
     isPhysicalActor = false;
+    automatical_texturing = true;
 
     ObjectMaterial = NULL;
 }
@@ -98,10 +99,13 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
     bool correct_object = false;                           // says if i have found the correct object yet
     bool triangle_or_square;                                // triangle == false, square == true
     bool texture_coordinates = false;
+    bool auto_texv_loaded = false;
     struct vertex2D *texvertex_ptr = NULL;
+    struct vertex2D *autotexvertex_ptrs[4];
     struct vertex3D *objvertex_ptr = NULL;
     struct triangle *triangle_ptr = NULL;
     struct square *square_ptr = NULL;
+
 
     printf("loading file %s...\n", objectFile);
 
@@ -409,6 +413,29 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
                         if(texture_coordinates)
                             square_ptr->texVertex[i] = texvertex_ptrs[tex_id[i]];
+                        else if(automatical_texturing == true && ObjectMaterial != NULL)
+                        {
+                            if(auto_texv_loaded == false)
+                            {
+                                auto_texv_loaded = true;
+
+                                autotexvertex_ptrs[0] = (struct vertex2D *)malloc(sizeof(struct vertex2D));
+                                autotexvertex_ptrs[1] = (struct vertex2D *)malloc(sizeof(struct vertex2D));
+                                autotexvertex_ptrs[2] = (struct vertex2D *)malloc(sizeof(struct vertex2D));
+                                autotexvertex_ptrs[3] = (struct vertex2D *)malloc(sizeof(struct vertex2D));
+
+                                autotexvertex_ptrs[0]->x = 0;
+                                autotexvertex_ptrs[0]->y = 1;
+                                autotexvertex_ptrs[1]->x = 0;
+                                autotexvertex_ptrs[1]->y = 0;
+                                autotexvertex_ptrs[2]->x = 1;
+                                autotexvertex_ptrs[2]->y = 0;
+                                autotexvertex_ptrs[3]->x = 1;
+                                autotexvertex_ptrs[3]->y = 1;
+                            }
+
+                            square_ptr->texVertex[i] = autotexvertex_ptrs[i];
+                        }
                     }
                 }
                 else
@@ -420,6 +447,29 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
                         if(texture_coordinates)
                             triangle_ptr->texVertex[i] = texvertex_ptrs[tex_id[i]];
+                        else if(automatical_texturing == true && ObjectMaterial != NULL)
+                        {
+                            if(auto_texv_loaded == false)
+                            {
+                                auto_texv_loaded = true;
+
+                                autotexvertex_ptrs[0] = (struct vertex2D *)malloc(sizeof(struct vertex2D));
+                                autotexvertex_ptrs[1] = (struct vertex2D *)malloc(sizeof(struct vertex2D));
+                                autotexvertex_ptrs[2] = (struct vertex2D *)malloc(sizeof(struct vertex2D));
+                                autotexvertex_ptrs[3] = (struct vertex2D *)malloc(sizeof(struct vertex2D));
+
+                                autotexvertex_ptrs[0]->x = 0;
+                                autotexvertex_ptrs[0]->y = 1;
+                                autotexvertex_ptrs[1]->x = 0;
+                                autotexvertex_ptrs[1]->y = 0;
+                                autotexvertex_ptrs[2]->x = 1;
+                                autotexvertex_ptrs[2]->y = 0;
+                                autotexvertex_ptrs[3]->x = 1;
+                                autotexvertex_ptrs[3]->y = 1;
+                            }
+
+                            triangle_ptr->texVertex[i] = autotexvertex_ptrs[i];
+                        }
                     }
                 }
 
