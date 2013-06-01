@@ -12,10 +12,12 @@ void INIT_Models(Scene *sce)
     MAN = new Material(IMAGE(man.png));
     createObjectCube(IC, sce);
     createObjectGround(ground, sce);
-    Object *testobject = new Object(OBJECT(bettercube.obj), "Cube");
-    //Object *testobject = new Object("cube.obj", "cube.001");
-    testobject->position.x = 5;
-    sce->addObject(testobject);
+    Object *woodcube = new Object(OBJECT(bettercube.obj), "Cube");
+    woodcube->position.x = 5;
+    sce->addObject(woodcube);
+    Object *gravelcube = new Object(OBJECT(cube.obj), "cube.001");
+    gravelcube->position.x = -5;
+    sce->addObject(gravelcube);
 }
 
 
