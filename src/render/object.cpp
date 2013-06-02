@@ -34,10 +34,6 @@ void Object::initObject()
     position.y = 0;
     position.z = 0;
 
-    distance.x = 0;
-    distance.y = 0;
-    distance.z = 0;
-
     rotationAxis.x = 0;
     rotationAxis.y = 0;
     rotationAxis.z = 0;
@@ -59,12 +55,23 @@ void Object::initObject()
     startRotationTime = 0;
     remAngleSing = 0;
 
-    velocity = 0;
-    acceleration = 0;
-    startTime = 0;
-    destPos.x = 0;
-    destPos.y = 0;
-    destPos.z = 0;
+
+
+
+    Dm.x = 0; // Direction Motion
+    Dm.y = 0; // Direction Motion
+    Dm.z = 0; // Direction Motion
+
+
+
+    Pmd.x = 0; // Position motion destination
+    Pmd.y = 0; // Position motion destination
+    Pmd.z = 0; // Position motion destination
+
+    Lmr = 0; // Distance Motion Remeaning
+    Vm = 0; // Velocity Motion
+    Am = 0; // Acceleration Motion
+    Tms = 0; //Time Motion Start
 
     numofTextureSpots = 0;
     numofSpots = 0;
@@ -76,6 +83,7 @@ void Object::initObject()
 
     ObjectMaterial = NULL;
 }
+
 
 Object::~Object()
 {
@@ -523,15 +531,59 @@ void Object::loadMaterial(const char *file)
 }
 
 
-void Object::moveObject(float v,float a , struct vector3D motion)
+void Object::moveObject(float v,float a , float l, struct vector3D D)
 {
-    this->startTime = SDL_GetTicks();
-    this->acceleration = a;
-    this->distance = motion;
-    this->velocity = v;
-    this->destPos.x = motion.x+this->position.x;
-    this->destPos.y = motion.y+this->position.y;
-    this->destPos.z = motion.z+this->position.z;
+    int currentTime = SDL_GetTicks();
+    //normize Direction
+    float vlen = sqrt((D.x*D.x)+(D.y*D.y)+(D.z*D.z));
+    D.x /=vlen;
+    D.y /=vlen;
+    D.z /=vlen;
+
+    float v0 = this->Vm+(this->Am*((currentTime-this->Tms)/1000));
+
+    // calculate System V0
+    struct vector3D Dv = {D.x*v,D.y*v,D.y*v};
+    struct vector3D Dmv = {this->Dm.x*v0,this->Dm.y*v0,this->Dm.z*v0};
+    struct vector3D Dmvr = {Dv.x+Dmv.x,Dv.y+Dmv.y,Dv.z+Dmv.z};
+    this->Vm = sqrt((Dmvr.x*Dmvr.x)+(Dmvr.y*Dmvr.y)+(Dmvr.z*Dmvr.z));
+
+    // calculate new acceleration
+    struct vector3D Da = {D.x*a,D.y*a,D.z*a};
+    struct vector3D Dma = {this->Dm.x*this->Am,this->Dm.y*this->Am,this->Dm.z*this->Am};
+    struct vector3D Dmar = {Da.x+Dma.x,Da.y+Dma.y,Da.z+Dma.z};
+    this->Am = sqrt((Dmar.x*Dmar.x)+(Dmar.y*Dmar.y)+(Dmar.z*Dmar.z));
+
+
+    // calculate remeaning distance
+    struct vector3D Dl = {D.x*l,D.y*l,D.z*l};
+    struct vector3D Dml = {this->Dm.x*this->Lmr,this->Dm.y*this->Lmr,this->Dm.z*this->Lmr};
+    struct vector3D Dmlr = {Dl.x+Dml.x,Dl.y+Dml.y,Dl.z+Dml.z};
+    this->Lmr = sqrt((Dmlr.x*Dmlr.x)+(Dmlr.y*Dmlr.y)+(Dmlr.z*Dmlr.z));
+
+
+
+    // generate Direction Vector
+    struct vector3D Dmn = {this->Dm.x + D.x,this->Dm.y + D.y,this->Dm.z + D.z};
+    vlen = sqrt((Dmn.x*Dmn.x)+(Dmn.y*Dmn.y)+(Dmn.z*Dmn.z));
+    Dmn.x /=vlen;
+    Dmn.y /=vlen;
+    Dmn.z /=vlen;
+    this->Dm = Dmn;
+
+
+    //calculate final position
+
+    this->Pmd.x = this->position.x+this->Dm.x*this->Lmr;
+    this->Pmd.y = this->position.y+this->Dm.y*this->Lmr;
+    this->Pmd.z = this->position.z+this->Dm.z*this->Lmr;
+
+
+
+
+
+    // save current time
+    this->Tms = currentTime;
 }
 
 void Object::rotateObject(float angle,float v,float a, struct vector3D rotationAxis)

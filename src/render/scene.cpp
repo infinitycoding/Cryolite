@@ -89,37 +89,26 @@ void Scene::render()
                     else
                         glBindTexture( GL_TEXTURE_2D, 0);
                     //Modify Model Matrix
-                    if(currentObject->distance.x>0 || currentObject->distance.z>0 || currentObject->distance.z>0)
+                    if(currentObject->Lmr>0)
                     {
-                        int remFrames = ((int)((double)(sqrt((currentObject->distance.x*currentObject->distance.x)+(currentObject->distance.y*currentObject->distance.y)+(currentObject->distance.z*currentObject->distance.z))/(currentObject->velocity+currentObject->acceleration*(SDL_GetTicks()-currentObject->startTime)))*averageFPS));
+                        double MPF = (double)(currentObject->Vm+currentObject->Am*(SDL_GetTicks()-currentObject->Tms))/averageFPS;
+                        currentObject->Lmr -= MPF;
+                        currentObject->position.x += currentObject->Dm.x*MPF;
+                        currentObject->position.y += currentObject->Dm.y*MPF;
+                        currentObject->position.z += currentObject->Dm.z*MPF;
 
-                        double motion[3] = {currentObject->distance.x/remFrames,currentObject->distance.y/remFrames,currentObject->distance.z/remFrames};
-
-                        if(motion[0]<0)
-                            currentObject->distance.x += motion[0];
-                        else
-                            currentObject->distance.x -= motion[0];
-
-                        if(motion[1]<0)
-                            currentObject->distance.y += motion[1];
-                        else
-                            currentObject->distance.y -= motion[1];
-
-                        if(motion[2]<0)
-                            currentObject->distance.z += motion[2];
-                        else
-                            currentObject->distance.z -= motion[2];
-
-                        currentObject->position.x +=motion[0];
-                        currentObject->position.y +=motion[1];
-                        currentObject->position.z +=motion[2];
                     }
-                    else if(currentObject->velocity)
+                    else if(currentObject->Vm)
                     {
-                        currentObject->position.x = currentObject->destPos.x;
-                        currentObject->position.y = currentObject->destPos.y;
-                        currentObject->position.z = currentObject->destPos.z;
-                        currentObject->velocity = 0;
+                        currentObject->position = currentObject->Pmd;
+                        currentObject->Dm.x = 0;
+                        currentObject->Dm.y = 0;
+                        currentObject->Dm.z = 0;
+                        currentObject->Lmr = 0;
+                        currentObject->Vm = 0;
+                        currentObject->Am = 0;
+                        currentObject->Tms = 0;
+
                         printf("RemF: 0 X: %f Y: %f Z: %f\n",currentObject->position.x,currentObject->position.y,currentObject->position.z);
                     }
 

@@ -40,7 +40,7 @@ class Object
         void addSquare(struct square *new_square);
         void loadMaterial(const char *file);
         void loadObjectFile(const char *objectFile, const char *objectName);
-        void moveObject(float v,float a , struct vector3D motion);
+        void moveObject(float v,float a , float l, struct vector3D D);
         void rotateObject(float angle,float v,float a, struct vector3D rotationAxis);
 
         char objectname[20];
@@ -51,7 +51,7 @@ class Object
         uint32_t numofSquares;
 
         struct vertex3D scale;
-        struct vertex3D position;
+        struct vector3D position;
         struct colorRGBA colorKey;
 
         struct vector3D rotationAxis;
@@ -64,10 +64,13 @@ class Object
         int remAngleSing;
 
 
-        struct vector3D distance;
-        float velocity;
-        float acceleration;
-        int startTime;
+        struct vector3D Dm; // Direction Motion
+        struct vector3D Pmd; // Position motion destination
+        float Lmr; // Distance Motion Remeaning
+        float Vm; // Velocity Motion
+        float Am; // Acceleration Motion
+        int Tms; //Time Motion Start
+
 
 
         struct List *vertices;
@@ -75,7 +78,7 @@ class Object
         struct List *triangles;
         struct List *squares;
         Material *ObjectMaterial;
-        struct vector3D destPos;
+
 
         bool isPhysicalActor;
         bool automatical_texturing;
