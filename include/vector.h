@@ -71,6 +71,15 @@ vector2D *vscale(float s,vector2D *v);
 vector3D vscalec(float s,vector3D *v);
 vector2D vscalec(float s,vector2D *v);
 
+vector2D vset(float x,float y);
+vector3D vset(float x,float y,float z);
+void vset(vector2D *v, float x, float y);
+void vset(vector3D *v, float x, float y, float z);
+
+vector3D vnull(void);
+vector2D vnull(void);
+void vnull(vector3D *v);
+void vnull(vector2D *v);
 
 
 

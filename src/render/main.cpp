@@ -18,6 +18,7 @@
 #include "models.h"
 #include "general_def.h"
 #include "scene.h"
+#include "vektor.h"
 #ifdef _WIN32
 #undef main
 #endif
@@ -39,7 +40,7 @@ float averageFPS = 0;
 int main(int argc, char *argv[]){
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,  GL_MODULATE);
 
-    SDL mainwindow = SDL(WIDTH,HEIGHT,SDL_OPENGL|SDL_HWSURFACE,"Cryolite Engine");     // Create the graphics window
+    SDL mainwindow = SDL(WIDTH,HEIGHT,SDL_OPENGL|SDL_HWSURFACE|SDL_FULLSCREEN,"Cryolite Engine");     // Create the graphics window
 
 
     glClearColor( 0.0, 0.0, 0.0, 0.0 ); // Sets the background color.

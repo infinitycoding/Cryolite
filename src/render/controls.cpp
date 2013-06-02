@@ -2,7 +2,7 @@
 #include "sdl.h"
 #include "general_def.h"
 #include "object.h"
-#include <math.h>
+#include "vektor.h"
 
 #define ANGLE 1
 #define SPEED 10
@@ -196,7 +196,7 @@ void moveCube(SDL_Event *e)
 {
     if(e->key.keysym.sym == SDLK_e)
     {
-        struct vector3D direction = {0,0,1};
+        vector3D direction = {0,0,1};
         iccube->moveObject(1,0.002,10,direction);
     }
 
@@ -207,7 +207,7 @@ void rotateCube(SDL_Event *e)
 {
     if(e->key.keysym.sym == SDLK_r)
     {
-        struct vector3D direction = {0,0,1};
+        vector3D direction = {0,0,1};
         iccube->rotateObject(360,2,0.05,direction);
     }
 

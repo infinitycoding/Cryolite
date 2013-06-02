@@ -204,3 +204,53 @@ vector2D vscalec(float s,vector2D *v)
     vector2D vr = {v->x*s,v->y*s};
     return vr;
 }
+
+vector2D vset(float x,float y)
+{
+    vector2D v = {x,y};
+    return v;
+}
+
+vector3D vset(float x,float y,float z)
+{
+    vector3D v = {x,y,z};
+    return v;
+}
+
+void vset(vector2D *v, float x, float y)
+{
+    v.x = x;
+    v.y = y;
+}
+
+void vset(vector3D *v, float x, float y, float z)
+{
+    v.x = x;
+    v.y = y;
+    v.z = z;
+}
+
+vector3D vnull(void)
+{
+    vector3D v = {0,0,0};
+    return v;
+}
+
+vector2D vnull(void)
+{
+    vector2D v = {0,0};
+    return v;
+}
+
+void vnull(vector3D *v)
+{
+    v->x = 0;
+    v->y = 0;
+    v->z = 0;
+}
+
+void vnull(vector2D *v)
+{
+    v->x = 0;
+    v->y = 0;
+}

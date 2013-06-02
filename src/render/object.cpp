@@ -531,62 +531,37 @@ void Object::loadMaterial(const char *file)
 }
 
 
-void Object::moveObject(float v,float a , float l, struct vector3D D)
+void Object::moveObject(float v,float a , float l,vector3D D)
 {
     int currentTime = SDL_GetTicks();
     //normize Direction
-    float vlen = sqrt((D.x*D.x)+(D.y*D.y)+(D.z*D.z));
-    D.x /=vlen;
-    D.y /=vlen;
-    D.z /=vlen;
+    vunify(D);
 
     float v0 = this->Vm+(this->Am*((currentTime-this->Tms)/1000));
 
     // calculate System V0
-    struct vector3D Dv = {D.x*v,D.y*v,D.y*v};
-    struct vector3D Dmv = {this->Dm.x*v0,this->Dm.y*v0,this->Dm.z*v0};
-    struct vector3D Dmvr = {Dv.x+Dmv.x,Dv.y+Dmv.y,Dv.z+Dmv.z};
-    this->Vm = sqrt((Dmvr.x*Dmvr.x)+(Dmvr.y*Dmvr.y)+(Dmvr.z*Dmvr.z));
+    this->Vm = vlen(vadd(vscale(v,D),vscale(v0,this->Dm)));
 
     // calculate new acceleration
-    struct vector3D Da = {D.x*a,D.y*a,D.z*a};
-    struct vector3D Dma = {this->Dm.x*this->Am,this->Dm.y*this->Am,this->Dm.z*this->Am};
-    struct vector3D Dmar = {Da.x+Dma.x,Da.y+Dma.y,Da.z+Dma.z};
-    this->Am = sqrt((Dmar.x*Dmar.x)+(Dmar.y*Dmar.y)+(Dmar.z*Dmar.z));
+    this->Am = vlen(vadd(vscale(a,D),vscale(this->Am,this->Dm)));
 
 
     // calculate remeaning distance
-    struct vector3D Dl = {D.x*l,D.y*l,D.z*l};
-    struct vector3D Dml = {this->Dm.x*this->Lmr,this->Dm.y*this->Lmr,this->Dm.z*this->Lmr};
-    struct vector3D Dmlr = {Dl.x+Dml.x,Dl.y+Dml.y,Dl.z+Dml.z};
-    this->Lmr = sqrt((Dmlr.x*Dmlr.x)+(Dmlr.y*Dmlr.y)+(Dmlr.z*Dmlr.z));
-
+    this->Lmr = vlen(vadd(vscale(l,D),vscale(this->Lmr,this->Dm)));
 
 
     // generate Direction Vector
-    struct vector3D Dmn = {this->Dm.x + D.x,this->Dm.y + D.y,this->Dm.z + D.z};
-    vlen = sqrt((Dmn.x*Dmn.x)+(Dmn.y*Dmn.y)+(Dmn.z*Dmn.z));
-    Dmn.x /=vlen;
-    Dmn.y /=vlen;
-    Dmn.z /=vlen;
-    this->Dm = Dmn;
+    this->Dm = vunify(vadd(this->Dm,D));
 
 
     //calculate final position
-
-    this->Pmd.x = this->position.x+this->Dm.x*this->Lmr;
-    this->Pmd.y = this->position.y+this->Dm.y*this->Lmr;
-    this->Pmd.z = this->position.z+this->Dm.z*this->Lmr;
-
-
-
-
+    this->Pmd = vadd(vscale(this->Lmr,this->Dm),this->position);
 
     // save current time
     this->Tms = currentTime;
 }
 
-void Object::rotateObject(float angle,float v,float a, struct vector3D rotationAxis)
+void Object::rotateObject(float angle,float v,float a,vector3D rotationAxis)
 {
     this->startRotationTime = SDL_GetTicks();
     this->remeaningAngle = angle;
@@ -598,7 +573,6 @@ void Object::rotateObject(float angle,float v,float a, struct vector3D rotationA
     this->rotationAcceleration = a;
     this->rotationAxis = rotationAxis;
     this->destAngle = this->Angle+angle;
-
 }
 
 
