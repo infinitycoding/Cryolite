@@ -29,14 +29,5 @@ struct vertex3D{
     GLfloat z;
 };
 
-struct vector3D{
-    GLfloat x;
-    GLfloat y;
-    GLfloat z;
-};
-
-
-
-
 #endif
 

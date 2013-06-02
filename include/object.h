@@ -12,6 +12,7 @@
 #include "types.h"
 #include "material.h"
 #include "list.h"
+#include "vector.h"
 
 
 
@@ -40,8 +41,8 @@ class Object
         void addSquare(struct square *new_square);
         void loadMaterial(const char *file);
         void loadObjectFile(const char *objectFile, const char *objectName);
-        void moveObject(float v,float a , float l, struct vector3D D);
-        void rotateObject(float angle,float v,float a, struct vector3D rotationAxis);
+        void moveObject(float v,float a , float l, dvector3D D);
+        void rotateObject(float angle,float v,float a,dvector3D rotationAxis);
 
         char objectname[20];
 
@@ -51,10 +52,10 @@ class Object
         uint32_t numofSquares;
 
         struct vertex3D scale;
-        struct vector3D position;
+         vector3D position;
         struct colorRGBA colorKey;
 
-        struct vector3D rotationAxis;
+        vector3D rotationAxis;
         GLfloat Angle;
         GLfloat remeaningAngle;
         GLfloat destAngle;
@@ -64,8 +65,8 @@ class Object
         int remAngleSing;
 
 
-        struct vector3D Dm; // Direction Motion
-        struct vector3D Pmd; // Position motion destination
+        vector3D Dm; // Direction Motion
+        vector3D Pmd; // Position motion destination
         float Lmr; // Distance Motion Remeaning
         float Vm; // Velocity Motion
         float Am; // Acceleration Motion
