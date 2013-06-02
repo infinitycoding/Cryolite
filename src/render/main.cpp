@@ -18,7 +18,7 @@
 #include "models.h"
 #include "general_def.h"
 #include "scene.h"
-#include "vektor.h"
+#include "vector.h"
 #ifdef _WIN32
 #undef main
 #endif
