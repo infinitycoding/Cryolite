@@ -230,13 +230,13 @@ void vset(vector3D *v, float x, float y, float z)
     v.z = z;
 }
 
-vector3D vnull(void)
+vector3D vnull3D(void)
 {
     vector3D v = {0,0,0};
     return v;
 }
 
-vector2D vnull(void)
+vector2D vnull2D(void)
 {
     vector2D v = {0,0};
     return v;

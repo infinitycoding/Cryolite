@@ -76,8 +76,8 @@ vector3D vset(float x,float y,float z);
 void vset(vector2D *v, float x, float y);
 void vset(vector3D *v, float x, float y, float z);
 
-vector3D vnull(void);
-vector2D vnull(void);
+vector3D vnull3D(void);
+vector2D vnull2D(void);
 void vnull(vector3D *v);
 void vnull(vector2D *v);
 
