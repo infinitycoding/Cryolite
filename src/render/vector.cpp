@@ -219,15 +219,15 @@ vector3D vset(float x,float y,float z)
 
 void vset(vector2D *v, float x, float y)
 {
-    v.x = x;
-    v.y = y;
+    v->x = x;
+    v->y = y;
 }
 
 void vset(vector3D *v, float x, float y, float z)
 {
-    v.x = x;
-    v.y = y;
-    v.z = z;
+    v->x = x;
+    v->y = y;
+    v->z = z;
 }
 
 vector3D vnull3D(void)

@@ -2,7 +2,7 @@
 #include "sdl.h"
 #include "general_def.h"
 #include "object.h"
-#include "vektor.h"
+#include "vector.h"
 
 #define ANGLE 1
 #define SPEED 10
