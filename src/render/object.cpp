@@ -39,16 +39,6 @@ void Object::initObject()
     rotationAxis.x = 0;
     rotationAxis.y = 0;
     rotationAxis.z = 0;
-
-    colorKey.red = 1.0f;
-    colorKey.green = 1.0f;
-    colorKey.blue = 1.0f;
-    colorKey.transparency = 1.0f;
-
-
-    rotationAxis.x = 0;
-    rotationAxis.y = 0;
-    rotationAxis.z = 0;
     Angle = 0;
     remeaningAngle = 0;
     destAngle = 0;

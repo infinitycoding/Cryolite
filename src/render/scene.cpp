@@ -136,8 +136,6 @@ void Scene::render()
                     {
                         glBegin( GL_TRIANGLES );
 
-                        glColor4f(currentObject->colorKey.red, currentObject->colorKey.green, currentObject->colorKey.blue, currentObject->colorKey.transparency);
-
                         ListSetFirst(currentObject->triangles);
                         while(!ListIsLast(currentObject->triangles))
                         {
