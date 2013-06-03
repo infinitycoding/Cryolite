@@ -1,6 +1,14 @@
 #ifndef VECTOR_H
 #define VECTOR_H
+
+
 #include <GL/gl.h>
+
+
+#define NULLVECTOR3D {0,0,0}
+#define NULLVECTOR2D {0,0}
+
+
 
 typedef struct {
     GLfloat x;
@@ -12,10 +20,6 @@ typedef struct{
     GLfloat x;
     GLfloat y;
 }vector2D;
-
-
-#define NULLVECTOR3D {0,0,0}
-#define NULLVECTOR2D {0,0}
 
 typedef vector3D dvector3D;
 typedef vector3D pvector3D;

@@ -24,23 +24,13 @@ float vlen(vector2D v)
 float vlen(vector3D *v)
 {
     vector3D vp = *v;
-    if(vp.x<0)
-        vp.x *= -1;
-    if(vp.y<0)
-        vp.y *= -1;
-    if(vp.z<0)
-        vp.z *= -1;
-    return sqrt((vp.x*vp.x)+(vp.y*vp.y)+(vp.z*vp.z));
+    return vlen(vp);
 }
 
 float vlen(vector2D *v)
 {
     vector2D vp = *v;
-    if(vp.x<0)
-        vp.x *= -1;
-    if(vp.y<0)
-        vp.y *= -1;
-    return sqrt((vp.x*vp.x)+(vp.y*vp.y));
+    return vlen(vp);
 }
 
 vector3D vunify(vector3D v)
@@ -232,13 +222,13 @@ void vset(vector3D *v, float x, float y, float z)
 
 vector3D vnull3D(void)
 {
-    vector3D v = {0,0,0};
+    vector3D v = NULLVECTOR3D;
     return v;
 }
 
 vector2D vnull2D(void)
 {
-    vector2D v = {0,0};
+    vector2D v = NULLVECTOR2D;
     return v;
 }
 
