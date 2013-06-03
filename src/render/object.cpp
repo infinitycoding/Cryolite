@@ -1,5 +1,7 @@
-#include "object.h"
-#include "vector.h"
+#include <string.h>
+
+#include <object.h>
+#include <vector.h>
 
 
 
@@ -87,30 +89,96 @@ void Object::initObject()
 
 Object::~Object()
 {
-    if(ObjectMaterial != NULL)
-        ObjectMaterial->~Material();
 
-    // TODO: integrate list destruction function when implemented
+}
+
+struct numofvertices Object::countVertices(const char *filename, const char *objectname)
+{
+    FILE *f;
+    int i, j;
+    char line[50];
+    char string[50];
+    bool correct_object = false;
+    struct numofvertices vertexCounter = {0, 0, 0};
+
+    f = fopen(filename, "r");
+
+    if(f == NULL)
+    {
+        printf("the file %s could not be opened.\n", filename);
+        exit(-1);
+    }
+
+    while(fgets(line, 50, f))
+    {
+        if(line[0] == 'o')
+        {
+            for(i = 2, j = 0; line[i] != '\n'; i++, j++)
+                string[j] = line[i];
+
+            string[j] = '\0';
+
+            if(!strncmp(string, objectname, strlen(string)))
+                correct_object = true;
+            else
+            {
+                correct_object = false;
+                break;
+            }
+        }
+        else if(line[0] == 'v' && line[1] == ' ')
+        {
+            if(correct_object == true)
+                vertexCounter.objectVertices++;
+        }
+        else if(line[0] == 'v' && line[1]== 't')
+        {
+            if(correct_object == true)
+                vertexCounter.textureVertices++;
+        }
+        else if(line[0] == 'v' && line[1] == 'n')
+        {
+            if(correct_object == true)
+                vertexCounter.normalVertices++;
+        }
+        else
+            continue;
+    }
+
+    fclose(f);
+
+    printf("Found %d Vertices, %d Texturevertices and %d Normalvertices.\n", vertexCounter.objectVertices, vertexCounter.textureVertices, vertexCounter.normalVertices);
+
+    return vertexCounter;
 }
 
 void Object::loadObjectFile(const char *objectFile, const char *objectName)
 {
-    FILE *f;                                                 // the file handle
+    FILE *f;                                                // the file handle
+
     char line[50];                                          // a line of the file
     char string[50];                                        // string can be many things
-    int h, i , j;                                           // h, i and j can too be many things
+
+    int h, i , j, k;                                        // h, i, j and k can too be many things
     int counter = 0;                                        // a general counter, counting what is to count
-    int numofotherVertices = 0, numofotherTexVertices = 0;  // counting the vertices and texture vertices not belonging to my object
-    int numofmyVertices = 0, numofmyTexVertices = 0;        // counting the vertices and texture vertices created until now to know the new arrey index
-    int ObjectVertexCounter = 0, TextureVertexCounter = 0;  // counting the vertices and texture vertices before main parser, to set the array size
     int vert_id[4], tex_id[4];                              // temponary variables
+
     bool correct_object = false;                           // says if i have found the correct object yet
     bool triangle_or_square;                                // triangle == false, square == true
     bool texture_coordinates = false;
     bool auto_texv_loaded = false;
+
+    struct numofvertices otherVertices = {0, 0, 0};
+    struct numofvertices myVertices = {0, 0, 0};
+    struct numofvertices allObjectVertices = countVertices(objectFile, objectName);
+
     struct vertex2D *texvertex_ptr = NULL;
     struct vertex2D *autotexvertex_ptrs[4];
     struct vertex3D *objvertex_ptr = NULL;
+
+    struct vertex2D *texvertex_ptrs[allObjectVertices.textureVertices];
+    struct vertex3D *objvertex_ptrs[allObjectVertices.objectVertices];
+
     struct triangle *triangle_ptr = NULL;
     struct square *square_ptr = NULL;
 
@@ -124,46 +192,6 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
         printf("the file %s could not be opened.\n", objectFile);
         exit(-1);
     }
-
-    while(fgets(line, 40, f))
-    {
-        if(line[0] == 'o')
-        {
-            for(i = 2, j = 0; line[i] != '\n'; i++, j++)
-                string[j] = line[i];
-
-            string[j] = '\0';
-
-            if(!strncmp(string, objectName, strlen(string)))
-                correct_object = true;
-            else
-            {
-                correct_object = false;
-                break;
-            }
-        }
-        else if(line[0] == 'v' && line[1] == ' ')
-        {
-            if(correct_object == true)
-                ObjectVertexCounter++;
-        }
-        else if(line[0] == 'v' && line[1]== 't')
-        {
-            if(correct_object == true)
-                TextureVertexCounter++;
-        }
-        else
-            continue;
-    }
-
-    correct_object = false;
-
-    printf("Found %d Vertices and %d Texturevertices.\n", ObjectVertexCounter, TextureVertexCounter);
-
-    struct vertex2D *texvertex_ptrs[TextureVertexCounter];
-    struct vertex3D *objvertex_ptrs[ObjectVertexCounter];
-
-    fseek(f, 0, SEEK_SET);
 
     while(*fgets(line, 40, f) != EOF)
     {
@@ -186,9 +214,12 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
         if(line[0] == 'v' && line[1] == 'n')
         {
-            printf("error: normals aren't supported yet by cryolite engine.\n");
-            printf("       it's impossible to load object. programm will be ended.\n");
-            exit(-1);
+            if(correct_object == false)
+                otherVertices.normalVertices++;
+            else
+                printf("error: normals aren't supported yet by cryolite engine.\n");
+
+            continue;
         }
 
         if(!strncmp(line, "usemtl", 6))
@@ -200,8 +231,6 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                 string[j] = line[i];
 
             string[j] = '\0';
-
-            printf("loading texture %s...\n", string);
 
             loadMaterial(string);
 
@@ -235,13 +264,13 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
         {
             if(correct_object == false)
             {
-                numofotherTexVertices++;
+                otherVertices.textureVertices++;
                 continue;
             }
             else
             {
 
-                texvertex_ptr = (struct vertex2D *)malloc(sizeof(struct vertex2D));
+                texvertex_ptr = new struct vertex2D;
 
                 for(i = 3, j = 0; line[i] != ' ' && line[i] != '\0' && line[i] != '\n'; i++, j++)
                     string[j] = line[i];
@@ -265,8 +294,8 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
                 this->addTextureVertex(texvertex_ptr);
 
-                texvertex_ptrs[numofmyTexVertices] = texvertex_ptr;
-                numofmyTexVertices++;
+                texvertex_ptrs[myVertices.textureVertices] = texvertex_ptr;
+                myVertices.textureVertices++;
             }
 
             continue;
@@ -276,13 +305,13 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
         {
             if(correct_object == false)
             {
-                numofotherVertices++;
+                otherVertices.objectVertices++;
                 continue;
             }
             else
             {
 
-                objvertex_ptr = (struct vertex3D *)malloc(sizeof(struct vertex3D));
+                objvertex_ptr = new struct vertex3D;
 
                 for(i = 2, j = 0; line[i] != ' ' && line[i] != '\0' && line[i] != '\n'; i++, j++)
                     string[j] = line[i];
@@ -319,8 +348,8 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
                 this->addObjectVertex(objvertex_ptr);
 
-                objvertex_ptrs[numofmyVertices] = objvertex_ptr;
-                numofmyVertices++;
+                objvertex_ptrs[myVertices.objectVertices] = objvertex_ptr;
+                myVertices.objectVertices++;
             }
         }
 
@@ -355,25 +384,13 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
                 if(triangle_or_square)
                 {
-                     square_ptr = (struct square *)malloc(sizeof(struct square));
-
-                     if(square_ptr == NULL)
-                     {
-                         printf("error: unable to malloc enought ram. programm will be ended.\n");
-                         exit(-1);
-                     }
+                     square_ptr = new struct square;
 
                      this->addSquare(square_ptr);
                 }
                 else
                 {
-                    triangle_ptr = (struct triangle *)malloc(sizeof(struct triangle));
-
-                    if(triangle_ptr == NULL)
-                     {
-                         printf("error: unable to malloc enought ram. programm will be ended.\n");
-                         exit(-1);
-                     }
+                    triangle_ptr = new struct triangle;
 
                     this->addTriangle(triangle_ptr);
                 }
@@ -391,7 +408,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                     string[j] = '\0';
 
                     vert_id[h] = atoi(string);
-                    vert_id[h] -= numofotherVertices+1;
+                    vert_id[h] -= otherVertices.objectVertices+1;
 
                     if(texture_coordinates)
                     {
@@ -405,7 +422,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                         string[j+1] = '\0';
 
                         tex_id[h] = atoi(string);
-                        tex_id[h] -= numofotherTexVertices+1;
+                        tex_id[h] -= otherVertices.textureVertices+1;
 
                     }
 
@@ -427,10 +444,8 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                             {
                                 auto_texv_loaded = true;
 
-                                autotexvertex_ptrs[0] = (struct vertex2D *)malloc(sizeof(struct vertex2D));
-                                autotexvertex_ptrs[1] = (struct vertex2D *)malloc(sizeof(struct vertex2D));
-                                autotexvertex_ptrs[2] = (struct vertex2D *)malloc(sizeof(struct vertex2D));
-                                autotexvertex_ptrs[3] = (struct vertex2D *)malloc(sizeof(struct vertex2D));
+                                for(k = 0; k < 4; k++)
+                                    autotexvertex_ptrs[k] = new struct vertex2D;
 
                                 autotexvertex_ptrs[0]->x = 0;
                                 autotexvertex_ptrs[0]->y = 1;
@@ -461,10 +476,8 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                             {
                                 auto_texv_loaded = true;
 
-                                autotexvertex_ptrs[0] = (struct vertex2D *)malloc(sizeof(struct vertex2D));
-                                autotexvertex_ptrs[1] = (struct vertex2D *)malloc(sizeof(struct vertex2D));
-                                autotexvertex_ptrs[2] = (struct vertex2D *)malloc(sizeof(struct vertex2D));
-                                autotexvertex_ptrs[3] = (struct vertex2D *)malloc(sizeof(struct vertex2D));
+                                for(k = 0; k < 3; k++)
+                                    autotexvertex_ptrs[k] = new struct vertex2D;
 
                                 autotexvertex_ptrs[0]->x = 0;
                                 autotexvertex_ptrs[0]->y = 1;
@@ -472,8 +485,6 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                                 autotexvertex_ptrs[1]->y = 0;
                                 autotexvertex_ptrs[2]->x = 1;
                                 autotexvertex_ptrs[2]->y = 0;
-                                autotexvertex_ptrs[3]->x = 1;
-                                autotexvertex_ptrs[3]->y = 1;
                             }
 
                             triangle_ptr->texVertex[i] = autotexvertex_ptrs[i];

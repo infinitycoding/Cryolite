@@ -9,10 +9,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "types.h"
-#include "material.h"
-#include "list.h"
-#include "vector.h"
+#include <types.h>
+#include <material.h>
+#include <list.h>
+#include <vector.h>
 
 
 
@@ -26,6 +26,13 @@ struct square
 {
     struct vertex3D *objVertex[4];
     struct vertex2D *texVertex[4];
+};
+
+struct numofvertices
+{
+    int objectVertices;
+    int textureVertices;
+    int normalVertices;
 };
 
 class Object
@@ -52,7 +59,7 @@ class Object
         uint32_t numofSquares;
 
         struct vertex3D scale;
-         vector3D position;
+        vector3D position;
         struct colorRGBA colorKey;
 
         vector3D rotationAxis;
@@ -88,6 +95,7 @@ class Object
     private:
 
         void initObject();
+        struct numofvertices countVertices(const char *filename, const char *objectname);
 };
 
 
