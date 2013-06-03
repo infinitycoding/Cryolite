@@ -3,8 +3,8 @@
 #define GENERAL_DEF_H_INCLUDED
 
 
-#define WIDTH 1600
-#define HEIGHT 900
+#define WIDTH 1920
+#define HEIGHT 1080
 
 #define STARTING_X 0
 #define STARTING_Y 0
@@ -16,11 +16,14 @@
 
 #define OBJECT_PATH  "resource/objects/"
 #define IMAGE_PATH  "resource/images/"
+#define FONT_PATH "resource/fonts/"
 #define RESOURCE_PATH "resource/"
+
 
 #define OBJECT(FILE) OBJECT_PATH #FILE
 #define RESOURCE(FILE) RESOURCE_PATH #FILE
 #define IMAGE(FILE) IMAGE_PATH #FILE
+#define FONT(FILE) FONT_PATH #FILE
 
 
 
