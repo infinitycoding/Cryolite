@@ -25,7 +25,7 @@ void createObjectGround(Material *mat, Scene *sce)
 {
     vertex3D *vertex = new vertex3D[4];
     vertex2D *texvertex = new vertex2D[4];
-    struct square *square = (struct square *)malloc(sizeof(struct square));
+    struct square *square = new struct square;
 
     Object *ground = new Object("ground");
 

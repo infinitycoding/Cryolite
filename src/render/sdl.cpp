@@ -54,7 +54,7 @@ SDL::~SDL()
 
 void SDL::addEvent(uint8_t event, void (*handle)(SDL_Event *event))
 {
-    struct eventHandler *newHandler = (struct eventHandler*) malloc(sizeof(struct eventHandler));
+    struct eventHandler *newHandler = new struct eventHandler;
     newHandler->event = event;
     newHandler->handle = handle;
     while(this->lock){}
