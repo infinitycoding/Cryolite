@@ -5,7 +5,7 @@
 #include "vector.h"
 
 #define ANGLE 1
-#define SPEED 10
+#define SPEED 5
 
 bool right=false;
 bool left=false;
@@ -135,14 +135,14 @@ void rotation_handler(){    // Rotates the object if a key is pressed.
         rotate_correctly(ANGLE,0,1,0);
 
         if(move_direction_foreward <= 0)
-            move_direction_left += (float)1/((9000/SPEED)*(1.0f/ANGLE));
+            move_direction_left += (float)1/(9000/SPEED)*ANGLE;
         else
-            move_direction_left -=  (float)1/((9000/SPEED)*(1.0f/ANGLE));
+            move_direction_left -=  (float)1/(9000/SPEED)*ANGLE;
 
         if(move_direction_left <= 0)
-            move_direction_foreward -= (float)1/((9000/SPEED)*(1.0f/ANGLE));
+            move_direction_foreward -= (float)1/(9000/SPEED)*ANGLE;
         else
-            move_direction_foreward += (float)1/((9000/SPEED)*(1.0f/ANGLE));
+            move_direction_foreward += (float)1/(9000/SPEED)*ANGLE;
 
         right = false;
 
@@ -153,14 +153,14 @@ void rotation_handler(){    // Rotates the object if a key is pressed.
         rotate_correctly(-ANGLE,0,1,0);
 
         if(move_direction_foreward >= 0)
-            move_direction_left += (float)1/((9000/SPEED)*(1.0f/ANGLE));
+            move_direction_left += (float)1/(9000/SPEED)*ANGLE;
         else
-            move_direction_left -=  (float)1/((9000/SPEED)*(1.0f/ANGLE));
+            move_direction_left -=  (float)1/(9000/SPEED)*ANGLE;
 
         if(move_direction_left >= 0)
-            move_direction_foreward -= (float)1/((9000/SPEED)*(1.0f/ANGLE));
+            move_direction_foreward -= (float)1/(9000/SPEED)*ANGLE;
         else
-            move_direction_foreward += (float)1/((9000/SPEED)*(1.0f/ANGLE));
+            move_direction_foreward += (float)1/(9000/SPEED)*ANGLE;
 
         left = false;
     }
