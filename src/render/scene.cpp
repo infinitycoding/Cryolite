@@ -1,15 +1,17 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include "scene.h"
-#include "object.h"
 #include <math.h>
 #include <SDL.h>
+
+#include <scene.h>
+#include <object.h>
+
 
 
 
 Scene::Scene()
 {
-    this->objectList = ListCreate();
+    this->objectList = new List<Object>;
     currenttick = 0;
     ticcount = 0;
     tickbundle = 3;
@@ -21,34 +23,34 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-    ListSetFirst(this->objectList);
-    while(!ListIsLast(this->objectList))
+    this->objectList->ListSetFirst();
+    while(!this->objectList->ListIsLast())
     {
-        ListRemove(this->objectList);
-        ListNext(this->objectList);
+        this->objectList->ListRemove();
+        this->objectList->ListNext();
     }
-    free(this->objectList);
+    delete this->objectList;
 }
 
 
 void Scene::addObject(Object *obj)
 {
-    ListPushFront(this->objectList,obj);
+    this->objectList->ListPushFront(obj);
 }
 
 int Scene::removeObject(char *name)
 {
     int delObj = 0;
-    ListSetFirst(this->objectList);
-    while(!ListIsLast(this->objectList))
+    this->objectList->ListSetFirst();
+    while(!this->objectList->ListIsLast())
     {
-        Object *currentObject = (Object *)ListGetCurrent(this->objectList);
+        Object *currentObject = (Object *)this->objectList->ListGetCurrent();
         if(!strncmp(currentObject->objectname,name,20))
         {
-            ListRemove(this->objectList);
+            this->objectList->ListRemove();
             delObj++;
         }
-        ListNext(this->objectList);
+        this->objectList->ListNext();
     }
     return delObj;
 }
@@ -56,15 +58,15 @@ int Scene::removeObject(char *name)
 int Scene::removeObject(Object *obj)
 {
     int delObj = 0;
-    ListSetFirst(this->objectList);
-    while(!ListIsLast(this->objectList))
+    this->objectList->ListSetFirst();
+    while(!this->objectList->ListIsLast())
     {
-        if(ListGetCurrent(this->objectList) == obj)
+        if(this->objectList->ListGetCurrent() == obj)
         {
-            ListRemove(this->objectList);
+            this->objectList->ListRemove();
             delObj++;
         }
-        ListNext(this->objectList);
+        this->objectList->ListNext();
     }
     return delObj;
 }
@@ -72,15 +74,15 @@ int Scene::removeObject(Object *obj)
 void Scene::render()
 {
     this->calculateFPS();
-    if(!ListIsEmpty(this->objectList))
+    if(!this->objectList->ListIsEmpty())
     {
         glMatrixMode(GL_MODELVIEW);
-        ListSetFirst(this->objectList);
+        this->objectList->ListSetFirst();
 
-        while(!ListIsLast(this->objectList))
+        while(!this->objectList->ListIsLast())
         {
-            Object *currentObject = (Object *)ListGetCurrent(this->objectList);
-            if(!ListIsEmpty(currentObject->vertices))
+            Object *currentObject = (Object *)this->objectList->ListGetCurrent();
+            if(!currentObject->vertices->ListIsEmpty())
             {
                 glPushMatrix();
                 glEnable(GL_TEXTURE_2D);
@@ -132,15 +134,15 @@ void Scene::render()
                     glTranslatef(currentObject->position.x,currentObject->position.y,currentObject->position.z); //move to local (0/0/0)
                     glScalef(currentObject->scale.x,currentObject->scale.z,currentObject->scale.z);
                     //Render Triangles
-                    if(!ListIsEmpty(currentObject->triangles))
+                    if(!currentObject->triangles->ListIsEmpty())
                     {
                         glBegin( GL_TRIANGLES );
 
-                        ListSetFirst(currentObject->triangles);
-                        while(!ListIsLast(currentObject->triangles))
+                        currentObject->triangles->ListSetFirst();
+                        while(!currentObject->triangles->ListIsLast())
                         {
 
-                            struct triangle *currentTriangle = (struct triangle *)ListGetCurrent(currentObject->triangles);
+                            struct triangle *currentTriangle = (struct triangle *)currentObject->triangles->ListGetCurrent();
                             for(int i=0;i<3;i++)
                             {
                                 if(currentObject->ObjectMaterial)
@@ -149,20 +151,20 @@ void Scene::render()
                                 glVertex3f( currentTriangle->objVertex[i]->x, currentTriangle->objVertex[i]->y, currentTriangle->objVertex[i]->z);
 
                             }
-                            ListNext(currentObject->triangles);
+                            currentObject->triangles->ListNext();
                         }
 
                         glEnd();
 
                     }
                     //Render Quads
-                    if(!ListIsEmpty(currentObject->squares))
+                    if(!currentObject->squares->ListIsEmpty())
                     {
                         glBegin( GL_QUADS );
-                        ListSetFirst(currentObject->squares);
-                        while(!ListIsLast(currentObject->squares))
+                        currentObject->squares->ListSetFirst();
+                        while(!currentObject->squares->ListIsLast())
                         {
-                            struct square *currentSquare = (struct square *)ListGetCurrent(currentObject->squares);
+                            struct square *currentSquare = (struct square *)currentObject->squares->ListGetCurrent();
                             for(int i=0;i<4;i++)
                             {
                                 if(currentObject->ObjectMaterial)
@@ -170,7 +172,7 @@ void Scene::render()
                                         glTexCoord2f( currentSquare->texVertex[i]->x, currentSquare->texVertex[i]->y );
                                 glVertex3f( currentSquare->objVertex[i]->x, currentSquare->objVertex[i]->y, currentSquare->objVertex[i]->z);
                             }
-                            ListNext(currentObject->squares);
+                            currentObject->squares->ListNext();
                         }
                         glEnd();
 
@@ -178,7 +180,7 @@ void Scene::render()
 
 
                 glPopMatrix();
-                ListNext(this->objectList);
+                this->objectList->ListNext();
             }
         }
     }

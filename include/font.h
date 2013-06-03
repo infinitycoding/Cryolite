@@ -4,7 +4,8 @@
 #include <SDL_ttf.h>
 #include <GL/glu.h>
 #include <SDL.h>
-#include "types.h"
+
+#include <types.h>
 
 struct fontEntry
 {

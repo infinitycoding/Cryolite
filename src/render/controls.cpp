@@ -1,11 +1,14 @@
-#include "controls.h"
-#include "sdl.h"
-#include "general_def.h"
-#include "object.h"
-#include "vector.h"
+#include <GL/gl.h>
+#include <GL/glu.h>
 
-#define ANGLE 1
-#define SPEED 5
+#include <sdl.h>
+#include <controls.h>
+#include <general_def.h>
+#include <object.h>
+#include <vector.h>
+
+#define ANGLE 2
+#define SPEED 20
 
 bool right=false;
 bool left=false;

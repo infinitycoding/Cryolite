@@ -1,6 +1,8 @@
-#include "material.h"
-#include "list.h"
 #include <SDL_image.h>
+
+#include <material.h>
+#include <List.h>
+
 
 Material::Material(const char* textureFile)
 {

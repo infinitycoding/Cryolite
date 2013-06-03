@@ -1,4 +1,4 @@
-#include "sdl.h"
+#include <sdl.h>
 
 
 SDL::SDL(int width, int height, int flags, const char* caption)
@@ -40,7 +40,7 @@ SDL::SDL(int width, int height, int flags, const char* caption)
         fprintf( stderr, "Video mode set failed: %s\n", SDL_GetError());
         exit(-1);
     }
-    this->events = ListCreate();
+    this->events = new List<struct eventHandler>;
 }
 
 SDL::~SDL()
@@ -59,7 +59,7 @@ void SDL::addEvent(uint8_t event, void (*handle)(SDL_Event *event))
     newHandler->handle = handle;
     while(this->lock){}
     this->lock = true;
-        ListPushFront(this->events,newHandler);
+        this->events->ListPushFront(newHandler);
     this->lock = false;
 }
 
@@ -67,17 +67,17 @@ int SDL::removeEvent(uint8_t event, void (*handle)(SDL_Event *event))
 {
     while(this->lock){}
     this->lock = true;
-        ListSetFirst(this->events);
-        while(!ListIsLast(this->events))
+        this->events->ListSetFirst();
+        while(!this->events->ListIsLast())
         {
-            struct eventHandler* currentHandler = (struct eventHandler*) ListGetCurrent(this->events);
+            struct eventHandler* currentHandler = (struct eventHandler*) this->events->ListGetCurrent();
             if(currentHandler->event == event && currentHandler->handle == handle)
             {
-                ListRemove(this->events);
+                this->events->ListRemove();
             }
             else
             {
-                ListNext(this->events);
+                this->events->ListNext();
             }
 
         }
@@ -92,15 +92,15 @@ void SDL::pollEvents()
     while( SDL_PollEvent( &event ) ) {
         if(events)
         {
-            ListSetFirst(this->events);
-            while(!ListIsLast(this->events))
+            this->events->ListSetFirst();
+            while(!this->events->ListIsLast())
             {
-                struct eventHandler* currentEvent = (struct eventHandler*) ListGetCurrent(this->events);
+                struct eventHandler* currentEvent = (struct eventHandler*) this->events->ListGetCurrent();
                 if(currentEvent->event == event.type)
                 {
                     currentEvent->handle(&event);
                 }
-                ListNext(this->events);
+                this->events->ListNext();
             }
 
         }

@@ -8,7 +8,7 @@
 
 #define STARTING_X 0
 #define STARTING_Y 0
-#define STARTING_Z 0
+#define STARTING_Z -3.5
 
 #define LINEWIDTH 1
 

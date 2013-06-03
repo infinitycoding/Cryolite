@@ -1,10 +1,12 @@
 #ifndef CRYOLITE_SDL_H
 #define CRYOLITE_SDL_H
+
 #include <SDL.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
-#include "types.h"
-#include "list.h"
+
+#include <types.h>
+#include <List.h>
 
 struct eventHandler
 {
@@ -26,7 +28,7 @@ class SDL
         void pollEvents();
 
     private:
-        struct List *events;
+        List<struct eventHandler> *events;
         SDL_Surface *screen;
         bool lock;
 

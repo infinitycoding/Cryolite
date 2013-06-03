@@ -3,22 +3,20 @@
 #include <GL/glu.h>
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <time.h>
 #include <SDL_thread.h>
 #include <SDL_image.h>
 
 
 
-#include "object.h"
-#include "sdl.h"
-#include "controls.h"
-#include "material.h"
-#include "models.h"
-#include "general_def.h"
-#include "scene.h"
-#include "vector.h"
+#include <object.h>
+#include <sdl.h>
+#include <controls.h>
+#include <material.h>
+#include <models.h>
+#include <general_def.h>
+#include <scene.h>
+#include <vector.h>
 #ifdef _WIN32
 #undef main
 #endif

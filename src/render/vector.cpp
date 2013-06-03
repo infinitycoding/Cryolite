@@ -1,5 +1,7 @@
-#include <vector.h>
 #include <math.h>
+
+#include <vector.h>
+
 
 float vlen(vector3D v)
 {

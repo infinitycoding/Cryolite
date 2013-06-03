@@ -2,7 +2,7 @@
 
 #include <object.h>
 #include <vector.h>
-
+#include <List.h>
 
 
 Object::Object(const char *objname)
@@ -23,10 +23,12 @@ Object::Object(const char *filename, const char *objname)
 
 void Object::initObject()
 {
-    vertices = ListCreate();
-    triangles = ListCreate();
-    squares = ListCreate();
-    texvertices = ListCreate();
+    vertices = new List<vertex3D>;
+    texvertices = new List<vertex2D>;
+
+    triangles = new List<struct triangle>;
+    squares = new List<struct square>;
+
 
     scale.x = 1;
     scale.y = 1;
@@ -162,12 +164,12 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
     struct numofvertices myVertices = {0, 0, 0};
     struct numofvertices allObjectVertices = countVertices(objectFile, objectName);
 
-    struct vertex2D *texvertex_ptr = NULL;
-    struct vertex2D *autotexvertex_ptrs[4];
-    struct vertex3D *objvertex_ptr = NULL;
+    vertex2D *texvertex_ptr = NULL;
+    vertex2D *autotexvertex_ptrs[4];
+    vertex3D *objvertex_ptr = NULL;
 
-    struct vertex2D *texvertex_ptrs[allObjectVertices.textureVertices];
-    struct vertex3D *objvertex_ptrs[allObjectVertices.objectVertices];
+    vertex2D *texvertex_ptrs[allObjectVertices.textureVertices];
+    vertex3D *objvertex_ptrs[allObjectVertices.objectVertices];
 
     struct triangle *triangle_ptr = NULL;
     struct square *square_ptr = NULL;
@@ -260,7 +262,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
             else
             {
 
-                texvertex_ptr = new struct vertex2D;
+                texvertex_ptr = new vertex2D;
 
                 for(i = 3, j = 0; line[i] != ' ' && line[i] != '\0' && line[i] != '\n'; i++, j++)
                     string[j] = line[i];
@@ -301,7 +303,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
             else
             {
 
-                objvertex_ptr = new struct vertex3D;
+                objvertex_ptr = new vertex3D;
 
                 for(i = 2, j = 0; line[i] != ' ' && line[i] != '\0' && line[i] != '\n'; i++, j++)
                     string[j] = line[i];
@@ -435,7 +437,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                                 auto_texv_loaded = true;
 
                                 for(k = 0; k < 4; k++)
-                                    autotexvertex_ptrs[k] = new struct vertex2D;
+                                    autotexvertex_ptrs[k] = new vertex2D;
 
                                 autotexvertex_ptrs[0]->x = 0;
                                 autotexvertex_ptrs[0]->y = 1;
@@ -467,7 +469,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                                 auto_texv_loaded = true;
 
                                 for(k = 0; k < 3; k++)
-                                    autotexvertex_ptrs[k] = new struct vertex2D;
+                                    autotexvertex_ptrs[k] = new vertex2D;
 
                                 autotexvertex_ptrs[0]->x = 0;
                                 autotexvertex_ptrs[0]->y = 1;
@@ -496,19 +498,19 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 }
 
 
-struct vertex3D *Object::addObjectVertex(struct vertex3D *new_vertex)
+vertex3D *Object::addObjectVertex(vertex3D *new_vertex)
 {
     numofSpots++;
 
-    vertices = ListPushFront(vertices, new_vertex);
+    vertices->ListPushFront(new_vertex);
     return new_vertex;
 }
 
-struct vertex2D *Object::addTextureVertex(struct vertex2D *new_tex_vertex)
+vertex2D *Object::addTextureVertex(vertex2D *new_tex_vertex)
 {
     numofTextureSpots++;
 
-    texvertices = ListPushFront(texvertices, new_tex_vertex);
+    texvertices->ListPushFront(new_tex_vertex);
     return new_tex_vertex;
 }
 
@@ -516,14 +518,14 @@ void Object::addTriangle(struct triangle *new_triangle)
 {
     numofTriangles++;
 
-    triangles = ListPushFront(triangles, new_triangle);
+    triangles->ListPushFront(new_triangle);
 }
 
 void Object::addSquare(struct square *new_square)
 {
     numofSquares++;
 
-    squares = ListPushFront(squares, new_square);
+    squares->ListPushFront(new_square);
 }
 
 void Object::loadMaterial(const char *file)

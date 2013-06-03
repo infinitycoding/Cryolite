@@ -1,4 +1,4 @@
-#include "models.h"
+#include <models.h>
 #include <material.h>
 
 Material *MAN;
@@ -23,8 +23,8 @@ void INIT_Models(Scene *sce)
 
 void createObjectGround(Material *mat, Scene *sce)
 {
-    struct vertex3D *vertex = (struct vertex3D *)malloc(4*sizeof(struct vertex3D));
-    struct vertex2D *texvertex = (struct vertex2D *)malloc(4*sizeof(struct vertex2D));
+    vertex3D *vertex = new vertex3D[4];
+    vertex2D *texvertex = new vertex2D[4];
     struct square *square = (struct square *)malloc(sizeof(struct square));
 
     Object *ground = new Object("ground");
@@ -83,9 +83,9 @@ void createObjectGround(Material *mat, Scene *sce)
 
 void createObjectCube(Material *mat, Scene *sce)
 {
-    struct vertex3D *vertex = (struct vertex3D *)malloc(8*sizeof(struct vertex3D));
-    struct vertex2D *texvertex = (struct vertex2D *)malloc(4*sizeof(struct vertex2D));
-    struct square *square = (struct square *)malloc(6*sizeof(struct square));
+    vertex3D *vertex = new vertex3D[8];
+    vertex2D *texvertex = new vertex2D[4];
+    struct square *square = new struct square[6];
 
     iccube = new Object("iccube");
 

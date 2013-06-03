@@ -11,21 +11,21 @@
 
 #include <types.h>
 #include <material.h>
-#include <list.h>
+#include <List.h>
 #include <vector.h>
 
 
 
 struct triangle
 {
-    struct vertex3D *objVertex[3];
-    struct vertex2D *texVertex[3];
+    vertex3D *objVertex[3];
+    vertex2D *texVertex[3];
 };
 
 struct square
 {
-    struct vertex3D *objVertex[4];
-    struct vertex2D *texVertex[4];
+    vertex3D *objVertex[4];
+    vertex2D *texVertex[4];
 };
 
 struct numofvertices
@@ -42,8 +42,8 @@ class Object
         Object(const char *filename, const char *objname);
         ~Object();
 
-        struct vertex3D *addObjectVertex(struct vertex3D *new_vertex);
-        struct vertex2D *addTextureVertex(struct vertex2D *new_tex_vertex);
+        vertex3D *addObjectVertex(vertex3D *new_vertex);
+        vertex2D *addTextureVertex(vertex2D *new_tex_vertex);
         void addTriangle(struct triangle *new_triangle);
         void addSquare(struct square *new_square);
         void loadMaterial(const char *file);
@@ -58,7 +58,7 @@ class Object
         uint32_t numofTriangles;
         uint32_t numofSquares;
 
-        struct vertex3D scale;
+        vertex3D scale;
         vector3D position;
 
         vector3D rotationAxis;
@@ -80,10 +80,10 @@ class Object
 
 
 
-        struct List *vertices;
-        struct List *texvertices;
-        struct List *triangles;
-        struct List *squares;
+        List<vertex3D> *vertices;
+        List<vertex2D> *texvertices;
+        List<struct triangle> *triangles;
+        List<struct square> *squares;
         Material *ObjectMaterial;
 
 
