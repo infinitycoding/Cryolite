@@ -22,6 +22,8 @@ bool move_backward=false;
 float move_direction_foreward=(float)SPEED/100;
 float move_direction_left=0;
 
+float move_direction_change=(float)ANGLE/(9000/SPEED);
+
 float position_x = STARTING_X;
 float position_y = STARTING_Y;
 float position_z = STARTING_Z;
@@ -138,14 +140,14 @@ void rotation_handler(){    // Rotates the object if a key is pressed.
         rotate_correctly(ANGLE,0,1,0);
 
         if(move_direction_foreward <= 0)
-            move_direction_left += (float)1/(9000/SPEED)*ANGLE;
+            move_direction_left += move_direction_change;
         else
-            move_direction_left -=  (float)1/(9000/SPEED)*ANGLE;
+            move_direction_left -=  move_direction_change;
 
         if(move_direction_left <= 0)
-            move_direction_foreward -= (float)1/(9000/SPEED)*ANGLE;
+            move_direction_foreward -= move_direction_change;
         else
-            move_direction_foreward += (float)1/(9000/SPEED)*ANGLE;
+            move_direction_foreward += move_direction_change;
 
         right = false;
 
@@ -156,14 +158,14 @@ void rotation_handler(){    // Rotates the object if a key is pressed.
         rotate_correctly(-ANGLE,0,1,0);
 
         if(move_direction_foreward >= 0)
-            move_direction_left += (float)1/(9000/SPEED)*ANGLE;
+            move_direction_left += move_direction_change;
         else
-            move_direction_left -=  (float)1/(9000/SPEED)*ANGLE;
+            move_direction_left -=  move_direction_change;
 
         if(move_direction_left >= 0)
-            move_direction_foreward -= (float)1/(9000/SPEED)*ANGLE;
+            move_direction_foreward -= move_direction_change;
         else
-            move_direction_foreward += (float)1/(9000/SPEED)*ANGLE;
+            move_direction_foreward += move_direction_change;
 
         left = false;
     }
