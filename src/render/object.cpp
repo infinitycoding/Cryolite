@@ -1,8 +1,6 @@
 #include <string.h>
 
 #include <object.h>
-#include <vector.h>
-#include <List.h>
 
 
 Object::Object(const char *objname)
@@ -24,6 +22,7 @@ Object::Object(const char *filename, const char *objname)
 void Object::initObject()
 {
     vertices = new List<vertex3D>;
+    normvertices = new List<vertex3D>;
     texvertices = new List<vertex2D>;
 
     triangles = new List<struct triangle>;
@@ -67,11 +66,6 @@ void Object::initObject()
     Am = 0; // Acceleration Motion
     Tms = 0; //Time Motion Start
 
-    numofTextureSpots = 0;
-    numofSpots = 0;
-    numofTriangles = 0;
-    numofSquares = 0;
-
     isPhysicalActor = false;
     automatical_texturing = true;
 
@@ -81,7 +75,14 @@ void Object::initObject()
 
 Object::~Object()
 {
+    vertices->~List();
+    normvertices->~List();
+    texvertices->~List();
 
+    triangles->~List();
+    squares->~List();
+
+    //ObjectMaterial->~Material();
 }
 
 struct numofvertices Object::countVertices(const char *filename, const char *objectname)
@@ -146,17 +147,21 @@ struct numofvertices Object::countVertices(const char *filename, const char *obj
 
 void Object::loadObjectFile(const char *objectFile, const char *objectName)
 {
-    FILE *f;                                                // the file handle
+    // when normals are fully implemented, activate line 161, line 179 and line 381
 
-    char line[50];                                          // a line of the file
-    char string[50];                                        // string can be many things
+    printf("loading file %s...\n", objectFile);
 
-    int h, i , j, k;                                        // h, i, j and k can too be many things
-    int counter = 0;                                        // a general counter, counting what is to count
-    int vert_id[4], tex_id[4];                              // temponary variables
+    FILE *f;
 
-    bool correct_object = false;                           // says if i have found the correct object yet
-    bool triangle_or_square;                                // triangle == false, square == true
+    char line[50];
+    char string[50];
+
+    int h, i , j;
+    int counter = 0;
+    int vert_id[4], tex_id[4]/*, norm_id[4]*/;
+
+    bool correct_object = false;
+    bool triangle_or_square;
     bool texture_coordinates = false;
     bool auto_texv_loaded = false;
 
@@ -167,15 +172,14 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
     vertex2D *texvertex_ptr = NULL;
     vertex2D *autotexvertex_ptrs[4];
     vertex3D *objvertex_ptr = NULL;
+    vertex3D *normvertex_ptr = NULL;
 
     vertex2D *texvertex_ptrs[allObjectVertices.textureVertices];
     vertex3D *objvertex_ptrs[allObjectVertices.objectVertices];
+    //vertex3D *normvertex_ptrs[allObjectVertices.normalVertices];
 
     struct triangle *triangle_ptr = NULL;
     struct square *square_ptr = NULL;
-
-
-    printf("loading file %s...\n", objectFile);
 
     f = fopen(objectFile, "r");
 
@@ -201,16 +205,6 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
         if(line[0] == 'g')
         {
             printf("warning: polygone groups aren't supported yet by cryolite engine.\n");
-            continue;
-        }
-
-        if(line[0] == 'v' && line[1] == 'n')
-        {
-            if(correct_object == false)
-                otherVertices.normalVertices++;
-            else
-                printf("error: normals aren't supported yet by cryolite engine.\n");
-
             continue;
         }
 
@@ -248,17 +242,13 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                 break;
             }
 
-
             continue;
         }
 
         if(line[0] == 'v' && line[1] == 't')
         {
             if(correct_object == false)
-            {
                 otherVertices.textureVertices++;
-                continue;
-            }
             else
             {
 
@@ -296,10 +286,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
         if(line[0] == 'v' && line[1] == ' ')
         {
             if(correct_object == false)
-            {
                 otherVertices.objectVertices++;
-                continue;
-            }
             else
             {
 
@@ -343,6 +330,59 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                 objvertex_ptrs[myVertices.objectVertices] = objvertex_ptr;
                 myVertices.objectVertices++;
             }
+
+	    continue;
+        }
+
+	if(line[0] == 'v' && line[1] == 'n')
+        {
+            if(correct_object == false)
+                otherVertices.normalVertices++;
+            else
+            {
+
+                normvertex_ptr = new vertex3D;
+
+                for(i = 3, j = 0; line[i] != ' ' && line[i] != '\0' && line[i] != '\n'; i++, j++)
+                    string[j] = line[i];
+
+                if(line[i] == '\0' || line[i] == '\n')
+                {
+                    printf("error: File is corrupted. programm will be ended.\n");
+                    exit(-1);
+                }
+
+                string[j+1] = '\0';
+
+                normvertex_ptr->x = atof(string);
+
+                for(i++, j = 0; line[i] != ' ' && line[i] != '\0' && line[i] != '\n'; i++, j++)
+                    string[j] = line[i];
+
+                if(line[i] == '\0' || line[i] == '\n')
+                {
+                    printf("error: File is corrupted. programm will be ended.\n");
+                    exit(-1);
+                }
+
+                string[j+1] = '\0';
+
+                normvertex_ptr->y = atof(string);
+
+                for(i++, j = 0; line[i] != '\n' && line[i] != '\0'; i++, j++)
+                    string[j] = line[i];
+
+                string[j+1] = '\0';
+
+                normvertex_ptr->z = atof(string);
+
+                this->addNormalVertex(normvertex_ptr);
+
+                //normvertex_ptrs[myVertices.normalVertices] = normvertex_ptr;
+                myVertices.normalVertices++;
+            }
+
+            continue;
         }
 
         if(line[0] == 'f')
@@ -351,7 +391,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                 continue;
             else
             {
-                for(i = 2, counter = 0; line[i] != '\n' && line[i] != '\0'; i++)     // check if it is a triangle or a square
+                for(i = 2, counter = 0; line[i] != '\n' && line[i] != '\0'; i++) // check if it is a triangle or a square
                     if(line[i] == ' ')
                         counter++;
 
@@ -365,7 +405,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                     exit(-1);
                 }
 
-                for(i = 2; line[i] != '\n' && line[i] != '\0'; i++)     // check if there are texture coordinates
+                for(i = 2; line[i] != '\n' && line[i] != '\0'; i++) // check if there are texture coordinates
                 {
                     if(line[i] == '/')
                     {
@@ -436,8 +476,8 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                             {
                                 auto_texv_loaded = true;
 
-                                for(k = 0; k < 4; k++)
-                                    autotexvertex_ptrs[k] = new vertex2D;
+                        	    for(j = 0; j < 4; j++)
+                                    autotexvertex_ptrs[j] = new vertex2D;
 
                                 autotexvertex_ptrs[0]->x = 0;
                                 autotexvertex_ptrs[0]->y = 1;
@@ -468,8 +508,8 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                             {
                                 auto_texv_loaded = true;
 
-                                for(k = 0; k < 3; k++)
-                                    autotexvertex_ptrs[k] = new vertex2D;
+                                for(j = 0; j < 4; j++)
+                                    autotexvertex_ptrs[j] = new vertex2D;
 
                                 autotexvertex_ptrs[0]->x = 0;
                                 autotexvertex_ptrs[0]->y = 1;
@@ -477,6 +517,8 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                                 autotexvertex_ptrs[1]->y = 0;
                                 autotexvertex_ptrs[2]->x = 1;
                                 autotexvertex_ptrs[2]->y = 0;
+                                autotexvertex_ptrs[3]->x = 1;
+                                autotexvertex_ptrs[3]->y = 1;
                             }
 
                             triangle_ptr->texVertex[i] = autotexvertex_ptrs[i];
@@ -497,34 +539,31 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
 }
 
-
 vertex3D *Object::addObjectVertex(vertex3D *new_vertex)
 {
-    numofSpots++;
-
     vertices->ListPushFront(new_vertex);
     return new_vertex;
 }
 
+vertex3D *Object::addNormalVertex(vertex3D *new_norm_vertex)
+{
+    normvertices->ListPushFront(new_norm_vertex);
+    return new_norm_vertex;
+}
+
 vertex2D *Object::addTextureVertex(vertex2D *new_tex_vertex)
 {
-    numofTextureSpots++;
-
     texvertices->ListPushFront(new_tex_vertex);
     return new_tex_vertex;
 }
 
 void Object::addTriangle(struct triangle *new_triangle)
 {
-    numofTriangles++;
-
     triangles->ListPushFront(new_triangle);
 }
 
 void Object::addSquare(struct square *new_square)
 {
-    numofSquares++;
-
     squares->ListPushFront(new_square);
 }
 
@@ -577,5 +616,3 @@ void Object::rotateObject(float angle,float v,float a,vector3D rotationAxis)
     this->rotationAxis = rotationAxis;
     this->destAngle = this->Angle+angle;
 }
-
-

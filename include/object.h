@@ -19,12 +19,14 @@
 struct triangle
 {
     vertex3D *objVertex[3];
+    vertex3D *normVertex[3];
     vertex2D *texVertex[3];
 };
 
 struct square
 {
     vertex3D *objVertex[4];
+    vertex3D *normVertex[4];
     vertex2D *texVertex[4];
 };
 
@@ -38,25 +40,26 @@ struct numofvertices
 class Object
 {
     public:
+
         Object(const char *objname);
         Object(const char *filename, const char *objname);
         ~Object();
 
+
         vertex3D *addObjectVertex(vertex3D *new_vertex);
+	vertex3D *addNormalVertex(vertex3D *new_norm_vertex);
         vertex2D *addTextureVertex(vertex2D *new_tex_vertex);
         void addTriangle(struct triangle *new_triangle);
         void addSquare(struct square *new_square);
+
         void loadMaterial(const char *file);
         void loadObjectFile(const char *objectFile, const char *objectName);
+
         void moveObject(float v,float a , float l, dvector3D D);
         void rotateObject(float angle,float v,float a,dvector3D rotationAxis);
 
-        char objectname[20];
 
-        uint32_t numofTextureSpots;
-        uint32_t numofSpots;
-        uint32_t numofTriangles;
-        uint32_t numofSquares;
+        char objectname[20];
 
         vertex3D scale;
         vector3D position;
@@ -78,18 +81,15 @@ class Object
         float Am; // Acceleration Motion
         int Tms; //Time Motion Start
 
-
-
         List<vertex3D> *vertices;
+	List<vertex3D> *normvertices;
         List<vertex2D> *texvertices;
         List<struct triangle> *triangles;
         List<struct square> *squares;
         Material *ObjectMaterial;
 
-
         bool isPhysicalActor;
         bool automatical_texturing;
-
 
     private:
 
