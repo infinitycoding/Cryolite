@@ -4,12 +4,6 @@
 
 template <typename T>
 
-
-
-
-
-
-
 class List
 {
     public:
@@ -48,15 +42,14 @@ class List
 
         void ListSplice(struct ListNode *start, struct ListNode *end, struct ListNode *target);
         T *ListRemoveNode(struct ListNode *node);
+
+        void (*structCleaner)(T *element);
     private:
-
-
-
-
         struct ListNode *head;
         struct ListNode *current;
 
 };
+
 
 
 template <typename T>
@@ -68,6 +61,7 @@ List<T>::List()
     dummy->next = dummy;
     dummy->prev = dummy;
     dummy->element = NULL;
+    this->structCleaner = NULL;
 }
 
 
@@ -76,8 +70,16 @@ List<T>::~List()
 {
     while(!this->ListIsEmpty())
     {
-        // Todo: call clearfunction
-        delete ListPopFront();
+        if(structCleaner)
+        {
+            T *element = ListPopFront();
+            structCleaner(element);
+            delete element;
+        }
+        else
+        {
+            delete ListPopFront();
+        }
     }
 }
 
@@ -222,6 +224,5 @@ void List<T>::ListSplice(struct ListNode *start, struct ListNode *end, struct Li
     target->next->prev = end;
     target->next = start;
 }
-
 
 #endif
