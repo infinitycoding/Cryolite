@@ -19,6 +19,18 @@ Object::Object(const char *filename, const char *objname)
     loadObjectFile(filename, objname);
 }
 
+Object::~Object()
+{
+    delete vertices;
+    delete normvertices;
+    delete texvertices;
+
+    delete triangles;
+    delete squares;
+
+    //delete ObjectMaterial;
+}
+
 void Object::initObject()
 {
     vertices = new List<vertex3D>;
@@ -70,19 +82,6 @@ void Object::initObject()
     automatical_texturing = true;
 
     ObjectMaterial = NULL;
-}
-
-
-Object::~Object()
-{
-    vertices->~List();
-    normvertices->~List();
-    texvertices->~List();
-
-    triangles->~List();
-    squares->~List();
-
-    //ObjectMaterial->~Material();
 }
 
 struct numofvertices Object::countVertices(const char *filename, const char *objectname)
