@@ -7,76 +7,18 @@ Object *iccube;
 
 void INIT_Models(Scene *sce)
 {
-    Material *ground = new Material(IMAGE(blacktile.jpg));   // Loads the ground texture
     Material *IC = new Material(IMAGE(textur.bmp));
     MAN = new Material(IMAGE(man.png));
     createObjectCube(IC, sce);
-    createObjectGround(ground, sce);
+    Object *ground = new Object(OBJECT(ground.obj), "Ground");
+    ground->position.y = -3;
+    sce->addObject(ground);
     Object *woodcube = new Object(OBJECT(bettercube.obj), "Cube");
     woodcube->position.x = 5;
     sce->addObject(woodcube);
     Object *gravelcube = new Object(OBJECT(cube.obj), "cube.001");
     gravelcube->position.x = -5;
     sce->addObject(gravelcube);
-}
-
-
-void createObjectGround(Material *mat, Scene *sce)
-{
-    vertex3D *vertex = new vertex3D[4];
-    vertex2D *texvertex = new vertex2D[4];
-    struct square *square = new struct square;
-
-    Object *ground = new Object("ground");
-
-    vertex[0].x = -GROUND_SIZE;
-    vertex[0].y = -3.0;
-    vertex[0].z = GROUND_SIZE;
-
-    vertex[1].x = -GROUND_SIZE;
-    vertex[1].y = -3.0;
-    vertex[1].z = -GROUND_SIZE;
-
-    vertex[2].x = GROUND_SIZE;
-    vertex[2].y = -3.0;
-    vertex[2].z = -GROUND_SIZE;
-
-    vertex[3].x = GROUND_SIZE;
-    vertex[3].y = -3.0;
-    vertex[3].z = GROUND_SIZE;
-
-
-    texvertex[0].x = 0.0;
-    texvertex[0].y = 0.0;
-
-    texvertex[1].x = 50.0;
-    texvertex[1].y = 0.0;
-
-    texvertex[2].x = 50.0;
-    texvertex[2].y = 50.0;
-
-    texvertex[3].x = 0.0;
-    texvertex[3].y = 50.0;
-
-
-    square->objVertex[0] = ground->addObjectVertex(&vertex[0]);
-    square->objVertex[1] = ground->addObjectVertex(&vertex[1]);
-    square->objVertex[2] = ground->addObjectVertex(&vertex[2]);
-    square->objVertex[3] = ground->addObjectVertex(&vertex[3]);
-
-    square->texVertex[0] = ground->addTextureVertex(&texvertex[0]);
-    square->texVertex[1] = ground->addTextureVertex(&texvertex[1]);
-    square->texVertex[2] = ground->addTextureVertex(&texvertex[2]);
-    square->texVertex[3] = ground->addTextureVertex(&texvertex[3]);
-
-    ground->addSquare(square);
-
-    ground->ObjectMaterial = mat;
-
-    sce->addObject(ground);
-
-    return;
-
 }
 
 // draw a cube with a texture

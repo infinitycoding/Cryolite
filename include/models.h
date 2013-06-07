@@ -16,13 +16,10 @@
     #define HOR 6
     #define VERT 16
     #define SCOPE 1
-    #define GROUND_SIZE 50
-
 
 
 
     void drawHUD();
-    void createObjectGround(Material *mat, Scene *sce);
     void createObjectCube(Material *mat, Scene *sce);
     void INIT_Models(Scene *sce);
 
