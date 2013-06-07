@@ -8,7 +8,7 @@
 #include <vector.h>
 
 #define ANGLE 2
-#define SPEED 20
+#define SPEED 5
 
 bool right=false;
 bool left=false;
@@ -19,10 +19,10 @@ bool move_left=false;
 bool move_foreward=false;
 bool move_backward=false;
 
-float move_direction_foreward=(float)SPEED/100;
-float move_direction_left=0;
+double move_direction_foreward=(double)SPEED/100;
+double move_direction_left=0;
 
-float move_direction_change=(float)ANGLE/(9000/SPEED);
+const double move_direction_change=(double)ANGLE/(9000/SPEED);
 
 float position_x = STARTING_X;
 float position_y = STARTING_Y;
