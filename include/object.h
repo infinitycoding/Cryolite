@@ -16,6 +16,11 @@
 
 
 
+enum usedVertices
+{
+    nothing_used, texture_used, normals_used, all_used
+};
+
 struct triangle
 {
     vertex3D *objVertex[3];
@@ -47,7 +52,7 @@ class Object
 
 
         vertex3D *addObjectVertex(vertex3D *new_vertex);
-	vertex3D *addNormalVertex(vertex3D *new_norm_vertex);
+        vertex3D *addNormalVertex(vertex3D *new_norm_vertex);
         vertex2D *addTextureVertex(vertex2D *new_tex_vertex);
         void addTriangle(struct triangle *new_triangle);
         void addSquare(struct square *new_square);
@@ -82,7 +87,7 @@ class Object
         int Tms; //Time Motion Start
 
         List<vertex3D> *vertices;
-	List<vertex3D> *normvertices;
+        List<vertex3D> *normvertices;
         List<vertex2D> *texvertices;
         List<struct triangle> *triangles;
         List<struct square> *squares;
@@ -95,6 +100,7 @@ class Object
 
         void initObject();
         struct numofvertices countVertices(const char *filename, const char *objectname);
+        usedVertices vertices_in_polygone(char *line);
 };
 
 

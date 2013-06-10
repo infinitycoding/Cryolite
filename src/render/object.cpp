@@ -84,6 +84,41 @@ void Object::initObject()
     ObjectMaterial = NULL;
 }
 
+usedVertices Object::vertices_in_polygone(char *line)
+{
+    usedVertices used = nothing_used;
+    bool firstSlash = true;
+    int i;
+
+    for(i = 2; line[i] != '\n' && line[i] != '\0'; i++)
+    {
+        if(line[i] == '/')
+        {
+            if(firstSlash == true)
+            {
+                firstSlash = false;
+
+                if(line[i+1] == '/')
+                {
+                    used = normals_used;
+
+                    break;
+                }
+                else
+                    used = texture_used;
+            }
+            else
+            {
+                used = all_used;
+
+                break;
+            }
+        }
+    }
+
+    return used;
+}
+
 struct numofvertices Object::countVertices(const char *filename, const char *objectname)
 {
     FILE *f;
@@ -161,8 +196,9 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
     bool correct_object = false;
     bool triangle_or_square;
-    bool texture_coordinates = false;
     bool auto_texv_loaded = false;
+
+    usedVertices used = nothing_used;
 
     struct numofvertices otherVertices = {0, 0, 0};
     struct numofvertices myVertices = {0, 0, 0};
@@ -404,14 +440,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                     exit(-1);
                 }
 
-                for(i = 2; line[i] != '\n' && line[i] != '\0'; i++) // check if there are texture coordinates
-                {
-                    if(line[i] == '/')
-                    {
-                        texture_coordinates = true;
-                        break;
-                    }
-                }
+                used = vertices_in_polygone(line);
 
                 if(triangle_or_square)
                 {
@@ -441,7 +470,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                     vert_id[h] = atoi(string);
                     vert_id[h] -= otherVertices.objectVertices+1;
 
-                    if(texture_coordinates)
+                    if(used == texture_used || used == all_used)
                     {
 
                         for(i++, j = 0; line[i] != ' ' && line[i] != '\n'; i++, j++)
@@ -467,7 +496,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
                         square_ptr->objVertex[i] = objvertex_ptrs[vert_id[i]];
 
-                        if(texture_coordinates)
+                        if(used == texture_used || used == all_used)
                             square_ptr->texVertex[i] = texvertex_ptrs[tex_id[i]];
                         else if(automatical_texturing == true && ObjectMaterial != NULL)
                         {
@@ -499,7 +528,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                     {
                         triangle_ptr->objVertex[i] = objvertex_ptrs[vert_id[i]];
 
-                        if(texture_coordinates)
+                        if(used == texture_used || used == all_used)
                             triangle_ptr->texVertex[i] = texvertex_ptrs[tex_id[i]];
                         else if(automatical_texturing == true && ObjectMaterial != NULL)
                         {
@@ -532,7 +561,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
         }
     }
 
-    printf("file successfully loaded.\n");
+    printf("file successfully loaded.\n\n");
 
     fclose(f);
 
