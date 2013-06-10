@@ -34,12 +34,16 @@ class Font
         Font(char *font);
         Font();
         ~Font();
+
         bool LoadFont(char *font,char* name, int ptsize);
         bool unloadFont(char *font);
+
         GLuint atotex(char* text, char* font,SDL_Color fontcolor, SDL_Color bgcolor);
         GLuint atextotex(char* text, char* font,int fontsize,SDL_Surface *texture);
         SDL_Surface *atosurf(char* text, char* font,int fontsize, struct colorRGBA);
         SDL_Surface *atextosurf(char* text, char* font,int fontsize,SDL_Surface *texture);
+
+
         struct List *TrueTypeFonts;
         struct List *PatternFonts;
 };
