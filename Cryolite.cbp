@@ -38,6 +38,7 @@
 		</Linker>
 		<Unit filename="include/List.h" />
 		<Unit filename="include/PhysicsEngine.h" />
+		<Unit filename="include/camera.h" />
 		<Unit filename="include/controls.h" />
 		<Unit filename="include/font.h" />
 		<Unit filename="include/general_def.h" />
@@ -49,6 +50,7 @@
 		<Unit filename="include/types.h" />
 		<Unit filename="include/vector.h" />
 		<Unit filename="src/physics/PhysicsEngine.cpp" />
+		<Unit filename="src/render/camera.cpp" />
 		<Unit filename="src/render/controls.cpp" />
 		<Unit filename="src/render/font.cpp" />
 		<Unit filename="src/render/main.cpp" />
