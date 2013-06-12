@@ -93,7 +93,7 @@ void Scene::render()
                     //Modify Model Matrix
                     if(currentObject->Lmr>0)
                     {
-                        double MPF = (double)(currentObject->Vm+currentObject->Am*(SDL_GetTicks()-currentObject->Tms))/averageFPS;
+                        double MPF = (double)(currentObject->Vm+currentObject->Am*((SDL_GetTicks()-currentObject->Tms)/1000))/averageFPS;
                         currentObject->Lmr -= MPF;
                         currentObject->position = (currentObject->position) + (currentObject->Dm * MPF);
                     }
@@ -127,7 +127,7 @@ void Scene::render()
 
                     glRotatef(currentObject->Angle, currentObject->rotationAxis.elements[0], currentObject->rotationAxis.elements[1], currentObject->rotationAxis.elements[2]);
                     glTranslatef(currentObject->position.elements[0],currentObject->position.elements[1],currentObject->position.elements[2]); //move to local (0/0/0)
-                    //glScalef(currentObject->scale.x,currentObject->scale.z,currentObject->scale.z);
+                    glScalef(currentObject->scale.elements[0],currentObject->scale.elements[1],currentObject->scale.elements[2]);
                     //Render Triangles
                     if(!currentObject->triangles->ListIsEmpty())
                     {
