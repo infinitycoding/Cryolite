@@ -201,7 +201,7 @@ void moveCube(SDL_Event *e)
 {
     if(e->key.keysym.sym == SDLK_e)
     {
-        vector3D direction = {0,0,1};
+        vector direction = vector(0, 0, 1);
         iccube->moveObject(1,0.002,10,direction);
     }
 
@@ -212,7 +212,7 @@ void rotateCube(SDL_Event *e)
 {
     if(e->key.keysym.sym == SDLK_r)
     {
-        vector3D direction = {0,0,1};
+        vector direction = vector(0, 0, 1);
         iccube->rotateObject(360,2,0.05,direction);
     }
 

@@ -377,17 +377,17 @@ vector *vector::scalecp(float s)
 }
 
 
-float Slen(vector v)
+float len(vector v)
 {
     return v.len();
 }
 
-vector Sunify(vector v)
+vector unify(vector v)
 {
     return v.unifyc();
 }
 
-vector *Sunify(vector *v)
+vector *unify(vector *v)
 {
     v->unifyc();
     return new vector(v);

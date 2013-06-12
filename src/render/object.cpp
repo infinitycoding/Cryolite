@@ -41,17 +41,12 @@ void Object::initObject()
     squares = new List<struct square>;
 
 
-    scale.x = 1;
-    scale.y = 1;
-    scale.z = 1;
+    scale = vector(1, 1, 1);
 
-    position.x = 0;
-    position.y = 0;
-    position.z = 0;
+    position = vector();
 
-    rotationAxis.x = 0;
-    rotationAxis.y = 0;
-    rotationAxis.z = 0;
+    rotationAxis = vector();
+
     Angle = 0;
     remeaningAngle = 0;
     destAngle = 0;
@@ -63,15 +58,11 @@ void Object::initObject()
 
 
 
-    Dm.x = 0; // Direction Motion
-    Dm.y = 0; // Direction Motion
-    Dm.z = 0; // Direction Motion
+    Dm = vector();
 
 
 
-    Pmd.x = 0; // Position motion destination
-    Pmd.y = 0; // Position motion destination
-    Pmd.z = 0; // Position motion destination
+    Pmd = vector();
 
     Lmr = 0; // Distance Motion Remeaning
     Vm = 0; // Velocity Motion
@@ -601,37 +592,37 @@ void Object::loadMaterial(const char *file)
 }
 
 
-void Object::moveObject(float v,float a , float l,vector3D D)
+void Object::moveObject(float v,float a , float l,vector D)
 {
     int currentTime = SDL_GetTicks();
     //normize Direction
-    vunify(D);
+    D.unify();
 
     float v0 = this->Vm+(this->Am*((currentTime-this->Tms)/1000));
 
     // calculate System V0
-    this->Vm = vlen(vadd(vscale(v,D),vscale(v0,this->Dm)));
+    this->Vm = len((D*v)+(this->Dm*v0));
 
     // calculate new acceleration
-    this->Am = vlen(vadd(vscale(a,D),vscale(this->Am,this->Dm)));
+    this->Am = len((D*a)+(this->Dm*this->Am));
 
 
     // calculate remeaning distance
-    this->Lmr = vlen(vadd(vscale(l,D),vscale(this->Lmr,this->Dm)));
+    this->Lmr = len((D*l)+(this->Dm*this->Lmr));
 
 
     // generate Direction Vector
-    this->Dm = vunify(vadd(this->Dm,D));
+    this->Dm = unify(this->Dm+D);
 
 
     //calculate final position
-    this->Pmd = vadd(vscale(this->Lmr,this->Dm),this->position);
+    this->Pmd = (this->Dm*this->Lmr)+(this->position);
 
     // save current time
     this->Tms = currentTime;
 }
 
-void Object::rotateObject(float angle,float v,float a,vector3D rotationAxis)
+void Object::rotateObject(float angle,float v,float a,vector rotationAxis)
 {
     this->startRotationTime = SDL_GetTicks();
     this->remeaningAngle = angle;

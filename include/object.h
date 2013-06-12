@@ -60,16 +60,16 @@ class Object
         void loadMaterial(const char *file);
         void loadObjectFile(const char *objectFile, const char *objectName);
 
-        void moveObject(float v,float a , float l, dvector3D D);
-        void rotateObject(float angle,float v,float a,dvector3D rotationAxis);
+        void moveObject(float v,float a , float l, vector D);
+        void rotateObject(float angle,float v,float a,vector rotationAxis);
 
 
         char objectname[20];
 
-        vertex3D scale;
-        vector3D position;
+        vector scale;
+        vector position;
 
-        vector3D rotationAxis;
+        vector rotationAxis;
         GLfloat Angle;
         GLfloat remeaningAngle;
         GLfloat destAngle;
@@ -79,8 +79,8 @@ class Object
         int remAngleSing;
 
 
-        vector3D Dm; // Direction Motion
-        vector3D Pmd; // Position motion destination
+        vector Dm; // Direction Motion
+        vector Pmd; // Position motion destination
         float Lmr; // Distance Motion Remeaning
         float Vm; // Velocity Motion
         float Am; // Acceleration Motion

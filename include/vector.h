@@ -107,7 +107,9 @@ class vector
         const vector operator - (vector const *v0, vector const v1);
         const vector operator * (vector const v0, const float s);
 
-
+float len(vector v);
+vector unify(vector v);
+vector *unify(vector *v);
 
 class vectorN
 {

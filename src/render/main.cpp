@@ -38,7 +38,7 @@ float averageFPS = 0;
 int main(int argc, char *argv[]){
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,  GL_MODULATE);
 
-    SDL mainwindow = SDL(WIDTH,HEIGHT,SDL_OPENGL|SDL_HWSURFACE|SDL_FULLSCREEN,"Cryolite Engine");     // Create the graphics window
+    SDL mainwindow = SDL(WIDTH,HEIGHT,SDL_OPENGL|SDL_HWSURFACE,"Cryolite Engine");     // Create the graphics window
 
 
     glClearColor( 0.0, 0.0, 0.0, 0.0 ); // Sets the background color.
@@ -98,6 +98,7 @@ int main(int argc, char *argv[]){
         move_handler();         // Moves the camera if key pressed
 
         mainScene->render();
+
         glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
         gluSphere(q,5,20,20);
         glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);

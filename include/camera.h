@@ -13,8 +13,8 @@ class Camera
         ~Camera();
 
 
-        pvector3D position;
-        dvector3D looking_direction;
+        vector position;
+        vector looking_direction;
 };
 
 

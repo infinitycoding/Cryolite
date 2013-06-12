@@ -95,23 +95,18 @@ void Scene::render()
                     {
                         double MPF = (double)(currentObject->Vm+currentObject->Am*(SDL_GetTicks()-currentObject->Tms))/averageFPS;
                         currentObject->Lmr -= MPF;
-                        currentObject->position.x += currentObject->Dm.x*MPF;
-                        currentObject->position.y += currentObject->Dm.y*MPF;
-                        currentObject->position.z += currentObject->Dm.z*MPF;
-
+                        currentObject->position = (currentObject->position) + (currentObject->Dm * MPF);
                     }
                     else if(currentObject->Vm)
                     {
                         currentObject->position = currentObject->Pmd;
-                        currentObject->Dm.x = 0;
-                        currentObject->Dm.y = 0;
-                        currentObject->Dm.z = 0;
+                        currentObject->Dm.null();
                         currentObject->Lmr = 0;
                         currentObject->Vm = 0;
                         currentObject->Am = 0;
                         currentObject->Tms = 0;
 
-                        printf("RemF: 0 X: %f Y: %f Z: %f\n",currentObject->position.x,currentObject->position.y,currentObject->position.z);
+                        printf("RemF: 0 X: %f Y: %f Z: %f\n",currentObject->position.elements[0],currentObject->position.elements[1],currentObject->position.elements[2]);
                     }
 
                     if(currentObject->remeaningAngle*currentObject->remAngleSing>0)
@@ -130,9 +125,9 @@ void Scene::render()
 
                     }
 
-                    glRotatef(currentObject->Angle, currentObject->rotationAxis.x, currentObject->rotationAxis.y, currentObject->rotationAxis.z);
-                    glTranslatef(currentObject->position.x,currentObject->position.y,currentObject->position.z); //move to local (0/0/0)
-                    glScalef(currentObject->scale.x,currentObject->scale.z,currentObject->scale.z);
+                    glRotatef(currentObject->Angle, currentObject->rotationAxis.elements[0], currentObject->rotationAxis.elements[1], currentObject->rotationAxis.elements[2]);
+                    glTranslatef(currentObject->position.elements[0],currentObject->position.elements[1],currentObject->position.elements[2]); //move to local (0/0/0)
+                    //glScalef(currentObject->scale.x,currentObject->scale.z,currentObject->scale.z);
                     //Render Triangles
                     if(!currentObject->triangles->ListIsEmpty())
                     {

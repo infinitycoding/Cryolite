@@ -11,13 +11,13 @@ void INIT_Models(Scene *sce)
     MAN = new Material(IMAGE(man.png));
     createObjectCube(IC, sce);
     Object *ground = new Object(OBJECT(ground.obj), "Ground");
-    ground->position.y = -3;
+    ground->position.setvalue(0, -3, 0);
     sce->addObject(ground);
     Object *woodcube = new Object(OBJECT(bettercube.obj), "Cube");
-    woodcube->position.x = 5;
+    woodcube->position.setvalue(5, 0, 0);
     sce->addObject(woodcube);
     Object *gravelcube = new Object(OBJECT(cube.obj), "cube.001");
-    gravelcube->position.x = -5;
+    gravelcube->position.setvalue(-5, 0, 0);
     sce->addObject(gravelcube);
 }
 

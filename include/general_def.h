@@ -3,8 +3,8 @@
 #define GENERAL_DEF_H_INCLUDED
 
 
-#define WIDTH 1920
-#define HEIGHT 1080
+#define WIDTH 640
+#define HEIGHT 480
 
 #define STARTING_X 0
 #define STARTING_Y 0
