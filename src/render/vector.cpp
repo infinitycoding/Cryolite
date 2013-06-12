@@ -1,248 +1,433 @@
 #include <math.h>
-
 #include <vector.h>
+#include <cstdarg>
 
-
-float vlen(vector3D v)
+vector::vector()
 {
-    if(v.x<0)
-        v.x *= -1;
-    if(v.y<0)
-        v.y *= -1;
-    if(v.z<0)
-        v.z *= -1;
-    return sqrt((v.x*v.x)+(v.y*v.y)+(v.z*v.z));
+    for(int i = 0; i < 3; i++)
+        this->elements[i] = 0;
+    this->cachlen = 0;
+    this->lenmod = false;
 }
 
-float vlen(vector2D v)
+
+vector::vector(float x)
 {
-    if(v.x<0)
-        v.x *= -1;
-    if(v.y<0)
-        v.y *= -1;
-    return sqrt((v.x*v.x)+(v.y*v.y));
+    this->elements[0] = x;
+    for(int i = 1; i < 3; i++)
+        this->elements[i] = 0;
+    this->cachlen = x;
+    this->lenmod = false;
 }
 
-float vlen(vector3D *v)
+vector::vector(float x, float y)
 {
-    vector3D vp = *v;
-    return vlen(vp);
+    this->elements[0] = x;
+    this->elements[1] = y;
+    this->elements[2] = 0;
+
+    this->cachlen = 0;
+    this->lenmod = true;
 }
 
-float vlen(vector2D *v)
+vector::vector(float x, float y, float z)
 {
-    vector2D vp = *v;
-    return vlen(vp);
+    this->elements[0] = x;
+    this->elements[1] = y;
+    this->elements[2] = z;
+
+    this->cachlen = 0;
+    this->lenmod = true;
 }
 
-vector3D vunify(vector3D v)
+vector::vector(float *v,int args)
 {
-    float len = vlen(v);
-    v.x /= len;
-    v.y /= len;
-    v.z /= len;
-    return v;
+    for(int i = 0; i < args && i < 3; i++)
+        this->elements[i] = v[i];
+
+    for(int i = args; i < 3; i++)
+        this->elements[i] = 0;
+
+    this->cachlen = 0;
+    this->lenmod = true;
 }
 
-vector2D vunify(vector2D v)
+
+vector::vector(vector *v)
 {
-    float len = vlen(v);
-    v.x /= len;
-    v.y /= len;
-    return v;
+    for(int i = 0; i < 3; i++)
+        this->elements[i] = v->elements[i];
+    this->cachlen = v->cachlen;
+    this->lenmod = v->lenmod;
 }
 
-vector3D *vunify(vector3D *v)
+void vector::null()
 {
-    vector3D *vu = new vector3D;
-    *vu = vunify(*v);
-    return vu;
-
+    for(int i = 0; i < 3; i++)
+        this->elements[i] = 0;
 }
 
-vector2D *vunify(vector2D *v)
+float vector::len()
 {
-    vector2D *vu = new vector2D;
-    *vu = vunify(*v);
-    return vu;
-
+    if(lenmod)
+    {
+        float sum = 0;
+        for(int i = 0; i < 3; i++)
+            sum += pow(this->elements[i],2);
+        this->cachlen = sqrt(sum);
+        this->lenmod = false;
+    }
+    return cachlen;
 }
 
-vector3D vunifyc(vector3D *v)
+void vector::setvalue(float x)
 {
-    *v = vunify(*v);
-    return *v;
+    this->elements[0] = x;
 }
 
-vector2D vunifyc(vector2D *v)
+void vector::setvalue(float x, float y)
 {
-    *v = vunify(*v);
-    return *v;
+    this->elements[0] = x;
+    this->elements[1] = y;
 }
 
-vector3D vadd(vector3D a,vector3D b)
+void vector::setvalue(float x, float y, float z)
 {
-    vector3D r = {a.x+b.x,a.y+b.y,a.z+b.z};
-    return r;
+    this->elements[0] = x;
+    this->elements[1] = y;
+    this->elements[2] = z;
 }
 
-vector2D vadd(vector2D a,vector2D b)
-{
-    vector2D r = {a.x+b.x,a.y+b.y};
-    return r;
+void vector::setvalue(float *v, int args){
+    for(int i = 0; i < args && i < 3; i++)
+        this->elements[i] = v[i];
+    for(int i = args; i < 3; i++)
+        this->elements[i] = 0;
 }
 
-vector3D *vadd(vector3D *a,vector3D *b)
+void vector::setvalue(vector v)
 {
-    vector3D *vr = new vector3D;
-    *vr = vadd(*a,*b);
+    for(int i = 0; i < 3; i++)
+        this->elements[i] = v.elements[i];
+    this->cachlen = v.cachlen;
+    this->lenmod = v.lenmod;
+}
+
+void vector::setvalue(vector *v)
+{
+    for(int i = 0; i < 3; i++)
+        this->elements[i] = v->elements[i];
+    this->cachlen = v->cachlen;
+    this->lenmod = v->lenmod;
+}
+
+void vector::unify()
+{
+    float len = this->len();
+    for(int i = 0; i < 3; i++)
+        this->elements[i] /=len;
+    this->lenmod = false;
+    this->cachlen = 1;
+}
+
+vector vector::unifyc()
+{
+    float len = this->len();
+    for(int i = 0; i < 3; i++)
+        this->elements[i] /=len;
+    this->lenmod = false;
+    this->cachlen = 1;
+    return vector(this);
+}
+
+vector *vector::unifycp()
+{
+    float len = this->len();
+    for(int i = 0; i < 3; i++)
+        this->elements[i] /=len;
+    this->lenmod = false;
+    this->cachlen = 1;
+    return new vector(this);
+}
+
+void vector::add(vector v)
+{
+    for(int i = 0; i < 3 ; i++)
+        this->elements[i] += v.elements[i];
+    this->lenmod = true;
+}
+
+void vector::add(vector *v)
+{
+    for(int i = 0; i < 3 ; i++)
+        this->elements[i] += v->elements[i];
+    this->lenmod = true;
+}
+
+void vector::add(vector v0, vector v1)
+{
+    for(int i = 0; i < 3 ; i++)
+        this->elements[i] = v0.elements[i]+v1.elements[i];
+    this->lenmod = true;
+}
+
+void vector::add(vector *v0, vector *v1)
+{
+    for(int i = 0; i < 3 ; i++)
+        this->elements[i] = v0->elements[i]+v1->elements[i];
+    this->lenmod = true;
+}
+
+void vector::add(vector *v, int args)
+{
+    for(int i = 0; i < args; i++)
+    {
+        for(int j = 0; j < 3; j++)
+        {
+            this->elements[j] += v[i].elements[j];
+        }
+    }
+    this->lenmod = true;
+}
+
+
+void vector::add(vector **v, int args)
+{
+    for(int i = 0; i < args; i++)
+    {
+        for(int j = 0; j < 3; j++)
+        {
+            this->elements[j] += v[i]->elements[j];
+        }
+    }
+    this->lenmod = true;
+}
+
+void vector::add(int args, ...)
+{
+    va_list arguments;
+    va_start ( arguments, args );
+        for(int i = 0; i < args; i++)
+        {
+            vector *temp = va_arg ( arguments, vector *);
+            for(int j = 0; j < 3 ; j++)
+            {
+                this->elements[j] += temp->elements[j];
+            }
+
+        }
+    va_end ( arguments );
+    this->lenmod = true;
+}
+
+vector vector::addc(vector v)
+{
+    this->add(v);
+    return vector(this);
+}
+
+vector *vector::addc(vector *v)
+{
+    this->add(v);
+    return new vector(this);
+}
+
+vector vector::addc(vector v0, vector v1)
+{
+    this->add(v0,v1);
+    return vector(this);
+}
+
+vector *vector::addc(vector *v0, vector *v1)
+{
+    this->add(v0,v1);
+    return new vector(this);
+}
+
+vector *vector::addc(vector  *v, int args)
+{
+    this->add(v,args);
+    return new vector(this);
+}
+
+vector *vector::addc(vector  **v, int args)
+{
+    this->add(v,args);
+    return new vector(this);
+}
+
+vector *vector::addc(int args, ...)
+{
+    va_list arguments;
+    va_start ( arguments, args );
+        for(int i = 0; i < args; i++)
+        {
+            vector *temp = va_arg ( arguments, vector *);
+            for(int j = 0; j < 3 ; j++)
+            {
+                this->elements[j] += temp->elements[j];
+            }
+
+        }
+    va_end ( arguments );
+    this->lenmod = true;
+    return new vector(this);
+}
+
+
+
+void vector::sub(vector v)
+{
+    for(int i = 0; i < 3; i++)
+        this->elements[i] -= v.elements[i];
+    this->lenmod = true;
+}
+
+void vector::sub(vector *v)
+{
+    for(int i = 0; i < 3; i++)
+        this->elements[i] -= v->elements[i];
+    this->lenmod = true;
+}
+
+void vector::sub(vector v0, vector v1)
+{
+    for(int i = 0; i < 3; i++)
+        this->elements[i] = v0.elements[i]-v1.elements[i];
+    this->lenmod = true;
+}
+
+void vector::sub(vector *v0, vector *v1)
+{
+    for(int i = 0; i < 3; i++)
+        this->elements[i] = v0->elements[i]-v1->elements[i];
+    this->lenmod = true;
+}
+
+vector vector::subc(vector v)
+{
+    this->sub(v);
+    return vector(this);
+}
+
+vector *vector::subc(vector *v)
+{
+    this->sub(v);
+    return new vector(this);
+}
+
+vector vector::subc(vector v0, vector v1)
+{
+    this->sub(v0, v1);
+    return vector(this);
+}
+
+vector *vector::subc(vector *v0, vector *v1)
+{
+    this->sub(v0, v1);
+    return new vector(this);
+}
+
+void vector::scale(float s)
+{
+    for(int i = 0; i < 3; i++)
+        this->elements[i] *= s;
+    this->lenmod = true;
+}
+
+
+void vector::scale(float s, vector v)
+{
+    for(int i = 0; i < 3; i++)
+        v.elements[i] *= s;
+    v.lenmod = true;
+    this->setvalue(v);
+}
+
+void vector::scale(float s, vector *v)
+{
+    for(int i = 0; i < 3; i++)
+        v->elements[i] *= s;
+    v->lenmod = true;
+    this->setvalue(v);
+}
+
+vector vector::scalec(float s)
+{
+    this->scale(s);
+    return vector(this);
+}
+
+vector vector::scalec(float s, vector v)
+{
+    this->scale(s,v);
+    return vector(this);
+}
+
+vector *vector::scalec(float s, vector *v)
+{
+    this->scale(s,v);
+    return new vector(this);
+}
+
+vector *vector::scalecp(float s)
+{
+    this->scale(s);
+    return new vector(this);
+}
+
+
+float Slen(vector v)
+{
+    return v.len();
+}
+
+vector Sunify(vector v)
+{
+    return v.unifyc();
+}
+
+vector *Sunify(vector *v)
+{
+    v->unifyc();
+    return new vector(v);
+}
+
+
+const vector operator + (vector const v0, vector const v1)
+{
+    vector vr = vector((vector *)&v0);
+    vr.add(v1);
     return vr;
 }
 
-vector2D *vadd(vector2D *a,vector2D *b)
+const vector operator + (vector const *v0, vector const v1)
 {
-    vector2D *vr = new vector2D;
-    *vr = vadd(*a,*b);
+    vector vr = vector((vector *)v0);
+    vr.add(v1);
     return vr;
 }
 
-vector3D vaddc(vector3D *dest,vector3D *b)
-{
-    *dest = vadd(*dest,*b);
-    return *dest;
-}
 
-vector2D vaddc(vector2D *dest,vector2D *b)
+const vector operator - (vector const v0, vector const v1)
 {
-    *dest = vadd(*dest,*b);
-    return *dest;
-}
-
-vector3D vsub(vector3D a,vector3D b)
-{
-    vector3D r = {a.x-b.x,a.y-b.y,a.z-b.z};
-    return r;
-}
-
-vector2D vsub(vector2D a,vector2D b)
-{
-    vector2D r = {a.x-b.x,a.y-b.y};
-    return r;
-}
-
-vector3D *vsub(vector3D *a,vector3D *b)
-{
-    vector3D *vr = new vector3D;
-    *vr = vsub(*a,*b);
+    vector vr = vector((vector *)&v0);
+    vr.sub(v1);
     return vr;
 }
 
-vector2D *vsub(vector2D *a,vector2D *b)
+const vector operator - (vector const *v0, vector const v1)
 {
-    vector2D *vr = new vector2D;
-    *vr = vsub(*a,*b);
+    vector vr = vector((vector *)v0);
+    vr.sub(v1);
     return vr;
 }
 
-vector3D vsubc(vector3D *dest,vector3D *b)
+const vector operator * (vector const v0, const float s)
 {
-    *dest = vsub(*dest,*b);
-    return *dest;
-}
-
-vector2D vsubc(vector2D *dest,vector2D *b)
-{
-    *dest = vsub(*dest,*b);
-    return *dest;
-}
-
-vector3D vscale(float s,vector3D v)
-{
-    v.x *= s;
-    v.y *= s;
-    v.z *= s;
-    return v;
-}
-
-vector2D vscale(float s,vector2D v)
-{
-    v.x *= s;
-    v.y *= s;
-    return v;
-}
-
-vector3D *vscale(float s,vector3D *v)
-{
-    vector3D *vr = new vector3D;
-    *vr = vscale(s,*v);
+    vector vr = vector((vector*)&v0);
+    vr.scale(s);
     return vr;
 }
 
-vector2D *vscale(float s,vector2D *v)
-{
-    vector2D *vr = new vector2D;
-    *vr = vscale(s,*v);
-    return vr;
-}
 
-vector3D vscalec(float s,vector3D *v)
-{
-    vector3D vr = {v->x*s,v->y*s,v->z*s};
-    return vr;
-}
-
-vector2D vscalec(float s,vector2D *v)
-{
-    vector2D vr = {v->x*s,v->y*s};
-    return vr;
-}
-
-vector2D vset(float x,float y)
-{
-    vector2D v = {x,y};
-    return v;
-}
-
-vector3D vset(float x,float y,float z)
-{
-    vector3D v = {x,y,z};
-    return v;
-}
-
-void vset(vector2D *v, float x, float y)
-{
-    v->x = x;
-    v->y = y;
-}
-
-void vset(vector3D *v, float x, float y, float z)
-{
-    v->x = x;
-    v->y = y;
-    v->z = z;
-}
-
-vector3D vnull3D(void)
-{
-    vector3D v = NULLVECTOR3D;
-    return v;
-}
-
-vector2D vnull2D(void)
-{
-    vector2D v = NULLVECTOR2D;
-    return v;
-}
-
-void vnull(vector3D *v)
-{
-    v->x = 0;
-    v->y = 0;
-    v->z = 0;
-}
-
-void vnull(vector2D *v)
-{
-    v->x = 0;
-    v->y = 0;
-}

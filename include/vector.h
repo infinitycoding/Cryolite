@@ -5,86 +5,231 @@
 #include <GL/gl.h>
 
 
-#define NULLVECTOR3D {0,0,0}
-#define NULLVECTOR2D {0,0}
+
+#define STD_VECTOR_DIMENSIONS 3
 
 
 
-typedef struct {
-    GLfloat x;
-    GLfloat y;
-    GLfloat z;
-}vector3D;
 
-typedef struct{
-    GLfloat x;
-    GLfloat y;
-}vector2D;
+class vector
+{
+    public:
 
-typedef vector3D dvector3D;
-typedef vector3D pvector3D;
+        float elements[3];
 
 
-typedef vector2D dvector2D;
-typedef vector2D pvector2D;
+        vector();
+        vector(float x);
+        vector(float x, float y);
+        vector(float x, float y, float z);
+        vector(float *v, int args = 3);
+        vector(vector *v);
 
 
-float vlen(vector3D v);
-float vlen(vector2D v);
 
-float vlen(vector3D *v);
-float vlen(vector2D *v);
+        void null();
+        float len();
 
 
-vector3D vunify(vector3D v);
-vector2D vunify(vector2D v);
 
-vector3D *vunify(vector3D *v);
-vector2D *vunify(vector2D *v);
-
-vector3D vunifyc(vector3D *v);
-vector2D vunifyc(vector2D *v);
-
-
-vector3D vadd(vector3D a,vector3D b);
-vector2D vadd(vector2D a,vector2D b);
-
-vector3D *vadd(vector3D *a,vector3D *b);
-vector2D *vadd(vector2D *a,vector2D *b);
-
-vector3D vaddc(vector3D *dest,vector3D *b);
-vector2D vaddc(vector2D *dest,vector2D *b);
-
-// SUB = a-b
-vector3D vsub(vector3D a,vector3D b);
-vector2D vsub(vector2D a,vector2D b);
-
-vector3D *vsub(vector3D *a,vector3D *b);
-vector2D *vsub(vector2D *a,vector2D *b);
-
-vector3D vsubc(vector3D *dest,vector3D *b);
-vector2D vsubc(vector2D *dest,vector2D *b);
+        void setvalue(float x);
+        void setvalue(float x, float y);
+        void setvalue(float x, float y, float z);
+        void setvalue(float *v, int args = 3);
+        void setvalue(vector v);
+        void setvalue(vector *v);
 
 
-vector3D vscale(float s,vector3D v);
-vector2D vscale(float s,vector2D v);
 
-vector3D *vscale(float s,vector3D *v);
-vector2D *vscale(float s,vector2D *v);
-
-vector3D vscalec(float s,vector3D *v);
-vector2D vscalec(float s,vector2D *v);
-
-vector2D vset(float x,float y);
-vector3D vset(float x,float y,float z);
-void vset(vector2D *v, float x, float y);
-void vset(vector3D *v, float x, float y, float z);
-
-vector3D vnull3D(void);
-vector2D vnull2D(void);
-void vnull(vector3D *v);
-void vnull(vector2D *v);
+        void unify();
+        vector  unifyc();
+        vector *unifycp();
 
 
+
+
+        void add(vector  v);
+        void add(vector *v);
+
+        void add(vector  v0, vector  v1);
+        void add(vector *v0, vector *v1);
+
+        void add(vector   *v, int args);
+        void add(vector  **v, int args);
+
+        void add(int args,...);//nur pointer
+
+        vector  addc(vector  v);
+        vector *addc(vector *v);
+
+        vector  addc(vector  v0, vector  v1);
+        vector *addc(vector *v0, vector *v1);
+
+        vector *addc(vector  *v, int args);
+        vector *addc(vector **v, int args);
+
+        vector *addc(int args, ...);//nur pointer
+
+
+
+
+        void sub(vector  v);
+        void sub(vector *v);
+
+        void sub(vector  v0, vector  v1);
+        void sub(vector *v0, vector *v1);
+
+        vector  subc(vector  v);
+        vector *subc(vector *v);
+        vector  subc(vector  v0, vector  v1);
+        vector *subc(vector *v0, vector *v1);
+
+
+        void scale(float s);
+        void scale(float s, vector *v);
+        void scale(float s, vector  v);
+
+        vector  scalec(float s);
+        vector  scalec(float s, vector v);
+        vector *scalec(float s, vector *v);
+        vector *scalecp(float s);
+
+
+
+
+
+        bool lenmod;
+        float cachlen;
+};
+        const vector operator + (vector const v0, vector const v1);
+        const vector operator + (vector const *v0, vector const v1);
+        const vector operator - (vector const v0, vector const v1);
+        const vector operator - (vector const *v0, vector const v1);
+        const vector operator * (vector const v0, const float s);
+
+
+
+class vectorN
+{
+    public:
+
+        float *elements;
+        int dim;
+
+
+        vectorN();
+        vectorN(float x);
+        vectorN(float x, float y);
+        vectorN(float x, float y, float z);
+        vectorN(int args,...); //only floats
+        vectorN(float *v, int args);
+        vectorN(vectorN *v);
+
+        ~vectorN();
+
+
+        void null();
+        float len();
+
+    //tdodo
+        void addDim(int dim);
+        void remDim(int dim);
+        void maxDim(int dim);
+    // todoend
+
+
+        void setvalue(float x);
+        void setvalue(float x, float y);
+        void setvalue(float x, float y, float z);
+        void setvalue(int args, ...);
+        void setvalue(int args, float *v);
+        void setvalue(vectorN v);
+        void setvalue(vectorN *v);
+
+
+
+        void unify();
+        vectorN *unifycp();
+        vectorN  unifyc();
+
+        void add(vectorN  v);
+        void add(vectorN *v);
+
+        void add(vectorN  v0, vectorN  v1);
+        void add(vectorN *v0, vectorN *v1);
+
+        void add(int args, vectorN   *v);
+        void add(int args, vectorN **v);
+
+        void add(int args, ...);//nur pointer
+
+        vectorN  addc(vectorN  v);
+        vectorN *addc(vectorN *v);
+
+        vectorN  addc(vectorN  v0, vectorN  v1);
+        vectorN *addc(vectorN *v0, vectorN *v1);
+
+        vectorN *addc(int args, vectorN  *v);
+        vectorN *addc(int args, vectorN **v);
+
+        vectorN *addc(int args, ...);//nur pinter
+
+
+
+        void sub(vectorN  v);
+        void sub(vectorN *v);
+
+        void sub(vectorN  v0, vectorN  v1);
+        void sub(vectorN *v0, vectorN *v1);
+
+        vectorN  subc(vectorN  v);
+        vectorN *subc(vectorN *v);
+        vectorN  subc(vectorN  v0, vectorN  v1);
+        vectorN *subc(vectorN *v0, vectorN *v1);
+
+
+
+
+        void scale(float s);
+        void scale(float s, vectorN *v);
+        void scale(float s, vectorN  v);
+
+        vectorN  scalec(float s);
+        vectorN  scalec(float s, vectorN v);
+        vectorN *scalec(float s, vectorN *v);
+
+        vectorN *scalecp(float s);
+
+
+        static vectorN *unifysp();
+        static vectorN  unifys();
+
+        static vectorN  adds(vectorN  v);
+        static vectorN *adds(vectorN *v);
+
+        static vectorN  adds(vectorN  v0, vectorN  v1);
+        static vectorN *adds(vectorN *v0, vectorN *v1);
+
+        static vectorN *adds(int args, vectorN   *v);
+        static vectorN *adds(int args, vectorN **v1);
+
+        static vectorN *adds(int args, ...);// nur pointer
+
+
+        static vectorN  subs(vectorN  v);
+        static vectorN *subs(vectorN *v);
+        static vectorN  subs(vectorN  v0, vectorN  v1);
+        static vectorN *subs(vectorN *v0, vectorN *v1);
+
+        static vectorN  scales(float s);
+        static vectorN  scales(float s, vectorN v);
+        static vectorN *scales(float s, vectorN *v);
+
+        static vectorN *scalesp(float s);
+
+        private:
+            bool lenmod;
+            float cachlen;
+};
 
 #endif
