@@ -6,6 +6,10 @@
 #define WIDTH 640
 #define HEIGHT 480
 
+#define STANDART_NEARCLIP 1.5
+#define STANDART_FARCLIP 100
+#define FOV 80
+
 #define STARTING_X 0
 #define STARTING_Y 0
 #define STARTING_Z -3.5

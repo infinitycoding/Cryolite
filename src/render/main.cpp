@@ -21,8 +21,6 @@
 #undef main
 #endif
 
-#define FOV 80
-
 //todo: textur klasse, scene klasse
 bool printFPS = false;
 bool render = true;
@@ -47,8 +45,8 @@ int main(int argc, char *argv[]){
 
     glMatrixMode( GL_PROJECTION );
 
-    glFrustum( -1.6, 1.6, -1.2, 1.2, 1.5, 100 );
-    //gluPerspective(FOV, WIDTH/HEIGHT, 1.5, 100 );
+    //glFrustum( -1.6, 1.6, -1.2, 1.2, STANDART_NEARCLIP, STANDART_FARCLIP );
+    gluPerspective(FOV, WIDTH/HEIGHT, STANDART_NEARCLIP, STANDART_FARCLIP );
 
     glMatrixMode( GL_MODELVIEW );
     glEnable(GL_BLEND);
