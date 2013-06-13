@@ -17,9 +17,11 @@
 #include <List.h>
 
 #define MAX_NAMELENGTH 20
-
+#define STANDART_FCOLOR {0.0, 0.0, 0.0, 0.0}
+#define STANDART_BGCOLOR {0.0, 0.0, 0.0, 1.0}
 
 bool sdl_ttf_loaded = false;        // shows  if sdl_ttf is loaded yet (to prevent whatever would happen)
+
 
 struct fontEntry
 {
@@ -51,18 +53,21 @@ class Font
         bool loadTTF(char *font,char *name, int ptsize);
         bool unloadTTF(char *name);
 
-        GLuint atotex(char *text, char *font,SDL_Color fontcolor, SDL_Color bgcolor);
-        GLuint atextotex(char *text, char *font,int fontsize,SDL_Surface *texture);
-        SDL_Surface *atosurf(char *text, char *font,int fontsize, struct colorRGBA);
-        SDL_Surface *atextosurf(char *text, char *font,int fontsize,SDL_Surface *texture);
+        GLuint atotex(char *text, char *fontname);
+        GLuint atotex(char *text, char *fontname, SDL_Color fontcolor);
+        GLuint atotex(char *text, char *fontname, SDL_Color fontcolor, SDL_Color backgroundcolor);
 
-        void TTFListCleaner(struct fontEntry *element);
-        void PatternFontListCleaner(struct patternFont *element);
+        SDL_Surface *atosurf(char *text, char *fontname);
+        SDL_Surface *atosurf(char *text, char *fontname, SDL_Color fontcolor);
+        SDL_Surface *atosurf(char *text, char *fontname, SDL_Color fontcolor, SDL_Color backgroundcolor);
+
 
 
         List<struct fontEntry> *TrueTypeFonts;          // The list of loaded truetype-fonts
         List<struct patternFont> *PatternFonts;         // The list of loaded pattern-fonts
 };
 
+void TTFListCleaner(struct fontEntry *element);
+void PatternFontListCleaner(struct patternFont *element);
 
 #endif

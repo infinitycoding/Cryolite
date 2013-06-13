@@ -1,5 +1,7 @@
 #include <font.h>
 
+
+
 // The standart constructor.
 // It inits sdl_ttf if is not initialized yet, creates the lists and sets the list cleaners.
 
@@ -19,7 +21,8 @@ Font::Font()
     TrueTypeFonts = new List<struct fontEntry>;
     PatternFonts = new List<struct patternFont>;
 
-    // TODO: Set list cleaners
+    TrueTypeFonts->structCleaner = TTFListCleaner;
+    PatternFonts->structCleaner = PatternFontListCleaner;
 }
 
 // The destuctor.
@@ -102,27 +105,71 @@ bool Font::unloadTTF(char *name)
     return true;
 }
 
-/*GLuint Font::atotex(char* text, char* font,SDL_Color fontcolor, SDL_Color bgcolor)
-{
+// This function converts a text and a font to a sdl-surface.
+// You need to give to it the text and the fontname.
+// It uses the standart fontcolor and the standart backgroundcolor.
 
+SDL_Surface *Font::atosurf(char *text, char *fontname)
+{
+    SDL_Color fcolor = STANDART_FCOLOR;     // i need this because there are no SDL_Color constants
+    SDL_Color bgcolor = STANDART_BGCOLOR;   // i need this because there are no SDL_Color constants
+
+    return atosurf(text, fontname, fcolor, bgcolor);    // give the job to the big function (so i don't need to write it three times)
 }
 
-GLuint Font::atextotex(char* text, char* font,int fontsize,SDL_Surface *texture)
-{
+// This function converts a text and a font to a sdl-surface.
+// You need to give to it the text, the fontname and the fontcolor.
+// It uses the standart backgroundcolor.
 
+SDL_Surface *Font::atosurf(char *text, char *fontname, SDL_Color fontcolor)
+{
+    SDL_Color bgcolor = STANDART_BGCOLOR;   // i need this because there are no SDL_Color constants
+
+    return atosurf(text, fontname, fontcolor, bgcolor); // give the job to the big function (so i don't need to write it three times)
 }
 
-SDL_Surface Font::*atosurf(char* text, char* font,int fontsize, struct colorRGBA)
-{
+// This function converts a text and a font to a sdl-surface.
+// You need to give to it the text, the fontname, the fontcolor and the backgroundcolor.
 
+SDL_Surface *Font::atosurf(char *text, char *fontname, SDL_Color fontcolor, SDL_Color backgroundcolor)
+{
+    bool found_font = false;               // shows me after searching loop if i found the correct font
+
+    struct fontEntry *fontToUse;           // the font in which the text will be printed
+
+    if(TrueTypeFonts->ListIsEmpty())        // first check if the list is empty
+    {
+        fprintf(stderr, "There is no font loaded, so it's impossible to use one. \n");
+        return false;
+    }
+
+    TrueTypeFonts->ListSetFirst();          // start at the beginning of the list with the search
+
+    while(!(TrueTypeFonts->ListIsLast()))     // searching loop
+    {
+        fontToUse = TrueTypeFonts->ListGetCurrent();    // get the actual element
+
+        if(!strncmp(fontToUse->name, fontname, MAX_NAMELENGTH))         // check if it's the correct one
+        {
+            found_font = true;
+            break;
+        }
+
+        TrueTypeFonts->ListNext();          // set the current pointer to the next element
+    }
+
+    if(found_font == false)                 // end function if the font is not in the list
+    {
+        fprintf(stderr, "The font could not be used, because it's not loaded. \n");
+        return false;
+    }
+
+
+
+    return TTF_RenderText_Shaded(fontToUse->font, text, fontcolor, backgroundcolor);   // the main converting function is called
 }
 
-SDL_Surface Font::*atextosurf(char* text, char* font,int fontsize,SDL_Surface *texture)
-{
-
-}*/
-
-void Font::TTFListCleaner(struct fontEntry *element)
+void TTFListCleaner(struct fontEntry *element)
 {
     TTF_CloseFont(element->font);
 }
