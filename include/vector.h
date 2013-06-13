@@ -3,6 +3,7 @@
 
 
 #include <GL/gl.h>
+#include <types.h>
 
 
 
@@ -19,6 +20,8 @@ class vector
 
 
         vector();
+        vector(vertex2D);
+        vector(vertex3D);
         vector(float x);
         vector(float x, float y);
         vector(float x, float y, float z);
@@ -31,7 +34,8 @@ class vector
         float len();
 
 
-
+        void setvalue(vertex2D);
+        void setvalue(vertex3D);
         void setvalue(float x);
         void setvalue(float x, float y);
         void setvalue(float x, float y, float z);
@@ -95,17 +99,24 @@ class vector
         vector *scalecp(float s);
 
 
-
-
-
         bool lenmod;
         float cachlen;
 };
         const vector operator + (vector const v0, vector const v1);
         const vector operator + (vector const *v0, vector const v1);
+        const vector operator + (vector const v0, vector const *v1);
+
+        const vector operator += (vector const v0, vector const v1);
+        const vector operator += (vector const v0, vector const *v1);
+        const vector operator += (vector const *v0, vector const v1);
+
         const vector operator - (vector const v0, vector const v1);
         const vector operator - (vector const *v0, vector const v1);
+        const vector operator - (vector const v1, vector const *v0);
+
+
         const vector operator * (vector const v0, const float s);
+        const vector operator * (const float s,vector const v0);
 
 float len(vector v);
 vector unify(vector v);

@@ -71,6 +71,49 @@ int Scene::removeObject(Object *obj)
     return delObj;
 }
 
+void Scene::handleMotions(Object *currentObject)
+{
+    if(currentObject->Am || currentObject->V0m)
+    {
+        vector direction = vector(currentObject->Dm);
+        float acc = currentObject->Am;
+        if(currentObject->position.elements[1] > -1)
+        {
+            printf("%f %f %f\n",currentObject->position.elements[0],currentObject->position.elements[1],currentObject->position.elements[2]);
+        }
+
+        else
+        {
+            printf("colision\n");
+            acc = len(direction*acc + vector(0,10,0));
+            direction = unify(direction+vector(0,1,0));
+            currentObject->position.elements[1] = -1-(direction*acc).elements[1];
+        }
+
+        currentObject->V0m += acc * ((SDL_GetTicks()-currentObject->Tms)/1000);
+        double MPF = (double)currentObject->V0m/averageFPS;
+        currentObject->position = (currentObject->position) + (direction * MPF);
+    }
+}
+
+void Scene::handleRotations(Object *currentObject)
+{
+    if(currentObject->remeaningAngle*currentObject->remAngleSing>0)
+    {
+        double APF = (double)(currentObject->rotationVelocity+currentObject->rotationAcceleration*(SDL_GetTicks()-currentObject->startRotationTime))/averageFPS;
+        currentObject->remeaningAngle -=APF;
+        currentObject->Angle += APF;
+    }
+    else if(currentObject->rotationVelocity)
+    {
+        currentObject->Angle = currentObject->destAngle;
+        currentObject->rotationVelocity = 0;
+        currentObject->rotationAcceleration = 0;
+        currentObject->remeaningAngle = 0;
+        printf("Angle: %f\n",currentObject->Angle);
+    }
+}
+
 void Scene::render()
 {
     this->calculateFPS();
@@ -91,44 +134,15 @@ void Scene::render()
                     else
                         glBindTexture( GL_TEXTURE_2D, 0);
                     //Modify Model Matrix
-                    if(currentObject->Lmr>0)
-                    {
-                        double MPF = (double)(currentObject->Vm+currentObject->Am*((SDL_GetTicks()-currentObject->Tms)/1000))/averageFPS;
-                        currentObject->Lmr -= MPF;
-                        currentObject->position = (currentObject->position) + (currentObject->Dm * MPF);
-                    }
-                    else if(currentObject->Vm)
-                    {
-                        currentObject->position = currentObject->Pmd;
-                        currentObject->Dm.null();
-                        currentObject->Lmr = 0;
-                        currentObject->Vm = 0;
-                        currentObject->Am = 0;
-                        currentObject->Tms = 0;
+                    this->handleMotions(currentObject);
+                    this->handleRotations(currentObject);
 
-                        printf("RemF: 0 X: %f Y: %f Z: %f\n",currentObject->position.elements[0],currentObject->position.elements[1],currentObject->position.elements[2]);
-                    }
-
-                    if(currentObject->remeaningAngle*currentObject->remAngleSing>0)
-                    {
-                        double APF = (double)(currentObject->rotationVelocity+currentObject->rotationAcceleration*(SDL_GetTicks()-currentObject->startRotationTime))/averageFPS;
-                        currentObject->remeaningAngle -=APF;
-                        currentObject->Angle += APF;
-                    }
-                    else if(currentObject->rotationVelocity)
-                    {
-                        currentObject->Angle = currentObject->destAngle;
-                        currentObject->rotationVelocity = 0;
-                        currentObject->rotationAcceleration = 0;
-                        currentObject->remeaningAngle = 0;
-                        printf("Angle: %f\n",currentObject->Angle);
-
-                    }
 
                     glRotatef(currentObject->Angle, currentObject->rotationAxis.elements[0], currentObject->rotationAxis.elements[1], currentObject->rotationAxis.elements[2]);
                     glTranslatef(currentObject->position.elements[0],currentObject->position.elements[1],currentObject->position.elements[2]); //move to local (0/0/0)
                     glScalef(currentObject->scale.elements[0],currentObject->scale.elements[1],currentObject->scale.elements[2]);
                     //Render Triangles
+
                     if(!currentObject->triangles->ListIsEmpty())
                     {
                         glBegin( GL_TRIANGLES );
@@ -152,6 +166,8 @@ void Scene::render()
                         glEnd();
 
                     }
+
+
                     //Render Quads
                     if(!currentObject->squares->ListIsEmpty())
                     {

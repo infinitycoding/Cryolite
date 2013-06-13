@@ -62,10 +62,7 @@ void Object::initObject()
 
 
 
-    Pmd = vector();
-
-    Lmr = 0; // Distance Motion Remeaning
-    Vm = 0; // Velocity Motion
+    V0m = 0; // Velocity Motion
     Am = 0; // Acceleration Motion
     Tms = 0; //Time Motion Start
 
@@ -592,34 +589,36 @@ void Object::loadMaterial(const char *file)
 }
 
 
-void Object::moveObject(float v,float a , float l,vector D)
+void Object::moveObject(float a ,vector D, float v)
 {
     int currentTime = SDL_GetTicks();
     //normize Direction
     D.unify();
 
-    float v0 = this->Vm+(this->Am*((currentTime-this->Tms)/1000));
-
     // calculate System V0
-    this->Vm = len((D*v)+(this->Dm*v0));
+    this->V0m = len( (D * v) + ( this->Dm * ( ( (currentTime - this->Tms) / 1000 ) + this->V0m) ) );
+
 
     // calculate new acceleration
-    this->Am = len((D*a)+(this->Dm*this->Am));
+    /*vector F = unify((D * a) + (this->Dm * this->Am));
+    vector Fd = unify(this->Dm);
+    int invert;
+    if(F.elements[0] == Fd.elements[0] && F.elements[1] == Fd.elements[1] && F.elements[2] == Fd.elements[2])
+        invert = 1;
+    else
+        invert = -1;*/
 
-
-    // calculate remeaning distance
-    this->Lmr = len((D*l)+(this->Dm*this->Lmr));
-
+    this->Am = len( (D * a) + (this->Dm * this->Am) + vector(0,-10,0) );
 
     // generate Direction Vector
-    this->Dm = unify(this->Dm+D);
+    this->Dm = unify(this->Dm+D+vector(0,-10,0));
 
 
-    //calculate final position
-    this->Pmd = (this->Dm*this->Lmr)+(this->position);
+    printf("V0m: %f Am: %f\n",this->V0m,this->Am);
 
     // save current time
     this->Tms = currentTime;
+
 }
 
 void Object::rotateObject(float angle,float v,float a,vector rotationAxis)

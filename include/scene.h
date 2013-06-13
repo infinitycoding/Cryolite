@@ -23,6 +23,8 @@ class Scene
     private:
         void calculateFPS(void);
         void renderQuad(void);
+        void handleMotions(Object *currentObject);
+        void handleRotations(Object *currentObject);
         int currenttick;
         int ticcount;
         int tickbundle;

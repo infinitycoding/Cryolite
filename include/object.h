@@ -42,6 +42,41 @@ struct numofvertices
     int normalVertices;
 };
 
+struct boundBox
+{
+    vertex3D base;
+    vector height;
+    vector widht;
+    vector length;
+};
+
+struct boundSphere
+{
+    vertex3D center;
+    GLfloat radian;
+};
+
+struct boundPlane
+{
+    vertex3D base;
+    vector widht;
+    vector length;
+};
+
+struct boundTriangel
+{
+    vertex3D vert0;
+    vertex3D vert1;
+    vertex3D vert2;
+};
+
+struct boundCylinder
+{
+    vertex3D center;
+    GLfloat radian;
+    GLfloat height;
+};
+
 class Object
 {
     public:
@@ -60,7 +95,7 @@ class Object
         void loadMaterial(const char *file);
         void loadObjectFile(const char *objectFile, const char *objectName);
 
-        void moveObject(float v,float a , float l, vector D);
+        void moveObject(float a, vector D,float v = 0);
         void rotateObject(float angle,float v,float a,vector rotationAxis);
 
 
@@ -80,9 +115,7 @@ class Object
 
 
         vector Dm; // Direction Motion
-        vector Pmd; // Position motion destination
-        float Lmr; // Distance Motion Remeaning
-        float Vm; // Velocity Motion
+        float V0m; // Velocity Motion
         float Am; // Acceleration Motion
         int Tms; //Time Motion Start
 
@@ -91,6 +124,14 @@ class Object
         List<vertex2D> *texvertices;
         List<struct triangle> *triangles;
         List<struct square> *squares;
+
+        // Bounds
+        List<struct boundBox> *boundBoxes;
+        List<struct boundSphere> *boundSpheres;
+        List<struct boundPlane> *boundPlanes;
+        List<struct boundCylinder> *boundCylinders;
+        List<struct boundTriangel> *boundTriangles;
+
         Material *ObjectMaterial;
 
         bool isPhysicalActor;
