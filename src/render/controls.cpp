@@ -6,7 +6,7 @@
 #include <general_def.h>
 #include <object.h>
 #include <vector.h>
-
+#include <scene.h>
 #define ANGLE 2
 #define SPEED 5
 
@@ -29,10 +29,12 @@ float position_y = STARTING_Y;
 float position_z = STARTING_Z;
 
 extern bool printFPS;
+extern bool render;
+extern Scene *mainScene;
 
 void endprogramm(SDL_Event *event)
 {
-    exit(0);
+    render = false;
 }
 
 void INIT_Controls(SDL* window)
@@ -53,7 +55,7 @@ void haldeKeydown(SDL_Event *e)
     switch(e->key.keysym.sym)
     {
         case SDLK_ESCAPE:   // Exit programm if Escape is pressed.
-            exit(0);
+            endprogramm(e);
             break;
         case SDLK_w:
             move_foreward=true;
@@ -202,7 +204,7 @@ void moveCube(SDL_Event *e)
     if(e->key.keysym.sym == SDLK_e)
     {
         vector direction = vector(0, 0, 1);
-        iccube->moveObject(1,0.002,10,direction);
+        iccube->moveObject(0.002,direction, 10);
     }
 
     return;

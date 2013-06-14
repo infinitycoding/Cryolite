@@ -17,17 +17,18 @@
 #include <general_def.h>
 #include <scene.h>
 #include <vector.h>
+#include <font.h>
 #ifdef _WIN32
 #undef main
 #endif
 
-//todo: textur klasse, scene klasse
+Scene *mainScene;
+
 bool printFPS = false;
 bool render = true;
 float averageFPS = 0;
 
 
-// draw the ground of the scene
 
 
 
@@ -38,6 +39,11 @@ int main(int argc, char *argv[]){
 
     SDL mainwindow = SDL(WIDTH,HEIGHT,SDL_OPENGL|SDL_HWSURFACE,"Cryolite Engine");     // Create the graphics window
 
+    if (TTF_Init() == -1)       // initialize and exit if it fails
+    {
+        fprintf(stderr, "Could not initialize SDL_ttf: %s \n", TTF_GetError());
+        exit(-1);
+    }
 
     glClearColor( 0.0, 0.0, 0.0, 0.0 ); // Sets the background color.
     glEnable( GL_DEPTH_TEST );
@@ -62,10 +68,9 @@ int main(int argc, char *argv[]){
 
     INIT_Controls(&mainwindow);
 
-    Scene *mainScene = new Scene();
+    mainScene = new Scene();
     INIT_Models(mainScene);
     GLUquadric *q =gluNewQuadric();
-
 
     // 2D Texute settings
     float lastFPS = 0;
@@ -108,5 +113,9 @@ int main(int argc, char *argv[]){
 
 
     }
+
+    TTF_Quit();
+
+    return 0;
 
 }
