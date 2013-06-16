@@ -10,9 +10,6 @@ Camera::Camera()
     position = vector();
     lookingDirection = vector(0.0, 0.0, 1.0);
 
-    moveDirection = vector();
-    motionDestination = vector();
-
     nearClip = STANDART_NEARCLIP;
     farClip = STANDART_FARCLIP;
     fov = FOV;
@@ -22,12 +19,6 @@ Camera::Camera()
 
     height = HEIGHT;
     width = WIDTH;
-
-    acceleration = 0;
-    velocity = 0;
-
-    timeMotionStart = 0;
-    remeaningDistance = 0;
 }
 
 
@@ -36,9 +27,6 @@ Camera::Camera(vector pos, vector looking, GLfloat nClip, GLfloat fClip, GLfloat
     position = vector(&pos);
     lookingDirection = vector(&looking);
     lookingDirection.unify();
-
-    moveDirection = vector();
-    motionDestination = vector();
 
     nearClip = nClip;
     farClip = fClip;
@@ -49,45 +37,9 @@ Camera::Camera(vector pos, vector looking, GLfloat nClip, GLfloat fClip, GLfloat
 
     height = vpheight;
     width = vpwidth;
-
-    acceleration = 0;
-    velocity = 0;
-
-    timeMotionStart = 0;
-    remeaningDistance = 0;
 }
 
 Camera::~Camera()
 {
 
-}
-
-void Camera::moveCamera(float newVelocity, float newAcceleration, float length , vector direction)
-{
-    int currentTime = SDL_GetTicks();
-    //normize Direction
-    direction.unify();
-
-    float completeVelocity = velocity+(acceleration*((currentTime-timeMotionStart)/1000));
-
-    // calculate System V0
-    velocity = len((direction*newVelocity)+(moveDirection*completeVelocity));
-
-    // calculate new acceleration
-    acceleration = len((direction*newAcceleration)+(moveDirection*acceleration));
-
-
-    // calculate remeaning distance
-    remeaningDistance = len((direction*length)+(moveDirection*remeaningDistance));
-
-
-    // generate Direction Vector
-    moveDirection = unify(moveDirection+direction);
-
-
-    //calculate final position
-    motionDestination = (moveDirection*remeaningDistance)+(position);
-
-    // save current time
-    timeMotionStart = currentTime;
 }

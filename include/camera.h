@@ -16,15 +16,9 @@ class Camera
 
         ~Camera();
 
-        void moveCamera(float newVelocity, float newAccaleration, float length , vector direction);
-
 
         vector position;
         vector lookingDirection;
-
-        vector moveDirection;
-
-        vector motionDestination;
 
         GLfloat nearClip;
         GLfloat farClip;
@@ -35,12 +29,6 @@ class Camera
 
         GLint height;
         GLint width;
-
-        float acceleration;
-        float velocity;
-
-        int timeMotionStart;
-        int remeaningDistance;
 };
 
 
