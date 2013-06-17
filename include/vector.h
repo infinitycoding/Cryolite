@@ -20,8 +20,10 @@ class vector
 
 
         vector();
-        vector(vertex2D);
-        vector(vertex3D);
+        vector(vertex2D vx);
+        vector(vertex3D vx);
+        vector(vertex2D *vx);
+        vector(vertex3D *vx);
         vector(float x);
         vector(float x, float y);
         vector(float x, float y, float z);
@@ -32,10 +34,13 @@ class vector
 
         void null();
         float len();
+        int print();
 
 
-        void setvalue(vertex2D);
-        void setvalue(vertex3D);
+        void setvalue(vertex2D vx);
+        void setvalue(vertex3D vx);
+        void setvalue(vertex2D *vx);
+        void setvalue(vertex3D *vx);
         void setvalue(float x);
         void setvalue(float x, float y);
         void setvalue(float x, float y, float z);
@@ -50,7 +55,10 @@ class vector
         vector *unifycp();
 
 
-
+        void add(vertex2D vx);
+        void add(vertex2D *vx);
+        void add(vertex3D vx);
+        void add(vertex3D *vx);
 
         void add(vector  v);
         void add(vector *v);
@@ -98,29 +106,38 @@ class vector
         vector *scalec(float s, vector *v);
         vector *scalecp(float s);
 
-
         bool lenmod;
         float cachlen;
+
+        vector operator += (vector const v0);
+        vector operator += (vector const *v0);
+
+        vector operator -= (vector const v0);
+        vector operator -= (vector const *v0);
+
+        vector operator *= (const float s);
 };
-        const vector operator + (vector const v0, vector const v1);
-        const vector operator + (vector const *v0, vector const v1);
-        const vector operator + (vector const v0, vector const *v1);
 
-        const vector operator += (vector const v0, vector const v1);
-        const vector operator += (vector const v0, vector const *v1);
-        const vector operator += (vector const *v0, vector const v1);
+// Standart Operators
+    const vector operator + (vector const v0, vector const v1);
+    const vector operator + (vector const *v0, vector const v1);
+    const vector operator + (vector const v1, vector const *v0);
 
-        const vector operator - (vector const v0, vector const v1);
-        const vector operator - (vector const *v0, vector const v1);
-        const vector operator - (vector const v1, vector const *v0);
+    const vector operator - (vector const v0, vector const v1);
+    const vector operator - (vector const *v0, vector const v1);
+    const vector operator - (vector const v1, vector const *v0);
 
 
-        const vector operator * (vector const v0, const float s);
-        const vector operator * (const float s,vector const v0);
+    const vector operator * (vector const v0, const float s);
+    const vector operator * (const float s,vector const v0);
+
+
 
 float len(vector v);
 vector unify(vector v);
 vector *unify(vector *v);
+int printv(vector v);
+int printv(vector *v);
 
 class vectorN
 {

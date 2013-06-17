@@ -1,6 +1,7 @@
 #include <math.h>
 #include <vector.h>
 #include <cstdarg>
+#include <stdio.h>
 
 vector::vector()
 {
@@ -8,6 +9,46 @@ vector::vector()
         this->elements[i] = 0;
     this->cachlen = 0;
     this->lenmod = false;
+}
+
+vector::vector(vertex2D vx)
+{
+
+    this->elements[0] = vx.x;
+    this->elements[1] = vx.y;
+    this->elements[2] = 0;
+    this->cachlen = 0;
+    this->lenmod = true;
+}
+
+vector::vector(vertex2D *vx)
+{
+
+    this->elements[0] = vx->x;
+    this->elements[1] = vx->y;
+    this->elements[2] = 0;
+    this->cachlen = 0;
+    this->lenmod = true;
+}
+
+vector::vector(vertex3D vx)
+{
+
+    this->elements[0] = vx.x;
+    this->elements[1] = vx.y;
+    this->elements[2] = vx.z;
+    this->cachlen = 0;
+    this->lenmod = true;
+}
+
+vector::vector(vertex3D *vx)
+{
+
+    this->elements[0] = vx->x;
+    this->elements[1] = vx->y;
+    this->elements[2] = vx->z;
+    this->cachlen = 0;
+    this->lenmod = true;
 }
 
 
@@ -80,15 +121,52 @@ float vector::len()
     return cachlen;
 }
 
+int vector::print()
+{
+    return printf("X:%f Y:%f Z:%f\n",this->elements[0],this->elements[1],this->elements[2]);
+}
+
+void vector::setvalue(vertex2D vx)
+{
+    this->elements[0] = vx.x;
+    this->elements[1] = vx.y;
+    this->lenmod = true;
+}
+
+void vector::setvalue(vertex2D *vx)
+{
+    this->elements[0] = vx->x;
+    this->elements[1] = vx->y;
+    this->lenmod = true;
+}
+
+void vector::setvalue(vertex3D vx)
+{
+    this->elements[0] = vx.x;
+    this->elements[1] = vx.y;
+    this->elements[2] = vx.z;
+    this->lenmod = true;
+}
+
+void vector::setvalue(vertex3D *vx)
+{
+    this->elements[0] = vx->x;
+    this->elements[1] = vx->y;
+    this->elements[2] = vx->z;
+    this->lenmod = true;
+}
+
 void vector::setvalue(float x)
 {
     this->elements[0] = x;
+    this->lenmod = true;
 }
 
 void vector::setvalue(float x, float y)
 {
     this->elements[0] = x;
     this->elements[1] = y;
+    this->lenmod = true;
 }
 
 void vector::setvalue(float x, float y, float z)
@@ -96,6 +174,7 @@ void vector::setvalue(float x, float y, float z)
     this->elements[0] = x;
     this->elements[1] = y;
     this->elements[2] = z;
+    this->lenmod = true;
 }
 
 void vector::setvalue(float *v, int args){
@@ -149,6 +228,34 @@ vector *vector::unifycp()
     this->cachlen = 1;
     return new vector(this);
 }
+
+void vector::add(vertex2D vx)
+{
+    this->elements[0] += vx.x;
+    this->elements[1] += vx.y;
+    this->lenmod = true;
+}
+void vector::add(vertex2D *vx)
+{
+    this->elements[0] += vx->x;
+    this->elements[1] += vx->y;
+    this->lenmod = true;
+}
+void vector::add(vertex3D vx)
+{
+    this->elements[0] += vx.x;
+    this->elements[1] += vx.y;
+    this->elements[2] += vx.z;
+    this->lenmod = true;
+}
+void vector::add(vertex3D *vx)
+{
+    this->elements[0] += vx->x;
+    this->elements[1] += vx->y;
+    this->elements[2] += vx->z;
+    this->lenmod = true;
+}
+
 
 void vector::add(vector v)
 {
@@ -393,6 +500,15 @@ vector *unify(vector *v)
     return new vector(v);
 }
 
+int printv(vector v)
+{
+    return printf("X:%f Y:%f Z:%f\n",v.elements[0],v.elements[1],v.elements[2]);
+}
+int printv(vector *v)
+{
+    return printf("X:%f Y:%f Z:%f\n",v->elements[0],v->elements[1],v->elements[2]);
+}
+
 
 const vector operator + (vector const v0, vector const v1)
 {
@@ -407,6 +523,14 @@ const vector operator + (vector const *v0, vector const v1)
     vr.add(v1);
     return vr;
 }
+
+const vector operator + (vector const v1,vector const *v0)
+{
+    vector vr = vector((vector *)v0);
+    vr.add(v1);
+    return vr;
+}
+
 
 
 const vector operator - (vector const v0, vector const v1)
@@ -423,6 +547,14 @@ const vector operator - (vector const *v0, vector const v1)
     return vr;
 }
 
+const vector operator - (vector const v1, vector const *v0)
+{
+    vector vr = vector((vector *)v0);
+    vr.sub(v1);
+    return vr;
+}
+
+
 const vector operator * (vector const v0, const float s)
 {
     vector vr = vector((vector*)&v0);
@@ -430,4 +562,45 @@ const vector operator * (vector const v0, const float s)
     return vr;
 }
 
+const vector operator * (const float s,vector const v0)
+{
+    vector vr = vector((vector*)&v0);
+    vr.scale(s);
+    return vr;
+}
+
+
+
+vector vector::operator += (vector const v0)
+{
+    this->add(v0);
+    return *this;
+}
+
+vector vector::operator += (vector const *v0)
+{
+    this->add((vector *)v0);
+    return *this;
+}
+
+
+
+vector vector::operator -= (vector const v0)
+{
+    this->sub(v0);
+    return *this;
+}
+
+vector vector::operator -= (vector const *v0)
+{
+    this->sub((vector *)v0);
+    return *this;
+}
+
+
+vector vector::operator *= (const float s)
+{
+    this->scale(s);
+    return vector(this);
+}
 
