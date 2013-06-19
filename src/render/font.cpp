@@ -7,23 +7,13 @@
 
 Font::Font()
 {
-    if(sdl_ttf_loaded == false)     // to don't double load sdl_ttf
-    {
-        sdl_ttf_loaded = true;
-
-        if (TTF_Init() == -1)       // initialize and exit if it fails
-        {
-            fprintf(stderr, "Could not initialize SDL_ttf: %s \n", TTF_GetError());
-            exit(-1);
-        }
-    }
-
     TrueTypeFonts = new List<struct fontEntry>;
     PatternFonts = new List<struct patternFont>;
 
     TrueTypeFonts->structCleaner = TTFListCleaner;
     PatternFonts->structCleaner = PatternFontListCleaner;
 }
+
 
 // The destuctor.
 // It deletes the lists.
@@ -33,6 +23,7 @@ Font:: ~Font()
     delete TrueTypeFonts;
     delete PatternFonts;
 }
+
 
 // This function loads a truetype-font from a file and pushs it into the list.
 // You need to give the filename, the intern fontname and the pointsize to it.
@@ -60,6 +51,7 @@ bool Font::loadTTF(char *font, char *name, int ptsize)
 
     return true;
 }
+
 
 // This function unloads a truetype-font from the list.
 // You need to give the intern fontname to it.
@@ -105,6 +97,46 @@ bool Font::unloadTTF(char *name)
     return true;
 }
 
+
+// This function converts a sdl-surface to a texture.
+// You need to give to it the sdl-surface.
+// It returns the number of the texture.
+
+GLuint Font::surftotex(SDL_Surface *surf)
+{
+    GLuint texture;
+
+    glEnable(GL_TEXTURE_2D);
+    glGenTextures( 1, &texture );
+
+    glBindTexture( GL_TEXTURE_2D, texture );
+    glTexImage2D( GL_TEXTURE_2D, 0, 2, surf->w, surf->h, 0,GL_RGB, GL_UNSIGNED_BYTE, surf->pixels );
+
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+
+    return texture;
+}
+
+
+GLuint Font::atotex(char *text, char *fontname)
+{
+    return surftotex(atosurf(text, fontname));
+}
+
+
+GLuint Font::atotex(char *text, char *fontname, SDL_Color fontcolor)
+{
+    return surftotex(atosurf(text, fontname, fontcolor));
+}
+
+
+GLuint Font::atotex(char *text, char *fontname, SDL_Color fontcolor, SDL_Color backgroundcolor)
+{
+    return surftotex(atosurf(text, fontname, fontcolor, backgroundcolor));
+}
+
+
 // This function converts a text and a font to a sdl-surface.
 // You need to give to it the text and the fontname.
 // It uses the standart fontcolor and the standart backgroundcolor.
@@ -117,6 +149,7 @@ SDL_Surface *Font::atosurf(char *text, char *fontname)
     return atosurf(text, fontname, fcolor, bgcolor);    // give the job to the big function (so i don't need to write it three times)
 }
 
+
 // This function converts a text and a font to a sdl-surface.
 // You need to give to it the text, the fontname and the fontcolor.
 // It uses the standart backgroundcolor.
@@ -127,6 +160,7 @@ SDL_Surface *Font::atosurf(char *text, char *fontname, SDL_Color fontcolor)
 
     return atosurf(text, fontname, fontcolor, bgcolor); // give the job to the big function (so i don't need to write it three times)
 }
+
 
 // This function converts a text and a font to a sdl-surface.
 // You need to give to it the text, the fontname, the fontcolor and the backgroundcolor.
@@ -169,10 +203,12 @@ SDL_Surface *Font::atosurf(char *text, char *fontname, SDL_Color fontcolor, SDL_
     return TTF_RenderText_Shaded(fontToUse->font, text, fontcolor, backgroundcolor);   // the main converting function is called
 }
 
+
 void TTFListCleaner(struct fontEntry *element)
 {
     TTF_CloseFont(element->font);
 }
+
 
 void PatternFontListCleaner(struct patternFont *element)
 {

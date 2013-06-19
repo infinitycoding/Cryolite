@@ -9,18 +9,18 @@
  *                                                       *
  *********************************************************/
 
-#include <SDL_ttf.h>
-#include <GL/glu.h>
 #include <SDL.h>
+#include <SDL_ttf.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 
 #include <types.h>
 #include <List.h>
 
 #define MAX_NAMELENGTH 20
-#define STANDART_FCOLOR {0.0, 0.0, 0.0, 0.0}
-#define STANDART_BGCOLOR {0.0, 0.0, 0.0, 1.0}
+#define STANDART_FCOLOR {1.0, 1.0, 1.0, 0.0}
+#define STANDART_BGCOLOR {0.0, 0.0, 0.0, 0.0}
 
-bool sdl_ttf_loaded = false;        // shows  if sdl_ttf is loaded yet (to prevent whatever would happen)
 
 
 struct fontEntry
@@ -52,6 +52,8 @@ class Font
 
         bool loadTTF(char *font,char *name, int ptsize);
         bool unloadTTF(char *name);
+
+        GLuint surftotex(SDL_Surface *surf);
 
         GLuint atotex(char *text, char *fontname);
         GLuint atotex(char *text, char *fontname, SDL_Color fontcolor);

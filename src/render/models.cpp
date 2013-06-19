@@ -1,5 +1,6 @@
 #include <models.h>
 #include <material.h>
+#include <font.h>
 
 Material *MAN;
 Object *iccube;
@@ -7,15 +8,24 @@ Object *iccube;
 
 void INIT_Models(Scene *sce)
 {
-    Material *IC = new Material(IMAGE(textur.bmp));
+    Font *generalFonts = new Font();
+    generalFonts->loadTTF(FONT(arial.ttf), "StdArial", 45);
+
+    Material *IC = new Material();
+    IC->textureGL = generalFonts->atotex("Peter was here!", "StdArial");
+
     MAN = new Material(IMAGE(man.png));
+
     createObjectCube(IC, sce);
+
     Object *ground = new Object(OBJECT(ground.obj), "Ground");
     ground->position.setvalue(0, -3, 0);
     sce->addObject(ground);
+
     Object *woodcube = new Object(OBJECT(bettercube.obj), "Cube");
     woodcube->position.setvalue(5, 0, 0);
     sce->addObject(woodcube);
+
     Object *gravelcube = new Object(OBJECT(cube.obj), "cube.001");
     gravelcube->position.setvalue(-5, 0, 0);
     sce->addObject(gravelcube);
@@ -159,7 +169,6 @@ void createObjectCube(Material *mat, Scene *sce)
 
 
     iccube->ObjectMaterial = mat;
-
 
 
     sce->addObject(iccube);
