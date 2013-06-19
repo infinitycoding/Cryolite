@@ -46,8 +46,8 @@ int main(int argc, char *argv[]){
 
 
     mainScene = new Scene();
-    Camera *Player = new Camera(vector(0,0,0),vector(0,0,1),STANDART_NEARCLIP,STANDART_FARCLIP,FOV,0,0,HEIGHT,WIDTH);
-    printf("add cam");
+    Camera *Player = new Camera(vector(STARTING_X,STARTING_Y,STARTING_Z),vector(0,0,1),STANDART_NEARCLIP,STANDART_FARCLIP,FOV,0,0,HEIGHT,WIDTH);
+    printf("add cam\n");
     mainScene->Camlist->ListPushFront(Player);
 
     INIT_Controls(&mainwindow);
@@ -71,9 +71,6 @@ int main(int argc, char *argv[]){
     glEnable(GL_MULTISAMPLE_ARB);
 
     glLineWidth (LINEWIDTH);
-    //glTranslatef(STARTING_X, STARTING_Y, STARTING_Z);
-
-
 
 
     GLUquadric *q =gluNewQuadric();
@@ -81,7 +78,7 @@ int main(int argc, char *argv[]){
 
     Material *sky = new Material(IMAGE(sky.jpg));
 
-    Mix_Music *music = Mix_LoadMUS("resource/sounds/moon.mp3");
+    Mix_Music *music = Mix_LoadMUS(SOUND(moon.mp3));
     if(music==NULL)
         printf("could not load music!!!\n");
     Mix_PlayMusic( music, -1 );

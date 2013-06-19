@@ -162,16 +162,12 @@ struct numofvertices Object::countVertices(const char *filename, const char *obj
 
     fclose(f);
 
-    printf("Found %d Vertices, %d Texturevertices and %d Normalvertices.\n", vertexCounter.objectVertices, vertexCounter.textureVertices, vertexCounter.normalVertices);
-
     return vertexCounter;
 }
 
 void Object::loadObjectFile(const char *objectFile, const char *objectName)
 {
     // when normals are fully implemented, activate line 161, line 179 and line 381
-
-    printf("loading file %s...\n", objectFile);
 
     FILE *f;
 
@@ -549,7 +545,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
         }
     }
 
-    printf("file successfully loaded.\n\n");
+    printf("file %s successfully loaded.\n\n", objectFile);
 
     fclose(f);
 

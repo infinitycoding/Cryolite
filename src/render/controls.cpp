@@ -113,7 +113,7 @@ void haldeMouse(SDL_Event *e)
 }
 
 
-void rotation_handler(Camera *cam){    // Rotates the object if a key is pressed.
+void rotation_handler(Camera *cam){    // Rotates the camera if a key is pressed.
     if(right)
     {
         cam->lookingDirection.elements[0] = cam->lookingDirection.elements[0] * cos(ROTATION_SPEED) - cam->lookingDirection.elements[2] * sin(ROTATION_SPEED);
@@ -122,40 +122,37 @@ void rotation_handler(Camera *cam){    // Rotates the object if a key is pressed
         right = false;
     }
 
-    /*if(left)
+    if(left)
     {
+        cam->lookingDirection.elements[0] = cam->lookingDirection.elements[0] * cos(-ROTATION_SPEED) - cam->lookingDirection.elements[2] * sin(-ROTATION_SPEED);
+        cam->lookingDirection.elements[2] = cam->lookingDirection.elements[0] * sin(-ROTATION_SPEED) + cam->lookingDirection.elements[2] * cos(-ROTATION_SPEED);
+
         left = false;
     }
 
     if(up)
     {
-        cam->lookingDirection.elements[1] = cam->lookingDirection.elements[1] * cos(ROTATION_SPEED) - cam->lookingDirection.elements[2] * sin(ROTATION_SPEED);
-        cam->lookingDirection.elements[2] = cam->lookingDirection.elements[1] * sin(ROTATION_SPEED) + cam->lookingDirection.elements[2] * cos(ROTATION_SPEED);
-
         up = false;
     }
 
     if(down)
     {
-        cam->lookingDirection.elements[2] = cam->lookingDirection.elements[2] * cos(ROTATION_SPEED) - cam->lookingDirection.elements[1] * sin(ROTATION_SPEED);
-        cam->lookingDirection.elements[1] = cam->lookingDirection.elements[2] * sin(ROTATION_SPEED) + cam->lookingDirection.elements[1] * cos(ROTATION_SPEED);
-
         down = false;
-    }*/
+    }
 
 }
 
-void move_handler(Camera *cam){        // Moves the object if a key is pressed
+void move_handler(Camera *cam){        // Moves the camera if a key is pressed
     if(move_right)
     {
         cam->position.elements[0] -= cam->lookingDirection.elements[2];
-        cam->position.elements[2] -= cam->lookingDirection.elements[0];
+        cam->position.elements[2] += cam->lookingDirection.elements[0];
     }
 
     if(move_left)
     {
         cam->position.elements[0] += cam->lookingDirection.elements[2];
-        cam->position.elements[2] += cam->lookingDirection.elements[0];
+        cam->position.elements[2] -= cam->lookingDirection.elements[0];
     }
 
     if(move_foreward)
