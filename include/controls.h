@@ -2,11 +2,12 @@
 #define CONTROLS_H
 
 #include <SDL.h>
+#include <camera.h>
 
 
 void INIT_Controls(SDL* window);
-void rotation_handler();
-void move_handler();
+void rotation_handler(Camera *cam);
+void move_handler(Camera *cam);
 
 void haldeKeydown(SDL_Event *e);
 void haldeKeyup(SDL_Event *e);

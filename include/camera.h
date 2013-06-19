@@ -29,6 +29,8 @@ class Camera
 
         GLint height;
         GLint width;
+
+        bool activ;
 };
 
 

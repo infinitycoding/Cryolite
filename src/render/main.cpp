@@ -1,5 +1,7 @@
 #include <SDL.h>
 #include <GL/gl.h>
+#include <AL/al.h>
+#include <AL/alut.h>
 #include <GL/glu.h>
 
 #include <stdio.h>
@@ -18,6 +20,7 @@
 #include <scene.h>
 #include <vector.h>
 #include <font.h>
+#include <SDL_mixer.h>
 #ifdef _WIN32
 #undef main
 #endif
@@ -33,26 +36,30 @@ float averageFPS = 0;
 
 
 
-
 int main(int argc, char *argv[]){
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,  GL_MODULATE);
 
     SDL mainwindow = SDL(WIDTH,HEIGHT,SDL_OPENGL|SDL_HWSURFACE,"Cryolite Engine");     // Create the graphics window
 
-    if (TTF_Init() == -1)       // initialize and exit if it fails
-    {
-        fprintf(stderr, "Could not initialize SDL_ttf: %s \n", TTF_GetError());
-        exit(-1);
-    }
+     if( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 ) return false;
+     if(TTF_Init()) return false;
 
-    glClearColor( 0.0, 0.0, 0.0, 0.0 ); // Sets the background color.
-    glEnable( GL_DEPTH_TEST );
 
+    mainScene = new Scene();
+    Camera *Player = new Camera(vector(0,0,0),vector(0,0,1),STANDART_NEARCLIP,STANDART_FARCLIP,FOV,0,0,HEIGHT,WIDTH);
+    printf("add cam");
+    mainScene->Camlist->ListPushFront(Player);
+
+    INIT_Controls(&mainwindow);
+    INIT_Models(mainScene);
 
     glMatrixMode( GL_PROJECTION );
 
     //glFrustum( -1.6, 1.6, -1.2, 1.2, STANDART_NEARCLIP, STANDART_FARCLIP );
-    gluPerspective(FOV, WIDTH/HEIGHT, STANDART_NEARCLIP, STANDART_FARCLIP );
+    //gluPerspective(FOV, WIDTH/HEIGHT, STANDART_NEARCLIP, STANDART_FARCLIP );
+
+    glClearColor( 0.0, 0.0, 0.0, 0.0 ); // Sets the background color.
+    glEnable( GL_DEPTH_TEST );
 
     glMatrixMode( GL_MODELVIEW );
     glEnable(GL_BLEND);
@@ -64,13 +71,21 @@ int main(int argc, char *argv[]){
     glEnable(GL_MULTISAMPLE_ARB);
 
     glLineWidth (LINEWIDTH);
-    glTranslatef(STARTING_X, STARTING_Y, STARTING_Z);
+    //glTranslatef(STARTING_X, STARTING_Y, STARTING_Z);
 
-    INIT_Controls(&mainwindow);
 
-    mainScene = new Scene();
-    INIT_Models(mainScene);
+
+
     GLUquadric *q =gluNewQuadric();
+    gluQuadricTexture(q, true);
+
+    Material *sky = new Material(IMAGE(sky.jpg));
+
+    Mix_Music *music = Mix_LoadMUS("resource/sounds/moon.mp3");
+    if(music==NULL)
+        printf("could not load music!!!\n");
+    Mix_PlayMusic( music, -1 );
+
 
     // 2D Texute settings
     float lastFPS = 0;
@@ -97,14 +112,22 @@ int main(int argc, char *argv[]){
 
         glMatrixMode(GL_MODELVIEW);
 
-        rotation_handler();     // Rotates the camera if mouse moved
-        move_handler();         // Moves the camera if key pressed
+        rotation_handler(Player);     // Rotates the camera if mouse moved
+        move_handler(Player);         // Moves the camera if key pressed
 
+        glPushMatrix();
+        glRotated(90,1,0,0);
+        glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+        glBindTexture( GL_TEXTURE_2D, sky->textureGL);
+        gluSphere(q,50,100,100);
+        glPopMatrix();
+
+
+        glBindTexture( GL_TEXTURE_2D, 0);
         mainScene->render();
 
-        glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-        gluSphere(q,5,20,20);
-        glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+
+
 
 
         drawHUD();
@@ -115,6 +138,7 @@ int main(int argc, char *argv[]){
     }
 
     TTF_Quit();
+    Mix_CloseAudio();
 
     return 0;
 

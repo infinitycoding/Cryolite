@@ -608,10 +608,10 @@ void Object::moveObject(float a ,vector D, float v)
     else
         invert = -1;*/
 
-    this->Am = len( (D * a) + (this->Dm * this->Am) + vector(0,-10,0) );
+    this->Am = len( (D * a) + (this->Dm * this->Am) );
 
     // generate Direction Vector
-    this->Dm = unify(this->Dm+D+vector(0,-10,0));
+    this->Dm = unify(this->Dm+D);
 
 
     printf("V0m: %f Am: %f\n",this->V0m,this->Am);

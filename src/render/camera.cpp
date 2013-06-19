@@ -19,6 +19,7 @@ Camera::Camera()
 
     height = HEIGHT;
     width = WIDTH;
+    activ = false;
 }
 
 
@@ -37,6 +38,7 @@ Camera::Camera(vector pos, vector looking, GLfloat nClip, GLfloat fClip, GLfloat
 
     height = vpheight;
     width = vpwidth;
+    activ = true;
 }
 
 Camera::~Camera()

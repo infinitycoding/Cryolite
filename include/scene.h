@@ -2,6 +2,7 @@
 #define SCENE_H
 
 #include <object.h>
+#include <camera.h>
 #include <List.h>
 
 class Scene
@@ -15,14 +16,18 @@ class Scene
         void render(void);
 
         List<Object> *objectList;
+        List<Camera> *Camlist;
 
         int lasttick;
         int accuracy;
         float averageFPS;
+        int handleCams(void);
 
     private:
         void calculateFPS(void);
-        void renderQuad(void);
+
+        void renderQuads(Object *currentObject);
+        void renderTriangles(Object *currentObject);
         void handleMotions(Object *currentObject);
         void handleRotations(Object *currentObject);
         int currenttick;

@@ -1,5 +1,6 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
+#include <math.h>
 
 #include <sdl.h>
 #include <controls.h>
@@ -7,8 +8,8 @@
 #include <object.h>
 #include <vector.h>
 #include <scene.h>
-#define ANGLE 2
-#define SPEED 5
+#define ROTATION_SPEED 0.05
+#define SPEED 10
 
 bool right=false;
 bool left=false;
@@ -18,15 +19,6 @@ bool move_right=false;
 bool move_left=false;
 bool move_foreward=false;
 bool move_backward=false;
-
-double move_direction_foreward=(double)SPEED/100;
-double move_direction_left=0;
-
-const double move_direction_change=(double)ANGLE/(9000/SPEED);
-
-float position_x = STARTING_X;
-float position_y = STARTING_Y;
-float position_z = STARTING_Z;
 
 extern bool printFPS;
 extern bool render;
@@ -108,7 +100,7 @@ void haldeMouse(SDL_Event *e)
     {
         left=true;
     }
-/*
+
     if(e->motion.yrel>0)
     {
         up = true;
@@ -117,72 +109,67 @@ void haldeMouse(SDL_Event *e)
     {
         down = true;
     }
-*/
+
 }
 
-void move_camera(GLfloat move_x, GLfloat move_y, GLfloat move_z)
-{
-    position_x += move_x;
-    position_y += move_y;
-    position_z += move_z;
 
-    glTranslatef(move_x, move_y, move_z);
-}
-
-void rotate_correctly(GLfloat angle, GLfloat rotate_x, GLfloat rotate_y, GLfloat rotate_z)
-{
-    glTranslatef(-position_x, -position_y, -position_z);
-    glRotatef(angle, rotate_x, rotate_y, rotate_z);
-    glTranslatef(position_x, position_y, position_z);
-}
-
-void rotation_handler(){    // Rotates the object if a key is pressed.
+void rotation_handler(Camera *cam){    // Rotates the object if a key is pressed.
     if(right)
     {
-        rotate_correctly(ANGLE,0,1,0);
-
-        if(move_direction_foreward <= 0)
-            move_direction_left += move_direction_change;
-        else
-            move_direction_left -=  move_direction_change;
-
-        if(move_direction_left <= 0)
-            move_direction_foreward -= move_direction_change;
-        else
-            move_direction_foreward += move_direction_change;
+        cam->lookingDirection.elements[0] = cam->lookingDirection.elements[0] * cos(ROTATION_SPEED) - cam->lookingDirection.elements[2] * sin(ROTATION_SPEED);
+        cam->lookingDirection.elements[2] = cam->lookingDirection.elements[0] * sin(ROTATION_SPEED) + cam->lookingDirection.elements[2] * cos(ROTATION_SPEED);
 
         right = false;
-
     }
 
-    if(left)
+    /*if(left)
     {
-        rotate_correctly(-ANGLE,0,1,0);
-
-        if(move_direction_foreward >= 0)
-            move_direction_left += move_direction_change;
-        else
-            move_direction_left -=  move_direction_change;
-
-        if(move_direction_left >= 0)
-            move_direction_foreward -= move_direction_change;
-        else
-            move_direction_foreward += move_direction_change;
-
         left = false;
     }
 
+    if(up)
+    {
+        cam->lookingDirection.elements[1] = cam->lookingDirection.elements[1] * cos(ROTATION_SPEED) - cam->lookingDirection.elements[2] * sin(ROTATION_SPEED);
+        cam->lookingDirection.elements[2] = cam->lookingDirection.elements[1] * sin(ROTATION_SPEED) + cam->lookingDirection.elements[2] * cos(ROTATION_SPEED);
+
+        up = false;
+    }
+
+    if(down)
+    {
+        cam->lookingDirection.elements[2] = cam->lookingDirection.elements[2] * cos(ROTATION_SPEED) - cam->lookingDirection.elements[1] * sin(ROTATION_SPEED);
+        cam->lookingDirection.elements[1] = cam->lookingDirection.elements[2] * sin(ROTATION_SPEED) + cam->lookingDirection.elements[1] * cos(ROTATION_SPEED);
+
+        down = false;
+    }*/
+
 }
 
-void move_handler(){        // Moves the object if a key is pressed
+void move_handler(Camera *cam){        // Moves the object if a key is pressed
     if(move_right)
-        move_camera(-move_direction_foreward,0,move_direction_left);
+    {
+        cam->position.elements[0] -= cam->lookingDirection.elements[2];
+        cam->position.elements[2] -= cam->lookingDirection.elements[0];
+    }
+
     if(move_left)
-        move_camera(move_direction_foreward,0,-move_direction_left);
+    {
+        cam->position.elements[0] += cam->lookingDirection.elements[2];
+        cam->position.elements[2] += cam->lookingDirection.elements[0];
+    }
+
     if(move_foreward)
-        move_camera(move_direction_left,0,move_direction_foreward);
+    {
+        cam->position.elements[0] += cam->lookingDirection.elements[0];
+        cam->position.elements[2] += cam->lookingDirection.elements[2];
+    }
+
     if(move_backward)
-        move_camera(-move_direction_left,0,-move_direction_foreward);
+    {
+        cam->position.elements[0] -= cam->lookingDirection.elements[0];
+        cam->position.elements[2] -= cam->lookingDirection.elements[2];
+    }
+
 }
 
 void toggle_printFPS(SDL_Event *e)
@@ -204,7 +191,7 @@ void moveCube(SDL_Event *e)
     if(e->key.keysym.sym == SDLK_e)
     {
         vector direction = vector(0, 0, 1);
-        iccube->moveObject(0.002,direction, 10);
+        iccube->moveObject(0.002,direction, 3);
     }
 
     return;
