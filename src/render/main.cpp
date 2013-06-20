@@ -76,7 +76,7 @@ int main(int argc, char *argv[]){
     GLUquadric *q =gluNewQuadric();
     gluQuadricTexture(q, true);
 
-    Material *sky = new Material(IMAGE(sky.jpg));
+    Material *sky = new Material(IMAGE(sky1.jpg));
 
     Mix_Music *music = Mix_LoadMUS(SOUND(moon.mp3));
     if(music==NULL)
@@ -111,18 +111,18 @@ int main(int argc, char *argv[]){
 
         playerControls.controls_handler(Player);
 
-        glPushMatrix();
-        glRotated(90,1,0,0);
-        glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-        glBindTexture( GL_TEXTURE_2D, sky->textureGL);
-        gluSphere(q,50,100,100);
-        glPopMatrix();
-
 
         glBindTexture( GL_TEXTURE_2D, 0);
         mainScene->render();
 
 
+        glPushMatrix();
+        glTranslatef(Player->position.elements[0],Player->position.elements[1],Player->position.elements[2]);
+        glRotated(90,1,0,0);
+        glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+        glBindTexture( GL_TEXTURE_2D, sky->textureGL);
+        gluSphere(q,50,100,100);
+        glPopMatrix();
 
 
 
