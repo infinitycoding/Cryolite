@@ -8,17 +8,23 @@
 #include <object.h>
 #include <vector.h>
 #include <scene.h>
-#define ROTATION_SPEED 0.05
-#define SPEED 10
 
-bool right=false;
-bool left=false;
-bool up = false;
-bool down = false;
-bool move_right=false;
-bool move_left=false;
-bool move_foreward=false;
-bool move_backward=false;
+#define ROTATION_SPEED 0.05
+#define SPEED 0.3
+
+
+bool Controls::right;
+bool Controls::left;
+bool Controls::up;
+bool Controls::down;
+
+bool Controls::move_right;
+bool Controls::move_left;
+bool Controls::move_foreward;
+bool Controls::move_backward;
+
+bool Controls::already_initialized;
+
 
 extern bool printFPS;
 extern bool render;
@@ -29,20 +35,24 @@ void endprogramm(SDL_Event *event)
     render = false;
 }
 
-void INIT_Controls(SDL* window)
+Controls::Controls(SDL* window)
 {
-    window->addEvent(SDL_QUIT,endprogramm);
-    window->addEvent(SDL_KEYDOWN,haldeKeydown);
-    window->addEvent(SDL_KEYUP,haldeKeyup);
-    SDL_ShowCursor(SDL_DISABLE); //mausanzeige deaktivieren
-    SDL_WM_GrabInput( SDL_GRAB_ON );// Maus einfangen
-    window->addEvent(SDL_MOUSEMOTION,haldeMouse);
-    window->addEvent(SDL_KEYDOWN,toggle_printFPS);
-    window->addEvent(SDL_KEYDOWN,moveCube);
-    window->addEvent(SDL_KEYDOWN,rotateCube);
+    if(!already_initialized)
+    {
+        already_initialized = true;
+        window->addEvent(SDL_QUIT,endprogramm);
+        window->addEvent(SDL_KEYDOWN,haldeKeydown);
+        window->addEvent(SDL_KEYUP,haldeKeyup);
+        SDL_ShowCursor(SDL_DISABLE); //mausanzeige deaktivieren
+        SDL_WM_GrabInput( SDL_GRAB_ON );// Maus einfangen
+        window->addEvent(SDL_MOUSEMOTION,haldeMouse);
+        window->addEvent(SDL_KEYDOWN,toggle_printFPS);
+        window->addEvent(SDL_KEYDOWN,moveCube);
+        window->addEvent(SDL_KEYDOWN,rotateCube);
+    }
 }
 
-void haldeKeydown(SDL_Event *e)
+void Controls::haldeKeydown(SDL_Event *e)
 {
     switch(e->key.keysym.sym)
     {
@@ -69,7 +79,7 @@ void haldeKeydown(SDL_Event *e)
 }
 
 
-void haldeKeyup(SDL_Event *e)
+void Controls::haldeKeyup(SDL_Event *e)
 {
     switch(e->key.keysym.sym)
     {
@@ -90,7 +100,7 @@ void haldeKeyup(SDL_Event *e)
     }
 }
 
-void haldeMouse(SDL_Event *e)
+void Controls::haldeMouse(SDL_Event *e)
 {
     if(e->motion.xrel>0)
     {
@@ -113,7 +123,14 @@ void haldeMouse(SDL_Event *e)
 }
 
 
-void rotation_handler(Camera *cam){    // Rotates the camera if a key is pressed.
+void Controls::controls_handler(Camera *cam)
+{
+    rotation_handler(cam);
+    move_handler(cam);
+}
+
+
+void Controls::rotation_handler(Camera *cam){    // Rotates the camera if a key is pressed.
     if(right)
     {
         cam->lookingDirection.elements[0] = cam->lookingDirection.elements[0] * cos(ROTATION_SPEED) - cam->lookingDirection.elements[2] * sin(ROTATION_SPEED);
@@ -130,46 +147,74 @@ void rotation_handler(Camera *cam){    // Rotates the camera if a key is pressed
         left = false;
     }
 
-    if(up)
+    /*if(up)
     {
+        float newLookingY = cam->lookingDirection.elements[1] * cos(ROTATION_SPEED) - cam->lookingDirection.elements[2] * sin(ROTATION_SPEED);
+        float newLookingZ = cam->lookingDirection.elements[1] * sin(ROTATION_SPEED) + cam->lookingDirection.elements[2] * cos(ROTATION_SPEED);
+
+        if((newLookingZ >= 0.0 ? true : false) == (cam->lookingDirection.elements[2] >= 0.0 ? true : false))
+        {
+            cam->lookingDirection.elements[1] = newLookingY;
+            cam->lookingDirection.elements[2] = newLookingZ;
+        }
+
         up = false;
     }
 
     if(down)
     {
+        float newLookingY = cam->lookingDirection.elements[1] * cos(-ROTATION_SPEED) - cam->lookingDirection.elements[2] * sin(-ROTATION_SPEED);
+        float newLookingZ = cam->lookingDirection.elements[1] * sin(-ROTATION_SPEED) + cam->lookingDirection.elements[2] * cos(-ROTATION_SPEED);
+
+        if((newLookingZ >= 0.0 ? true : false) == (cam->lookingDirection.elements[2] >= 0.0 ? true : false))
+        {
+            cam->lookingDirection.elements[1] = newLookingY;
+            cam->lookingDirection.elements[2] = newLookingZ;
+        }
+
         down = false;
-    }
+    }*/
 
 }
 
-void move_handler(Camera *cam){        // Moves the camera if a key is pressed
+void Controls::move_handler(Camera *cam){        // Moves the camera if a key is pressed
+    vector moveDirection;
+
     if(move_right)
     {
-        cam->position.elements[0] -= cam->lookingDirection.elements[2];
-        cam->position.elements[2] += cam->lookingDirection.elements[0];
+        moveDirection =  vector(-cam->lookingDirection.elements[2], 0, cam->lookingDirection.elements[0]);
+        moveDirection.unify();
+
+        cam->position += moveDirection * SPEED;
     }
 
     if(move_left)
     {
-        cam->position.elements[0] += cam->lookingDirection.elements[2];
-        cam->position.elements[2] -= cam->lookingDirection.elements[0];
+        moveDirection =  vector(cam->lookingDirection.elements[2], 0, -cam->lookingDirection.elements[0]);
+        moveDirection.unify();
+
+        cam->position += moveDirection * SPEED;
     }
 
     if(move_foreward)
     {
-        cam->position.elements[0] += cam->lookingDirection.elements[0];
-        cam->position.elements[2] += cam->lookingDirection.elements[2];
+        moveDirection =  vector(cam->lookingDirection.elements[0], 0, cam->lookingDirection.elements[2]);
+        moveDirection.unify();
+
+        cam->position += moveDirection * SPEED;
     }
 
     if(move_backward)
     {
-        cam->position.elements[0] -= cam->lookingDirection.elements[0];
-        cam->position.elements[2] -= cam->lookingDirection.elements[2];
+        moveDirection =  vector(-cam->lookingDirection.elements[0], 0, -cam->lookingDirection.elements[2]);
+        moveDirection.unify();
+
+        cam->position += moveDirection * SPEED;
     }
 
 }
 
-void toggle_printFPS(SDL_Event *e)
+void Controls::toggle_printFPS(SDL_Event *e)
 {
     if(e->key.keysym.sym == SDLK_f)
     {
@@ -183,7 +228,7 @@ void toggle_printFPS(SDL_Event *e)
 }
 extern Object *iccube;
 
-void moveCube(SDL_Event *e)
+void Controls::moveCube(SDL_Event *e)
 {
     if(e->key.keysym.sym == SDLK_e)
     {
@@ -194,7 +239,7 @@ void moveCube(SDL_Event *e)
     return;
 }
 
-void rotateCube(SDL_Event *e)
+void Controls::rotateCube(SDL_Event *e)
 {
     if(e->key.keysym.sym == SDLK_r)
     {

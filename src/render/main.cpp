@@ -50,7 +50,7 @@ int main(int argc, char *argv[]){
     printf("add cam\n");
     mainScene->Camlist->ListPushFront(Player);
 
-    INIT_Controls(&mainwindow);
+    Controls playerControls = Controls(&mainwindow);
     INIT_Models(mainScene);
 
     glMatrixMode( GL_PROJECTION );
@@ -109,8 +109,7 @@ int main(int argc, char *argv[]){
 
         glMatrixMode(GL_MODELVIEW);
 
-        rotation_handler(Player);     // Rotates the camera if mouse moved
-        move_handler(Player);         // Moves the camera if key pressed
+        playerControls.controls_handler(Player);
 
         glPushMatrix();
         glRotated(90,1,0,0);
