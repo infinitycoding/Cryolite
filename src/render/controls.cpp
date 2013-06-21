@@ -10,7 +10,7 @@
 #include <scene.h>
 
 #define ROTATION_SPEED 0.05
-#define SPEED 0.3
+#define SPEED 10
 
 
 bool Controls::right;
@@ -30,11 +30,6 @@ extern bool printFPS;
 extern bool render;
 extern Scene *mainScene;
 
-void endprogramm(SDL_Event *event)
-{
-    render = false;
-}
-
 Controls::Controls(SDL* window)
 {
     if(!already_initialized)
@@ -50,6 +45,11 @@ Controls::Controls(SDL* window)
         window->addEvent(SDL_KEYDOWN,moveCube);
         window->addEvent(SDL_KEYDOWN,rotateCube);
     }
+}
+
+void Controls::endprogramm(SDL_Event *event)
+{
+    render = false;
 }
 
 void Controls::haldeKeydown(SDL_Event *e)
@@ -75,7 +75,6 @@ void Controls::haldeKeydown(SDL_Event *e)
             break;
 
     }
-
 }
 
 
@@ -184,32 +183,36 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
     {
         moveDirection =  vector(-cam->lookingDirection.elements[2], 0, cam->lookingDirection.elements[0]);
         moveDirection.unify();
+        moveDirection *= (SPEED / mainScene->averageFPS);
 
-        cam->position += moveDirection * SPEED;
+        cam->position += moveDirection;
     }
 
     if(move_left)
     {
         moveDirection =  vector(cam->lookingDirection.elements[2], 0, -cam->lookingDirection.elements[0]);
         moveDirection.unify();
+        moveDirection *= (SPEED / mainScene->averageFPS);
 
-        cam->position += moveDirection * SPEED;
+        cam->position += moveDirection;
     }
 
     if(move_foreward)
     {
         moveDirection =  vector(cam->lookingDirection.elements[0], 0, cam->lookingDirection.elements[2]);
         moveDirection.unify();
+        moveDirection *= (SPEED / mainScene->averageFPS);
 
-        cam->position += moveDirection * SPEED;
+        cam->position += moveDirection;
     }
 
     if(move_backward)
     {
         moveDirection =  vector(-cam->lookingDirection.elements[0], 0, -cam->lookingDirection.elements[2]);
         moveDirection.unify();
+        moveDirection *= (SPEED / mainScene->averageFPS);
 
-        cam->position += moveDirection * SPEED;
+        cam->position += moveDirection;
     }
 
 }

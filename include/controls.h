@@ -11,10 +11,9 @@ class Controls
     public:
         Controls(SDL* window);
 
-        static void controls_handler(Camera *cam);
-        static void rotation_handler(Camera *cam);
-        static void move_handler(Camera *cam);
+        void controls_handler(Camera *cam);
 
+        static void endprogramm(SDL_Event *e);
         static void haldeKeydown(SDL_Event *e);
         static void haldeKeyup(SDL_Event *e);
         static void haldeMouse(SDL_Event *e);
@@ -23,6 +22,10 @@ class Controls
         static void rotateCube(SDL_Event *e);
 
     private:
+        void rotation_handler(Camera *cam);
+        void move_handler(Camera *cam);
+
+
         static bool right;
         static bool left;
         static bool up;

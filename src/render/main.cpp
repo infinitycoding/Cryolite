@@ -29,8 +29,6 @@ Scene *mainScene;
 
 bool printFPS = false;
 bool render = true;
-float averageFPS = 0;
-
 
 
 
@@ -101,7 +99,6 @@ int main(int argc, char *argv[]){
             printf ("%4.1f FPS",mainScene->averageFPS);
             lastFPS = mainScene->averageFPS;
         }
-
 
         mainwindow.pollEvents();    // Eventhandler
 
