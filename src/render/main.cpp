@@ -40,7 +40,6 @@ int main(int argc, char *argv[]){
     SDL mainwindow = SDL(WIDTH,HEIGHT,SDL_OPENGL|SDL_HWSURFACE,"Cryolite Engine");     // Create the graphics window
 
      if( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 ) return false;
-     if(TTF_Init()) return false;
 
 
     mainScene = new Scene();
@@ -125,12 +124,11 @@ int main(int argc, char *argv[]){
 
         drawHUD();
 
-        SDL_GL_SwapBuffers();   // Changes frontbuffer and backbuffera
+        SDL_GL_SwapBuffers();   // Changes frontbuffer and backbuffer
 
 
     }
 
-    TTF_Quit();
     Mix_CloseAudio();
 
     return 0;

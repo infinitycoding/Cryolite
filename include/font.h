@@ -63,13 +63,16 @@ class Font
         SDL_Surface *atosurf(char *text, char *fontname, SDL_Color fontcolor);
         SDL_Surface *atosurf(char *text, char *fontname, SDL_Color fontcolor, SDL_Color backgroundcolor);
 
+        static void TTFListCleaner(struct fontEntry *element);              // The cleaner for the TTF-Lit
+        static void PatternFontListCleaner(struct patternFont *element);    // The cleaner for the Pattern-Font-List
 
+
+    private:
+        static unsigned int numOfFontObjects;
 
         List<struct fontEntry> *TrueTypeFonts;          // The list of loaded truetype-fonts
         List<struct patternFont> *PatternFonts;         // The list of loaded pattern-fonts
 };
 
-void TTFListCleaner(struct fontEntry *element);
-void PatternFontListCleaner(struct patternFont *element);
 
 #endif

@@ -9,8 +9,11 @@
 #include <vector.h>
 #include <scene.h>
 
-#define ROTATION_SPEED 0.05
-#define SPEED 10
+#define ROTATION_SPEED 5
+#define MOVEMENT_SPEED 10
+
+#define ROTATION_WIDTH (ROTATION_SPEED/mainScene->averageFPS)
+#define MOVEMENT_WIDTH (MOVEMENT_SPEED/mainScene->averageFPS)
 
 
 bool Controls::right;
@@ -132,24 +135,24 @@ void Controls::controls_handler(Camera *cam)
 void Controls::rotation_handler(Camera *cam){    // Rotates the camera if a key is pressed.
     if(right)
     {
-        cam->lookingDirection.elements[0] = cam->lookingDirection.elements[0] * cos(ROTATION_SPEED) - cam->lookingDirection.elements[2] * sin(ROTATION_SPEED);
-        cam->lookingDirection.elements[2] = cam->lookingDirection.elements[0] * sin(ROTATION_SPEED) + cam->lookingDirection.elements[2] * cos(ROTATION_SPEED);
+        cam->lookingDirection.elements[0] = cam->lookingDirection.elements[0] * cos(ROTATION_WIDTH) - cam->lookingDirection.elements[2] * sin(ROTATION_WIDTH);
+        cam->lookingDirection.elements[2] = cam->lookingDirection.elements[0] * sin(ROTATION_WIDTH) + cam->lookingDirection.elements[2] * cos(ROTATION_WIDTH);
 
         right = false;
     }
 
     if(left)
     {
-        cam->lookingDirection.elements[0] = cam->lookingDirection.elements[0] * cos(-ROTATION_SPEED) - cam->lookingDirection.elements[2] * sin(-ROTATION_SPEED);
-        cam->lookingDirection.elements[2] = cam->lookingDirection.elements[0] * sin(-ROTATION_SPEED) + cam->lookingDirection.elements[2] * cos(-ROTATION_SPEED);
+        cam->lookingDirection.elements[0] = cam->lookingDirection.elements[0] * cos(-ROTATION_WIDTH) - cam->lookingDirection.elements[2] * sin(-ROTATION_WIDTH);
+        cam->lookingDirection.elements[2] = cam->lookingDirection.elements[0] * sin(-ROTATION_WIDTH) + cam->lookingDirection.elements[2] * cos(-ROTATION_WIDTH);
 
         left = false;
     }
 
     /*if(up)
     {
-        float newLookingY = cam->lookingDirection.elements[1] * cos(ROTATION_SPEED) - cam->lookingDirection.elements[2] * sin(ROTATION_SPEED);
-        float newLookingZ = cam->lookingDirection.elements[1] * sin(ROTATION_SPEED) + cam->lookingDirection.elements[2] * cos(ROTATION_SPEED);
+        float newLookingY = cam->lookingDirection.elements[1] * cos(ROTATION_WIDTH) - cam->lookingDirection.elements[2] * sin(ROTATION_WIDTH);
+        float newLookingZ = cam->lookingDirection.elements[1] * sin(ROTATION_WIDTH) + cam->lookingDirection.elements[2] * cos(ROTATION_WIDTH);
 
         if((newLookingZ >= 0.0 ? true : false) == (cam->lookingDirection.elements[2] >= 0.0 ? true : false))
         {
@@ -162,8 +165,8 @@ void Controls::rotation_handler(Camera *cam){    // Rotates the camera if a key 
 
     if(down)
     {
-        float newLookingY = cam->lookingDirection.elements[1] * cos(-ROTATION_SPEED) - cam->lookingDirection.elements[2] * sin(-ROTATION_SPEED);
-        float newLookingZ = cam->lookingDirection.elements[1] * sin(-ROTATION_SPEED) + cam->lookingDirection.elements[2] * cos(-ROTATION_SPEED);
+        float newLookingY = cam->lookingDirection.elements[1] * cos(-ROTATION_WIDTH) - cam->lookingDirection.elements[2] * sin(-ROTATION_WIDTH);
+        float newLookingZ = cam->lookingDirection.elements[1] * sin(-ROTATION_WIDTH) + cam->lookingDirection.elements[2] * cos(-ROTATION_WIDTH);
 
         if((newLookingZ >= 0.0 ? true : false) == (cam->lookingDirection.elements[2] >= 0.0 ? true : false))
         {
@@ -183,7 +186,7 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
     {
         moveDirection =  vector(-cam->lookingDirection.elements[2], 0, cam->lookingDirection.elements[0]);
         moveDirection.unify();
-        moveDirection *= (SPEED / mainScene->averageFPS);
+        moveDirection *= MOVEMENT_WIDTH;
 
         cam->position += moveDirection;
     }
@@ -192,7 +195,7 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
     {
         moveDirection =  vector(cam->lookingDirection.elements[2], 0, -cam->lookingDirection.elements[0]);
         moveDirection.unify();
-        moveDirection *= (SPEED / mainScene->averageFPS);
+        moveDirection *= MOVEMENT_WIDTH;
 
         cam->position += moveDirection;
     }
@@ -201,7 +204,7 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
     {
         moveDirection =  vector(cam->lookingDirection.elements[0], 0, cam->lookingDirection.elements[2]);
         moveDirection.unify();
-        moveDirection *= (SPEED / mainScene->averageFPS);
+        moveDirection *= MOVEMENT_WIDTH;
 
         cam->position += moveDirection;
     }
@@ -210,7 +213,7 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
     {
         moveDirection =  vector(-cam->lookingDirection.elements[0], 0, -cam->lookingDirection.elements[2]);
         moveDirection.unify();
-        moveDirection *= (SPEED / mainScene->averageFPS);
+        moveDirection *= MOVEMENT_WIDTH;
 
         cam->position += moveDirection;
     }

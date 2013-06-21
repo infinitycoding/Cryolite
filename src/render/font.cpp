@@ -1,12 +1,19 @@
 #include <font.h>
 
 
+unsigned int Font::numOfFontObjects;
 
 // The standart constructor.
 // It inits sdl_ttf if is not initialized yet, creates the lists and sets the list cleaners.
 
 Font::Font()
 {
+    numOfFontObjects++;
+
+    if(numOfFontObjects == 1)
+             if(TTF_Init() != 0)
+                exit(-1);
+
     TrueTypeFonts = new List<struct fontEntry>;
     PatternFonts = new List<struct patternFont>;
 
@@ -20,6 +27,11 @@ Font::Font()
 
 Font:: ~Font()
 {
+    numOfFontObjects--;
+
+    if(numOfFontObjects == 0)
+        TTF_Quit();
+
     delete TrueTypeFonts;
     delete PatternFonts;
 }
@@ -124,13 +136,13 @@ GLuint Font::surftotex(SDL_Surface *surf)
 
 GLuint Font::atotex(char *text, char *fontname)
 {
-    return surftotex(atosurf(text, fontname));
+    return surftotex(atosurf(text, fontname));      // first convert ascii to surface and then convert surface to texture
 }
 
 
 GLuint Font::atotex(char *text, char *fontname, SDL_Color fontcolor)
 {
-    return surftotex(atosurf(text, fontname, fontcolor));
+    return surftotex(atosurf(text, fontname, fontcolor));   // first convert ascii to surface and then convert surface to texture
 }
 
 
@@ -207,13 +219,13 @@ SDL_Surface *Font::atosurf(char *text, char *fontname, SDL_Color fontcolor, SDL_
 }
 
 
-void TTFListCleaner(struct fontEntry *element)
+void Font::TTFListCleaner(struct fontEntry *element)
 {
     TTF_CloseFont(element->font);
 }
 
 
-void PatternFontListCleaner(struct patternFont *element)
+void Font::PatternFontListCleaner(struct patternFont *element)
 {
     delete element->patterns;
 }
