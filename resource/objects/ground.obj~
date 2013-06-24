@@ -1,4 +1,5 @@
-mtllib resource/images/blacktile.bmp
+#handcreated by Peter Hösch
+mtllib resource/images/blacktile.jpg
 o Ground
 v -50.0 0.0 50.0
 v -50.0 0.0 -50.0
