@@ -1,6 +1,6 @@
 # Blender v2.62 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib resource/images/black.bmp
+mtllib resource/images/blacktile.jpg
 o M16
 v -1.432547 -1.256700 -1.101977
 v -1.429753 -1.256909 -1.101991
