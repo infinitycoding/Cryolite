@@ -42,23 +42,33 @@
 		<Unit filename="include/controls.h" />
 		<Unit filename="include/font.h" />
 		<Unit filename="include/general_def.h" />
+		<Unit filename="include/light.h" />
 		<Unit filename="include/material.h" />
 		<Unit filename="include/models.h" />
 		<Unit filename="include/object.h" />
+		<Unit filename="include/profiler.h">
+			<Option target="Debug" />
+		</Unit>
 		<Unit filename="include/scene.h" />
 		<Unit filename="include/sdl.h" />
+		<Unit filename="include/sound.h" />
 		<Unit filename="include/types.h" />
 		<Unit filename="include/vector.h" />
+		<Unit filename="src/optimize/profiler.cpp">
+			<Option target="Debug" />
+		</Unit>
 		<Unit filename="src/physics/PhysicsEngine.cpp" />
 		<Unit filename="src/render/camera.cpp" />
 		<Unit filename="src/render/controls.cpp" />
 		<Unit filename="src/render/font.cpp" />
+		<Unit filename="src/render/light.cpp" />
 		<Unit filename="src/render/main.cpp" />
 		<Unit filename="src/render/material.cpp" />
 		<Unit filename="src/render/models.cpp" />
 		<Unit filename="src/render/object.cpp" />
 		<Unit filename="src/render/scene.cpp" />
 		<Unit filename="src/render/sdl.cpp" />
+		<Unit filename="src/render/sound.cpp" />
 		<Unit filename="src/render/vector.cpp" />
 		<Extensions>
 			<envvars />

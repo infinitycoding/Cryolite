@@ -8,7 +8,7 @@
 #include <string.h>
 #include <SDL_thread.h>
 #include <SDL_image.h>
-
+#include <SDL_mixer.h>
 
 
 #include <object.h>
@@ -20,7 +20,8 @@
 #include <scene.h>
 #include <vector.h>
 #include <font.h>
-#include <SDL_mixer.h>
+#include <light.h>
+
 #ifdef _WIN32
 #undef main
 #endif
@@ -66,6 +67,11 @@ int main(int argc, char *argv[]){
 
     glEnable(GL_MULTISAMPLE_ARB);
 
+    //glEnable(GL_LIGHTING);
+    glEnable(GL_COLOR_MATERIAL);
+
+    //Light stdLight = Light();
+
     glLineWidth (LINEWIDTH);
 
 
@@ -86,6 +92,8 @@ int main(int argc, char *argv[]){
     mainScene->lasttick = SDL_GetTicks(); //better calculation
 
     Controls playerControls = Controls(&mainwindow);
+
+    //printf("max. lights: %d\n", GL_MAX_LIGHTS);
 
     while(render){ //render
         for(int i = 0; i<9;i++)
@@ -110,6 +118,7 @@ int main(int argc, char *argv[]){
 
 
         glBindTexture( GL_TEXTURE_2D, 0);
+
         mainScene->render();
 
 
