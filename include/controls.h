@@ -35,6 +35,8 @@ class Controls
         static bool move_left;
         static bool move_foreward;
         static bool move_backward;
+        static bool move_up;
+        static bool move_down;
 
         static bool already_initialized;
 };
