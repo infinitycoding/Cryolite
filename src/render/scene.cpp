@@ -19,6 +19,7 @@ Scene::Scene()
     sum = 0;
     lasttick = SDL_GetTicks();
     accuracy = 60;
+    averageFPS = 60;
 
 }
 
@@ -117,8 +118,9 @@ void Scene::render()
 
 
                     glPopMatrix();
-                    objectList->ListNext();
                 }
+
+                objectList->ListNext();
            }
         }
     }

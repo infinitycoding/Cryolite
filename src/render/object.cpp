@@ -136,10 +136,7 @@ struct numofvertices Object::countVertices(const char *filename, const char *obj
             if(!strncmp(string, objectname, strlen(string)))
                 correct_object = true;
             else
-            {
-                correct_object = false;
                 break;
-            }
         }
         else if(line[0] == 'v' && line[1] == ' ')
         {
@@ -200,6 +197,12 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
     struct triangle *triangle_ptr = NULL;
     struct square *square_ptr = NULL;
 
+    if(allObjectVertices.objectVertices == 0)
+    {
+        fprintf(stderr, "error: object %s does not exist or has no vertices.\n", objectFile);
+        return;
+    }
+
     f = fopen(objectFile, "r");
 
     if(f == NULL)
@@ -208,8 +211,9 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
         exit(-1);
     }
 
-    while(*fgets(line, 40, f) != EOF)
+    do
     {
+        fgets(line, 40, f);
 
         if(line[0] == '#')
             continue;
@@ -256,10 +260,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
             if(!strncmp(string, objectName, strlen(string)))
                 correct_object = true;
             else
-            {
-                correct_object = false;
                 break;
-            }
 
             continue;
         }
@@ -543,9 +544,9 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                 printf("this should never be displayed.\n");
             }
         }
-    }
+    }while(!feof(f));
 
-    printf("file %s successfully loaded.\n\n", objectFile);
+    printf("file %s successfully loaded.\n", objectFile);
 
     fclose(f);
 

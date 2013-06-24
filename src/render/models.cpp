@@ -9,10 +9,10 @@ Object *iccube;
 void INIT_Models(Scene *sce)
 {
     Font *generalFonts = new Font();
-    generalFonts->loadTTF(FONT(arial.ttf), "StdArial", 45);
+    generalFonts->loadTTF((char *)FONT(arial.ttf), (char *)"StdArial", 45);
 
     Material *IC = new Material();
-    IC->textureGL = generalFonts->atotex("Peter was here!", "StdArial");
+    IC->textureGL = generalFonts->atotex((char *)"Peter was here!", (char *)"StdArial");
 
     MAN = new Material(IMAGE(man.png));
 

@@ -47,7 +47,6 @@ int main(int argc, char *argv[]){
     printf("add cam\n");
     mainScene->Camlist->ListPushFront(Player);
 
-    Controls playerControls = Controls(&mainwindow);
     INIT_Models(mainScene);
 
     glMatrixMode( GL_PROJECTION );
@@ -85,6 +84,8 @@ int main(int argc, char *argv[]){
     float lastFPS = 0;
 
     mainScene->lasttick = SDL_GetTicks(); //better calculation
+
+    Controls playerControls = Controls(&mainwindow);
 
     while(render){ //render
         for(int i = 0; i<9;i++)
