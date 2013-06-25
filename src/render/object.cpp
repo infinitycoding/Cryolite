@@ -175,6 +175,8 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
     int counter = 0;
     int vert_id[4], tex_id[4]/*, norm_id[4]*/;
 
+    unsigned int actualSmoothingGroup = 0;
+
     bool correct_object = false;
     bool triangle_or_square;
     bool auto_texv_loaded = false;
@@ -221,6 +223,22 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
         if(line[0] == 's')
         {
+            if(line[2] == '0' || line[2] == 'o')
+            {
+                actualSmoothingGroup = 0;
+                continue;
+            }
+            else
+            {
+                for(i = 2, j = 0; line[i] != '\n'; i++, j++)
+                    string[j] = line[i];
+
+                string[j] = '\0';
+
+                actualSmoothingGroup = atoi(string);
+
+                continue;
+            }
             printf("warning: smoothing groups aren't supported yet by cryolite engine.\n");
             continue;
         }
@@ -505,6 +523,8 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                             square_ptr->texVertex[i] = autotexvertex_ptrs[i];
                         }
                     }
+
+                    square_ptr->smoothingGroup = actualSmoothingGroup;
                 }
                 else
                 {
@@ -537,6 +557,8 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                             triangle_ptr->texVertex[i] = autotexvertex_ptrs[i];
                         }
                     }
+
+                    triangle_ptr->smoothingGroup = actualSmoothingGroup;
                 }
 
                 continue;

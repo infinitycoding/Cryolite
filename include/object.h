@@ -26,6 +26,7 @@ struct triangle
     vertex3D *objVertex[3];
     vertex3D *normVertex[3];
     vertex2D *texVertex[3];
+    unsigned int smoothingGroup;
 };
 
 struct square
@@ -33,6 +34,7 @@ struct square
     vertex3D *objVertex[4];
     vertex3D *normVertex[4];
     vertex2D *texVertex[4];
+    unsigned int smoothingGroup;
 };
 
 struct numofvertices
@@ -97,6 +99,8 @@ class Object
 
         void moveObject(float a, vector D,float v = 0);
         void rotateObject(float angle,float v,float a,vector rotationAxis);
+
+
 
 
         char objectname[20];
