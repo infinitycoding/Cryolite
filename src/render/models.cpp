@@ -18,7 +18,7 @@ void INIT_Models(Scene *sce)
 
     createObjectCube(IC, sce);
 
-    Object *ground = new Object(OBJECT(ground.obj), "Ground");
+    Object *ground = new Object(OBJECT(ground.obj), "ground");
     ground->position.setvalue(0, -3, 0);
     sce->addObject(ground);
 
