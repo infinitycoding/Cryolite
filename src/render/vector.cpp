@@ -256,6 +256,78 @@ void vector::add(vertex3D *vx)
     this->lenmod = true;
 }
 
+void vector::add(vector  v0, vertex2D vx){ this->add(vx,v0); }
+
+void vector::add(vertex2D vx,  vector  v0)
+{
+    this->elements[0] = vx.x + v0.elements[0];
+    this->elements[1] = vx.y + v0.elements[1];
+    this->elements[2] = v0.elements[2];
+}
+
+void vector::add(vector  v0, vertex2D *vx){ this->add(vx,v0); }
+
+void vector::add(vertex2D *vx,  vector  v0)
+{
+    this->elements[0] = vx->x + v0.elements[0];
+    this->elements[1] = vx->y + v0.elements[1];
+    this->elements[2] = v0.elements[2];
+}
+
+void vector::add(vector  v0, vertex3D vx){ this->add(vx,v0); }
+
+void vector::add(vertex3D vx,  vector  v0)
+{
+    this->elements[0] = vx.x + v0.elements[0];
+    this->elements[1] = vx.y + v0.elements[1];
+    this->elements[2] = vx.z + v0.elements[2];
+}
+
+void vector::add(vector  v0, vertex3D *vx){ this->add(vx,v0); }
+
+void vector::add(vertex3D *vx,  vector  v0)
+{
+    this->elements[0] = vx->x + v0.elements[0];
+    this->elements[1] = vx->y + v0.elements[1];
+    this->elements[2] = vx->z + v0.elements[2];
+}
+
+void vector::add(vector  *v0, vertex2D vx){ this->add(vx,v0); }
+
+void vector::add(vertex2D vx,  vector  *v0)
+{
+    this->elements[0] = vx.x + v0->elements[0];
+    this->elements[1] = vx.y + v0->elements[1];
+    this->elements[2] = v0->elements[2];
+}
+
+void vector::add(vector  *v0, vertex2D *vx){ this->add(vx,v0); }
+
+void vector::add(vertex2D *vx,  vector  *v0)
+{
+    this->elements[0] = vx->x + v0->elements[0];
+    this->elements[1] = vx->y + v0->elements[1];
+    this->elements[2] = v0->elements[2];
+}
+
+void vector::add(vector  *v0, vertex3D vx){ this->add(vx,v0); }
+
+void vector::add(vertex3D vx,  vector  *v0)
+{
+    this->elements[0] = vx.x + v0->elements[0];
+    this->elements[1] = vx.y + v0->elements[1];
+    this->elements[2] = vx.z + v0->elements[2];
+}
+
+void vector::add(vector  *v0, vertex3D *vx){ this->add(vx,v0); }
+
+void vector::add(vertex3D *vx,  vector  *v0)
+{
+    this->elements[0] = vx->x + v0->elements[0];
+    this->elements[1] = vx->y + v0->elements[1];
+    this->elements[2] = vx->z + v0->elements[2];
+}
+
 
 void vector::add(vector v)
 {
@@ -310,7 +382,7 @@ void vector::add(vector **v, int args)
     this->lenmod = true;
 }
 
-void vector::add(int args, ...)
+void vector::addvc(int args, ...)
 {
     va_list arguments;
     va_start ( arguments, args );
@@ -380,7 +452,6 @@ vector *vector::addc(int args, ...)
     this->lenmod = true;
     return new vector(this);
 }
-
 
 
 void vector::sub(vector v)
@@ -602,5 +673,17 @@ vector vector::operator *= (const float s)
 {
     this->scale(s);
     return vector(this);
+}
+
+std::ostream& operator << (std::ostream& stream, vector const v)
+{
+    stream<<"X:"<<v.elements[0]<<" Y:"<<v.elements[1]<<" Z:"<<v.elements[2];
+    return stream;
+}
+
+std::ostream& operator << (std::ostream& stream, vector const *v)
+{
+    stream<<"X:"<<v->elements[0]<<" Y:"<<v->elements[1]<<" Z:"<<v->elements[2];
+    return stream;
 }
 

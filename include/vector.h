@@ -4,7 +4,9 @@
 
 #include <GL/gl.h>
 #include <types.h>
-
+#include <iostream>
+#include <ostream>
+#include <List.h>
 
 
 #define STD_VECTOR_DIMENSIONS 3
@@ -49,7 +51,6 @@ class vector
         void setvalue(vector *v);
 
 
-
         void unify();
         vector  unifyc();
         vector *unifycp();
@@ -66,10 +67,53 @@ class vector
         void add(vector  v0, vector  v1);
         void add(vector *v0, vector *v1);
 
+
+        void add(vertex2D vx,  vector  v0);
+        void add(vertex2D *vx, vector  v0);
+        void add(vertex3D vx,  vector  v0);
+        void add(vertex3D *vx, vector  v0);
+
+        void add(vertex2D vx,  vector  *v0);
+        void add(vertex2D *vx, vector  *v0);
+        void add(vertex3D vx,  vector  *v0);
+        void add(vertex3D *vx, vector  *v0);
+
+
+        void add(vector  v0, vertex2D vx );
+        void add(vector  v0, vertex2D *vx);
+        void add(vector  v0, vertex3D vx );
+        void add(vector  v0, vertex3D *vx);
+
+        void add(vector  *v0, vertex2D vx );
+        void add(vector  *v0, vertex2D *vx);
+        void add(vector  *v0, vertex3D vx );
+        void add(vector  *v0, vertex3D *vx);
+        //done until here
+
+
+
+        void add(vertex3D   *v, int args);
+        void add(vertex3D  **v, int args);
+        void add(vertex2D   *v, int args);
+        void add(vertex2D  **v, int args);
         void add(vector   *v, int args);
         void add(vector  **v, int args);
 
-        void add(int args,...);//nur pointer
+        vector add(List<vertex3D> *vlist);
+        vector add(List<vertex2D> *vlist);
+
+        void addvc(int args,...);//vector pointer
+        void addvx2(int args,...);//vertex pointer
+        void addvx3(int args,...);//vertex pointer
+
+
+
+
+        vector  addc(vertex3D  v);
+        vector *addc(vertex3D *v);
+
+        vector  addc(vertex2D  v);
+        vector *addc(vertex2D *v);
 
         vector  addc(vector  v);
         vector *addc(vector *v);
@@ -130,6 +174,9 @@ class vector
 
     const vector operator * (vector const v0, const float s);
     const vector operator * (const float s,vector const v0);
+
+    std::ostream& operator << (std::ostream& stream, vector const  v);
+    std::ostream& operator << (std::ostream& stream, vector const *v);
 
 
 
