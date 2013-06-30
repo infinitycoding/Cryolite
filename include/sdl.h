@@ -26,13 +26,12 @@ class SDL
         void addEvent(uint8_t event, void (*handle)(SDL_Event *event));
         int  removeEvent(uint8_t event, void (*handle)(SDL_Event *event));
         void pollEvents();
+        static void SDLexit();
 
     private:
         List<struct eventHandler> *events;
         SDL_Surface *screen;
         bool lock;
-
-
 };
 
 

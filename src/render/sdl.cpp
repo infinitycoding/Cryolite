@@ -1,4 +1,5 @@
 #include <sdl.h>
+#include <SDL_mixer.h>
 
 
 SDL::SDL(int width, int height, int flags, const char* caption)
@@ -12,7 +13,7 @@ SDL::SDL(int width, int height, int flags, const char* caption)
         exit(-1);
     }
 
-    atexit(SDL_Quit); // Quit SDL if the programm ends.
+    atexit(SDL::SDLexit); // Quit SDL if the programm ends.
 
     info = SDL_GetVideoInfo();
 
@@ -40,6 +41,13 @@ SDL::SDL(int width, int height, int flags, const char* caption)
         fprintf( stderr, "Video mode set failed: %s\n", SDL_GetError());
         exit(-1);
     }
+
+    if( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 )
+    {
+        fprintf(stderr,"Faild to initiate SDL Mixer %s\n",Mix_GetError());
+        exit(-1);
+    }
+
     this->events = new List<struct eventHandler>;
 }
 
@@ -106,5 +114,12 @@ void SDL::pollEvents()
         }
     }
 }
+
+void SDL::SDLexit()
+{
+    SDL_Quit();
+    Mix_CloseAudio();
+    printf("Application closed \n");
+};
 
 

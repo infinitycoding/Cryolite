@@ -36,64 +36,46 @@ bool render = true;
 
 
 int main(int argc, char *argv[]){
-    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,  GL_MODULATE);
-
-    SDL mainwindow = SDL(WIDTH,HEIGHT,SDL_OPENGL|SDL_HWSURFACE,"Cryolite Engine");     // Create the graphics window
-
-     if( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 ) return false;
-
-
+    //Create Window and Scene
+    SDL mainwindow = SDL(WIDTH,HEIGHT,SDL_OPENGL|SDL_HWSURFACE,"Cryolite Engine");
     mainScene = new Scene();
-    Camera *Player = new Camera(vector(STARTING_X,STARTING_Y,STARTING_Z),vector(0,0,1),STANDART_NEARCLIP,STANDART_FARCLIP,FOV,0,0,HEIGHT,WIDTH);
-    printf("add cam\n");
-    mainScene->Camlist->ListPushFront(Player);
 
+    // Create camera, Global light and Input controler
+    Camera *Player = new Camera(vector(STARTING_X,STARTING_Y,STARTING_Z),vector(0,0,1),STANDART_NEARCLIP,STANDART_FARCLIP,FOV,0,0,HEIGHT,WIDTH);
+    mainScene->Camlist->ListPushFront(Player);
+    Controls playerControls = Controls(&mainwindow);
+    GlobalLight stdLight = GlobalLight();
+
+    // Draw test models
     INIT_Models(mainScene);
 
+    //GL Settigs
     glMatrixMode( GL_PROJECTION );
-
-    //glFrustum( -1.6, 1.6, -1.2, 1.2, STANDART_NEARCLIP, STANDART_FARCLIP );
-    //gluPerspective(FOV, WIDTH/HEIGHT, STANDART_NEARCLIP, STANDART_FARCLIP );
-
     glClearColor( 0.0, 0.0, 0.0, 0.0 ); // Sets the background color.
     glEnable( GL_DEPTH_TEST );
-
     glMatrixMode( GL_MODELVIEW );
     glEnable(GL_BLEND);
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-
     glEnable( GL_TEXTURE_2D );
-
     glEnable(GL_MULTISAMPLE_ARB);
-
-    //glEnable(GL_LIGHTING);
     glEnable(GL_COLOR_MATERIAL);
-
-    //Light stdLight = Light();
-
     glLineWidth (LINEWIDTH);
 
-
+    // Skysphere
     GLUquadric *q =gluNewQuadric();
     gluQuadricTexture(q, true);
-
     Material *sky = new Material(IMAGE(sky1.jpg));
 
+    //Background Music
     Mix_Music *music = Mix_LoadMUS(SOUND(moon.mp3));
     if(music==NULL)
         printf("could not load music!!!\n");
     Mix_PlayMusic( music, -1 );
 
 
-    // 2D Texute settings
     float lastFPS = 0;
+    mainScene->lasttick = SDL_GetTicks();
 
-    mainScene->lasttick = SDL_GetTicks(); //better calculation
-
-    Controls playerControls = Controls(&mainwindow);
-
-    //printf("max. lights: %d\n", GL_MAX_LIGHTS);
 
     while(render){ //render
         for(int i = 0; i<9;i++)
@@ -135,12 +117,7 @@ int main(int argc, char *argv[]){
         drawHUD();
 
         SDL_GL_SwapBuffers();   // Changes frontbuffer and backbuffer
-
-
     }
 
-    Mix_CloseAudio();
-
     return 0;
-
 }
