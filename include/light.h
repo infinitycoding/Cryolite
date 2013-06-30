@@ -5,26 +5,46 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
+#include <object.h>
 
 
-class Light
+typedef enum
+{
+    constant,
+    linear,
+    quadric
+}attenaution_t;
+
+
+
+class GlobalLight
 {
     public:
-        Light();
-        ~Light();
+        GlobalLight();
+        GlobalLight(GLfloat ambientRed, GLfloat ambientGreen, GLfloat ambientBlue, GLfloat ambientTransparency );
+        ~GlobalLight();
 
-
-    private:
-        GLfloat ambiantLightning[4];
-        GLfloat diffuseLightning[4];
-        GLfloat position[3];
-        GLfloat spotDirection[3];
+        GLfloat ambient[4];
 };
+
 
 class Lamp
 {
     public:
+         Lamp();
+        ~Lamp();
 
+        GLint Lightnum;
+        GLfloat ambient[4];
+        GLfloat diffuse[4];
+        GLfloat specular[4];
+        GLfloat position[4];
+        GLfloat direction[4];
+        GLfloat exponent;
+        GLfloat cutof;
+        attenaution_t attType;
+        GLfloat attenaution;
+        bool activ;
 };
 
 
