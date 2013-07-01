@@ -51,6 +51,7 @@
 		</Unit>
 		<Unit filename="include/scene.h" />
 		<Unit filename="include/sdl.h" />
+		<Unit filename="include/settings.h" />
 		<Unit filename="include/sound.h" />
 		<Unit filename="include/types.h" />
 		<Unit filename="include/vector.h" />
@@ -68,6 +69,7 @@
 		<Unit filename="src/render/object.cpp" />
 		<Unit filename="src/render/scene.cpp" />
 		<Unit filename="src/render/sdl.cpp" />
+		<Unit filename="src/render/settings.cpp" />
 		<Unit filename="src/render/sound.cpp" />
 		<Unit filename="src/render/vector.cpp" />
 		<Extensions>
