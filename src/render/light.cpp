@@ -25,6 +25,12 @@ GlobalLight::GlobalLight(GLfloat ambientRed, GLfloat ambientGreen, GLfloat ambie
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT,ambient);
 }
 
+void GlobalLight::activateLight()
+{
+    glEnable(GL_LIGHTING);
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT,ambient);
+}
+
 GlobalLight::~GlobalLight()
 {
     glDisable(GL_LIGHTING);

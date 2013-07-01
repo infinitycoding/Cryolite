@@ -4,6 +4,7 @@
 #include <object.h>
 #include <camera.h>
 #include <List.h>
+#include <light.h>
 
 class Scene
 {
@@ -17,6 +18,9 @@ class Scene
 
         List<Object> *objectList;
         List<Camera> *Camlist;
+        List<Lamp> *globalLamps;
+        bool currentScene;
+        GlobalLight *GlobalAmbience;
 
         int lasttick;
         int accuracy;

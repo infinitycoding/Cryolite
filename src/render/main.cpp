@@ -26,11 +26,16 @@
 #undef main
 #endif
 
+#include <iostream>
+#include <ostream>
+
 Scene *mainScene;
 
 bool printFPS = false;
 bool render = true;
 
+
+using namespace std;
 
 
 
@@ -44,7 +49,7 @@ int main(int argc, char *argv[]){
     Camera *Player = new Camera(vector(STARTING_X,STARTING_Y,STARTING_Z),vector(0,0,1),STANDART_NEARCLIP,STANDART_FARCLIP,FOV,0,0,HEIGHT,WIDTH);
     mainScene->Camlist->ListPushFront(Player);
     Controls playerControls = Controls(&mainwindow);
-    GlobalLight stdLight = GlobalLight();
+    mainScene->GlobalAmbience = new GlobalLight();
 
     // Draw test models
     INIT_Models(mainScene);
@@ -72,6 +77,8 @@ int main(int argc, char *argv[]){
         printf("could not load music!!!\n");
     Mix_PlayMusic( music, -1 );
 
+    cout<<vector(1.0,2.0,3.0)<<endl;
+
 
     float lastFPS = 0;
     mainScene->lasttick = SDL_GetTicks();
@@ -91,8 +98,6 @@ int main(int argc, char *argv[]){
         }
 
         mainwindow.pollEvents();    // Eventhandler
-
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glMatrixMode(GL_MODELVIEW);
 

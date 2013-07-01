@@ -7,12 +7,11 @@
 #include <object.h>
 
 
-
-
 Scene::Scene()
 {
     this->objectList = new List<Object>;
     this->Camlist = new List<Camera>;
+    this->GlobalAmbience = NULL;
     currenttick = 0;
     ticcount = 0;
     tickbundle = 3;
@@ -76,6 +75,20 @@ int Scene::removeObject(Object *obj)
 
 void Scene::render()
 {
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    if(GlobalAmbience && !currentScene)
+        GlobalAmbience->activateLight();
+
+    else if(!GlobalAmbience)
+    {
+        GLboolean activlight;
+        glGetBooleanv(GL_LIGHTING, &activlight);
+        if(activlight)
+            glDisable(GL_LIGHTING);
+    }
+
+
     calculateFPS();
     this->Camlist->ListSetFirst();
     while(handleCams())
@@ -229,6 +242,7 @@ void Scene::renderTriangles(Object *currentObject)
             {
 
                 struct triangle *currentTriangle = (struct triangle *)currentObject->triangles->ListGetCurrent();
+
 
                 for(int i=0;i<3;i++)
                 {
