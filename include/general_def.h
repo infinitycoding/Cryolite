@@ -5,13 +5,10 @@
 
 #define STANDART_NEARCLIP 1.5
 #define STANDART_FARCLIP 100
-#define FOV 80
 
 #define STARTING_X 0
 #define STARTING_Y 0
 #define STARTING_Z -3.5
-
-#define LINEWIDTH 1
 
 #define STANDARD_SIZED_CACHE 100
 

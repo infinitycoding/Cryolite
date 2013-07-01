@@ -55,6 +55,7 @@
 		<Unit filename="include/sound.h" />
 		<Unit filename="include/types.h" />
 		<Unit filename="include/vector.h" />
+		<Unit filename="settings" />
 		<Unit filename="src/optimize/profiler.cpp">
 			<Option target="Debug" />
 		</Unit>

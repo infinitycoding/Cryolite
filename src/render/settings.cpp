@@ -48,7 +48,8 @@ bool Settings::loadSettingsFile(const char *filename)
         }
         else if(strncmp(line, "fullscreen", 10) == 0)
         {
-            if(getValueBool(line) == true)  sdlFlags |= SDL_FULLSCREEN;
+            if(getValueBool(line) == true)
+                sdlFlags |= SDL_FULLSCREEN;
         }
         else if(strncmp(line, "catchCourser", 12) == 0)
         {
@@ -57,6 +58,18 @@ bool Settings::loadSettingsFile(const char *filename)
         else if(strncmp(line, "multisamples", 12) == 0)
         {
             multisamples = getValueInt(line);
+        }
+        else if(strncmp(line, "linewidth", 9) == 0)
+        {
+            lineWidth = getValueFloat(line);
+        }
+        else if(strncmp(line, "pointsize", 9) == 0)
+        {
+            pointSize = getValueFloat(line);
+        }
+        else if(strncmp(line, "fov", 3) == 0)
+        {
+            fov = getValueFloat(line);
         }
 
     }while(!feof(f));
@@ -75,6 +88,9 @@ void Settings::initSettings()
     height = 480;
     sdlFlags = SDL_OPENGL|SDL_HWSURFACE;
     multisamples = 4;
+    lineWidth = 1;
+    pointSize = 1;
+    fov = 80;
 }
 
 
@@ -114,9 +130,16 @@ bool Settings::getValueBool(const char *line)
     memset(string, '\0', sizeof(string));
     getValueString(line, string);
 
-    if((strncmp(string, "enable", 6) == 0) || (strncmp(string, "on", 2) == 0) || (strncmp(string, "activate", 8) == 0) || (strncmp(string, "true", 4) == 0) || (strncmp(string, "1", 1) == 0))
+    if((strncmp(string, "enable", 6) == 0) || (strncmp(string, "on", 2) == 0) || (strncmp(string, "yes", 3) == 0) || (strncmp(string, "activate", 8) == 0) || (strncmp(string, "true", 4) == 0) || (strncmp(string, "1", 1) == 0))
         return true;
-    else
+    else if((strncmp(string, "disable", 7) == 0) || (strncmp(string, "off", 3) == 0) || (strncmp(string, "no", 2) == 0) || (strncmp(string, "deactivate", 10) == 0) || (strncmp(string, "false", 5) == 0) || (strncmp(string, "0", 1) == 0))
         return false;
+    else
+    {
+        cout << "The settings-file is corrupted." << endl;
+        cout << "The incorrect line is the following one:" << endl;
+        cout << line << endl;
+        return false;
+    }
 }
 

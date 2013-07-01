@@ -50,7 +50,7 @@ int main(int argc, char *argv[]){
     mainScene = new Scene();
 
     // Create camera, Global light and Input controler
-    Camera *Player = new Camera(vector(STARTING_X,STARTING_Y,STARTING_Z),vector(0,0,1),STANDART_NEARCLIP,STANDART_FARCLIP,FOV,0,0,gameSettings->height,gameSettings->width);
+    Camera *Player = new Camera(vector(STARTING_X,STARTING_Y,STARTING_Z),vector(0,0,1),STANDART_NEARCLIP,STANDART_FARCLIP,gameSettings->fov,0,0,gameSettings->height,gameSettings->width);
     mainScene->Camlist->ListPushFront(Player);
     Controls playerControls = Controls(&mainwindow);
     mainScene->GlobalAmbience = new GlobalLight();
@@ -68,7 +68,8 @@ int main(int argc, char *argv[]){
     glEnable( GL_TEXTURE_2D );
     glEnable(GL_MULTISAMPLE_ARB);
     glEnable(GL_COLOR_MATERIAL);
-    glLineWidth (LINEWIDTH);
+    glLineWidth(gameSettings->lineWidth);
+    glPointSize(gameSettings->pointSize);
 
     // Skysphere
     GLUquadric *q =gluNewQuadric();
