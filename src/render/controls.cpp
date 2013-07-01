@@ -149,44 +149,28 @@ void Controls::controls_handler(Camera *cam)
 void Controls::rotation_handler(Camera *cam){    // Rotates the camera if a key is pressed.
     if(right)
     {
-        cam->lookingDirection.elements[0] = cam->lookingDirection.elements[0] * cos(ROTATION_WIDTH) - cam->lookingDirection.elements[2] * sin(ROTATION_WIDTH);
-        cam->lookingDirection.elements[2] = cam->lookingDirection.elements[0] * sin(ROTATION_WIDTH) + cam->lookingDirection.elements[2] * cos(ROTATION_WIDTH);
+        cam->rotateY(ROTATION_WIDTH);
 
         right = false;
     }
 
     if(left)
     {
-        cam->lookingDirection.elements[0] = cam->lookingDirection.elements[0] * cos(-ROTATION_WIDTH) - cam->lookingDirection.elements[2] * sin(-ROTATION_WIDTH);
-        cam->lookingDirection.elements[2] = cam->lookingDirection.elements[0] * sin(-ROTATION_WIDTH) + cam->lookingDirection.elements[2] * cos(-ROTATION_WIDTH);
+        cam->rotateY(-ROTATION_WIDTH);
 
         left = false;
     }
 
     /*if(up)
     {
-        float newLookingY = cam->lookingDirection.elements[1] * cos(ROTATION_WIDTH) - cam->lookingDirection.elements[2] * sin(ROTATION_WIDTH);
-        float newLookingZ = cam->lookingDirection.elements[1] * sin(ROTATION_WIDTH) + cam->lookingDirection.elements[2] * cos(ROTATION_WIDTH);
-
-        if((newLookingZ >= 0.0 ? true : false) == (cam->lookingDirection.elements[2] >= 0.0 ? true : false))
-        {
-            cam->lookingDirection.elements[1] = newLookingY;
-            cam->lookingDirection.elements[2] = newLookingZ;
-        }
+        cam->rotateX(-ROTATION_WIDTH);
 
         up = false;
     }
 
     if(down)
     {
-        float newLookingY = cam->lookingDirection.elements[1] * cos(-ROTATION_WIDTH) - cam->lookingDirection.elements[2] * sin(-ROTATION_WIDTH);
-        float newLookingZ = cam->lookingDirection.elements[1] * sin(-ROTATION_WIDTH) + cam->lookingDirection.elements[2] * cos(-ROTATION_WIDTH);
-
-        if((newLookingZ >= 0.0 ? true : false) == (cam->lookingDirection.elements[2] >= 0.0 ? true : false))
-        {
-            cam->lookingDirection.elements[1] = newLookingY;
-            cam->lookingDirection.elements[2] = newLookingZ;
-        }
+        cam->rotateX(ROTATION_WIDTH);
 
         down = false;
     }*/

@@ -17,6 +17,11 @@ class Camera
         ~Camera();
 
 
+        void rotateX(float rotate);
+        void rotateY(float rotate);
+        void rotateZ(float rotate);
+
+
         vector position;
         vector lookingDirection;
 

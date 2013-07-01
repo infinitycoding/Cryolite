@@ -1,4 +1,5 @@
 #include <SDL.h>
+#include <math.h>
 
 #include <camera.h>
 #include <general_def.h>
@@ -44,4 +45,22 @@ Camera::Camera(vector pos, vector looking, GLfloat nClip, GLfloat fClip, GLfloat
 Camera::~Camera()
 {
 
+}
+
+void Camera::rotateX(float rotate)
+{
+    lookingDirection.elements[1] = lookingDirection.elements[1] * cos(rotate) + lookingDirection.elements[2] * sin(rotate);
+    lookingDirection.elements[2] = lookingDirection.elements[2] * cos(rotate) - lookingDirection.elements[1] * sin(rotate);
+}
+
+void Camera::rotateY(float rotate)
+{
+    lookingDirection.elements[0] = lookingDirection.elements[0] * cos(rotate) - lookingDirection.elements[2] * sin(rotate);
+    lookingDirection.elements[2] = lookingDirection.elements[0] * sin(rotate) + lookingDirection.elements[2] * cos(rotate);
+}
+
+void Camera::rotateZ(float rotate)
+{
+    lookingDirection.elements[0] = lookingDirection.elements[1] * cos(rotate) + lookingDirection.elements[0] * sin(rotate);
+    lookingDirection.elements[1] = lookingDirection.elements[0] * cos(rotate) - lookingDirection.elements[1] * sin(rotate);
 }
