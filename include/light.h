@@ -34,11 +34,11 @@ class Lamp
     public:
          Lamp();
          Lamp(Lamp *L);
-         Lamp(Lamp *L, vector position);
-         Lamp(Lamp *L, vector position, vector direction);
+         Lamp(Lamp *L, vector pos);
+         Lamp(Lamp *L, vector pos, vector dir);
 
-         Lamp(Lamp *L, vector *position);
-         Lamp(Lamp *L, vector *position, vector *direction);
+         Lamp(Lamp *L, vector *pos);
+         Lamp(Lamp *L, vector *pos, vector *dir);
 
 
          void setAmbientLight(GLfloat r, GLfloat g, GLfloat b, GLfloat t);
@@ -48,6 +48,20 @@ class Lamp
          void setAmbientLight(GLfloat *L);
          void setDiffuseLight(GLfloat *L);
          void setSpecularLight(GLfloat *L);
+
+         void setDirection(vector d);
+         void setDirection(vector *d);
+         void setDirection(GLfloat *L);
+
+
+         void setPosition(vector p);
+         void setPosition(vector *p);
+         void setPosition(GLfloat *L);
+
+         void directed(bool b);
+         bool isDirected(void);
+
+         void setStandart();
 
         ~Lamp();
 
@@ -62,6 +76,7 @@ class Lamp
         attenaution_t attType;
         GLfloat attenaution;
         bool activ;
+
 };
 
 
