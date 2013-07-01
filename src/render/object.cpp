@@ -1,4 +1,5 @@
 #include <string.h>
+#include <iostream>
 
 #include <object.h>
 
@@ -76,9 +77,10 @@ usedVertices Object::vertices_in_polygone(char *line)
 {
     usedVertices used = nothing_used;
     bool firstSlash = true;
+    bool resultFound = false;
     int i;
 
-    for(i = 2; line[i] != '\n' && line[i] != '\0'; i++)
+    for(i = 2; line[i] != '\n' && line[i] != '\0' && line[i] != ' ' && resultFound == false; i++)
     {
         if(line[i] == '/')
         {
@@ -86,11 +88,11 @@ usedVertices Object::vertices_in_polygone(char *line)
             {
                 firstSlash = false;
 
-                if(line[i+1] == '/')
+                if(line[++i] == '/')
                 {
                     used = normals_used;
 
-                    break;
+                    resultFound = true;
                 }
                 else
                     used = texture_used;
@@ -99,7 +101,7 @@ usedVertices Object::vertices_in_polygone(char *line)
             {
                 used = all_used;
 
-                break;
+                resultFound = true;
             }
         }
     }
@@ -164,8 +166,6 @@ struct numofvertices Object::countVertices(const char *filename, const char *obj
 
 void Object::loadObjectFile(const char *objectFile, const char *objectName)
 {
-    // when normals are fully implemented, activate line 161, line 179 and line 381
-
     FILE *f;
 
     char line[50];
@@ -173,7 +173,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
     int h, i , j;
     int counter = 0;
-    int vert_id[4], tex_id[4]/*, norm_id[4]*/;
+    int vert_id[4], tex_id[4], norm_id[4];
 
     unsigned int actualSmoothingGroup = 0;
 
@@ -194,7 +194,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
     vertex2D *texvertex_ptrs[allObjectVertices.textureVertices];
     vertex3D *objvertex_ptrs[allObjectVertices.objectVertices];
-    //vertex3D *normvertex_ptrs[allObjectVertices.normalVertices];
+    vertex3D *normvertex_ptrs[allObjectVertices.normalVertices];
 
     struct triangle *triangle_ptr = NULL;
     struct square *square_ptr = NULL;
@@ -416,7 +416,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
                 this->addNormalVertex(normvertex_ptr);
 
-                //normvertex_ptrs[myVertices.normalVertices] = normvertex_ptr;
+                normvertex_ptrs[myVertices.normalVertices] = normvertex_ptr;
                 myVertices.normalVertices++;
             }
 
@@ -489,6 +489,23 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
                     }
 
+                    if(used == normals_used)
+                        i++;
+
+                    if(used == normals_used || used == all_used)
+                    {
+                        for(i++, j = 0; line[i] != ' ' && line[i] != '\n'; i++, j++)
+                        {
+                            string[j] = line[i];
+                        }
+
+
+                        string[j+1] = '\0';
+
+                        norm_id[h] = atoi(string);
+                        norm_id[h] -= otherVertices.normalVertices+1;
+                    }
+
                 }
 
                 if(triangle_or_square)
@@ -522,6 +539,9 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
                             square_ptr->texVertex[i] = autotexvertex_ptrs[i];
                         }
+
+                        if(used == normals_used || used == all_used)
+                            square_ptr->normVertex[i] = normvertex_ptrs[norm_id[i]];
                     }
 
                     square_ptr->smoothingGroup = actualSmoothingGroup;
@@ -556,6 +576,10 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
                             triangle_ptr->texVertex[i] = autotexvertex_ptrs[i];
                         }
+
+                        if(used == normals_used || used == all_used)
+                            triangle_ptr->normVertex[i] = normvertex_ptrs[norm_id[i]];
+
                     }
 
                     triangle_ptr->smoothingGroup = actualSmoothingGroup;
