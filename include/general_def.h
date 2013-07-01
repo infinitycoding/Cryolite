@@ -3,10 +3,6 @@
 #define GENERAL_DEF_H_INCLUDED
 
 
-
-#define WIDTH 640
-#define HEIGHT 480
-
 #define STANDART_NEARCLIP 1.5
 #define STANDART_FARCLIP 100
 #define FOV 80

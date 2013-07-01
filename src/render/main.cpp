@@ -21,6 +21,7 @@
 #include <vector.h>
 #include <font.h>
 #include <light.h>
+#include <settings.h>
 
 #ifdef _WIN32
 #undef main
@@ -29,6 +30,7 @@
 #include <iostream>
 #include <ostream>
 
+Settings *gameSettings;
 Scene *mainScene;
 
 bool printFPS = false;
@@ -41,12 +43,14 @@ using namespace std;
 
 
 int main(int argc, char *argv[]){
+
+    gameSettings = new Settings("settings");
     //Create Window and Scene
-    SDL mainwindow = SDL(WIDTH,HEIGHT,SDL_OPENGL|SDL_HWSURFACE,"Cryolite Engine");
+    SDL mainwindow = SDL(gameSettings->width,gameSettings->height,gameSettings->sdlFlags,"Cryolite Engine");
     mainScene = new Scene();
 
     // Create camera, Global light and Input controler
-    Camera *Player = new Camera(vector(STARTING_X,STARTING_Y,STARTING_Z),vector(0,0,1),STANDART_NEARCLIP,STANDART_FARCLIP,FOV,0,0,HEIGHT,WIDTH);
+    Camera *Player = new Camera(vector(STARTING_X,STARTING_Y,STARTING_Z),vector(0,0,1),STANDART_NEARCLIP,STANDART_FARCLIP,FOV,0,0,gameSettings->height,gameSettings->width);
     mainScene->Camlist->ListPushFront(Player);
     Controls playerControls = Controls(&mainwindow);
     mainScene->GlobalAmbience = new GlobalLight();

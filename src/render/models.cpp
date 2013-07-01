@@ -1,6 +1,7 @@
 #include <models.h>
 #include <material.h>
 #include <font.h>
+#include <settings.h>
 
 Material *MAN;
 Object *iccube;
@@ -176,13 +177,14 @@ void createObjectCube(Material *mat, Scene *sce)
 
 }
 
+extern Settings *gameSettings;
 
 void drawHUD(void)
 {
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
-    glOrtho(0, WIDTH, HEIGHT, 0, 0, 1);
+    glOrtho(0, gameSettings->width, gameSettings->height, 0, 0, 1);
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glLoadIdentity();
@@ -192,15 +194,15 @@ void drawHUD(void)
     glBindTexture( GL_TEXTURE_2D, 0);
 
     glBegin(GL_QUADS);
-            glVertex2f((WIDTH/2)-1, (HEIGHT/2)-((WIDTH/100)*SCOPE));
-            glVertex2f((WIDTH/2)+1, (HEIGHT/2)-((WIDTH/100)*SCOPE));
-            glVertex2f((WIDTH/2)+1, (HEIGHT/2)+((WIDTH/100)*SCOPE));
-            glVertex2f((WIDTH/2)-1, (HEIGHT/2)+((WIDTH/100)*SCOPE));
+            glVertex2f((gameSettings->width/2)-1, (gameSettings->height/2)-((gameSettings->width/100)*SCOPE));
+            glVertex2f((gameSettings->width/2)+1, (gameSettings->height/2)-((gameSettings->width/100)*SCOPE));
+            glVertex2f((gameSettings->width/2)+1, (gameSettings->height/2)+((gameSettings->width/100)*SCOPE));
+            glVertex2f((gameSettings->width/2)-1, (gameSettings->height/2)+((gameSettings->width/100)*SCOPE));
 
-            glVertex2f((WIDTH/2)-((WIDTH/100)*SCOPE), (HEIGHT/2)-1);
-            glVertex2f((WIDTH/2)-((WIDTH/100)*SCOPE), (HEIGHT/2)+1);
-            glVertex2f((WIDTH/2)+((WIDTH/100)*SCOPE), (HEIGHT/2)+1);
-            glVertex2f((WIDTH/2)+((WIDTH/100)*SCOPE), (HEIGHT/2)-1);
+            glVertex2f((gameSettings->width/2)-((gameSettings->width/100)*SCOPE), (gameSettings->height/2)-1);
+            glVertex2f((gameSettings->width/2)-((gameSettings->width/100)*SCOPE), (gameSettings->height/2)+1);
+            glVertex2f((gameSettings->width/2)+((gameSettings->width/100)*SCOPE), (gameSettings->height/2)+1);
+            glVertex2f((gameSettings->width/2)+((gameSettings->width/100)*SCOPE), (gameSettings->height/2)-1);
 
 
     glEnd();
@@ -213,13 +215,13 @@ glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,  GL_MODULATE);
 
             glColor4f(0, 0, 0.5f,0.5f);
             glTexCoord2i( 1,  0);
-            glVertex2f(WIDTH-((WIDTH/100)*HOR), HEIGHT-((HEIGHT/100)*VERT));
+            glVertex2f(gameSettings->width-((gameSettings->width/100)*HOR), gameSettings->height-((gameSettings->height/100)*VERT));
             glTexCoord2i( 1,  1);
-            glVertex2f(WIDTH-((WIDTH/100)*HOR), HEIGHT-10);
+            glVertex2f(gameSettings->width-((gameSettings->width/100)*HOR), gameSettings->height-10);
             glTexCoord2i( 0,  1);
-            glVertex2f(WIDTH-10, HEIGHT-10);
+            glVertex2f(gameSettings->width-10, gameSettings->height-10);
             glTexCoord2i( 0,  0);
-            glVertex2f(WIDTH-10, HEIGHT-((HEIGHT/100)*VERT));
+            glVertex2f(gameSettings->width-10, gameSettings->height-((gameSettings->height/100)*VERT));
             glColor4f(1, 1, 1,1);
 
 
