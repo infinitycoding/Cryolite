@@ -117,9 +117,9 @@ void Scene::render()
                         handleRotations(currentObject);
 
                         //Modify Model Matrix
-                        glRotatef(currentObject->Angle, currentObject->rotationAxis.elements[0], currentObject->rotationAxis.elements[1], currentObject->rotationAxis.elements[2]);
-                        glTranslatef(currentObject->position.elements[0],currentObject->position.elements[1],currentObject->position.elements[2]);
-                        glScalef(currentObject->scale.elements[0],currentObject->scale.elements[1],currentObject->scale.elements[2]);
+                        glRotatef(currentObject->Angle, currentObject->rotationAxis.x, currentObject->rotationAxis.y, currentObject->rotationAxis.z);
+                        glTranslatef(currentObject->position.x,currentObject->position.y,currentObject->position.z);
+                        glScalef(currentObject->scale.x,currentObject->scale.y,currentObject->scale.z);
 
                         //Render Triangles
                         if(!currentObject->triangles->ListIsEmpty())
@@ -148,7 +148,7 @@ void Scene::handleMotions(Object *currentObject)
     {
         vector direction = vector(currentObject->Dm);
         float acc = currentObject->Am;
-        if(currentObject->position.elements[1] > -2)
+        if(currentObject->position.y > -2)
         {
             acc = len( (direction * acc) + vector(0,-10,0) );
             direction = unify( (direction * acc) + vector(0,-10,0) );
@@ -156,7 +156,7 @@ void Scene::handleMotions(Object *currentObject)
 
         else
         {
-            currentObject->position.elements[1] = -2;
+            currentObject->position.y = -2;
         }
 
         currentObject->V0m +=  currentObject->Am* ((SDL_GetTicks()-currentObject->Tms)/1000);
@@ -199,7 +199,7 @@ int Scene::handleCams(void)
 
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-        gluLookAt(currentCam->position.elements[0],currentCam->position.elements[1],currentCam->position.elements[2],currentCam->lookingDirection.elements[0]+currentCam->position.elements[0],currentCam->lookingDirection.elements[1]+currentCam->position.elements[1],currentCam->lookingDirection.elements[2]+currentCam->position.elements[2],0.0,1.0,0.0);
+        gluLookAt(currentCam->position.x,currentCam->position.y,currentCam->position.z,currentCam->lookingDirection.x+currentCam->position.x,currentCam->lookingDirection.y+currentCam->position.y,currentCam->lookingDirection.z+currentCam->position.z,0.0,1.0,0.0);
 
         return true;
     }

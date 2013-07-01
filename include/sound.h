@@ -2,8 +2,6 @@
 #define SOUND_H_INCLUDED
 
 
-
-
 #include <AL/alut.h>
 
 
@@ -30,7 +28,6 @@ class Sound
         bool playSound(struct soundSettings *settings);
 
     private:
-
         void initSound();
 
 

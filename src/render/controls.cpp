@@ -188,7 +188,7 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
 
     if(move_right)
     {
-        moveDirection =  vector(-cam->lookingDirection.elements[2], 0, cam->lookingDirection.elements[0]);
+        moveDirection =  vector(-cam->lookingDirection.z, 0, cam->lookingDirection.x);
         moveDirection.unify();
         moveDirection *= MOVEMENT_WIDTH;
 
@@ -197,7 +197,7 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
 
     if(move_left)
     {
-        moveDirection =  vector(cam->lookingDirection.elements[2], 0, -cam->lookingDirection.elements[0]);
+        moveDirection =  vector(cam->lookingDirection.z, 0, -cam->lookingDirection.x);
         moveDirection.unify();
         moveDirection *= MOVEMENT_WIDTH;
 
@@ -206,7 +206,7 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
 
     if(move_foreward)
     {
-        moveDirection =  vector(cam->lookingDirection.elements[0], 0, cam->lookingDirection.elements[2]);
+        moveDirection =  vector(cam->lookingDirection.x, 0, cam->lookingDirection.z);
         moveDirection.unify();
         moveDirection *= MOVEMENT_WIDTH;
 
@@ -215,7 +215,7 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
 
     if(move_backward)
     {
-        moveDirection =  vector(-cam->lookingDirection.elements[0], 0, -cam->lookingDirection.elements[2]);
+        moveDirection =  vector(-cam->lookingDirection.x, 0, -cam->lookingDirection.z);
         moveDirection.unify();
         moveDirection *= MOVEMENT_WIDTH;
 

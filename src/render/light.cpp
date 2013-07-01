@@ -84,9 +84,11 @@ Lamp::Lamp(Lamp *L, vector pos)
         diffuse[i]   = L->diffuse[i];
         specular[i]  = L->specular[i];
         direction[i] = L->direction[i];
-        if(i<3)
-            position[i]  = pos.elements[i];
     }
+
+    position[0]  = pos.x;
+    position[1]  = pos.y;
+    position[2]  = pos.z;
 
     exponent = L->exponent;
     cutof = L->cutof;
@@ -105,9 +107,11 @@ Lamp::Lamp(Lamp *L, vector *pos)
         diffuse[i]   = L->diffuse[i];
         specular[i]  = L->specular[i];
         direction[i] = L->direction[i];
-        if(i<3)
-            position[i]  = pos->elements[i];
     }
+
+    position[0]  = pos->x;
+    position[1]  = pos->y;
+    position[2]  = pos->z;
 
     exponent = L->exponent;
     cutof = L->cutof;
@@ -124,16 +128,16 @@ Lamp::Lamp(Lamp *L, vector pos, vector dir)
         ambient[i]   = L->ambient[i];
         diffuse[i]   = L->diffuse[i];
         specular[i]  = L->specular[i];
-        if(i<3)
-        {
-            position[i]  = pos.elements[i];
-            direction[i] = dir.elements[i];
-        }
-        else
-        {
-            position[i]  = 0;
-        }
     }
+
+    position[0]  = pos.x;
+    position[1]  = pos.y;
+    position[2]  = pos.z;
+    position[3]  = 0;
+
+    direction[0]  = dir.x;
+    direction[1]  = dir.y;
+    direction[2]  = dir.z;
 
     exponent = L->exponent;
     cutof = L->cutof;
@@ -150,16 +154,16 @@ Lamp::Lamp(Lamp *L, vector *pos, vector *dir)
         ambient[i]   = L->ambient[i];
         diffuse[i]   = L->diffuse[i];
         specular[i]  = L->specular[i];
-        if(i<3)
-        {
-            position[i]  = pos->elements[i];
-            direction[i] = dir->elements[i];
-        }
-        else
-        {
-            position[i]  = 0;
-        }
     }
+
+    position[0]  = pos->x;
+    position[1]  = pos->y;
+    position[2]  = pos->z;
+    position[3]  = 0;
+
+    direction[0]  = dir->x;
+    direction[1]  = dir->y;
+    direction[2]  = dir->z;
 
     exponent = L->exponent;
     cutof = L->cutof;
@@ -220,29 +224,26 @@ void Lamp::setSpecularLight(GLfloat *L)
 void Lamp::setDirection(vector d)
 {
 
-    if(d.elements[0] || d.elements[1] || d.elements[2])
+    if(d.x || d.y || d.z)
         position[3] = 1;
     else
         position[3] = 0;
 
-
-    for(int i = 0; i< 3; i++)
-    {
-        direction[i] = d.elements[i];
-    }
+    direction[0] = d.x;
+    direction[1] = d.y;
+    direction[2] = d.z;
 }
 
 void Lamp::setDirection(vector *d)
 {
-    if(d->elements[0] || d->elements[1] || d->elements[2])
+    if(d->x || d->y || d->z)
         position[3] = 1;
     else
         position[3] = 0;
 
-    for(int i = 0; i< 3; i++)
-    {
-        direction[i] = d->elements[i];
-    }
+    direction[0] = d->x;
+    direction[1] = d->y;
+    direction[2] = d->z;
 }
 
 void Lamp::setDirection(GLfloat *L)
@@ -261,19 +262,17 @@ void Lamp::setDirection(GLfloat *L)
 
 void Lamp::setPosition(vector p)
 {
-    for(int i = 0; i< 3; i++)
-    {
-        position[i] = p.elements[i];
-    }
+    position[0] = p.x;
+    position[1] = p.y;
+    position[2] = p.z;
 }
 
 
 void Lamp::setPosition(vector *p)
 {
-    for(int i = 0; i< 3; i++)
-    {
-        position[i] = p->elements[i];
-    }
+    position[0] = p->x;
+    position[1] = p->y;
+    position[2] = p->z;
 }
 void Lamp::setPosition(GLfloat *L)
 {

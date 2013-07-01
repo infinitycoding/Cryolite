@@ -79,12 +79,6 @@ bool Material::loadTexture2D(const char* file)
 
 
 
-
-
-
-
-
-
     printf("texur %d %s loaded\n",this->textureGL,file);
     return true;
 }

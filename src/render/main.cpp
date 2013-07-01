@@ -114,7 +114,7 @@ int main(int argc, char *argv[]){
 
 
         glPushMatrix();
-        glTranslatef(Player->position.elements[0],Player->position.elements[1],Player->position.elements[2]);
+        glTranslatef(Player->position.x,Player->position.y,Player->position.z);
         glRotated(90,1,0,0);
         glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
         glBindTexture( GL_TEXTURE_2D, sky->textureGL);

@@ -18,7 +18,9 @@ class vector
 {
     public:
 
-        float elements[3];
+        float x;
+        float y;
+        float z;
 
 
         vector();

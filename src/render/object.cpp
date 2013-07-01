@@ -646,7 +646,7 @@ void Object::moveObject(float a ,vector D, float v)
     /*vector F = unify((D * a) + (this->Dm * this->Am));
     vector Fd = unify(this->Dm);
     int invert;
-    if(F.elements[0] == Fd.elements[0] && F.elements[1] == Fd.elements[1] && F.elements[2] == Fd.elements[2])
+    if(F.x == Fd.x && F.y == Fd.y && F.z == Fd.z)
         invert = 1;
     else
         invert = -1;*/

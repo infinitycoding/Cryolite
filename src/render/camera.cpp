@@ -52,18 +52,18 @@ Camera::~Camera()
 
 void Camera::rotateX(float rotate)
 {
-    lookingDirection.elements[1] = lookingDirection.elements[1] * cos(rotate) + lookingDirection.elements[2] * sin(rotate);
-    lookingDirection.elements[2] = lookingDirection.elements[2] * cos(rotate) - lookingDirection.elements[1] * sin(rotate);
+    lookingDirection.y = lookingDirection.y * cos(rotate) + lookingDirection.z * sin(rotate);
+    lookingDirection.z = lookingDirection.z * cos(rotate) - lookingDirection.y * sin(rotate);
 }
 
 void Camera::rotateY(float rotate)
 {
-    lookingDirection.elements[0] = lookingDirection.elements[0] * cos(rotate) - lookingDirection.elements[2] * sin(rotate);
-    lookingDirection.elements[2] = lookingDirection.elements[0] * sin(rotate) + lookingDirection.elements[2] * cos(rotate);
+    lookingDirection.x = lookingDirection.x * cos(rotate) - lookingDirection.z * sin(rotate);
+    lookingDirection.z = lookingDirection.x * sin(rotate) + lookingDirection.z * cos(rotate);
 }
 
 void Camera::rotateZ(float rotate)
 {
-    lookingDirection.elements[0] = lookingDirection.elements[1] * cos(rotate) + lookingDirection.elements[0] * sin(rotate);
-    lookingDirection.elements[1] = lookingDirection.elements[0] * cos(rotate) - lookingDirection.elements[1] * sin(rotate);
+    lookingDirection.x = lookingDirection.y * cos(rotate) + lookingDirection.x * sin(rotate);
+    lookingDirection.y = lookingDirection.x * cos(rotate) - lookingDirection.y * sin(rotate);
 }
