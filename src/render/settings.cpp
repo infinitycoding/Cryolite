@@ -48,7 +48,8 @@ bool Settings::loadSettingsFile(const char *filename)
         }
         else if(strncmp(line, "fullscreen", 10) == 0)
         {
-            if(getValueBool(line) == true)  sdlFlags |= SDL_FULLSCREEN;
+            if(getValueBool(line) == true)
+                sdlFlags |= SDL_FULLSCREEN;
         }
         else if(strncmp(line, "catchCourser", 12) == 0)
         {
@@ -57,6 +58,18 @@ bool Settings::loadSettingsFile(const char *filename)
         else if(strncmp(line, "multisamples", 12) == 0)
         {
             multisamples = getValueInt(line);
+        }
+        else if(strncmp(line, "linewidth", 9) == 0)
+        {
+            lineWidth = getValueFloat(line);
+        }
+        else if(strncmp(line, "pointsize", 9) == 0)
+        {
+            pointSize = getValueFloat(line);
+        }
+        else if(strncmp(line, "fov", 3) == 0)
+        {
+            fov = getValueFloat(line);
         }
 
     }while(!feof(f));
@@ -75,6 +88,9 @@ void Settings::initSettings()
     height = 480;
     sdlFlags = SDL_OPENGL|SDL_HWSURFACE;
     multisamples = 4;
+    lineWidth = 1;
+    pointSize = 1;
+    fov = 80;
 }
 
 

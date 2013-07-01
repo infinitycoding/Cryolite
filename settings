@@ -1,6 +1,8 @@
 width = 640
 height = 480
 catchCourser = true
-fullscreen = disable
+fullscreen = deactivate
 multisamples = 4
-
+linewidth = 1
+pointsize = 1
+fov = 80

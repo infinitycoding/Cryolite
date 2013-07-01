@@ -33,6 +33,9 @@ class Settings
         int height;
         int sdlFlags;
         int multisamples;
+        float lineWidth;
+        float pointSize;
+        float fov;
 
     private:
         void initSettings();
