@@ -114,9 +114,16 @@ bool Settings::getValueBool(const char *line)
     memset(string, '\0', sizeof(string));
     getValueString(line, string);
 
-    if((strncmp(string, "enable", 6) == 0) || (strncmp(string, "on", 2) == 0) || (strncmp(string, "activate", 8) == 0) || (strncmp(string, "true", 4) == 0) || (strncmp(string, "1", 1) == 0))
+    if((strncmp(string, "enable", 6) == 0) || (strncmp(string, "on", 2) == 0) || (strncmp(string, "yes", 3) == 0) || (strncmp(string, "activate", 8) == 0) || (strncmp(string, "true", 4) == 0) || (strncmp(string, "1", 1) == 0))
         return true;
-    else
+    else if((strncmp(string, "disable", 7) == 0) || (strncmp(string, "off", 3) == 0) || (strncmp(string, "no", 2) == 0) || (strncmp(string, "deactivate", 10) == 0) || (strncmp(string, "false", 5) == 0) || (strncmp(string, "0", 1) == 0))
         return false;
+    else
+    {
+        cout << "The settings-file is corrupted." << endl;
+        cout << "The incorrect line is the following one:" << endl;
+        cout << line << endl;
+        return false;
+    }
 }
 
