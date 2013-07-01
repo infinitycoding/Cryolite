@@ -3,7 +3,10 @@
 
 #include <camera.h>
 #include <general_def.h>
+#include <settings.h>
 
+
+extern Settings *gameSettings;
 
 
 Camera::Camera()
@@ -18,8 +21,8 @@ Camera::Camera()
     x = 0;
     y = 0;
 
-    height = HEIGHT;
-    width = WIDTH;
+    height = gameSettings->height;
+    width = gameSettings->width;
     activ = false;
 }
 
