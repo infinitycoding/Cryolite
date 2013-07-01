@@ -39,11 +39,25 @@ bool Settings::loadSettingsFile(const char *filename)
         fgets(line, MAX_LINELENGTH, f);
 
         if(strncmp(line, "width", 5) == 0)
+        {
             width = getValueInt(line);
+        }
         else if(strncmp(line, "height", 6) == 0)
+        {
             height = getValueInt(line);
+        }
         else if(strncmp(line, "fullscreen", 10) == 0)
+        {
             if(getValueBool(line) == true)  sdlFlags |= SDL_FULLSCREEN;
+        }
+        else if(strncmp(line, "catchCourser", 12) == 0)
+        {
+            captureMouse = getValueBool(line);
+        }
+        else if(strncmp(line, "multisamples", 12) == 0)
+        {
+            multisamples = getValueInt(line);
+        }
 
     }while(!feof(f));
 
@@ -56,9 +70,11 @@ bool Settings::loadSettingsFile(const char *filename)
 
 void Settings::initSettings()
 {
+    captureMouse = true;
     width = 640;
     height = 480;
     sdlFlags = SDL_OPENGL|SDL_HWSURFACE;
+    multisamples = 4;
 }
 
 
@@ -77,6 +93,7 @@ void Settings::getValueString(const char *line, char *string)
 float Settings::getValueFloat(const char *line)
 {
     char string[MAX_LINELENGTH];
+    memset(string, '\0', sizeof(string));
     getValueString(line, string);
     return atof(string);
 }
@@ -85,6 +102,7 @@ float Settings::getValueFloat(const char *line)
 int Settings::getValueInt(const char *line)
 {
     char string[MAX_LINELENGTH];
+    memset(string, '\0', sizeof(string));
     getValueString(line, string);
     return atoi(string);
 }
@@ -93,6 +111,7 @@ int Settings::getValueInt(const char *line)
 bool Settings::getValueBool(const char *line)
 {
     char string[MAX_LINELENGTH];
+    memset(string, '\0', sizeof(string));
     getValueString(line, string);
 
     if((strncmp(string, "enable", 6) == 0) || (strncmp(string, "on", 2) == 0) || (strncmp(string, "activate", 8) == 0) || (strncmp(string, "true", 4) == 0) || (strncmp(string, "1", 1) == 0))

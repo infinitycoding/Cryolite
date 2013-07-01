@@ -1,4 +1,6 @@
 width = 640
 height = 480
+catchCourser = true
 fullscreen = disable
+multisamples = 4
 

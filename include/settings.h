@@ -28,9 +28,11 @@ class Settings
         bool loadSettingsFile(const char *filename);
 
 
+        bool captureMouse;
         int width;
         int height;
         int sdlFlags;
+        int multisamples;
 
     private:
         void initSettings();

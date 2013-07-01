@@ -8,6 +8,7 @@
 #include <object.h>
 #include <vector.h>
 #include <scene.h>
+#include <settings.h>
 
 #define ROTATION_SPEED 5
 #define MOVEMENT_SPEED 10
@@ -33,6 +34,7 @@ bool Controls::already_initialized;
 
 extern bool printFPS;
 extern bool render;
+extern Settings *gameSettings;
 extern Scene *mainScene;
 
 Controls::Controls(SDL* window)
@@ -43,12 +45,16 @@ Controls::Controls(SDL* window)
         window->addEvent(SDL_QUIT,endprogramm);
         window->addEvent(SDL_KEYDOWN,haldeKeydown);
         window->addEvent(SDL_KEYUP,haldeKeyup);
-        SDL_ShowCursor(SDL_DISABLE); //mausanzeige deaktivieren
-        SDL_WM_GrabInput( SDL_GRAB_ON );// Maus einfangen
         window->addEvent(SDL_MOUSEMOTION,haldeMouse);
         window->addEvent(SDL_KEYDOWN,toggle_printFPS);
         window->addEvent(SDL_KEYDOWN,moveCube);
         window->addEvent(SDL_KEYDOWN,rotateCube);
+
+        if(gameSettings->captureMouse)
+        {
+            SDL_ShowCursor(SDL_DISABLE);
+            SDL_WM_GrabInput( SDL_GRAB_ON );
+        }
     }
 }
 
