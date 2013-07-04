@@ -4,11 +4,9 @@
 #include <object.h>
 
 
-Object::Object(const char *objname)
+Object::Object()
 {
     initObject();
-
-    strncpy(objectname, objname, 20);
 }
 
 Object::Object(const char *filename, const char *objname)
@@ -20,26 +18,74 @@ Object::Object(const char *filename, const char *objname)
     loadObjectFile(filename, objname);
 }
 
+Object::Object(const char *filename, const char *objname, vector pos)
+{
+    initObject();
+
+    strncpy(objectname, objname, 20);
+
+    loadObjectFile(filename, objname);
+
+    position.setvalue(pos);
+}
+
+/*Object::Object(Object *obj, const char *objname, vector pos, bool copy)
+{
+    strncpy(objectname, objname, 20);
+
+    if(copy)
+    {
+        vertices = new List<vertex3D>(obj->vertices);
+        normvertices = new List<vector>(obj->normvertices);
+        texvertices = new List<vertex2D>(obj->texvertices);
+        polygones = new List<Polygone>(obj->polygones);
+
+        boundBoxes = new List<struct boundBox>(obj->boundBoxes);
+        boundSpheres = new List<struct boundSphere>(obj->boundSpheres);
+        boundPlanes = new List<struct boundPlane>(obj->boundPlanes);
+        boundCylinders = new List<struct boundCylinder>(obj->boundCylinders);
+        boundTriangles = new List<struct boundTriangel>(obj->boundTriangles);
+    }
+    else
+    {
+        vertices = obj->vertices;
+        normvertices = obj->normvertices;
+        texvertices = obj->texvertices;
+        polygones = obj->polygones;
+
+        boundBoxes = obj->boundBoxes;
+        boundSpheres = obj->boundSpheres;
+        boundPlanes = obj->boundPlanes;
+        boundCylinders = obj->boundCylinders;
+        boundTriangles = obj->boundTriangles;
+    }
+
+    scale = obj->scale;
+
+    ObjectMaterial = obj->ObjectMaterial;
+
+    isPhysicalActor = obj->isPhysicalActor;
+    automatical_texturing = obj->automatical_texturing;
+
+    position.setvalue(pos);
+}*/
+
 Object::~Object()
 {
     delete vertices;
     delete normvertices;
     delete texvertices;
 
-    delete triangles;
-    delete squares;
-
-    //delete ObjectMaterial;
+    delete polygones;
 }
 
 void Object::initObject()
 {
     vertices = new List<vertex3D>;
-    normvertices = new List<vertex3D>;
+    normvertices = new List<vector>;
     texvertices = new List<vertex2D>;
 
-    triangles = new List<struct triangle>;
-    squares = new List<struct square>;
+    polygones = new List<Polygone>;
 
 
     scale = vector(1, 1, 1);
@@ -172,13 +218,11 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
     char string[50];
 
     int h, i , j;
-    int counter = 0;
     int vert_id[4], tex_id[4], norm_id[4];
 
-    unsigned int actualSmoothingGroup = 0;
+    int vertexNumber = 0;
 
     bool correct_object = false;
-    bool triangle_or_square;
     bool auto_texv_loaded = false;
 
     usedVertices used = nothing_used;
@@ -190,14 +234,13 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
     vertex2D *texvertex_ptr = NULL;
     vertex2D *autotexvertex_ptrs[4];
     vertex3D *objvertex_ptr = NULL;
-    vertex3D *normvertex_ptr = NULL;
+    vector *normvertex_ptr = NULL;
 
     vertex2D *texvertex_ptrs[allObjectVertices.textureVertices];
     vertex3D *objvertex_ptrs[allObjectVertices.objectVertices];
-    vertex3D *normvertex_ptrs[allObjectVertices.normalVertices];
+    vector *normvertex_ptrs[allObjectVertices.normalVertices];
 
-    struct triangle *triangle_ptr = NULL;
-    struct square *square_ptr = NULL;
+    Polygone *polygone_ptr = NULL;
 
     if(allObjectVertices.objectVertices == 0)
     {
@@ -219,29 +262,6 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
         if(line[0] == '#')
             continue;
-
-
-        if(line[0] == 's')
-        {
-            if(line[2] == '0' || line[2] == 'o')
-            {
-                actualSmoothingGroup = 0;
-                continue;
-            }
-            else
-            {
-                for(i = 2, j = 0; line[i] != '\n'; i++, j++)
-                    string[j] = line[i];
-
-                string[j] = '\0';
-
-                actualSmoothingGroup = atoi(string);
-
-                continue;
-            }
-            printf("warning: smoothing groups aren't supported yet by cryolite engine.\n");
-            continue;
-        }
 
         if(line[0] == 'g')
         {
@@ -379,7 +399,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
             else
             {
 
-                normvertex_ptr = new vertex3D;
+                normvertex_ptr = new vector;
 
                 for(i = 3, j = 0; line[i] != ' ' && line[i] != '\0' && line[i] != '\n'; i++, j++)
                     string[j] = line[i];
@@ -429,38 +449,19 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                 continue;
             else
             {
-                for(i = 2, counter = 0; line[i] != '\n' && line[i] != '\0'; i++) // check if it is a triangle or a square
+                for(i = 2, vertexNumber = 1; line[i] != '\n' && line[i] != '\0'; i++) // check if it is a triangle or a square
                     if(line[i] == ' ')
-                        counter++;
-
-                if(counter == 2)
-                    triangle_or_square = false;
-                else if(counter == 3)
-                    triangle_or_square = true;
-                else
-                {
-                    printf("error: File is corrupted. programm will be ended.\n");
-                    exit(-1);
-                }
+                        vertexNumber++;
 
                 used = vertices_in_polygone(line);
 
-                if(triangle_or_square)
-                {
-                     square_ptr = new struct square;
+                polygone_ptr = new Polygone(vertexNumber);
 
-                     this->addSquare(square_ptr);
-                }
-                else
-                {
-                    triangle_ptr = new struct triangle;
-
-                    this->addTriangle(triangle_ptr);
-                }
+                addPolygone(polygone_ptr);
 
                 i = 1;
 
-                for(h = 0; h < (triangle_or_square ? 4 : 3); h++)
+                for(h = 0; h < vertexNumber; h++)
                 {
 
                     for(++i, j = 0; line[i] != ' ' && line[i] != '/' && line[i] != '\n' && line[i] != '\0'; i++, j++)
@@ -508,81 +509,37 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
                 }
 
-                if(triangle_or_square)
+                for(i = 0; i < vertexNumber; i++)
                 {
 
-                    for(i = 0; i < 4; i++)
+                    polygone_ptr->setObjVertex(i, objvertex_ptrs[vert_id[i]]);
+
+                    if(used == texture_used || used == all_used)
+                        polygone_ptr->setTexVertex(i, texvertex_ptrs[tex_id[i]]);
+                    else if(automatical_texturing == true && ObjectMaterial != NULL)
                     {
-
-                        square_ptr->objVertex[i] = objvertex_ptrs[vert_id[i]];
-
-                        if(used == texture_used || used == all_used)
-                            square_ptr->texVertex[i] = texvertex_ptrs[tex_id[i]];
-                        else if(automatical_texturing == true && ObjectMaterial != NULL)
+                        if(auto_texv_loaded == false)
                         {
-                            if(auto_texv_loaded == false)
-                            {
-                                auto_texv_loaded = true;
+                            auto_texv_loaded = true;
 
-                        	    for(j = 0; j < 4; j++)
-                                    autotexvertex_ptrs[j] = new vertex2D;
+                            for(j = 0; j < 4; j++)
+                                autotexvertex_ptrs[j] = new vertex2D;
 
-                                autotexvertex_ptrs[0]->x = 0;
-                                autotexvertex_ptrs[0]->y = 1;
-                                autotexvertex_ptrs[1]->x = 0;
-                                autotexvertex_ptrs[1]->y = 0;
-                                autotexvertex_ptrs[2]->x = 1;
-                                autotexvertex_ptrs[2]->y = 0;
-                                autotexvertex_ptrs[3]->x = 1;
-                                autotexvertex_ptrs[3]->y = 1;
-                            }
-
-                            square_ptr->texVertex[i] = autotexvertex_ptrs[i];
+                            autotexvertex_ptrs[0]->x = 0;
+                            autotexvertex_ptrs[0]->y = 1;
+                            autotexvertex_ptrs[1]->x = 0;
+                            autotexvertex_ptrs[1]->y = 0;
+                            autotexvertex_ptrs[2]->x = 1;
+                            autotexvertex_ptrs[2]->y = 0;
+                            autotexvertex_ptrs[3]->x = 1;
+                            autotexvertex_ptrs[3]->y = 1;
                         }
 
-                        if(used == normals_used || used == all_used)
-                            square_ptr->normVertex[i] = normvertex_ptrs[norm_id[i]];
+                        polygone_ptr->setTexVertex(i, autotexvertex_ptrs[i%5]);
                     }
 
-                    square_ptr->smoothingGroup = actualSmoothingGroup;
-                }
-                else
-                {
-
-                    for(i = 0; i < 3; i++)
-                    {
-                        triangle_ptr->objVertex[i] = objvertex_ptrs[vert_id[i]];
-
-                        if(used == texture_used || used == all_used)
-                            triangle_ptr->texVertex[i] = texvertex_ptrs[tex_id[i]];
-                        else if(automatical_texturing == true && ObjectMaterial != NULL)
-                        {
-                            if(auto_texv_loaded == false)
-                            {
-                                auto_texv_loaded = true;
-
-                                for(j = 0; j < 4; j++)
-                                    autotexvertex_ptrs[j] = new vertex2D;
-
-                                autotexvertex_ptrs[0]->x = 0;
-                                autotexvertex_ptrs[0]->y = 1;
-                                autotexvertex_ptrs[1]->x = 0;
-                                autotexvertex_ptrs[1]->y = 0;
-                                autotexvertex_ptrs[2]->x = 1;
-                                autotexvertex_ptrs[2]->y = 0;
-                                autotexvertex_ptrs[3]->x = 1;
-                                autotexvertex_ptrs[3]->y = 1;
-                            }
-
-                            triangle_ptr->texVertex[i] = autotexvertex_ptrs[i];
-                        }
-
-                        if(used == normals_used || used == all_used)
-                            triangle_ptr->normVertex[i] = normvertex_ptrs[norm_id[i]];
-
-                    }
-
-                    triangle_ptr->smoothingGroup = actualSmoothingGroup;
+                    if(used == normals_used || used == all_used)
+                        polygone_ptr->setNormVector(i, normvertex_ptrs[norm_id[i]]);
                 }
 
                 continue;
@@ -604,7 +561,7 @@ vertex3D *Object::addObjectVertex(vertex3D *new_vertex)
     return new_vertex;
 }
 
-vertex3D *Object::addNormalVertex(vertex3D *new_norm_vertex)
+vector *Object::addNormalVertex(vector *new_norm_vertex)
 {
     normvertices->ListPushFront(new_norm_vertex);
     return new_norm_vertex;
@@ -616,14 +573,9 @@ vertex2D *Object::addTextureVertex(vertex2D *new_tex_vertex)
     return new_tex_vertex;
 }
 
-void Object::addTriangle(struct triangle *new_triangle)
+void Object::addPolygone(Polygone *newPolygone)
 {
-    triangles->ListPushFront(new_triangle);
-}
-
-void Object::addSquare(struct square *new_square)
-{
-    squares->ListPushFront(new_square);
+    polygones->ListPushFront(newPolygone);
 }
 
 void Object::loadMaterial(const char *file)

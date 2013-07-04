@@ -121,13 +121,9 @@ void Scene::render()
                         glTranslatef(currentObject->position.x,currentObject->position.y,currentObject->position.z);
                         glScalef(currentObject->scale.x,currentObject->scale.y,currentObject->scale.z);
 
-                        //Render Triangles
-                        if(!currentObject->triangles->ListIsEmpty())
-                            renderTriangles(currentObject);
-
-                        //Render Quads
-                        if(!currentObject->squares->ListIsEmpty())
-                            renderQuads(currentObject);
+                        //Render Polyganes
+                        if(!currentObject->polygones->ListIsEmpty())
+                            renderPolygones(currentObject);
 
 
                     glPopMatrix();
@@ -208,57 +204,31 @@ int Scene::handleCams(void)
 }
 
 
-void Scene::renderQuads(Object *currentObject)
+void Scene::renderPolygones(Object *currentObject)
 {
-    glBegin( GL_QUADS );
 
-            currentObject->squares->ListSetFirst();
+        currentObject->polygones->ListSetFirst();
 
-            while(!currentObject->squares->ListIsLast())
-            {
-                struct square *currentSquare = (struct square *)currentObject->squares->ListGetCurrent();
+        while(!currentObject->polygones->ListIsLast())
+        {
+            Polygone *currentPolygone = (Polygone *)currentObject->polygones->ListGetCurrent();
 
-                for(int i=0;i<4;i++)
+            glBegin( GL_POLYGON );
+
+                for(int i=0;i < currentPolygone->getVertexAmount();i++)
                 {
-                    if(currentObject->ObjectMaterial && currentObject->ObjectMaterial->textureGL)
-                            glTexCoord2f( currentSquare->texVertex[i]->x, currentSquare->texVertex[i]->y );
+                    if(currentObject->ObjectMaterial && currentObject->ObjectMaterial->textureGL && currentPolygone->getTexVertex(i) != NULL)
+                            glTexCoord2f( currentPolygone->getTexVertex(i)->x, currentPolygone->getTexVertex(i)->y );
 
-                    glVertex3f( currentSquare->objVertex[i]->x, currentSquare->objVertex[i]->y, currentSquare->objVertex[i]->z);
+                    if(currentPolygone->getObjVertex(i) != NULL)
+                        glVertex3f( currentPolygone->getObjVertex(i)->x, currentPolygone->getObjVertex(i)->y, currentPolygone->getObjVertex(i)->z);
                 }
 
-                currentObject->squares->ListNext();
-            }
+            glEnd();
 
-    glEnd();
+            currentObject->polygones->ListNext();
+        }
 }
-
-void Scene::renderTriangles(Object *currentObject)
-{
-    glBegin( GL_TRIANGLES );
-
-            currentObject->triangles->ListSetFirst();
-
-            while(!currentObject->triangles->ListIsLast())
-            {
-
-                struct triangle *currentTriangle = (struct triangle *)currentObject->triangles->ListGetCurrent();
-
-
-                for(int i=0;i<3;i++)
-                {
-                    if(currentObject->ObjectMaterial && currentObject->ObjectMaterial->textureGL)
-                        glTexCoord2f( currentTriangle->texVertex[i]->x, currentTriangle->texVertex[i]->y );
-
-                    glVertex3f( currentTriangle->objVertex[i]->x, currentTriangle->objVertex[i]->y, currentTriangle->objVertex[i]->z);
-
-                }
-
-                currentObject->triangles->ListNext();
-            }
-
-    glEnd();
-}
-
 
 void Scene::calculateFPS(void)
 {

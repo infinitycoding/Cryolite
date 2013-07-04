@@ -9,32 +9,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <types.h>
 #include <material.h>
 #include <List.h>
 #include <vector.h>
+#include <polygone.h>
 
 
 
 enum usedVertices
 {
     nothing_used, texture_used, normals_used, all_used
-};
-
-struct triangle
-{
-    vertex3D *objVertex[3];
-    vertex3D *normVertex[3];
-    vertex2D *texVertex[3];
-    unsigned int smoothingGroup;
-};
-
-struct square
-{
-    vertex3D *objVertex[4];
-    vertex3D *normVertex[4];
-    vertex2D *texVertex[4];
-    unsigned int smoothingGroup;
 };
 
 struct numofvertices
@@ -83,16 +67,17 @@ class Object
 {
     public:
 
-        Object(const char *objname);
-        Object(const char *filename, const char *objname);
+        Object();                                                                  // zero-constructor. for self-created objects.
+        Object(const char *filename, const char *objname);                      // template-constructor. for templates.
+        Object(const char *filename, const char *objname, vector pos);          // direct-constrocter. for unique objects.
+        //Object(Object *obj, const char *objname, vector pos, bool copy);         // copy-constructor. to create an object out of an template.
         ~Object();
 
 
         vertex3D *addObjectVertex(vertex3D *new_vertex);
-        vertex3D *addNormalVertex(vertex3D *new_norm_vertex);
+        vector *addNormalVertex(vector *new_norm_vertex);
         vertex2D *addTextureVertex(vertex2D *new_tex_vertex);
-        void addTriangle(struct triangle *new_triangle);
-        void addSquare(struct square *new_square);
+        void addPolygone(Polygone *newPolygone);
 
         void loadMaterial(const char *file);
         void loadObjectFile(const char *objectFile, const char *objectName);
@@ -124,10 +109,9 @@ class Object
         int Tms; //Time Motion Start
 
         List<vertex3D> *vertices;
-        List<vertex3D> *normvertices;
+        List<vector> *normvertices;
         List<vertex2D> *texvertices;
-        List<struct triangle> *triangles;
-        List<struct square> *squares;
+        List<Polygone> *polygones;
 
         // Bounds
         List<struct boundBox> *boundBoxes;

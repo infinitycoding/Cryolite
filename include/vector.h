@@ -3,7 +3,7 @@
 
 
 #include <GL/gl.h>
-#include <types.h>
+#include <vertex.h>
 #include <iostream>
 #include <ostream>
 #include <List.h>

@@ -30,8 +30,7 @@ class Scene
     private:
         void calculateFPS(void);
 
-        void renderQuads(Object *currentObject);
-        void renderTriangles(Object *currentObject);
+        void renderPolygones(Object *currentObject);
         void handleMotions(Object *currentObject);
         void handleRotations(Object *currentObject);
         int currenttick;

@@ -7,7 +7,6 @@
     #include <GL/glu.h>
 
     #include <general_def.h>
-    #include <types.h>
     #include <object.h>
     #include <scene.h>
 

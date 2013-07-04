@@ -9,26 +9,18 @@ Object *iccube;
 
 void INIT_Models(Scene *sce)
 {
-    Font *generalFonts = new Font();
-    generalFonts->loadTTF((char *)FONT(arial.ttf), (char *)"StdArial", 45);
-
-    Material *IC = new Material();
-    IC->textureGL = generalFonts->atotex((char *)"Peter was here!", (char *)"StdArial");
-
+    Material *IC = new Material(IMAGE(textur.bmp));
     MAN = new Material(IMAGE(man.png));
 
     createObjectCube(IC, sce);
 
-    Object *ground = new Object(OBJECT(ground.obj), "ground");
-    ground->position.setvalue(0, -3, 0);
+    Object *ground = new Object(OBJECT(ground.obj), "ground", vector(0, -3, 0));
     sce->addObject(ground);
 
-    Object *woodcube = new Object(OBJECT(bettercube.obj), "Cube");
-    woodcube->position.setvalue(5, 0, 0);
+    Object *woodcube = new Object(OBJECT(bettercube.obj), "Cube", vector(5, 0, 0));
     sce->addObject(woodcube);
 
-    Object *gravelcube = new Object(OBJECT(cube.obj), "cube.001");
-    gravelcube->position.setvalue(-5, 0, 0);
+    Object *gravelcube = new Object(OBJECT(cube.obj), "cube.001", vector(-5, 0, 0));
     sce->addObject(gravelcube);
 }
 
@@ -38,9 +30,9 @@ void createObjectCube(Material *mat, Scene *sce)
 {
     vertex3D *vertex = new vertex3D[8];
     vertex2D *texvertex = new vertex2D[4];
-    struct square *square = new struct square[6];
+    Polygone *square = new Polygone[6];
 
-    iccube = new Object("iccube");
+    iccube = new Object();
 
 
     texvertex[0].x = 1.0f;
@@ -89,59 +81,59 @@ void createObjectCube(Material *mat, Scene *sce)
     vertex[7].z = -1;
 
 
-    square[0].objVertex[0] = &vertex[0];
-    square[0].objVertex[1] = &vertex[1];
-    square[0].objVertex[2] = &vertex[2];
-    square[0].objVertex[3] = &vertex[3];
-    square[0].texVertex[0] = &texvertex[0];
-    square[0].texVertex[1] = &texvertex[1];
-    square[0].texVertex[2] = &texvertex[2];
-    square[0].texVertex[3] = &texvertex[3];
+    square[0].setObjVertex(0, &vertex[0]);
+    square[0].setObjVertex(1, &vertex[1]);
+    square[0].setObjVertex(2, &vertex[2]);
+    square[0].setObjVertex(3, &vertex[3]);
+    square[0].setTexVertex(0, &texvertex[0]);
+    square[0].setTexVertex(1, &texvertex[1]);
+    square[0].setTexVertex(2, &texvertex[2]);
+    square[0].setTexVertex(3, &texvertex[3]);
 
-    square[1].objVertex[0] = &vertex[4];
-    square[1].objVertex[1] = &vertex[5];
-    square[1].objVertex[2] = &vertex[6];
-    square[1].objVertex[3] = &vertex[7];
-    square[1].texVertex[0] = &texvertex[0];
-    square[1].texVertex[1] = &texvertex[1];
-    square[1].texVertex[2] = &texvertex[2];
-    square[1].texVertex[3] = &texvertex[3];
+    square[1].setObjVertex(0, &vertex[4]);
+    square[1].setObjVertex(1, &vertex[5]);
+    square[1].setObjVertex(2, &vertex[6]);
+    square[1].setObjVertex(3, &vertex[7]);
+    square[1].setTexVertex(0, &texvertex[0]);
+    square[1].setTexVertex(1, &texvertex[1]);
+    square[1].setTexVertex(2, &texvertex[2]);
+    square[1].setTexVertex(3, &texvertex[3]);
 
-    square[2].objVertex[0] = &vertex[4];
-    square[2].objVertex[1] = &vertex[0];
-    square[2].objVertex[2] = &vertex[3];
-    square[2].objVertex[3] = &vertex[5];
-    square[2].texVertex[0] = &texvertex[0];
-    square[2].texVertex[1] = &texvertex[1];
-    square[2].texVertex[2] = &texvertex[2];
-    square[2].texVertex[3] = &texvertex[3];
+    square[2].setObjVertex(0, &vertex[4]);
+    square[2].setObjVertex(1, &vertex[0]);
+    square[2].setObjVertex(2, &vertex[3]);
+    square[2].setObjVertex(3, &vertex[5]);
+    square[2].setTexVertex(0, &texvertex[0]);
+    square[2].setTexVertex(1, &texvertex[1]);
+    square[2].setTexVertex(2, &texvertex[2]);
+    square[2].setTexVertex(3, &texvertex[3]);
 
-    square[3].objVertex[0] = &vertex[5];
-    square[3].objVertex[1] = &vertex[3];
-    square[3].objVertex[2] = &vertex[2];
-    square[3].objVertex[3] = &vertex[6];
-    square[3].texVertex[0] = &texvertex[0];
-    square[3].texVertex[1] = &texvertex[1];
-    square[3].texVertex[2] = &texvertex[2];
-    square[3].texVertex[3] = &texvertex[3];
+    square[3].setObjVertex(0, &vertex[5]);
+    square[3].setObjVertex(1, &vertex[3]);
+    square[3].setObjVertex(2, &vertex[2]);
+    square[3].setObjVertex(3, &vertex[6]);
+    square[3].setTexVertex(0, &texvertex[0]);
+    square[3].setTexVertex(1, &texvertex[1]);
+    square[3].setTexVertex(2, &texvertex[2]);
+    square[3].setTexVertex(3, &texvertex[3]);
 
-    square[4].objVertex[0] = &vertex[6];
-    square[4].objVertex[1] = &vertex[2];
-    square[4].objVertex[2] = &vertex[1];
-    square[4].objVertex[3] = &vertex[7];
-    square[4].texVertex[0] = &texvertex[0];
-    square[4].texVertex[1] = &texvertex[1];
-    square[4].texVertex[2] = &texvertex[2];
-    square[4].texVertex[3] = &texvertex[3];
+    square[4].setObjVertex(0, &vertex[6]);
+    square[4].setObjVertex(1, &vertex[2]);
+    square[4].setObjVertex(2, &vertex[1]);
+    square[4].setObjVertex(3, &vertex[7]);
+    square[4].setTexVertex(0, &texvertex[0]);
+    square[4].setTexVertex(1, &texvertex[1]);
+    square[4].setTexVertex(2, &texvertex[2]);
+    square[4].setTexVertex(3, &texvertex[3]);
 
-    square[5].objVertex[0] = &vertex[0];
-    square[5].objVertex[1] = &vertex[4];
-    square[5].objVertex[2] = &vertex[7];
-    square[5].objVertex[3] = &vertex[1];
-    square[5].texVertex[0] = &texvertex[0];
-    square[5].texVertex[1] = &texvertex[1];
-    square[5].texVertex[2] = &texvertex[2];
-    square[5].texVertex[3] = &texvertex[3];
+    square[5].setObjVertex(0, &vertex[0]);
+    square[5].setObjVertex(1, &vertex[4]);
+    square[5].setObjVertex(2, &vertex[7]);
+    square[5].setObjVertex(3, &vertex[1]);
+    square[5].setTexVertex(0, &texvertex[0]);
+    square[5].setTexVertex(1, &texvertex[1]);
+    square[5].setTexVertex(2, &texvertex[2]);
+    square[5].setTexVertex(3, &texvertex[3]);
 
 
 
@@ -161,12 +153,12 @@ void createObjectCube(Material *mat, Scene *sce)
     iccube->addObjectVertex(&vertex[7]);
 
 
-    iccube->addSquare(&square[0]);
-    iccube->addSquare(&square[1]);
-    iccube->addSquare(&square[2]);
-    iccube->addSquare(&square[3]);
-    iccube->addSquare(&square[4]);
-    iccube->addSquare(&square[5]);
+    iccube->addPolygone(&square[0]);
+    iccube->addPolygone(&square[1]);
+    iccube->addPolygone(&square[2]);
+    iccube->addPolygone(&square[3]);
+    iccube->addPolygone(&square[4]);
+    iccube->addPolygone(&square[5]);
 
 
     iccube->ObjectMaterial = mat;

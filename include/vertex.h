@@ -1,5 +1,9 @@
-#ifndef TYPES_H
-#define TYPES_H
+#ifndef VERTEX_H_INCLUDED
+#define VERTEX_H_INCLUDED
+
+
+
+#include <GL/gl.h>
 
 
 typedef struct{
@@ -13,5 +17,5 @@ typedef struct{
     GLfloat z;
 }vertex3D;
 
-#endif
 
+#endif

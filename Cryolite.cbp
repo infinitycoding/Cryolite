@@ -46,6 +46,7 @@
 		<Unit filename="include/material.h" />
 		<Unit filename="include/models.h" />
 		<Unit filename="include/object.h" />
+		<Unit filename="include/polygone.h" />
 		<Unit filename="include/profiler.h">
 			<Option target="Debug" />
 		</Unit>
@@ -53,8 +54,8 @@
 		<Unit filename="include/sdl.h" />
 		<Unit filename="include/settings.h" />
 		<Unit filename="include/sound.h" />
-		<Unit filename="include/types.h" />
 		<Unit filename="include/vector.h" />
+		<Unit filename="include/vertex.h" />
 		<Unit filename="settings" />
 		<Unit filename="src/optimize/profiler.cpp">
 			<Option target="Debug" />
@@ -68,11 +69,13 @@
 		<Unit filename="src/render/material.cpp" />
 		<Unit filename="src/render/models.cpp" />
 		<Unit filename="src/render/object.cpp" />
+		<Unit filename="src/render/polygone.cpp" />
 		<Unit filename="src/render/scene.cpp" />
 		<Unit filename="src/render/sdl.cpp" />
 		<Unit filename="src/render/settings.cpp" />
 		<Unit filename="src/render/sound.cpp" />
 		<Unit filename="src/render/vector.cpp" />
+		<Unit filename="src/render/vertex.cpp" />
 		<Extensions>
 			<envvars />
 			<code_completion />

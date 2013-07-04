@@ -5,7 +5,6 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-#include <types.h>
 #include <List.h>
 
 struct eventHandler
