@@ -16,7 +16,7 @@ Camera::Camera()
 
     nearClip = STANDART_NEARCLIP;
     farClip = STANDART_FARCLIP;
-    fov = FOV;
+    fov = gameSettings->fov;
 
     x = 0;
     y = 0;

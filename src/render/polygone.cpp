@@ -7,8 +7,8 @@ Polygone::Polygone()
     vertexAmount = 4;   // i want to know the vertex amout late
 
     normVector = new vector*[4];    // create the normal vector pointers
-    objVertex = new vertex3D*[4];   // create the object vertex pointers
-    texVertex = new vertex2D*[4];   // create the texture vertex pointers
+    objVertex = new Vertex3D*[4];   // create the object vertex pointers
+    texVertex = new Vertex2D*[4];   // create the texture vertex pointers
 
     for(int i = 0; i < 4; i++)      // initialize the pointers (so you can see if it it valid or not)
     {
@@ -29,8 +29,8 @@ Polygone::Polygone(int numOfVertices)
         vertexAmount = numOfVertices;   // i want to know the vertex amout late
 
         normVector = new vector*[numOfVertices];    // create the normal vector pointers
-        objVertex = new vertex3D*[numOfVertices];   // create the object vertex pointers
-        texVertex = new vertex2D*[numOfVertices];   // create the texture vertex pointers
+        objVertex = new Vertex3D*[numOfVertices];   // create the object vertex pointers
+        texVertex = new Vertex2D*[numOfVertices];   // create the texture vertex pointers
 
         for(int i = 0; i < numOfVertices; i++)      // initialize the pointers (so you can see if it it valid or not)
         {
@@ -76,7 +76,7 @@ void Polygone::setNormVector(int number, vector *value)
 
 // the set-method of object vertex.
 
-void Polygone::setObjVertex(int number, vertex3D *value)
+void Polygone::setObjVertex(int number, Vertex3D *value)
 {
     objVertex[number] = value;
 }
@@ -84,7 +84,7 @@ void Polygone::setObjVertex(int number, vertex3D *value)
 
 // the set-method of texture vertex.
 
-void Polygone::setTexVertex(int number, vertex2D *value)
+void Polygone::setTexVertex(int number, Vertex2D *value)
 {
     texVertex[number] = value;
 }
@@ -100,7 +100,7 @@ vector *Polygone::getNormVector(int number)
 
 // the get-method of object vertex.
 
-vertex3D *Polygone::getObjVertex(int number)
+Vertex3D *Polygone::getObjVertex(int number)
 {
     return objVertex[number];
 }
@@ -108,7 +108,7 @@ vertex3D *Polygone::getObjVertex(int number)
 
 // the get-method of texture vertex.
 
-vertex2D *Polygone::getTexVertex(int number)
+Vertex2D *Polygone::getTexVertex(int number)
 {
     return texVertex[number];
 }

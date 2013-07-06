@@ -28,57 +28,26 @@ void INIT_Models(Scene *sce)
 
 void createObjectCube(Material *mat, Scene *sce)
 {
-    vertex3D *vertex = new vertex3D[8];
-    vertex2D *texvertex = new vertex2D[4];
+    Vertex3D *vertex = new Vertex3D[8];
+    Vertex2D *texvertex = new Vertex2D[4];
     Polygone *square = new Polygone[6];
 
     iccube = new Object();
 
 
-    texvertex[0].x = 1.0f;
-    texvertex[0].y = 0.0f;
+    texvertex[0].set(1.0, 0.0);
+    texvertex[1].set(0.0, 0.0);
+    texvertex[2].set(0.0, 1.0);
+    texvertex[3].set(1.0, 1.0);
 
-    texvertex[1].x = 0.0f;
-    texvertex[1].y = 0.0f;
-
-    texvertex[2].x = 0.0f;
-    texvertex[2].y = 1.0f;
-
-    texvertex[3].x = 1.0f;
-    texvertex[3].y = 1.0f;
-
-
-    vertex[0].x = 1;
-    vertex[0].y = 1;
-    vertex[0].z = 1;
-
-    vertex[1].x = -1;
-    vertex[1].y = 1;
-    vertex[1].z = 1;
-
-    vertex[2].x = -1;
-    vertex[2].y = -1;
-    vertex[2].z = 1;
-
-    vertex[3].x = 1;
-    vertex[3].y = -1;
-    vertex[3].z = 1;
-
-    vertex[4].x = 1;
-    vertex[4].y = 1;
-    vertex[4].z = -1;
-
-    vertex[5].x = 1;
-    vertex[5].y = -1;
-    vertex[5].z = -1;
-
-    vertex[6].x = -1;
-    vertex[6].y = -1;
-    vertex[6].z = -1;
-
-    vertex[7].x = -1;
-    vertex[7].y = 1;
-    vertex[7].z = -1;
+    vertex[0].set(1, 1, 1);
+    vertex[1].set(-1, 1, 1);
+    vertex[2].set(-1, -1, 1);
+    vertex[3].set(1, -1, 1);
+    vertex[4].set(1, 1, -1);
+    vertex[5].set(1, -1, -1);
+    vertex[6].set(-1, -1, -1);
+    vertex[7].set(-1, 1, -1);
 
 
     square[0].setObjVertex(0, &vertex[0]);

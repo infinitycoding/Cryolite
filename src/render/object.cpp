@@ -1,7 +1,7 @@
-#include <string.h>
-#include <iostream>
-
 #include <object.h>
+
+
+using namespace std;
 
 
 Object::Object()
@@ -13,7 +13,7 @@ Object::Object(const char *filename, const char *objname)
 {
     initObject();
 
-    strncpy(objectname, objname, 20);
+    objectname = objname;
 
     loadObjectFile(filename, objname);
 }
@@ -22,70 +22,41 @@ Object::Object(const char *filename, const char *objname, vector pos)
 {
     initObject();
 
-    strncpy(objectname, objname, 20);
+    objectname = objname;
 
     loadObjectFile(filename, objname);
 
     position.setvalue(pos);
 }
 
-/*Object::Object(Object *obj, const char *objname, vector pos, bool copy)
-{
-    strncpy(objectname, objname, 20);
-
-    if(copy)
-    {
-        vertices = new List<vertex3D>(obj->vertices);
-        normvertices = new List<vector>(obj->normvertices);
-        texvertices = new List<vertex2D>(obj->texvertices);
-        polygones = new List<Polygone>(obj->polygones);
-
-        boundBoxes = new List<struct boundBox>(obj->boundBoxes);
-        boundSpheres = new List<struct boundSphere>(obj->boundSpheres);
-        boundPlanes = new List<struct boundPlane>(obj->boundPlanes);
-        boundCylinders = new List<struct boundCylinder>(obj->boundCylinders);
-        boundTriangles = new List<struct boundTriangel>(obj->boundTriangles);
-    }
-    else
-    {
-        vertices = obj->vertices;
-        normvertices = obj->normvertices;
-        texvertices = obj->texvertices;
-        polygones = obj->polygones;
-
-        boundBoxes = obj->boundBoxes;
-        boundSpheres = obj->boundSpheres;
-        boundPlanes = obj->boundPlanes;
-        boundCylinders = obj->boundCylinders;
-        boundTriangles = obj->boundTriangles;
-    }
-
-    scale = obj->scale;
-
-    ObjectMaterial = obj->ObjectMaterial;
-
-    isPhysicalActor = obj->isPhysicalActor;
-    automatical_texturing = obj->automatical_texturing;
-
-    position.setvalue(pos);
-}*/
-
 Object::~Object()
 {
     delete vertices;
-    delete normvertices;
+    delete normvectors;
     delete texvertices;
 
     delete polygones;
+
+    delete boundBoxes;
+    delete boundSpheres;
+    delete boundPlanes;
+    delete boundCylinders;
+    delete boundTriangles;
 }
 
 void Object::initObject()
 {
-    vertices = new List<vertex3D>;
-    normvertices = new List<vector>;
-    texvertices = new List<vertex2D>;
+    vertices = new List<Vertex3D>;
+    normvectors = new List<vector>;
+    texvertices = new List<Vertex2D>;
 
     polygones = new List<Polygone>;
+
+    boundBoxes = new List<struct boundBox>;
+    boundSpheres = new List<struct boundSphere>;
+    boundPlanes = new List<struct boundPlane>;
+    boundCylinders = new List<struct boundCylinder>;
+    boundTriangles = new List<struct boundTriangel>;
 
 
     scale = vector(1, 1, 1);
@@ -114,19 +85,17 @@ void Object::initObject()
     Tms = 0; //Time Motion Start
 
     isPhysicalActor = false;
-    automatical_texturing = true;
 
     ObjectMaterial = NULL;
 }
 
-usedVertices Object::vertices_in_polygone(char *line)
+usedVertices Object::verticesInPolygone(char *line)
 {
-    usedVertices used = nothing_used;
+    usedVertices used = nothingUsed;
     bool firstSlash = true;
     bool resultFound = false;
-    int i;
 
-    for(i = 2; line[i] != '\n' && line[i] != '\0' && line[i] != ' ' && resultFound == false; i++)
+    for(int i = 2; line[i] != '\n' && line[i] != '\0' && line[i] != ' ' && resultFound == false; i++)
     {
         if(line[i] == '/')
         {
@@ -136,16 +105,16 @@ usedVertices Object::vertices_in_polygone(char *line)
 
                 if(line[++i] == '/')
                 {
-                    used = normals_used;
+                    used = normalsUsed;
 
                     resultFound = true;
                 }
                 else
-                    used = texture_used;
+                    used = textureUsed;
             }
             else
             {
-                used = all_used;
+                used = allUsed;
 
                 resultFound = true;
             }
@@ -155,14 +124,14 @@ usedVertices Object::vertices_in_polygone(char *line)
     return used;
 }
 
-struct numofvertices Object::countVertices(const char *filename, const char *objectname)
+struct vertexNumber Object::countVertices(const char *filename, const char *objectname)
 {
     FILE *f;
     int i, j;
     char line[50];
     char string[50];
-    bool correct_object = false;
-    struct numofvertices vertexCounter = {0, 0, 0};
+    bool correctObject = false;
+    struct vertexNumber vertexCounter = {0, 0, 0};
 
     f = fopen(filename, "r");
 
@@ -182,24 +151,24 @@ struct numofvertices Object::countVertices(const char *filename, const char *obj
             string[j] = '\0';
 
             if(!strncmp(string, objectname, strlen(string)))
-                correct_object = true;
+                correctObject = true;
             else
                 break;
         }
         else if(line[0] == 'v' && line[1] == ' ')
         {
-            if(correct_object == true)
+            if(correctObject == true)
                 vertexCounter.objectVertices++;
         }
         else if(line[0] == 'v' && line[1]== 't')
         {
-            if(correct_object == true)
+            if(correctObject == true)
                 vertexCounter.textureVertices++;
         }
         else if(line[0] == 'v' && line[1] == 'n')
         {
-            if(correct_object == true)
-                vertexCounter.normalVertices++;
+            if(correctObject == true)
+                vertexCounter.normalVectors++;
         }
         else
             continue;
@@ -222,29 +191,29 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
     int vertexNumber = 0;
 
-    bool correct_object = false;
+    bool correctObject = false;
     bool auto_texv_loaded = false;
 
-    usedVertices used = nothing_used;
+    usedVertices used = nothingUsed;
 
-    struct numofvertices otherVertices = {0, 0, 0};
-    struct numofvertices myVertices = {0, 0, 0};
-    struct numofvertices allObjectVertices = countVertices(objectFile, objectName);
+    struct vertexNumber otherVertices = {0, 0, 0};
+    struct vertexNumber myVertices = {0, 0, 0};
+    struct vertexNumber allObjectVertices = countVertices(objectFile, objectName);
 
-    vertex2D *texvertex_ptr = NULL;
-    vertex2D *autotexvertex_ptrs[4];
-    vertex3D *objvertex_ptr = NULL;
-    vector *normvertex_ptr = NULL;
+    Vertex2D *texvertex_ptr = NULL;
+    Vertex2D *autotexvertex_ptrs[4];
+    Vertex3D *objvertex_ptr = NULL;
+    vector *normvector_ptr = NULL;
 
-    vertex2D *texvertex_ptrs[allObjectVertices.textureVertices];
-    vertex3D *objvertex_ptrs[allObjectVertices.objectVertices];
-    vector *normvertex_ptrs[allObjectVertices.normalVertices];
+    Vertex2D *texvertex_ptrs[allObjectVertices.textureVertices];
+    Vertex3D *objvertex_ptrs[allObjectVertices.objectVertices];
+    vector *normvector_ptrs[allObjectVertices.normalVectors];
 
     Polygone *polygone_ptr = NULL;
 
     if(allObjectVertices.objectVertices == 0)
     {
-        fprintf(stderr, "error: object %s does not exist or has no vertices.\n", objectFile);
+        cerr << "error: object " << objectName << " in file " << objectFile << " does not exist or has no vertices." << endl;
         return;
     }
 
@@ -252,25 +221,13 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
     if(f == NULL)
     {
-        printf("the file %s could not be opened.\n", objectFile);
-        exit(-1);
+        cerr << "error: the file " << objectFile << " could not be opened." << endl;
+        return;
     }
 
     do
     {
         fgets(line, 40, f);
-
-        if(line[0] == '#')
-            continue;
-
-        if(line[0] == 'g')
-        {
-            printf("warning: polygone groups aren't supported yet by cryolite engine.\n");
-            continue;
-        }
-
-        if(!strncmp(line, "usemtl", 6))
-            continue;
 
         if(!strncmp(line, "mtllib", 6))
         {
@@ -284,10 +241,6 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
             continue;
         }
 
-
-        if(line[0] == '\n')
-            continue;
-
         if(line[0] == 'o')
         {
             for(i = 2, j = 0; line[i] != '\n'; i++, j++)
@@ -296,7 +249,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
             string[j] = '\0';
 
             if(!strncmp(string, objectName, strlen(string)))
-                correct_object = true;
+                correctObject = true;
             else
                 break;
 
@@ -305,37 +258,30 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
         if(line[0] == 'v' && line[1] == 't')
         {
-            if(correct_object == false)
+            if(correctObject == false)
                 otherVertices.textureVertices++;
             else
             {
 
-                texvertex_ptr = new vertex2D;
+                texvertex_ptr = new Vertex2D;
 
                 for(i = 3, j = 0; line[i] != ' ' && line[i] != '\0' && line[i] != '\n'; i++, j++)
                     string[j] = line[i];
 
-                if(line[i] == '\0' || line[i] == '\n')
-                {
-                    printf("error: File is corrupted. programm will be ended.\n");
-                    exit(-1);
-                }
+                string[++j] = '\0';
 
-                string[j+1] = '\0';
-
-                texvertex_ptr->x = atof(string);
+                texvertex_ptr->setX(atof(string));
 
                 for(i++, j = 0; line[i] != '\n' && line[i] != '\0'; i++, j++)
                     string[j] = line[i];
 
-                string[j+1] = '\0';
+                string[++j] = '\0';
 
-                texvertex_ptr->y = atof(string);
+                texvertex_ptr->setY(atof(string));
 
                 this->addTextureVertex(texvertex_ptr);
 
-                texvertex_ptrs[myVertices.textureVertices] = texvertex_ptr;
-                myVertices.textureVertices++;
+                texvertex_ptrs[myVertices.textureVertices++] = texvertex_ptr;
             }
 
             continue;
@@ -343,50 +289,37 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
         if(line[0] == 'v' && line[1] == ' ')
         {
-            if(correct_object == false)
+            if(correctObject == false)
                 otherVertices.objectVertices++;
             else
             {
 
-                objvertex_ptr = new vertex3D;
+                objvertex_ptr = new Vertex3D;
 
                 for(i = 2, j = 0; line[i] != ' ' && line[i] != '\0' && line[i] != '\n'; i++, j++)
                     string[j] = line[i];
 
-                if(line[i] == '\0' || line[i] == '\n')
-                {
-                    printf("error: File is corrupted. programm will be ended.\n");
-                    exit(-1);
-                }
+                string[++j] = '\0';
 
-                string[j+1] = '\0';
-
-                objvertex_ptr->x = atof(string);
+                objvertex_ptr->setX(atof(string));
 
                 for(i++, j = 0; line[i] != ' ' && line[i] != '\0' && line[i] != '\n'; i++, j++)
                     string[j] = line[i];
 
-                if(line[i] == '\0' || line[i] == '\n')
-                {
-                    printf("error: File is corrupted. programm will be ended.\n");
-                    exit(-1);
-                }
+                string[++j] = '\0';
 
-                string[j+1] = '\0';
-
-                objvertex_ptr->y = atof(string);
+                objvertex_ptr->setY(atof(string));
 
                 for(i++, j = 0; line[i] != '\n' && line[i] != '\0'; i++, j++)
                     string[j] = line[i];
 
-                string[j+1] = '\0';
+                string[++j] = '\0';
 
-                objvertex_ptr->z = atof(string);
+                objvertex_ptr->setZ(atof(string));
 
                 this->addObjectVertex(objvertex_ptr);
 
-                objvertex_ptrs[myVertices.objectVertices] = objvertex_ptr;
-                myVertices.objectVertices++;
+                objvertex_ptrs[myVertices.objectVertices++] = objvertex_ptr;
             }
 
 	    continue;
@@ -394,50 +327,37 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
 	if(line[0] == 'v' && line[1] == 'n')
         {
-            if(correct_object == false)
-                otherVertices.normalVertices++;
+            if(correctObject == false)
+                otherVertices.normalVectors++;
             else
             {
 
-                normvertex_ptr = new vector;
+                normvector_ptr = new vector();
 
                 for(i = 3, j = 0; line[i] != ' ' && line[i] != '\0' && line[i] != '\n'; i++, j++)
                     string[j] = line[i];
 
-                if(line[i] == '\0' || line[i] == '\n')
-                {
-                    printf("error: File is corrupted. programm will be ended.\n");
-                    exit(-1);
-                }
+                string[++j] = '\0';
 
-                string[j+1] = '\0';
-
-                normvertex_ptr->x = atof(string);
+                normvector_ptr->x = atof(string);
 
                 for(i++, j = 0; line[i] != ' ' && line[i] != '\0' && line[i] != '\n'; i++, j++)
                     string[j] = line[i];
 
-                if(line[i] == '\0' || line[i] == '\n')
-                {
-                    printf("error: File is corrupted. programm will be ended.\n");
-                    exit(-1);
-                }
+                string[++j] = '\0';
 
-                string[j+1] = '\0';
-
-                normvertex_ptr->y = atof(string);
+                normvector_ptr->y = atof(string);
 
                 for(i++, j = 0; line[i] != '\n' && line[i] != '\0'; i++, j++)
                     string[j] = line[i];
 
-                string[j+1] = '\0';
+                string[++j] = '\0';
 
-                normvertex_ptr->z = atof(string);
+                normvector_ptr->z = atof(string);
 
-                this->addNormalVertex(normvertex_ptr);
+                this->addNormalVector(normvector_ptr);
 
-                normvertex_ptrs[myVertices.normalVertices] = normvertex_ptr;
-                myVertices.normalVertices++;
+                normvector_ptrs[myVertices.normalVectors++] = normvector_ptr;
             }
 
             continue;
@@ -445,7 +365,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
         if(line[0] == 'f')
         {
-            if(correct_object == false)
+            if(correctObject == false)
                 continue;
             else
             {
@@ -453,7 +373,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                     if(line[i] == ' ')
                         vertexNumber++;
 
-                used = vertices_in_polygone(line);
+                used = verticesInPolygone(line);
 
                 polygone_ptr = new Polygone(vertexNumber);
 
@@ -474,7 +394,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                     vert_id[h] = atoi(string);
                     vert_id[h] -= otherVertices.objectVertices+1;
 
-                    if(used == texture_used || used == all_used)
+                    if(used == textureUsed || used == allUsed)
                     {
 
                         for(i++, j = 0; line[i] != ' ' && line[i] != '\n'; i++, j++)
@@ -490,10 +410,10 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
                     }
 
-                    if(used == normals_used)
+                    if(used == normalsUsed)
                         i++;
 
-                    if(used == normals_used || used == all_used)
+                    if(used == normalsUsed || used == allUsed)
                     {
                         for(i++, j = 0; line[i] != ' ' && line[i] != '\n'; i++, j++)
                         {
@@ -504,7 +424,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                         string[j+1] = '\0';
 
                         norm_id[h] = atoi(string);
-                        norm_id[h] -= otherVertices.normalVertices+1;
+                        norm_id[h] -= otherVertices.normalVectors+1;
                     }
 
                 }
@@ -514,75 +434,69 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
                     polygone_ptr->setObjVertex(i, objvertex_ptrs[vert_id[i]]);
 
-                    if(used == texture_used || used == all_used)
+                    if(used == textureUsed || used == allUsed)
                         polygone_ptr->setTexVertex(i, texvertex_ptrs[tex_id[i]]);
-                    else if(automatical_texturing == true && ObjectMaterial != NULL)
+                    else if(ObjectMaterial != NULL)
                     {
                         if(auto_texv_loaded == false)
                         {
                             auto_texv_loaded = true;
 
                             for(j = 0; j < 4; j++)
-                                autotexvertex_ptrs[j] = new vertex2D;
+                                autotexvertex_ptrs[j] = new Vertex2D;
 
-                            autotexvertex_ptrs[0]->x = 0;
-                            autotexvertex_ptrs[0]->y = 1;
-                            autotexvertex_ptrs[1]->x = 0;
-                            autotexvertex_ptrs[1]->y = 0;
-                            autotexvertex_ptrs[2]->x = 1;
-                            autotexvertex_ptrs[2]->y = 0;
-                            autotexvertex_ptrs[3]->x = 1;
-                            autotexvertex_ptrs[3]->y = 1;
+                            autotexvertex_ptrs[0]->set(0, 1);
+                            autotexvertex_ptrs[1]->set(0, 0);
+                            autotexvertex_ptrs[2]->set(1, 0);
+                            autotexvertex_ptrs[3]->set(1, 1);
                         }
 
                         polygone_ptr->setTexVertex(i, autotexvertex_ptrs[i%5]);
                     }
 
-                    if(used == normals_used || used == all_used)
-                        polygone_ptr->setNormVector(i, normvertex_ptrs[norm_id[i]]);
+                    if(used == normalsUsed || used == allUsed)
+                        polygone_ptr->setNormVector(i, normvector_ptrs[norm_id[i]]);
                 }
 
                 continue;
-
-                printf("this should never be displayed.\n");
             }
         }
     }while(!feof(f));
 
-    printf("file %s successfully loaded.\n", objectFile);
+    cout << "object " << objectName << " in file " << objectFile << " successfully loaded." << endl;
 
     fclose(f);
 
 }
 
-vertex3D *Object::addObjectVertex(vertex3D *new_vertex)
+Vertex3D *Object::addObjectVertex(Vertex3D *newVertex)
 {
-    vertices->ListPushFront(new_vertex);
-    return new_vertex;
+    vertices->ListPushFront(newVertex);
+    return newVertex;
 }
 
-vector *Object::addNormalVertex(vector *new_norm_vertex)
+vector *Object::addNormalVector(vector *newNormVector)
 {
-    normvertices->ListPushFront(new_norm_vertex);
-    return new_norm_vertex;
+    normvectors->ListPushFront(newNormVector);
+    return newNormVector;
 }
 
-vertex2D *Object::addTextureVertex(vertex2D *new_tex_vertex)
+Vertex2D *Object::addTextureVertex(Vertex2D *newTexVertex)
 {
-    texvertices->ListPushFront(new_tex_vertex);
-    return new_tex_vertex;
+    texvertices->ListPushFront(newTexVertex);
+    return newTexVertex;
 }
 
-void Object::addPolygone(Polygone *newPolygone)
+Polygone *Object::addPolygone(Polygone *newPolygone)
 {
     polygones->ListPushFront(newPolygone);
+    return newPolygone;
 }
 
 void Object::loadMaterial(const char *file)
 {
     ObjectMaterial = new Material(file);
 }
-
 
 void Object::moveObject(float a ,vector D, float v)
 {
@@ -607,9 +521,6 @@ void Object::moveObject(float a ,vector D, float v)
 
     // generate Direction Vector
     this->Dm = unify(this->Dm+D);
-
-
-    printf("V0m: %f Am: %f\n",this->V0m,this->Am);
 
     // save current time
     this->Tms = currentTime;

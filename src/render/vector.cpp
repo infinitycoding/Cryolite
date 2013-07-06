@@ -12,42 +12,42 @@ vector::vector()
     this->lenmod = false;
 }
 
-vector::vector(vertex2D vx)
+vector::vector(Vertex2D vx)
 {
 
-    this->x = vx.x;
-    this->y = vx.y;
+    this->x = vx.getX();
+    this->y = vx.getY();
     this->z = 0;
     this->cachlen = 0;
     this->lenmod = true;
 }
 
-vector::vector(vertex2D *vx)
+vector::vector(Vertex2D *vx)
 {
 
-    this->x = vx->x;
-    this->y = vx->y;
+    this->x = vx->getX();
+    this->y = vx->getY();
     this->z = 0;
     this->cachlen = 0;
     this->lenmod = true;
 }
 
-vector::vector(vertex3D vx)
+vector::vector(Vertex3D vx)
 {
 
-    this->x = vx.x;
-    this->y = vx.y;
-    this->z = vx.z;
+    this->x = vx.getX();
+    this->y = vx.getY();
+    this->z = vx.getZ();
     this->cachlen = 0;
     this->lenmod = true;
 }
 
-vector::vector(vertex3D *vx)
+vector::vector(Vertex3D *vx)
 {
 
-    this->x = vx->x;
-    this->y = vx->y;
-    this->z = vx->z;
+    this->x = vx->getX();
+    this->y = vx->getY();
+    this->z = vx->getZ();
     this->cachlen = 0;
     this->lenmod = true;
 }
@@ -164,33 +164,33 @@ int vector::print()
     return printf("X:%f Y:%f Z:%f\n",this->x,this->y,this->z);
 }
 
-void vector::setvalue(vertex2D vx)
+void vector::setvalue(Vertex2D vx)
 {
-    this->x = vx.x;
-    this->y = vx.y;
+    this->x = vx.getX();
+    this->y = vx.getY();
     this->lenmod = true;
 }
 
-void vector::setvalue(vertex2D *vx)
+void vector::setvalue(Vertex2D *vx)
 {
-    this->x = vx->x;
-    this->y = vx->y;
+    this->x = vx->getX();
+    this->y = vx->getY();
     this->lenmod = true;
 }
 
-void vector::setvalue(vertex3D vx)
+void vector::setvalue(Vertex3D vx)
 {
-    this->x = vx.x;
-    this->y = vx.y;
-    this->z = vx.z;
+    this->x = vx.getX();
+    this->y = vx.getY();
+    this->z = vx.getZ();
     this->lenmod = true;
 }
 
-void vector::setvalue(vertex3D *vx)
+void vector::setvalue(Vertex3D *vx)
 {
-    this->x = vx->x;
-    this->y = vx->y;
-    this->z = vx->z;
+    this->x = vx->getX();
+    this->y = vx->getY();
+    this->z = vx->getZ();
     this->lenmod = true;
 }
 
@@ -312,103 +312,103 @@ vector *vector::unifycp()
     return new vector(this);
 }
 
-void vector::add(vertex2D vx)
+void vector::add(Vertex2D vx)
 {
-    this->x += vx.x;
-    this->y += vx.y;
+    this->x += vx.getX();
+    this->y += vx.getY();
     this->lenmod = true;
 }
-void vector::add(vertex2D *vx)
+void vector::add(Vertex2D *vx)
 {
-    this->x += vx->x;
-    this->y += vx->y;
+    this->x += vx->getX();
+    this->y += vx->getY();
     this->lenmod = true;
 }
-void vector::add(vertex3D vx)
+void vector::add(Vertex3D vx)
 {
-    this->x += vx.x;
-    this->y += vx.y;
-    this->z += vx.z;
+    this->x += vx.getX();
+    this->y += vx.getY();
+    this->z += vx.getZ();
     this->lenmod = true;
 }
-void vector::add(vertex3D *vx)
+void vector::add(Vertex3D *vx)
 {
-    this->x += vx->x;
-    this->y += vx->y;
-    this->z += vx->z;
+    this->x += vx->getX();
+    this->y += vx->getY();
+    this->z += vx->getZ();
     this->lenmod = true;
 }
 
-void vector::add(vector  v0, vertex2D vx){ this->add(vx,v0); }
+void vector::add(vector  v0, Vertex2D vx){ this->add(vx,v0); }
 
-void vector::add(vertex2D vx,  vector  v0)
+void vector::add(Vertex2D vx,  vector  v0)
 {
-    this->x = vx.x + v0.x;
-    this->y = vx.y + v0.y;
+    this->x = vx.getX() + v0.x;
+    this->y = vx.getY() + v0.y;
     this->z = v0.z;
 }
 
-void vector::add(vector  v0, vertex2D *vx){ this->add(vx,v0); }
+void vector::add(vector  v0, Vertex2D *vx){ this->add(vx,v0); }
 
-void vector::add(vertex2D *vx,  vector  v0)
+void vector::add(Vertex2D *vx,  vector  v0)
 {
-    this->x = vx->x + v0.x;
-    this->y = vx->y + v0.y;
+    this->x = vx->getX() + v0.x;
+    this->y = vx->getY() + v0.y;
     this->z = v0.z;
 }
 
-void vector::add(vector  v0, vertex3D vx){ this->add(vx,v0); }
+void vector::add(vector  v0, Vertex3D vx){ this->add(vx,v0); }
 
-void vector::add(vertex3D vx,  vector  v0)
+void vector::add(Vertex3D vx,  vector  v0)
 {
-    this->x = vx.x + v0.x;
-    this->y = vx.y + v0.y;
-    this->z = vx.z + v0.z;
+    this->x = vx.getX() + v0.x;
+    this->y = vx.getY() + v0.y;
+    this->z = vx.getZ() + v0.z;
 }
 
-void vector::add(vector  v0, vertex3D *vx){ this->add(vx,v0); }
+void vector::add(vector  v0, Vertex3D *vx){ this->add(vx,v0); }
 
-void vector::add(vertex3D *vx,  vector  v0)
+void vector::add(Vertex3D *vx,  vector  v0)
 {
-    this->x = vx->x + v0.x;
-    this->y = vx->y + v0.y;
-    this->z = vx->z + v0.z;
+    this->x = vx->getX() + v0.x;
+    this->y = vx->getY() + v0.y;
+    this->z = vx->getZ() + v0.z;
 }
 
-void vector::add(vector  *v0, vertex2D vx){ this->add(vx,v0); }
+void vector::add(vector  *v0, Vertex2D vx){ this->add(vx,v0); }
 
-void vector::add(vertex2D vx,  vector  *v0)
+void vector::add(Vertex2D vx,  vector  *v0)
 {
-    this->x = vx.x + v0->x;
-    this->y = vx.y + v0->y;
+    this->x = vx.getX() + v0->x;
+    this->y = vx.getY() + v0->y;
     this->z = v0->z;
 }
 
-void vector::add(vector  *v0, vertex2D *vx){ this->add(vx,v0); }
+void vector::add(vector  *v0, Vertex2D *vx){ this->add(vx,v0); }
 
-void vector::add(vertex2D *vx,  vector  *v0)
+void vector::add(Vertex2D *vx,  vector  *v0)
 {
-    this->x = vx->x + v0->x;
-    this->y = vx->y + v0->y;
+    this->x = vx->getX() + v0->x;
+    this->y = vx->getY() + v0->y;
     this->z = v0->z;
 }
 
-void vector::add(vector  *v0, vertex3D vx){ this->add(vx,v0); }
+void vector::add(vector  *v0, Vertex3D vx){ this->add(vx,v0); }
 
-void vector::add(vertex3D vx,  vector  *v0)
+void vector::add(Vertex3D vx,  vector  *v0)
 {
-    this->x = vx.x + v0->x;
-    this->y = vx.y + v0->y;
-    this->z = vx.z + v0->z;
+    this->x = vx.getX() + v0->x;
+    this->y = vx.getY() + v0->y;
+    this->z = vx.getZ() + v0->z;
 }
 
-void vector::add(vector  *v0, vertex3D *vx){ this->add(vx,v0); }
+void vector::add(vector  *v0, Vertex3D *vx){ this->add(vx,v0); }
 
-void vector::add(vertex3D *vx,  vector  *v0)
+void vector::add(Vertex3D *vx,  vector  *v0)
 {
-    this->x = vx->x + v0->x;
-    this->y = vx->y + v0->y;
-    this->z = vx->z + v0->z;
+    this->x = vx->getX() + v0->x;
+    this->y = vx->getY() + v0->y;
+    this->z = vx->getZ() + v0->z;
 }
 
 

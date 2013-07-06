@@ -46,7 +46,7 @@ int Scene::removeObject(char *name)
     while(!this->objectList->ListIsLast())
     {
         Object *currentObject = (Object *)this->objectList->ListGetCurrent();
-        if(!strncmp(currentObject->objectname,name,20))
+        if(currentObject->objectname != name)
         {
             this->objectList->ListRemove();
             delObj++;
@@ -218,10 +218,10 @@ void Scene::renderPolygones(Object *currentObject)
                 for(int i=0;i < currentPolygone->getVertexAmount();i++)
                 {
                     if(currentObject->ObjectMaterial && currentObject->ObjectMaterial->textureGL && currentPolygone->getTexVertex(i) != NULL)
-                            glTexCoord2f( currentPolygone->getTexVertex(i)->x, currentPolygone->getTexVertex(i)->y );
+                            glTexCoord2f( currentPolygone->getTexVertex(i)->getX(), currentPolygone->getTexVertex(i)->getY() );
 
                     if(currentPolygone->getObjVertex(i) != NULL)
-                        glVertex3f( currentPolygone->getObjVertex(i)->x, currentPolygone->getObjVertex(i)->y, currentPolygone->getObjVertex(i)->z);
+                        glVertex3f( currentPolygone->getObjVertex(i)->getX(), currentPolygone->getObjVertex(i)->getY(), currentPolygone->getObjVertex(i)->getZ());
                 }
 
             glEnd();

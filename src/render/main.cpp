@@ -82,9 +82,6 @@ int main(int argc, char *argv[]){
         printf("could not load music!!!\n");
     Mix_PlayMusic( music, -1 );
 
-    cout<<vector(1.0,2.0,3.0)<<endl;
-
-
     float lastFPS = 0;
     mainScene->lasttick = SDL_GetTicks();
 

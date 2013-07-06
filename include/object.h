@@ -2,35 +2,37 @@
 #define OBJECT_H
 
 
-#include <SDL.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include <SDL.h>        // SDL-Header
+#include <GL/gl.h>      // OpenGL-Header
+#include <GL/glu.h>     // OpenGL-utility-header
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>       // c++ standart library headers
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
 
-#include <material.h>
+#include <material.h>   // own headers
 #include <List.h>
 #include <vector.h>
 #include <polygone.h>
 
 
 
-enum usedVertices
+enum usedVertices       // enumberation which says if a vertex has a texture coordinate and/or a normal vector too
 {
-    nothing_used, texture_used, normals_used, all_used
+    nothingUsed = 0, textureUsed = 1, normalsUsed = 2, allUsed = 3
 };
 
-struct numofvertices
+struct vertexNumber     // a struct which shows the number of object vertices, texture vertices and normal vectors in an object
 {
     int objectVertices;
     int textureVertices;
-    int normalVertices;
+    int normalVectors;
 };
 
-struct boundBox
+struct boundBox         // many structs are following here, all defining bound objects
 {
-    vertex3D base;
+    Vertex3D base;
     vector height;
     vector widht;
     vector length;
@@ -38,27 +40,27 @@ struct boundBox
 
 struct boundSphere
 {
-    vertex3D center;
+    Vertex3D center;
     GLfloat radian;
 };
 
 struct boundPlane
 {
-    vertex3D base;
+    Vertex3D base;
     vector widht;
     vector length;
 };
 
 struct boundTriangel
 {
-    vertex3D vert0;
-    vertex3D vert1;
-    vertex3D vert2;
+    Vertex3D vert0;
+    Vertex3D vert1;
+    Vertex3D vert2;
 };
 
 struct boundCylinder
 {
-    vertex3D center;
+    Vertex3D center;
     GLfloat radian;
     GLfloat height;
 };
@@ -70,25 +72,28 @@ class Object
         Object();                                                                  // zero-constructor. for self-created objects.
         Object(const char *filename, const char *objname);                      // template-constructor. for templates.
         Object(const char *filename, const char *objname, vector pos);          // direct-constrocter. for unique objects.
-        //Object(Object *obj, const char *objname, vector pos, bool copy);         // copy-constructor. to create an object out of an template.
         ~Object();
 
+        void initObject();
 
-        vertex3D *addObjectVertex(vertex3D *new_vertex);
-        vector *addNormalVertex(vector *new_norm_vertex);
-        vertex2D *addTextureVertex(vertex2D *new_tex_vertex);
-        void addPolygone(Polygone *newPolygone);
+
+        Vertex3D *addObjectVertex(Vertex3D *newVertex);         // functions to add new members to the lists
+        vector *addNormalVector(vector *newNormVector);
+        Vertex2D *addTextureVertex(Vertex2D *newTexVertex);
+        Polygone *addPolygone(Polygone *newPolygone);
 
         void loadMaterial(const char *file);
         void loadObjectFile(const char *objectFile, const char *objectName);
+
+        struct vertexNumber countVertices(const char *filename, const char *objectname);
+        usedVertices verticesInPolygone(char *line);
 
         void moveObject(float a, vector D,float v = 0);
         void rotateObject(float angle,float v,float a,vector rotationAxis);
 
 
 
-
-        char objectname[20];
+        string objectname;
 
         vector scale;
         vector position;
@@ -108,9 +113,9 @@ class Object
         float Am; // Acceleration Motion
         int Tms; //Time Motion Start
 
-        List<vertex3D> *vertices;
-        List<vector> *normvertices;
-        List<vertex2D> *texvertices;
+        List<Vertex3D> *vertices;
+        List<vector> *normvectors;
+        List<Vertex2D> *texvertices;
         List<Polygone> *polygones;
 
         // Bounds
@@ -123,13 +128,6 @@ class Object
         Material *ObjectMaterial;
 
         bool isPhysicalActor;
-        bool automatical_texturing;
-
-    private:
-
-        void initObject();
-        struct numofvertices countVertices(const char *filename, const char *objectname);
-        usedVertices vertices_in_polygone(char *line);
 };
 
 
