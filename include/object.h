@@ -14,7 +14,7 @@
 #include <material.h>   // own headers
 #include <List.h>
 #include <vector.h>
-#include <polygone.h>
+#include <polygon.h>
 
 
 
@@ -80,13 +80,13 @@ class Object
         Vertex3D *addObjectVertex(Vertex3D *newVertex);         // functions to add new members to the lists
         vector *addNormalVector(vector *newNormVector);
         Vertex2D *addTextureVertex(Vertex2D *newTexVertex);
-        Polygone *addPolygone(Polygone *newPolygone);
+        Polygon *addPolygon(Polygon *newPolygon);
 
         void loadMaterial(const char *file);
         void loadObjectFile(const char *objectFile, const char *objectName);
 
         struct vertexNumber countVertices(const char *filename, const char *objectname);
-        usedVertices verticesInPolygone(char *line);
+        usedVertices verticesInPolygon(char *line);
 
         void moveObject(float a, vector D,float v = 0);
         void rotateObject(float angle,float v,float a,vector rotationAxis);
@@ -116,7 +116,7 @@ class Object
         List<Vertex3D> *vertices;
         List<vector> *normvectors;
         List<Vertex2D> *texvertices;
-        List<Polygone> *polygones;
+        List<Polygon> *polygones;
 
         // Bounds
         List<struct boundBox> *boundBoxes;

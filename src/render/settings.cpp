@@ -81,6 +81,24 @@ bool Settings::loadSettingsFile(const char *filename)
 }
 
 
+void Settings::activateSettings()
+{
+    glLineWidth(lineWidth);
+    glPointSize(pointSize);
+
+    if(captureMouse)
+    {
+        SDL_ShowCursor(SDL_DISABLE);
+        SDL_WM_GrabInput( SDL_GRAB_ON );
+    }
+    else
+    {
+        SDL_ShowCursor(SDL_ENABLE);
+        SDL_WM_GrabInput( SDL_GRAB_OFF );
+    }
+}
+
+
 void Settings::initSettings()
 {
     captureMouse = true;

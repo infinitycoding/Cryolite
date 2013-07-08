@@ -30,7 +30,7 @@ void createObjectCube(Material *mat, Scene *sce)
 {
     Vertex3D *vertex = new Vertex3D[8];
     Vertex2D *texvertex = new Vertex2D[4];
-    Polygone *square = new Polygone[6];
+    Polygon *square = new Polygon[6];
 
     iccube = new Object();
 
@@ -122,12 +122,12 @@ void createObjectCube(Material *mat, Scene *sce)
     iccube->addObjectVertex(&vertex[7]);
 
 
-    iccube->addPolygone(&square[0]);
-    iccube->addPolygone(&square[1]);
-    iccube->addPolygone(&square[2]);
-    iccube->addPolygone(&square[3]);
-    iccube->addPolygone(&square[4]);
-    iccube->addPolygone(&square[5]);
+    iccube->addPolygon(&square[0]);
+    iccube->addPolygon(&square[1]);
+    iccube->addPolygon(&square[2]);
+    iccube->addPolygon(&square[3]);
+    iccube->addPolygon(&square[4]);
+    iccube->addPolygon(&square[5]);
 
 
     iccube->ObjectMaterial = mat;

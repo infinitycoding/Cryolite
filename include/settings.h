@@ -3,6 +3,7 @@
 
 
 
+#include <GL/gl.h>
 #include <SDL.h>
 
 #include <iostream>
@@ -23,9 +24,10 @@ class Settings
     public:
         Settings();
         Settings(const char *filename);
-        ~Settings();
+        virtual ~Settings();
 
         bool loadSettingsFile(const char *filename);
+        void activateSettings();
 
 
         bool captureMouse;

@@ -1,8 +1,8 @@
-#include <polygone.h>
+#include <polygon.h>
 
 
 
-Polygone::Polygone()
+Polygon::Polygon()
 {
     vertexAmount = 4;   // i want to know the vertex amout late
 
@@ -20,11 +20,11 @@ Polygone::Polygone()
 
 
 // The standart constructor.
-// Just say how big the polygone should be.
+// Just say how big the polygon should be.
 
-Polygone::Polygone(int numOfVertices)
+Polygon::Polygon(int numOfVertices)
 {
-    if(numOfVertices >= 3)      // have you ever seen a polygone with less than three vertices?
+    if(numOfVertices >= 3)      // have you ever seen a polygon with less than three vertices?
     {
         vertexAmount = numOfVertices;   // i want to know the vertex amout late
 
@@ -41,7 +41,7 @@ Polygone::Polygone(int numOfVertices)
     }
     else
     {
-        cerr << "Error: Tryed to create a polygone with " << numOfVertices << " vertices." << endl;
+        cerr << "Error: Tryed to create a polygon with " << numOfVertices << " vertices." << endl;
         exit(-1);
     }
 }
@@ -50,7 +50,7 @@ Polygone::Polygone(int numOfVertices)
 // The destructor.
 // Deletes the vertex and vector pointers.
 
-Polygone::~Polygone()
+Polygon::~Polygon()
 {
     delete[] normVector;
     delete[] objVertex;
@@ -60,7 +60,7 @@ Polygone::~Polygone()
 
 // The get-method of vertex amount.
 
-int Polygone::getVertexAmount()
+int Polygon::getVertexAmount()
 {
     return vertexAmount;
 }
@@ -68,7 +68,7 @@ int Polygone::getVertexAmount()
 
 // the set-method of normal vector.
 
-void Polygone::setNormVector(int number, vector *value)
+void Polygon::setNormVector(int number, vector *value)
 {
     normVector[number] = value;
 }
@@ -76,7 +76,7 @@ void Polygone::setNormVector(int number, vector *value)
 
 // the set-method of object vertex.
 
-void Polygone::setObjVertex(int number, Vertex3D *value)
+void Polygon::setObjVertex(int number, Vertex3D *value)
 {
     objVertex[number] = value;
 }
@@ -84,7 +84,7 @@ void Polygone::setObjVertex(int number, Vertex3D *value)
 
 // the set-method of texture vertex.
 
-void Polygone::setTexVertex(int number, Vertex2D *value)
+void Polygon::setTexVertex(int number, Vertex2D *value)
 {
     texVertex[number] = value;
 }
@@ -92,7 +92,7 @@ void Polygone::setTexVertex(int number, Vertex2D *value)
 
 // the get-method of normal vector.
 
-vector *Polygone::getNormVector(int number)
+vector *Polygon::getNormVector(int number)
 {
     return normVector[number];
 }
@@ -100,7 +100,7 @@ vector *Polygone::getNormVector(int number)
 
 // the get-method of object vertex.
 
-Vertex3D *Polygone::getObjVertex(int number)
+Vertex3D *Polygon::getObjVertex(int number)
 {
     return objVertex[number];
 }
@@ -108,7 +108,7 @@ Vertex3D *Polygone::getObjVertex(int number)
 
 // the get-method of texture vertex.
 
-Vertex2D *Polygone::getTexVertex(int number)
+Vertex2D *Polygon::getTexVertex(int number)
 {
     return texVertex[number];
 }

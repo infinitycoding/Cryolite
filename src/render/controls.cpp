@@ -49,12 +49,6 @@ Controls::Controls(SDL* window)
         window->addEvent(SDL_KEYDOWN,toggle_printFPS);
         window->addEvent(SDL_KEYDOWN,moveCube);
         window->addEvent(SDL_KEYDOWN,rotateCube);
-
-        if(gameSettings->captureMouse)
-        {
-            SDL_ShowCursor(SDL_DISABLE);
-            SDL_WM_GrabInput( SDL_GRAB_ON );
-        }
     }
 }
 

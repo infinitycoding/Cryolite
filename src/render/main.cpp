@@ -68,8 +68,8 @@ int main(int argc, char *argv[]){
     glEnable( GL_TEXTURE_2D );
     glEnable(GL_MULTISAMPLE_ARB);
     glEnable(GL_COLOR_MATERIAL);
-    glLineWidth(gameSettings->lineWidth);
-    glPointSize(gameSettings->pointSize);
+
+    gameSettings->activateSettings();
 
     // Skysphere
     GLUquadric *q =gluNewQuadric();

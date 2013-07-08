@@ -50,7 +50,7 @@ void Object::initObject()
     normvectors = new List<vector>;
     texvertices = new List<Vertex2D>;
 
-    polygones = new List<Polygone>;
+    polygones = new List<Polygon>;
 
     boundBoxes = new List<struct boundBox>;
     boundSpheres = new List<struct boundSphere>;
@@ -89,7 +89,7 @@ void Object::initObject()
     ObjectMaterial = NULL;
 }
 
-usedVertices Object::verticesInPolygone(char *line)
+usedVertices Object::verticesInPolygon(char *line)
 {
     usedVertices used = nothingUsed;
     bool firstSlash = true;
@@ -209,7 +209,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
     Vertex3D *objvertex_ptrs[allObjectVertices.objectVertices];
     vector *normvector_ptrs[allObjectVertices.normalVectors];
 
-    Polygone *polygone_ptr = NULL;
+    Polygon *polygon_ptr = NULL;
 
     if(allObjectVertices.objectVertices == 0)
     {
@@ -320,6 +320,11 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                 this->addObjectVertex(objvertex_ptr);
 
                 objvertex_ptrs[myVertices.objectVertices++] = objvertex_ptr;
+
+                if(!strncmp("Polygon",  objectName, 8))
+                {
+                    cout << *objvertex_ptr << endl;
+                }
             }
 
 	    continue;
@@ -373,11 +378,11 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                     if(line[i] == ' ')
                         vertexNumber++;
 
-                used = verticesInPolygone(line);
+                used = verticesInPolygon(line);
 
-                polygone_ptr = new Polygone(vertexNumber);
+                polygon_ptr = new Polygon(vertexNumber);
 
-                addPolygone(polygone_ptr);
+                addPolygon(polygon_ptr);
 
                 i = 1;
 
@@ -432,10 +437,10 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                 for(i = 0; i < vertexNumber; i++)
                 {
 
-                    polygone_ptr->setObjVertex(i, objvertex_ptrs[vert_id[i]]);
+                    polygon_ptr->setObjVertex(i, objvertex_ptrs[vert_id[i]]);
 
                     if(used == textureUsed || used == allUsed)
-                        polygone_ptr->setTexVertex(i, texvertex_ptrs[tex_id[i]]);
+                        polygon_ptr->setTexVertex(i, texvertex_ptrs[tex_id[i]]);
                     else if(ObjectMaterial != NULL)
                     {
                         if(auto_texv_loaded == false)
@@ -451,11 +456,11 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                             autotexvertex_ptrs[3]->set(1, 1);
                         }
 
-                        polygone_ptr->setTexVertex(i, autotexvertex_ptrs[i%5]);
+                        polygon_ptr->setTexVertex(i, autotexvertex_ptrs[i%5]);
                     }
 
                     if(used == normalsUsed || used == allUsed)
-                        polygone_ptr->setNormVector(i, normvector_ptrs[norm_id[i]]);
+                        polygon_ptr->setNormVector(i, normvector_ptrs[norm_id[i]]);
                 }
 
                 continue;
@@ -487,10 +492,10 @@ Vertex2D *Object::addTextureVertex(Vertex2D *newTexVertex)
     return newTexVertex;
 }
 
-Polygone *Object::addPolygone(Polygone *newPolygone)
+Polygon *Object::addPolygon(Polygon *newPolygon)
 {
-    polygones->ListPushFront(newPolygone);
-    return newPolygone;
+    polygones->ListPushFront(newPolygon);
+    return newPolygon;
 }
 
 void Object::loadMaterial(const char *file)

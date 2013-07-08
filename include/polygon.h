@@ -1,14 +1,14 @@
-#ifndef POLYGONE_H_INCLUDED
-#define POLYGONE_H_INCLUDED
+#ifndef POLYGON_H_INCLUDED
+#define POLYGON_H_INCLUDED
 
 
 
 /********************************************
- * Polygone-Module                          *
+ * Polygon-Module                          *
  * ---------------                          *
  *                                          *
- * Contains the polygone-class:             *
- * Able to create infinite sized polygones  *
+ * Contains the polygon-class:             *
+ * Able to create infinite sized polygons  *
  *                                          *
  * created by Peter Hösch                   *
  ********************************************/
@@ -26,12 +26,12 @@ using namespace std;
 
 
 
-class Polygone
+class Polygon
 {
     public:
-        Polygone();                     // a backward compatibility constructor - don't use it
-        Polygone(int numOfVertices);    // the constructor
-        virtual ~Polygone();            // the destructor
+        Polygon();                     // a backward compatibility constructor - don't use it
+        Polygon(int numOfVertices);    // the constructor
+        virtual ~Polygon();            // the destructor
 
         int getVertexAmount();  // The get-method of vertex amount
 
@@ -45,8 +45,8 @@ class Polygone
 
 
     protected:
-        int vertexAmount;           // of how many vertices the polygone consists
-                                    // a polygone has...
+        int vertexAmount;           // of how many vertices the polygon consists
+                                    // a polygon has...
         vector   **normVector;      // ... normal vectors (to simulate light reflection)
         Vertex3D **objVertex;       // ... object vertices (makes sense, doesn't it?)
         Vertex2D **texVertex;       // ... texture vertices (to know which part of the texture should be put where)

@@ -211,17 +211,17 @@ void Scene::renderPolygones(Object *currentObject)
 
         while(!currentObject->polygones->ListIsLast())
         {
-            Polygone *currentPolygone = (Polygone *)currentObject->polygones->ListGetCurrent();
+            Polygon *currentPolygon = (Polygon *)currentObject->polygones->ListGetCurrent();
 
             glBegin( GL_POLYGON );
 
-                for(int i=0;i < currentPolygone->getVertexAmount();i++)
+                for(int i=0;i < currentPolygon->getVertexAmount();i++)
                 {
-                    if(currentObject->ObjectMaterial && currentObject->ObjectMaterial->textureGL && currentPolygone->getTexVertex(i) != NULL)
-                            glTexCoord2f( currentPolygone->getTexVertex(i)->getX(), currentPolygone->getTexVertex(i)->getY() );
+                    if(currentObject->ObjectMaterial && currentObject->ObjectMaterial->textureGL && currentPolygon->getTexVertex(i) != NULL)
+                            glTexCoord2f( currentPolygon->getTexVertex(i)->getX(), currentPolygon->getTexVertex(i)->getY() );
 
-                    if(currentPolygone->getObjVertex(i) != NULL)
-                        glVertex3f( currentPolygone->getObjVertex(i)->getX(), currentPolygone->getObjVertex(i)->getY(), currentPolygone->getObjVertex(i)->getZ());
+                    if(currentPolygon->getObjVertex(i) != NULL)
+                        glVertex3f( currentPolygon->getObjVertex(i)->getX(), currentPolygon->getObjVertex(i)->getY(), currentPolygon->getObjVertex(i)->getZ());
                 }
 
             glEnd();
