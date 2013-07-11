@@ -9,10 +9,10 @@ Object *iccube;
 
 void INIT_Models(Scene *sce)
 {
-    Material *IC = new Material(IMAGE(textur.bmp));
     MAN = new Material(IMAGE(man.png));
 
-    createObjectCube(IC, sce);
+    Object *iccube = new Object(OBJECT(iccube.obj), "iccube", vector(0, 0, 0));
+    sce->addObject(iccube);
 
     Object *ground = new Object(OBJECT(ground.obj), "ground", vector(0, -3, 0));
     sce->addObject(ground);
@@ -24,119 +24,7 @@ void INIT_Models(Scene *sce)
     sce->addObject(gravelcube);
 }
 
-// draw a cube with a texture
 
-void createObjectCube(Material *mat, Scene *sce)
-{
-    Vertex3D *vertex = new Vertex3D[8];
-    Vertex2D *texvertex = new Vertex2D[4];
-    Polygon *square = new Polygon[6];
-
-    iccube = new Object();
-
-
-    texvertex[0].set(1.0, 0.0);
-    texvertex[1].set(0.0, 0.0);
-    texvertex[2].set(0.0, 1.0);
-    texvertex[3].set(1.0, 1.0);
-
-    vertex[0].set(1, 1, 1);
-    vertex[1].set(-1, 1, 1);
-    vertex[2].set(-1, -1, 1);
-    vertex[3].set(1, -1, 1);
-    vertex[4].set(1, 1, -1);
-    vertex[5].set(1, -1, -1);
-    vertex[6].set(-1, -1, -1);
-    vertex[7].set(-1, 1, -1);
-
-
-    square[0].setObjVertex(0, &vertex[0]);
-    square[0].setObjVertex(1, &vertex[1]);
-    square[0].setObjVertex(2, &vertex[2]);
-    square[0].setObjVertex(3, &vertex[3]);
-    square[0].setTexVertex(0, &texvertex[0]);
-    square[0].setTexVertex(1, &texvertex[1]);
-    square[0].setTexVertex(2, &texvertex[2]);
-    square[0].setTexVertex(3, &texvertex[3]);
-
-    square[1].setObjVertex(0, &vertex[4]);
-    square[1].setObjVertex(1, &vertex[5]);
-    square[1].setObjVertex(2, &vertex[6]);
-    square[1].setObjVertex(3, &vertex[7]);
-    square[1].setTexVertex(0, &texvertex[0]);
-    square[1].setTexVertex(1, &texvertex[1]);
-    square[1].setTexVertex(2, &texvertex[2]);
-    square[1].setTexVertex(3, &texvertex[3]);
-
-    square[2].setObjVertex(0, &vertex[4]);
-    square[2].setObjVertex(1, &vertex[0]);
-    square[2].setObjVertex(2, &vertex[3]);
-    square[2].setObjVertex(3, &vertex[5]);
-    square[2].setTexVertex(0, &texvertex[0]);
-    square[2].setTexVertex(1, &texvertex[1]);
-    square[2].setTexVertex(2, &texvertex[2]);
-    square[2].setTexVertex(3, &texvertex[3]);
-
-    square[3].setObjVertex(0, &vertex[5]);
-    square[3].setObjVertex(1, &vertex[3]);
-    square[3].setObjVertex(2, &vertex[2]);
-    square[3].setObjVertex(3, &vertex[6]);
-    square[3].setTexVertex(0, &texvertex[0]);
-    square[3].setTexVertex(1, &texvertex[1]);
-    square[3].setTexVertex(2, &texvertex[2]);
-    square[3].setTexVertex(3, &texvertex[3]);
-
-    square[4].setObjVertex(0, &vertex[6]);
-    square[4].setObjVertex(1, &vertex[2]);
-    square[4].setObjVertex(2, &vertex[1]);
-    square[4].setObjVertex(3, &vertex[7]);
-    square[4].setTexVertex(0, &texvertex[0]);
-    square[4].setTexVertex(1, &texvertex[1]);
-    square[4].setTexVertex(2, &texvertex[2]);
-    square[4].setTexVertex(3, &texvertex[3]);
-
-    square[5].setObjVertex(0, &vertex[0]);
-    square[5].setObjVertex(1, &vertex[4]);
-    square[5].setObjVertex(2, &vertex[7]);
-    square[5].setObjVertex(3, &vertex[1]);
-    square[5].setTexVertex(0, &texvertex[0]);
-    square[5].setTexVertex(1, &texvertex[1]);
-    square[5].setTexVertex(2, &texvertex[2]);
-    square[5].setTexVertex(3, &texvertex[3]);
-
-
-
-    iccube->addTextureVertex(&texvertex[0]);
-    iccube->addTextureVertex(&texvertex[1]);
-    iccube->addTextureVertex(&texvertex[2]);
-    iccube->addTextureVertex(&texvertex[3]);
-
-
-    iccube->addObjectVertex(&vertex[0]);
-    iccube->addObjectVertex(&vertex[1]);
-    iccube->addObjectVertex(&vertex[2]);
-    iccube->addObjectVertex(&vertex[3]);
-    iccube->addObjectVertex(&vertex[4]);
-    iccube->addObjectVertex(&vertex[5]);
-    iccube->addObjectVertex(&vertex[6]);
-    iccube->addObjectVertex(&vertex[7]);
-
-
-    iccube->addPolygon(&square[0]);
-    iccube->addPolygon(&square[1]);
-    iccube->addPolygon(&square[2]);
-    iccube->addPolygon(&square[3]);
-    iccube->addPolygon(&square[4]);
-    iccube->addPolygon(&square[5]);
-
-
-    iccube->ObjectMaterial = mat;
-
-
-    sce->addObject(iccube);
-
-
-}
 
 extern Settings *gameSettings;
 

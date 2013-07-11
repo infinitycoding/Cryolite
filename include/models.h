@@ -19,7 +19,6 @@
 
 
     void drawHUD();
-    void createObjectCube(Material *mat, Scene *sce);
     void INIT_Models(Scene *sce);
 
 
