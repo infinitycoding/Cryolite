@@ -22,6 +22,7 @@
 #include <font.h>
 #include <light.h>
 #include <settings.h>
+#include <sound.h>
 
 #ifdef _WIN32
 #undef main
@@ -77,10 +78,9 @@ int main(int argc, char *argv[]){
     Material *sky = new Material(IMAGE(sky1.jpg));
 
     //Background Music
-    Mix_Music *music = Mix_LoadMUS(SOUND(moon.mp3));
-    if(music==NULL)
-        printf("could not load music!!!\n");
-    Mix_PlayMusic( music, -1 );
+    Music *bgMusic = new Music(SOUND(moon.mp3),-1);
+    bgMusic->toggle();
+
 
     float lastFPS = 0;
     mainScene->lasttick = SDL_GetTicks();
