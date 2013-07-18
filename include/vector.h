@@ -90,7 +90,7 @@ class vector
         void add(vector  *v0, Vertex2D *vx);
         void add(vector  *v0, Vertex3D vx );
         void add(vector  *v0, Vertex3D *vx);
-        //done until here
+
 
 
 
@@ -101,9 +101,11 @@ class vector
         void add(vector   *v, int args);
         void add(vector  **v, int args);
 
+         //not done
         vector add(List<Vertex3D> *vlist);
         vector add(List<Vertex2D> *vlist);
 
+        //done
         void addvc(int args,...);//vector pointer
         void addvx2(int args,...);//vertex pointer
         void addvx3(int args,...);//vertex pointer
@@ -152,6 +154,23 @@ class vector
         vector *scalec(float s, vector *v);
         vector *scalecp(float s);
 
+        void  cross(vector  v0, vector  v1);
+        void  cross(vector *v0, vector *v1);
+        void  cross(vector *v0, vector  v1);
+        void  cross(vector  v0, vector *v1);
+
+
+        vector  cross(vector   v);
+        vector *cross(vector  *v);
+        vector  crossc(vector  v);
+        vector *crossc(vector *v);
+
+        vector  crossc(vector  v0, vector  v1);
+        vector *crossc(vector *v0, vector *v1);
+        vector *crossc(vector *v0, vector  v1);
+        vector *crossc(vector  v0, vector *v1);
+
+
         bool lenmod;
         float cachlen;
 
@@ -172,6 +191,10 @@ class vector
     const vector operator - (vector const v0, vector const v1);
     const vector operator - (vector const *v0, vector const v1);
     const vector operator - (vector const v1, vector const *v0);
+
+    const vector operator ^ (vector const v0, vector const v1);
+    const vector operator ^ (vector const *v0, vector const v1);
+    const vector operator ^ (vector const v1, vector const *v0);
 
 
     const vector operator * (vector const v0, const float s);

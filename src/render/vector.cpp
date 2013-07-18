@@ -339,6 +339,38 @@ void vector::add(Vertex3D *vx)
     this->lenmod = true;
 }
 
+void vector::add(vector v)
+{
+    x += v.x;
+    y += v.y;
+    z += v.z;
+    this->lenmod = true;
+}
+
+void vector::add(vector *v)
+{
+    x += v->x;
+    y += v->y;
+    z += v->z;
+    this->lenmod = true;
+}
+
+void vector::add(vector v0, vector v1)
+{
+    x = v0.x+v1.x;
+    y = v0.y+v1.y;
+    z = v0.z+v1.z;
+    this->lenmod = true;
+}
+
+void vector::add(vector *v0, vector *v1)
+{
+    x = v0->x+v1->x;
+    y = v0->y+v1->y;
+    z = v0->z+v1->z;
+    this->lenmod = true;
+}
+
 void vector::add(vector  v0, Vertex2D vx){ this->add(vx,v0); }
 
 void vector::add(Vertex2D vx,  vector  v0)
@@ -412,35 +444,46 @@ void vector::add(Vertex3D *vx,  vector  *v0)
 }
 
 
-void vector::add(vector v)
+
+void vector::add(Vertex3D *vx, int args)
 {
-    x += v.x;
-    y += v.y;
-    z += v.z;
+    for(int i = 0; i < args; i++)
+    {
+        x += vx[i].getX();
+        y += vx[i].getY();
+        z += vx[i].getZ();
+    }
     this->lenmod = true;
 }
 
-void vector::add(vector *v)
+void vector::add(Vertex3D **vx, int args)
 {
-    x += v->x;
-    y += v->y;
-    z += v->z;
+    for(int i = 0; i < args; i++)
+    {
+        x += vx[i]->getX();
+        y += vx[i]->getY();
+        z += vx[i]->getZ();
+    }
     this->lenmod = true;
 }
 
-void vector::add(vector v0, vector v1)
+void vector::add(Vertex2D *vx, int args)
 {
-    x = v0.x+v1.x;
-    y = v0.y+v1.y;
-    z = v0.z+v1.z;
+    for(int i = 0; i < args; i++)
+    {
+        x += vx[i].getX();
+        y += vx[i].getY();
+    }
     this->lenmod = true;
 }
 
-void vector::add(vector *v0, vector *v1)
+void vector::add(Vertex2D **vx, int args)
 {
-    x = v0->x+v1->x;
-    y = v0->y+v1->y;
-    z = v0->z+v1->z;
+    for(int i = 0; i < args; i++)
+    {
+        x += vx[i]->getX();
+        y += vx[i]->getY();
+    }
     this->lenmod = true;
 }
 
@@ -477,6 +520,35 @@ void vector::addvc(int args, ...)
             x += temp->x;
             y += temp->y;
             z += temp->z;
+        }
+    va_end ( arguments );
+    this->lenmod = true;
+}
+
+void vector::addvx2(int args, ...)
+{
+    va_list arguments;
+    va_start ( arguments, args );
+        for(int i = 0; i < args; i++)
+        {
+            Vertex2D *temp = va_arg ( arguments, Vertex2D *);
+            x += temp->getX();
+            y += temp->getY();
+        }
+    va_end ( arguments );
+    this->lenmod = true;
+}
+
+void vector::addvx3(int args, ...)
+{
+    va_list arguments;
+    va_start ( arguments, args );
+        for(int i = 0; i < args; i++)
+        {
+            Vertex3D *temp = va_arg ( arguments, Vertex3D *);
+            x += temp->getX();
+            y += temp->getY();
+            z += temp->getZ();
         }
     va_end ( arguments );
     this->lenmod = true;
@@ -643,6 +715,80 @@ vector *vector::scalecp(float s)
     return new vector(this);
 }
 
+void vector::cross(vector v0, vector v1)
+{
+     x = (v0.y*v1.z)-(v0.z*v1.y);
+     y = (v0.z*v1.x)-(v0.x*v1.z);
+     z = (v0.x*v1.y)-(v0.y*v1.x);
+}
+
+void vector::cross(vector *v0, vector *v1)
+{
+     x = (v0->y*v1->z)-(v0->z*v1->y);
+     y = (v0->z*v1->x)-(v0->x*v1->z);
+     z = (v0->x*v1->y)-(v0->y*v1->x);
+}
+
+void vector::cross(vector *v0, vector v1)
+{
+     x = (v0->y*v1.z)-(v0->z*v1.y);
+     y = (v0->z*v1.x)-(v0->x*v1.z);
+     z = (v0->x*v1.y)-(v0->y*v1.x);
+}
+
+void vector::cross(vector v0, vector *v1)
+{
+     x = (v0.y*v1->z)-(v0.z*v1->y);
+     y = (v0.z*v1->x)-(v0.x*v1->z);
+     z = (v0.x*v1->y)-(v0.y*v1->x);
+}
+
+vector vector::cross(vector v)
+{
+    return vector(this).cross(v);
+}
+
+vector *vector::cross(vector *v)
+{
+    return (new vector(this))->cross(v);
+}
+
+vector vector::crossc(vector v)
+{
+    setvalue(vector(this).cross(v));
+    return vector(this);
+}
+
+vector *vector::crossc(vector *v)
+{
+    setvalue(vector(this).cross(v));
+    return new vector(this);
+}
+
+vector vector::crossc(vector v0, vector v1)
+{
+    this->cross(v0,v1);
+    return vector(this);
+}
+
+vector *vector::crossc(vector *v0, vector *v1)
+{
+    this->cross(v0,v1);
+    return new vector(this);
+}
+
+vector *vector::crossc(vector *v0, vector v1)
+{
+    this->cross(v0,v1);
+    return new vector(this);
+}
+
+vector *vector::crossc(vector v0, vector *v1)
+{
+    this->cross(v0,v1);
+    return new vector(this);
+}
+
 
 float len(vector v)
 {
@@ -713,6 +859,24 @@ const vector operator - (vector const v1, vector const *v0)
     vr.sub(v1);
     return vr;
 }
+
+
+
+const vector operator ^ (vector const v0, vector const v1)
+{
+    return ((vector)v0).cross(((vector)v1));
+}
+
+const vector operator ^ (vector const *v0, vector const v1)
+{
+    return ((vector *)v0)->cross(((vector)v1));
+}
+
+const vector operator ^ (vector const v1,vector const *v0)
+{
+    return ((vector *)v0)->cross(((vector)v1));
+}
+
 
 
 const vector operator * (vector const v0, const float s)
