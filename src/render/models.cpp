@@ -11,7 +11,7 @@ void INIT_Models(Scene *sce)
 {
     MAN = new Material(IMAGE(man.png));
 
-    Object *iccube = new Object(OBJECT(iccube.obj), "iccube", vector(0, 0, 0));
+    iccube = new Object(OBJECT(iccube.obj), "iccube", vector(0, 0, 0));
     sce->addObject(iccube);
 
     Object *ground = new Object(OBJECT(ground.obj), "ground", vector(0, -3, 0));
