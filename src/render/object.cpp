@@ -13,7 +13,7 @@ Object::Object(const char *filename, const char *objname)
 {
     initObject();
 
-    objectname = objname;
+    strncpy(objectname, objname, 20);
 
     loadObjectFile(filename, objname);
 }
@@ -22,7 +22,7 @@ Object::Object(const char *filename, const char *objname, vector pos)
 {
     initObject();
 
-    objectname = objname;
+    strncpy(objectname, objname, 20);
 
     loadObjectFile(filename, objname);
 
@@ -185,6 +185,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
     char line[50];
     char string[50];
+    char matfile[50];
 
     int h, i , j;
     int vert_id[4], tex_id[4], norm_id[4];
@@ -232,11 +233,21 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
         if(!strncmp(line, "mtllib", 6))
         {
             for(i = 7, j = 0; line[i] != '\n'; i++, j++)
+                matfile[j] = line[i];
+
+            matfile[j] = '\0';
+
+            continue;
+        }
+
+        if(!strncmp(line, "usemtl", 6))
+        {
+            for(i = 7, j = 0; line[i] != '\n'; i++, j++)
                 string[j] = line[i];
 
             string[j] = '\0';
 
-            loadMaterial(string);
+            loadMaterial(matfile, string);
 
             continue;
         }
@@ -498,9 +509,9 @@ Polygon *Object::addPolygon(Polygon *newPolygon)
     return newPolygon;
 }
 
-void Object::loadMaterial(const char *file)
+void Object::loadMaterial(const char *file, const char *matname)
 {
-    ObjectMaterial = new Material(file);
+    ObjectMaterial = new Material(file, matname);
 }
 
 void Object::moveObject(float a ,vector D, float v)

@@ -3,13 +3,13 @@
 #include <font.h>
 #include <settings.h>
 
-Material *MAN;
+GLuint MAN;
 Object *iccube;
 
 
 void INIT_Models(Scene *sce)
 {
-    MAN = new Material(IMAGE(man.png));
+    MAN = Material::loadTexture(IMAGE(man.png));
 
     iccube = new Object(OBJECT(iccube.obj), "iccube", vector(0, 0, 0));
     sce->addObject(iccube);
@@ -56,7 +56,7 @@ void drawHUD(void)
 
     glEnd();
 
-glBindTexture( GL_TEXTURE_2D, MAN->textureGL);
+glBindTexture( GL_TEXTURE_2D, MAN);
 glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,  GL_MODULATE);
 
 

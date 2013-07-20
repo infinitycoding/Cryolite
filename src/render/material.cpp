@@ -1,51 +1,179 @@
 #include <SDL_image.h>
 
 #include <material.h>
-#include <List.h>
 
 
-Material::Material(const char* textureFile)
-{
-    this->BMPtexture = NULL;
-    this->BMPbumpMap = NULL;
-    this->BMPlightMap = NULL;
-    this->textureGL = 0;
-    this->loadTexture2D(textureFile);
-}
+using namespace std;
+
 
 
 Material::Material()
 {
-    this->BMPtexture = NULL;
-    this->BMPbumpMap = NULL;
-    this->BMPlightMap = NULL;
-    this->textureGL = 0;
+    initMaterial();
 }
 
-Material::~Material(){
-    if(this->BMPtexture) SDL_FreeSurface(this->BMPtexture);
-    if(this->BMPbumpMap) SDL_FreeSurface(this->BMPbumpMap);
-    if(this->BMPlightMap) SDL_FreeSurface(this->BMPlightMap);
-}
 
-bool Material::loadTexture2D(const char* file)
+Material::Material(const char *filename, const char *matname)
 {
-    GLint nOfColors = 0;
-    GLenum texture_format = 0;
-    this->BMPtexture = IMG_Load(file);
+    initMaterial();
 
-    if(this->BMPtexture == 0)
+    loadMaterial(filename, matname);
+}
+
+
+Material::~Material()
+{
+
+}
+
+
+void Material::initMaterial()
+{
+    memset(name, '\0', sizeof(name));
+
+    memset(&ambiantMatColor, 0.0, sizeof(ambiantMatColor));
+    memset(&diffuseMatColor, 0.0, sizeof(diffuseMatColor));
+    memset(&specularMatColor, 0.0, sizeof(specularMatColor));
+    memset(&emissiveMatColor, 0.0, sizeof(emissiveMatColor));
+    memset(&transparancyMatColor, 0.0, sizeof(transparancyMatColor));
+
+    ambiantTexture = 0;
+    diffuseTexture = 0;
+    specularTexture = 0;
+    alphaTexture = 0;
+    bumpMap = 0;
+
+    transparancy = 0.0;
+    sharpness = 0.0;
+    opticalDensity = 0.0;
+    specularExponent = 0.0;
+
+    illuminationMode = 0;
+}
+
+
+bool Material::loadMaterial(const char *filename, const char *matname)
+{
+    FILE *f;
+
+    char line[MAX_STRING_LENGTH];
+    char string[MAX_STRING_LENGTH];
+
+    strncpy(name, matname, MAX_STRING_LENGTH);
+
+    f = fopen(filename, "r");
+
+    if(f == NULL)
     {
-        printf("textur %s not found\n",file);
+        cerr << "error: the file " << filename << " could not be loaded." << endl;
+        fclose(f);
         return false;
     }
 
+    strncpy(string, "newmtl ", 7);
 
-    nOfColors = this->BMPtexture->format->BytesPerPixel;
+    while(!feof(f) && strncmp(line, strncat(string, name, MAX_STRING_LENGTH), strlen(string)))
+        fgets(line, MAX_STRING_LENGTH, f);
+
+    if(feof(f))
+    {
+        cerr << "error: the material " << name << " does not exist in file " << filename << "." << endl;
+        fclose(f);
+        return false;
+    }
+
+    while(!feof(f))
+    {
+        if(fgets(line, MAX_STRING_LENGTH, f) == NULL)
+            break;
+
+        if(!strncmp(line, "Ka", 2))    // ambiant color
+        {
+            ambiantMatColor = extractColorFromLine(line);
+        }
+        else if(!strncmp(line, "Kd", 2))   // diffuse color
+        {
+            diffuseMatColor = extractColorFromLine(line);
+        }
+        else if(!strncmp(line, "Ks", 2))   // specular color
+        {
+            specularMatColor = extractColorFromLine(line);
+        }
+        else if(!strncmp(line, "Ke", 2))     // emissive color
+        {
+            emissiveMatColor = extractColorFromLine(line);
+        }
+        else if(!strncmp(line, "Tf", 2))     // transparancy color
+        {
+            transparancyMatColor = extractColorFromLine(line);
+        }
+        else if(!strncmp(line, "map_Ka", 6))     // ambiant texture
+        {
+            ambiantTexture = loadTexture(extractStringFromLine(line, string));
+        }
+        else if(!strncmp(line, "map_Kd", 6))     // diffuse texture
+        {
+            diffuseTexture = loadTexture(extractStringFromLine(line, string));
+        }
+        else if(!strncmp(line, "map_Ks", 6))     // specular texture
+        {
+            specularTexture = loadTexture(extractStringFromLine(line, string));
+        }
+        else if(!strncmp(line, "map_d", 5))     // alpha texture
+        {
+            alphaTexture = loadTexture(extractStringFromLine(line, string));
+        }
+        else if(!strncmp(line, "map_bump", 8) || !strncmp(line, "bump", 4))     // bump map
+        {
+            bumpMap = loadTexture(extractStringFromLine(line, string));
+        }
+        else if(!strncmp(line, "d", 1) || !strncmp(line, "Tr", 2))     // transparancy
+        {
+            transparancy = extractFloatFromLine(line);
+        }
+        else if(!strncmp(line, "sharpness", 9))     // sharpness
+        {
+            sharpness = extractFloatFromLine(line);
+        }
+        else if(!strncmp(line, "Ni", 2))     // optical density
+        {
+            opticalDensity = extractFloatFromLine(line);
+        }
+        else if(!strncmp(line, "Ns", 2))     // specular exponent
+        {
+            specularExponent = extractFloatFromLine(line);
+        }
+        else if(!strncmp(line, "illum", 5))     // illumination mode
+        {
+            illuminationMode = extractIntFromLine(line);
+        }
+    }
+
+    fclose(f);
+
+    return true;
+}
+
+
+GLuint Material::loadTexture(const char *filename)
+{
+    GLint nOfColors = 0;
+    GLenum texture_format = 0;
+    SDL_Surface *SDL_Texture = IMG_Load(filename);
+    GLuint GL_Texture = 0;
+
+    if(SDL_Texture == NULL)
+    {
+        printf("textur %s not found\n",filename);
+        return 0;
+    }
+
+
+    nOfColors = SDL_Texture->format->BytesPerPixel;
 
     if (nOfColors == 4)
     {
-        if (this->BMPtexture->format->Rmask == 0x000000ff)
+        if (SDL_Texture->format->Rmask == 0x000000ff)
             texture_format = GL_RGBA;
         else
             texture_format = GL_BGRA;
@@ -53,25 +181,25 @@ bool Material::loadTexture2D(const char* file)
 
     else if (nOfColors == 3)
     {
-        if (this->BMPtexture->format->Rmask == 0x000000ff)
+        if (SDL_Texture->format->Rmask == 0x000000ff)
             texture_format = GL_RGB;
         else
             texture_format = GL_BGR;
     }
     else
     {
-        printf("warning: %s is not truecolor.. this will probably break\n",file);
+        printf("warning: %s is not truecolor.. this will probably break\n", filename);
     }
 
     glEnable(GL_TEXTURE_2D);
-    glGenTextures( 1, &this->textureGL );
-    glActiveTextureARB(this->textureGL);
+    glGenTextures( 1, &GL_Texture );
+    glActiveTextureARB(GL_Texture);
 
 
 
 
-    glBindTexture( GL_TEXTURE_2D, this->textureGL );
-    glTexImage2D( GL_TEXTURE_2D, 0, nOfColors, this->BMPtexture->w, this->BMPtexture->h, 0,texture_format, GL_UNSIGNED_BYTE, this->BMPtexture->pixels );
+    glBindTexture( GL_TEXTURE_2D, GL_Texture );
+    glTexImage2D( GL_TEXTURE_2D, 0, nOfColors, SDL_Texture->w, SDL_Texture->h, 0,texture_format, GL_UNSIGNED_BYTE, SDL_Texture->pixels );
 
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
@@ -79,64 +207,194 @@ bool Material::loadTexture2D(const char* file)
 
 
 
-    printf("texur %d %s loaded\n",this->textureGL,file);
-    return true;
+    printf("texur %d %s loaded\n",GL_Texture, filename);
+    return GL_Texture;
 }
 
-bool Material::loadBumpMap(const char* file)
+
+int Material::extractIntFromLine(const char *line)
 {
-    GLint nOfColors = 0;
-    GLenum texture_format = 0;
-    this->BMPbumpMap = IMG_Load(file);
+    int i, j;
+    char string[MAX_STRING_LENGTH];
 
-    if(this->BMPbumpMap == 0)
+    for(i = 0; line[i] != '\n' && line[i] != '\0' && line[i] != ' ' && i < MAX_STRING_LENGTH; i++);
+
+    if(line[i] != ' ')
     {
-        printf("bumpmap %s not found\n",file);
-        return false;
+        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
+        return 0;
     }
 
+    for(; line[i] == ' ' && i < MAX_STRING_LENGTH; i++);
 
-    nOfColors = this->BMPbumpMap->format->BytesPerPixel;
-
-    if (nOfColors == 4)
+    if(i == MAX_STRING_LENGTH)
     {
-        if (this->BMPbumpMap->format->Rmask == 0x000000ff)
-            texture_format = GL_RGBA;
-        else
-            texture_format = GL_BGRA;
+        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
+        return 0;
     }
 
-    else if (nOfColors == 3)
-    {
-        if (this->BMPbumpMap->format->Rmask == 0x000000ff)
-            texture_format = GL_RGB;
-        else
-            texture_format = GL_BGR;
-    }
-    else
-    {
-        printf("warning: %s is not truecolor.. this will probably break\n",file);
-    }
-    glEnable(GL_TEXTURE_2D);
-    glGenTextures( 1, &this->bumpmapGL );
-    glActiveTextureARB(this->bumpmapGL);
+    for(j = 0; line[i] >= '0' && line[i] <= '9' && i < MAX_STRING_LENGTH; i++, j++)
+        string[j] = line[i];
 
-    glBindTexture( GL_TEXTURE_2D, this->bumpmapGL );
-    glTexImage2D( GL_TEXTURE_2D, 0, nOfColors, this->BMPbumpMap->w, this->BMPbumpMap->h, 0,texture_format, GL_UNSIGNED_BYTE, this->BMPbumpMap->pixels );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    string[j] = '\0';
 
-    printf("bumpmap %d %s loaded\n",this->bumpmapGL,file);
-    return true;
+    if(i == MAX_STRING_LENGTH)
+    {
+        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
+        return 0;
+    }
+
+    return atoi(string);
 }
 
 
+float Material::extractFloatFromLine(const char *line)
+{
+    int i, j;
+    char string[MAX_STRING_LENGTH];
+
+    for(i = 0; line[i] != '\n' && line[i] != '\0' && line[i] != ' ' && i < MAX_STRING_LENGTH; i++);
+
+    if(line[i] != ' ')
+    {
+        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
+        return 0;
+    }
+
+    for(; line[i] == ' ' && i < MAX_STRING_LENGTH; i++);
+
+    if(i == MAX_STRING_LENGTH)
+    {
+        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
+        return 0;
+    }
+
+    for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.') && i < MAX_STRING_LENGTH; i++, j++)
+        string[j] = line[i];
+
+    string[j] = '\0';
+
+    if(i == MAX_STRING_LENGTH)
+    {
+        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
+        return 0;
+    }
+
+    return atof(string);
+}
 
 
+SDL_Color Material::extractColorFromLine(const char *line)
+{
+    int i, j;
+    SDL_Color returnValue = {0, 0, 0, 0};
+    char string[MAX_STRING_LENGTH];
+
+    for(i = 0; line[i] != '\n' && line[i] != '\0' && line[i] != ' ' && i < MAX_STRING_LENGTH; i++);
+
+    if(line[i] != ' ')
+    {
+        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
+        return returnValue;
+    }
+
+    for(; line[i] == ' ' && i < MAX_STRING_LENGTH; i++);
+
+    if(i == MAX_STRING_LENGTH)
+    {
+        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
+        return returnValue;
+    }
+
+    for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.') && i < MAX_STRING_LENGTH; i++, j++)
+        string[j] = line[i];
+
+    string[j] = '\0';
+
+    if(i == MAX_STRING_LENGTH || line[i] != ' ')
+    {
+        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
+        return returnValue;
+    }
+
+    returnValue.r = atof(string);
+
+    for(; line[i] == ' ' && i < MAX_STRING_LENGTH; i++);
+
+    if(i == MAX_STRING_LENGTH)
+    {
+        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
+        return returnValue;
+    }
+
+    for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.') && i < MAX_STRING_LENGTH; i++, j++)
+        string[j] = line[i];
+
+    string[j] = '\0';
+
+    if(i == MAX_STRING_LENGTH || line[i] != ' ')
+    {
+        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
+        return returnValue;
+    }
+
+    returnValue.g = atof(string);
+
+    for(; line[i] == ' ' && i < MAX_STRING_LENGTH; i++);
+
+    if(i == MAX_STRING_LENGTH)
+    {
+        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
+        return returnValue;
+    }
+
+    for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.') && i < MAX_STRING_LENGTH; i++, j++)
+        string[j] = line[i];
+
+    string[j] = '\0';
+
+    if(i == MAX_STRING_LENGTH)
+    {
+        cerr << "The following line is corrupted. Will return 0." << endl << line;
+        return returnValue;
+    }
+
+    returnValue.b = atof(string);
+
+    return returnValue;
+}
 
 
+char *Material::extractStringFromLine(const char *line, char *string)
+{
+    int i, j;
 
+    for(i = 0; line[i] != '\n' && line[i] != '\0' && line[i] != ' ' && i < MAX_STRING_LENGTH; i++);
 
+    if(line[i] != ' ')
+    {
+        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
+        return NULL;
+    }
 
+    for(; line[i] == ' ' && i < MAX_STRING_LENGTH; i++);
 
+    if(i == MAX_STRING_LENGTH)
+    {
+        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
+        return NULL;
+    }
 
+    for(j = 0; line[i] != '\n' && line[i] != '\0' && i < MAX_STRING_LENGTH; i++, j++)
+        string[j] = line[i];
+
+    string[j] = '\0';
+
+    if(i == MAX_STRING_LENGTH)
+    {
+        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
+        return NULL;
+    }
+
+    return string;
+}

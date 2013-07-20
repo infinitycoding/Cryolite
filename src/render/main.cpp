@@ -7,29 +7,28 @@
 #include <stdio.h>
 #include <string.h>
 #include <SDL_thread.h>
-#include <SDL_image.h>
 #include <SDL_mixer.h>
 
 
-#include <object.h>
 #include <sdl.h>
 #include <controls.h>
-#include <material.h>
 #include <models.h>
 #include <general_def.h>
 #include <scene.h>
-#include <vector.h>
 #include <font.h>
 #include <light.h>
 #include <settings.h>
 #include <sound.h>
+
+#ifdef DEBUG
+#include <profiler.h>
+#endif
 
 #ifdef _WIN32
 #undef main
 #endif
 
 #include <iostream>
-#include <ostream>
 
 Settings *gameSettings;
 Scene *mainScene;
@@ -75,7 +74,7 @@ int main(int argc, char *argv[]){
     // Skysphere
     GLUquadric *q =gluNewQuadric();
     gluQuadricTexture(q, true);
-    Material *sky = new Material(IMAGE(sky1.jpg));
+    GLuint sky = Material::loadTexture(IMAGE(sky1.jpg));;
 
     //Background Music
     Music *bgMusic = new Music(SOUND(moon.mp3),-1);
@@ -115,7 +114,7 @@ int main(int argc, char *argv[]){
         glTranslatef(Player->position.x,Player->position.y,Player->position.z);
         glRotated(90,1,0,0);
         glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-        glBindTexture( GL_TEXTURE_2D, sky->textureGL);
+        glBindTexture( GL_TEXTURE_2D, sky);
         gluSphere(q,50,100,100);
         glPopMatrix();
 

@@ -82,7 +82,7 @@ class Object
         Vertex2D *addTextureVertex(Vertex2D *newTexVertex);
         Polygon *addPolygon(Polygon *newPolygon);
 
-        void loadMaterial(const char *file);
+        void loadMaterial(const char *file, const char *matname);
         void loadObjectFile(const char *objectFile, const char *objectName);
 
         struct vertexNumber countVertices(const char *filename, const char *objectname);
@@ -93,7 +93,7 @@ class Object
 
 
 
-        string objectname;
+        char objectname[20];
 
         vector scale;
         vector position;

@@ -24,12 +24,6 @@ Scene::Scene()
 
 Scene::~Scene()
 {
-    this->objectList->ListSetFirst();
-    while(!this->objectList->ListIsLast())
-    {
-        this->objectList->ListRemove();
-        this->objectList->ListNext();
-    }
     delete this->objectList;
 }
 
@@ -108,7 +102,7 @@ void Scene::render()
                         glEnable(GL_TEXTURE_2D);
 
                         if(currentObject->ObjectMaterial)
-                            glBindTexture( GL_TEXTURE_2D, currentObject->ObjectMaterial->textureGL);
+                            glBindTexture( GL_TEXTURE_2D, currentObject->ObjectMaterial->ambiantTexture);
                         else
                             glBindTexture( GL_TEXTURE_2D, 0);
 
@@ -207,28 +201,29 @@ int Scene::handleCams(void)
 void Scene::renderPolygones(Object *currentObject)
 {
 
-        currentObject->polygones->ListSetFirst();
+    currentObject->polygones->ListSetFirst();
 
-        while(!currentObject->polygones->ListIsLast())
-        {
-            Polygon *currentPolygon = (Polygon *)currentObject->polygones->ListGetCurrent();
+    while(!currentObject->polygones->ListIsLast())
+    {
+        Polygon *currentPolygon = (Polygon *)currentObject->polygones->ListGetCurrent();
 
-            glBegin( GL_POLYGON );
+        glBegin( GL_POLYGON );
 
-                for(int i=0;i < currentPolygon->getVertexAmount();i++)
-                {
-                    if(currentObject->ObjectMaterial && currentObject->ObjectMaterial->textureGL && currentPolygon->getTexVertex(i) != NULL)
-                            glTexCoord2f( currentPolygon->getTexVertex(i)->getX(), currentPolygon->getTexVertex(i)->getY() );
+            for(int i=0;i < currentPolygon->getVertexAmount();i++)
+            {
+                if(currentObject->ObjectMaterial && currentObject->ObjectMaterial->ambiantTexture && currentPolygon->getTexVertex(i) != NULL)
+                        glTexCoord2f( currentPolygon->getTexVertex(i)->getX(), currentPolygon->getTexVertex(i)->getY() );
 
-                    if(currentPolygon->getObjVertex(i) != NULL)
-                        glVertex3f( currentPolygon->getObjVertex(i)->getX(), currentPolygon->getObjVertex(i)->getY(), currentPolygon->getObjVertex(i)->getZ());
-                }
+                if(currentPolygon->getObjVertex(i) != NULL)
+                    glVertex3f( currentPolygon->getObjVertex(i)->getX(), currentPolygon->getObjVertex(i)->getY(), currentPolygon->getObjVertex(i)->getZ());
+            }
 
-            glEnd();
+        glEnd();
 
-            currentObject->polygones->ListNext();
-        }
+        currentObject->polygones->ListNext();
+    }
 }
+
 
 void Scene::calculateFPS(void)
 {
