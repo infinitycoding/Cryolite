@@ -2,17 +2,8 @@
 #define OBJECT_H
 
 
-#include <SDL.h>        // SDL-Header
-#include <GL/gl.h>      // OpenGL-Header
-#include <GL/glu.h>     // OpenGL-utility-header
-
-#include <cstdio>       // c++ standart library headers
-#include <cstdlib>
-#include <cstring>
-#include <iostream>
 
 #include <material.h>   // own headers
-#include <List.h>
 #include <vector.h>
 #include <polygon.h>
 
@@ -125,6 +116,7 @@ class Object
         List<struct boundCylinder> *boundCylinders;
         List<struct boundTriangel> *boundTriangles;
 
+        static MaterialCache *MatCache;
         Material *ObjectMaterial;
 
         bool isPhysicalActor;

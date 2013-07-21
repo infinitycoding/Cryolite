@@ -1,5 +1,3 @@
-#include <SDL_image.h>
-
 #include <material.h>
 
 
@@ -59,6 +57,9 @@ bool Material::loadMaterial(const char *filename, const char *matname)
     char line[MAX_STRING_LENGTH];
     char string[MAX_STRING_LENGTH];
 
+    memset(line, '\0', sizeof(line));
+    memset(string, '\0', sizeof(string));
+
     strncpy(name, matname, MAX_STRING_LENGTH);
 
     f = fopen(filename, "r");
@@ -71,9 +72,11 @@ bool Material::loadMaterial(const char *filename, const char *matname)
     }
 
     strncpy(string, "newmtl ", 7);
+    strncat(string, name, MAX_STRING_LENGTH);
 
-    while(!feof(f) && strncmp(line, strncat(string, name, MAX_STRING_LENGTH), strlen(string)))
-        fgets(line, MAX_STRING_LENGTH, f);
+    while(!feof(f) && strncmp(line, string, strlen(string)))
+        if(fgets(line, MAX_STRING_LENGTH, f) == NULL)
+            break;
 
     if(feof(f))
     {
@@ -146,6 +149,10 @@ bool Material::loadMaterial(const char *filename, const char *matname)
         else if(!strncmp(line, "illum", 5))     // illumination mode
         {
             illuminationMode = extractIntFromLine(line);
+        }
+        else if(!strncmp(line, "newmtl", 6))
+        {
+            break;
         }
     }
 
@@ -398,3 +405,52 @@ char *Material::extractStringFromLine(const char *line, char *string)
 
     return string;
 }
+
+
+
+MaterialCache::MaterialCache()
+{
+    cachedMaterials = new List<Material>;
+}
+
+
+MaterialCache::~MaterialCache()
+{
+    delete cachedMaterials;
+}
+
+
+Material *MaterialCache::requestMaterial(const char *filename, const char *matname)
+{
+    Material *requestedMaterial = NULL;
+
+
+    cachedMaterials->ListSetFirst();
+
+    while(!(cachedMaterials->ListIsLast()))
+    {
+        requestedMaterial = cachedMaterials->ListGetCurrent();
+
+        if(!strncmp(requestedMaterial->name, matname, MAX_STRING_LENGTH))
+            break;
+        else
+            requestedMaterial = NULL;
+
+        cachedMaterials->ListNext();
+    }
+
+    if(requestedMaterial == NULL)
+    {
+        requestedMaterial = new Material(filename, matname);
+        cachedMaterials->ListPushFront(requestedMaterial);
+    }
+
+    return requestedMaterial;
+}
+
+
+bool MaterialCache::unloadMaterial(const char *matname)
+{
+    return false;
+}
+

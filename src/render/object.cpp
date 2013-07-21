@@ -4,6 +4,9 @@
 using namespace std;
 
 
+MaterialCache *Object::MatCache;
+
+
 Object::Object()
 {
     initObject();
@@ -13,16 +16,12 @@ Object::Object(const char *filename, const char *objname)
 {
     initObject();
 
-    strncpy(objectname, objname, 20);
-
     loadObjectFile(filename, objname);
 }
 
 Object::Object(const char *filename, const char *objname, vector pos)
 {
     initObject();
-
-    strncpy(objectname, objname, 20);
 
     loadObjectFile(filename, objname);
 
@@ -85,6 +84,9 @@ void Object::initObject()
     Tms = 0; //Time Motion Start
 
     isPhysicalActor = false;
+
+    if(MatCache == NULL)
+        MatCache = new MaterialCache();
 
     ObjectMaterial = NULL;
 }
@@ -211,6 +213,8 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
     vector *normvector_ptrs[allObjectVertices.normalVectors];
 
     Polygon *polygon_ptr = NULL;
+
+    strncpy(objectname, objectName, 20);
 
     if(allObjectVertices.objectVertices == 0)
     {
@@ -511,7 +515,7 @@ Polygon *Object::addPolygon(Polygon *newPolygon)
 
 void Object::loadMaterial(const char *file, const char *matname)
 {
-    ObjectMaterial = new Material(file, matname);
+    ObjectMaterial = MatCache->requestMaterial(file, matname);
 }
 
 void Object::moveObject(float a ,vector D, float v)

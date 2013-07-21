@@ -10,6 +10,9 @@
 #include <iostream>
 #include <cstring>
 #include <cstdio>
+#include <cstdlib>
+
+#include <List.h>
 
 
 #define MAX_STRING_LENGTH 40
@@ -58,6 +61,21 @@ class Material
         float extractFloatFromLine(const char *line);
         SDL_Color extractColorFromLine(const char *line);
         char *extractStringFromLine(const char *line, char *string);
+};
+
+
+class MaterialCache
+{
+    public:
+        MaterialCache();
+        ~MaterialCache();
+
+        Material *requestMaterial(const char *filename, const char *matname);
+        bool unloadMaterial(const char *matname);
+
+
+    protected:
+        List<Material> *cachedMaterials;
 };
 
 #endif
