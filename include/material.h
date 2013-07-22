@@ -71,6 +71,7 @@ class MaterialCache
         ~MaterialCache();
 
         Material *requestMaterial(const char *filename, const char *matname);
+        Material *searchMaterial(const char *matname);
         bool unloadMaterial(const char *matname);
 
 
