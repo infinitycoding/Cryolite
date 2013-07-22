@@ -212,9 +212,8 @@ GLuint Material::loadTexture(const char *filename)
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 
 
+    cout << "texur " << GL_Texture << " " << filename << " loaded" << endl;
 
-
-    printf("texur %d %s loaded\n",GL_Texture, filename);
     return GL_Texture;
 }
 
@@ -422,22 +421,7 @@ MaterialCache::~MaterialCache()
 
 Material *MaterialCache::requestMaterial(const char *filename, const char *matname)
 {
-    Material *requestedMaterial = NULL;
-
-
-    cachedMaterials->ListSetFirst();
-
-    while(!(cachedMaterials->ListIsLast()))
-    {
-        requestedMaterial = cachedMaterials->ListGetCurrent();
-
-        if(!strncmp(requestedMaterial->name, matname, MAX_STRING_LENGTH))
-            break;
-        else
-            requestedMaterial = NULL;
-
-        cachedMaterials->ListNext();
-    }
+    Material *requestedMaterial = searchMaterial(matname);
 
     if(requestedMaterial == NULL)
     {
@@ -449,8 +433,37 @@ Material *MaterialCache::requestMaterial(const char *filename, const char *matna
 }
 
 
+Material *MaterialCache::searchMaterial(const char *matname)
+{
+    Material *result = NULL;
+
+    cachedMaterials->ListSetFirst();
+
+    while(!(cachedMaterials->ListIsLast()))
+    {
+        result = cachedMaterials->ListGetCurrent();
+
+        if(!strncmp(result->name, matname, MAX_STRING_LENGTH))
+            break;
+        else
+            result = NULL;
+
+        cachedMaterials->ListNext();
+    }
+
+    return result;
+}
+
+
 bool MaterialCache::unloadMaterial(const char *matname)
 {
-    return false;
+    Material *matToDelete = searchMaterial(matname);
+
+    if(matToDelete != NULL)
+        delete matToDelete;
+    else
+        return false;
+
+    return true;
 }
 
