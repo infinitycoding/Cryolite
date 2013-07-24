@@ -566,13 +566,63 @@ vector *vector::addc(vector *v)
     return new vector(this);
 }
 
+vector vector::addc(Vertex3D v)
+{
+    this->add(v);
+    return vector(this);
+}
+
+vector *vector::addc(Vertex3D *v)
+{
+    this->add(v);
+    return new vector(this);
+}
+
+vector vector::addc(Vertex2D v)
+{
+    this->add(v);
+    return vector(this);
+}
+
+vector *vector::addc(Vertex2D *v)
+{
+    this->add(v);
+    return new vector(this);
+}
+
+
+
 vector vector::addc(vector v0, vector v1)
 {
     this->add(v0,v1);
     return vector(this);
 }
 
+vector vector::addc(Vertex3D v0, vector v1)
+{
+    this->add(v0,v1);
+    return vector(this);
+}
+
+vector vector::addc(vector v1, Vertex3D v0)
+{
+    this->add(v0,v1);
+    return vector(this);
+}
+
 vector *vector::addc(vector *v0, vector *v1)
+{
+    this->add(v0,v1);
+    return new vector(this);
+}
+
+vector *vector::addc(Vertex3D *v0, vector *v1)
+{
+    this->add(v0,v1);
+    return new vector(this);
+}
+
+vector *vector::addc(vector *v1, Vertex3D *v0)
 {
     this->add(v0,v1);
     return new vector(this);

@@ -101,17 +101,19 @@ class vector
         void add(vector   *v, int args);
         void add(vector  **v, int args);
 
-         //not done
-        vector add(List<Vertex3D> *vlist);
-        vector add(List<Vertex2D> *vlist);
-
-        //done
+         /*
+            will be done when list class is fixed
+            vector add(List<Vertex3D> *vlist);
+            vector add(List<Vertex2D> *vlist);
+            vector add(List<vector> *vlist);
+        */
         void addvc(int args,...);//vector pointer
         void addvx2(int args,...);//vertex pointer
         void addvx3(int args,...);//vertex pointer
 
 
-
+        vector  addc(vector  v);
+        vector *addc(vector *v);
 
         vector  addc(Vertex3D  v);
         vector *addc(Vertex3D *v);
@@ -119,22 +121,32 @@ class vector
         vector  addc(Vertex2D  v);
         vector *addc(Vertex2D *v);
 
-        vector  addc(vector  v);
-        vector *addc(vector *v);
-
         vector  addc(vector  v0, vector  v1);
-        vector *addc(vector *v0, vector *v1);
+
+        vector  addc(Vertex3D  v0, vector  v1);
+        vector  addc(vector  v1, Vertex3D  v0);
+
+        vector *addc(vector   *v0, vector  *v1);
+        vector *addc(Vertex3D  *v0, vector  *v1);
+
+        vector *addc(vector   *v1, Vertex3D *v0);
 
         vector *addc(vector  *v, int args);
         vector *addc(vector **v, int args);
 
-        vector *addc(int args, ...);//nur pointer
+        vector *addc(int args, ...);//vector pointer
 
 
 
 
         void sub(vector  v);
         void sub(vector *v);
+
+        void sub(Vertex2D  v);
+        void sub(Vertex2D *v);
+
+        void sub(Vertex3D  v);
+        void sub(Vertex3D *v);
 
         void sub(vector  v0, vector  v1);
         void sub(vector *v0, vector *v1);
@@ -196,7 +208,6 @@ class vector
     const vector operator ^ (vector const *v0, vector const v1);
     const vector operator ^ (vector const v1, vector const *v0);
 
-
     const vector operator * (vector const v0, const float s);
     const vector operator * (const float s,vector const v0);
 
@@ -211,127 +222,5 @@ vector *unify(vector *v);
 int printv(vector v);
 int printv(vector *v);
 
-class vectorN
-{
-    public:
-
-        float *elements;
-        int dim;
-
-
-        vectorN();
-        vectorN(float x);
-        vectorN(float x, float y);
-        vectorN(float x, float y, float z);
-        vectorN(int args,...); //only floats
-        vectorN(float *v, int args);
-        vectorN(vectorN *v);
-
-        ~vectorN();
-
-
-        void null();
-        float len();
-
-    //tdodo
-        void addDim(int dim);
-        void remDim(int dim);
-        void maxDim(int dim);
-    // todoend
-
-
-        void setvalue(float x);
-        void setvalue(float x, float y);
-        void setvalue(float x, float y, float z);
-        void setvalue(int args, ...);
-        void setvalue(int args, float *v);
-        void setvalue(vectorN v);
-        void setvalue(vectorN *v);
-
-
-
-        void unify();
-        vectorN *unifycp();
-        vectorN  unifyc();
-
-        void add(vectorN  v);
-        void add(vectorN *v);
-
-        void add(vectorN  v0, vectorN  v1);
-        void add(vectorN *v0, vectorN *v1);
-
-        void add(int args, vectorN   *v);
-        void add(int args, vectorN **v);
-
-        void add(int args, ...);//nur pointer
-
-        vectorN  addc(vectorN  v);
-        vectorN *addc(vectorN *v);
-
-        vectorN  addc(vectorN  v0, vectorN  v1);
-        vectorN *addc(vectorN *v0, vectorN *v1);
-
-        vectorN *addc(int args, vectorN  *v);
-        vectorN *addc(int args, vectorN **v);
-
-        vectorN *addc(int args, ...);//nur pinter
-
-
-
-        void sub(vectorN  v);
-        void sub(vectorN *v);
-
-        void sub(vectorN  v0, vectorN  v1);
-        void sub(vectorN *v0, vectorN *v1);
-
-        vectorN  subc(vectorN  v);
-        vectorN *subc(vectorN *v);
-        vectorN  subc(vectorN  v0, vectorN  v1);
-        vectorN *subc(vectorN *v0, vectorN *v1);
-
-
-
-
-        void scale(float s);
-        void scale(float s, vectorN *v);
-        void scale(float s, vectorN  v);
-
-        vectorN  scalec(float s);
-        vectorN  scalec(float s, vectorN v);
-        vectorN *scalec(float s, vectorN *v);
-
-        vectorN *scalecp(float s);
-
-
-        static vectorN *unifysp();
-        static vectorN  unifys();
-
-        static vectorN  adds(vectorN  v);
-        static vectorN *adds(vectorN *v);
-
-        static vectorN  adds(vectorN  v0, vectorN  v1);
-        static vectorN *adds(vectorN *v0, vectorN *v1);
-
-        static vectorN *adds(int args, vectorN   *v);
-        static vectorN *adds(int args, vectorN **v1);
-
-        static vectorN *adds(int args, ...);// nur pointer
-
-
-        static vectorN  subs(vectorN  v);
-        static vectorN *subs(vectorN *v);
-        static vectorN  subs(vectorN  v0, vectorN  v1);
-        static vectorN *subs(vectorN *v0, vectorN *v1);
-
-        static vectorN  scales(float s);
-        static vectorN  scales(float s, vectorN v);
-        static vectorN *scales(float s, vectorN *v);
-
-        static vectorN *scalesp(float s);
-
-        private:
-            bool lenmod;
-            float cachlen;
-};
 
 #endif
