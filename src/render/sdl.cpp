@@ -51,7 +51,7 @@ SDL::SDL(int width, int height, int flags, const char* caption)
         exit(-1);
     }
 
-    this->events = new List<struct eventHandler>;
+    this->events = new List<EventHandle>;
 }
 
 SDL::~SDL()
@@ -63,26 +63,23 @@ SDL::~SDL()
     exit(0);
 }
 
-void SDL::addEvent(uint8_t event, void (*handle)(SDL_Event *event))
+void SDL::addHandle(EventHandle *Instance)
 {
-    struct eventHandler *newHandler = new struct eventHandler;
-    newHandler->event = event;
-    newHandler->handle = handle;
     while(this->lock){}
     this->lock = true;
-        this->events->ListPushFront(newHandler);
+        this->events->ListPushFront(Instance);
     this->lock = false;
 }
 
-int SDL::removeEvent(uint8_t event, void (*handle)(SDL_Event *event))
+int SDL::removeHandle(EventHandle *Instance)
 {
     while(this->lock){}
     this->lock = true;
         this->events->ListSetFirst();
         while(!this->events->ListIsLast())
         {
-            struct eventHandler* currentHandler = (struct eventHandler*) this->events->ListGetCurrent();
-            if(currentHandler->event == event && currentHandler->handle == handle)
+            EventHandle* currentHandler = this->events->ListGetCurrent();
+            if(currentHandler == Instance)
             {
                 this->events->ListRemove();
             }
@@ -106,11 +103,33 @@ void SDL::pollEvents()
             this->events->ListSetFirst();
             while(!this->events->ListIsLast())
             {
-                struct eventHandler* currentEvent = (struct eventHandler*) this->events->ListGetCurrent();
-                if(currentEvent->event == event.type)
+                EventHandle* currentEvent = (EventHandle*) this->events->ListGetCurrent();
+
+                switch(event.type)
                 {
-                    currentEvent->handle(&event);
-                }
+                    case SDL_KEYDOWN:
+                        if(currentEvent->types.KeyDown) currentEvent->handleKeyDown(&event.key);
+                        break;
+                    case SDL_KEYUP:
+                        if(currentEvent->types.KeyUp) currentEvent->handleKeyUp(&event.key);
+                        break;
+                    case SDL_MOUSEBUTTONDOWN:
+                        if(currentEvent->types.MouseButtonDown) currentEvent->handleMouseButtonDown(&event.button);
+                        break;
+                    case  SDL_MOUSEBUTTONUP:
+                        if(currentEvent->types.MouseButtonUp) currentEvent->handleMouseButtonUp(&event.button);
+                        break;
+                    case SDL_MOUSEMOTION:
+                        if(currentEvent->types.MouseMotion) currentEvent->handleMouseMotion(&event.motion);
+                        break;
+                    /*case SDL_MOUSEWHEEL:
+                        if(currentEvent->types.MouseWheel) currentEvent->handle->handleMouseWheel(event);
+                        break;*/
+                    case SDL_QUIT:
+                        if(currentEvent->types.Quit) currentEvent->handleQuit();
+                        break;
+                };
+
                 this->events->ListNext();
             }
 
@@ -124,5 +143,26 @@ void SDL::SDLexit()
     Mix_CloseAudio();
     printf("Application closed \n");
 };
+
+EventHandle::EventHandle()
+{
+    object = this;
+    types.KeyUp = false;
+    types.KeyDown = false;
+    types.MouseButtonDown = false;
+    types.MouseButtonUp = false;
+    types.MouseMotion = false;
+    types.MouseWheel = false;
+    types.Quit = false;
+}
+
+void EventHandle::handleKeyDown(SDL_KeyboardEvent *e){}
+void EventHandle::handleKeyUp(SDL_KeyboardEvent *e){}
+void EventHandle::handleMouseButtonUp(SDL_MouseButtonEvent *e){}
+void EventHandle::handleMouseButtonDown(SDL_MouseButtonEvent *e){}
+void EventHandle::handleMouseMotion(SDL_MouseMotionEvent *e){}
+//virtual void handleMouseWheel(SDL_MouseWheelEvent *e);
+void EventHandle::handleQuit(){};
+EventHandle::~EventHandle(){}
 
 

@@ -2,24 +2,26 @@
 #define CONTROLS_H
 
 #include <SDL.h>
+#include <sdl.h>
 #include <camera.h>
 
 
 
-class Controls
+class Controls : EventHandle
 {
     public:
         Controls(SDL* window);
 
         void controls_handler(Camera *cam);
 
-        static void endprogramm(SDL_Event *e);
-        static void haldeKeydown(SDL_Event *e);
-        static void haldeKeyup(SDL_Event *e);
-        static void haldeMouse(SDL_Event *e);
-        static void toggle_printFPS(SDL_Event *e);
-        static void moveCube(SDL_Event *e);
-        static void rotateCube(SDL_Event *e);
+        virtual void handleQuit();
+        virtual void handleKeyDown(SDL_KeyboardEvent *e);
+        virtual void handleKeyUp(SDL_KeyboardEvent *e);
+        virtual void handleMouseMotion(SDL_MouseMotionEvent *e);
+
+        virtual void toggle_printFPS();
+        static void moveCube();
+        static void rotateCube();
 
     private:
         void rotation_handler(Camera *cam);
@@ -44,3 +46,4 @@ class Controls
 
 
 #endif
+

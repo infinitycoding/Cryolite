@@ -37,32 +37,30 @@ extern bool render;
 extern Settings *gameSettings;
 extern Scene *mainScene;
 
-Controls::Controls(SDL* window)
+Controls::Controls(SDL* window) : EventHandle()
 {
     if(!already_initialized)
     {
         already_initialized = true;
-        window->addEvent(SDL_QUIT,endprogramm);
-        window->addEvent(SDL_KEYDOWN,haldeKeydown);
-        window->addEvent(SDL_KEYUP,haldeKeyup);
-        window->addEvent(SDL_MOUSEMOTION,haldeMouse);
-        window->addEvent(SDL_KEYDOWN,toggle_printFPS);
-        window->addEvent(SDL_KEYDOWN,moveCube);
-        window->addEvent(SDL_KEYDOWN,rotateCube);
+        types.KeyDown = true;
+        types.KeyUp = true;
+        types.MouseMotion = true;
+        types.Quit = true;
+        window->addHandle(object);
     }
 }
 
-void Controls::endprogramm(SDL_Event *event)
+void Controls::handleQuit()
 {
     render = false;
 }
 
-void Controls::haldeKeydown(SDL_Event *e)
+void Controls::handleKeyDown(SDL_KeyboardEvent *e)
 {
-    switch(e->key.keysym.sym)
+    switch(e->keysym.sym)
     {
         case SDLK_ESCAPE:   // Exit programm if Escape is pressed.
-            endprogramm(e);
+            handleQuit();
             break;
         case SDLK_w:
             move_foreward=true;
@@ -82,6 +80,15 @@ void Controls::haldeKeydown(SDL_Event *e)
         case SDLK_LSHIFT:
             move_down=true;
             break;
+        case SDLK_f:
+            toggle_printFPS();
+            break;
+        case SDLK_e:
+            moveCube();
+            break;
+        case SDLK_r:
+            rotateCube();
+            break;
         default:
             break;
 
@@ -89,9 +96,9 @@ void Controls::haldeKeydown(SDL_Event *e)
 }
 
 
-void Controls::haldeKeyup(SDL_Event *e)
+void Controls::handleKeyUp(SDL_KeyboardEvent *e)
 {
-    switch(e->key.keysym.sym)
+    switch(e->keysym.sym)
     {
         case SDLK_w:
             move_foreward=false;
@@ -116,9 +123,9 @@ void Controls::haldeKeyup(SDL_Event *e)
     }
 }
 
-void Controls::haldeMouse(SDL_Event *e)
+void Controls::handleMouseMotion(SDL_MouseMotionEvent *e)
 {
-    if(e->motion.xrel>0)
+    if(e->xrel>0)
     {
         right=true;
     }
@@ -127,7 +134,7 @@ void Controls::haldeMouse(SDL_Event *e)
         left=true;
     }
 
-    if(e->motion.yrel>0)
+    if(e->yrel>0)
     {
         up = true;
     }
@@ -234,38 +241,29 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
 
 }
 
-void Controls::toggle_printFPS(SDL_Event *e)
+void Controls::toggle_printFPS()
 {
-    if(e->key.keysym.sym == SDLK_f)
-    {
         if(printFPS)
             printFPS = false;
         else
             printFPS = true;
-    }
 
     return;
 }
 extern Object *iccube;
 
-void Controls::moveCube(SDL_Event *e)
+void Controls::moveCube()
 {
-    if(e->key.keysym.sym == SDLK_e)
-    {
-        vector direction = vector(0, 0, 1);
-        iccube->moveObject(0.002,direction, 3);
-    }
+    vector direction = vector(0, 0, 1);
+    iccube->moveObject(0.2,direction, 20);
 
     return;
 }
 
-void Controls::rotateCube(SDL_Event *e)
+void Controls::rotateCube()
 {
-    if(e->key.keysym.sym == SDLK_r)
-    {
-        vector direction = vector(0, 0, 1);
-        iccube->rotateObject(360,2,0.05,direction);
-    }
+    vector direction = vector(0, 0, 1);
+    iccube->rotateObject(360,2,0.05,direction);
 
     return;
 }

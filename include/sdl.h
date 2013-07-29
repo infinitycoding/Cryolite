@@ -7,31 +7,60 @@
 
 #include <List.h>
 
-struct eventHandler
+struct usedHandles
 {
-    uint8_t event;
-    void (*handle)(SDL_Event *event);
+    bool KeyUp;
+    bool KeyDown;
+    bool MouseButtonUp;
+    bool MouseButtonDown;
+    bool MouseMotion;
+    bool MouseWheel;
+    bool Quit;
 };
 
 
+class EventHandle
+{
+    public:
 
+        usedHandles types;
+        EventHandle *object;
+
+
+        virtual void handleKeyDown(SDL_KeyboardEvent *e);
+        virtual void handleKeyUp(SDL_KeyboardEvent *e);
+        virtual void handleMouseButtonUp(SDL_MouseButtonEvent *e);
+        virtual void handleMouseButtonDown(SDL_MouseButtonEvent *e);
+        virtual void handleMouseMotion(SDL_MouseMotionEvent *e);
+        //virtual void handleMouseWheel(SDL_MouseWheelEvent *e);
+        virtual void handleQuit();
+
+        EventHandle();
+        virtual ~EventHandle();
+};
 
 
 class SDL
 {
     public:
+
         SDL(int width, int height, int flags, const char* caption);
         ~SDL();
-        void addEvent(uint8_t event, void (*handle)(SDL_Event *event));
-        int  removeEvent(uint8_t event, void (*handle)(SDL_Event *event));
+
+        void addHandle(EventHandle *Instance);
+        int  removeHandle(EventHandle *Instance);
         void pollEvents();
         static void SDLexit();
 
     private:
-        List<struct eventHandler> *events;
+        List<EventHandle> *events;
         SDL_Surface *screen;
         bool lock;
 };
+
+
+
+
 
 
 #endif
