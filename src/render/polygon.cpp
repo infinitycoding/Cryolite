@@ -2,23 +2,6 @@
 
 
 
-Polygon::Polygon()
-{
-    vertexAmount = 4;   // i want to know the vertex amout late
-
-    normVector = new vector*[4];    // create the normal vector pointers
-    objVertex = new Vertex3D*[4];   // create the object vertex pointers
-    texVertex = new Vertex2D*[4];   // create the texture vertex pointers
-
-    for(int i = 0; i < 4; i++)      // initialize the pointers (so you can see if it it valid or not)
-    {
-        normVector[i] = NULL;
-        objVertex[i] = NULL;
-        texVertex[i] = NULL;
-    }
-}
-
-
 // The standart constructor.
 // Just say how big the polygon should be.
 

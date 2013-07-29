@@ -23,7 +23,7 @@ Font::Font()
 
 
 // The destuctor.
-// It deletes the lists.
+// It deletes the lists and quits sdl_ttf if it's the last font class.
 
 Font:: ~Font()
 {

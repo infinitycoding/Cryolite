@@ -28,8 +28,6 @@
 #undef main
 #endif
 
-#include <iostream>
-
 Settings *gameSettings;
 Scene *mainScene;
 
@@ -43,7 +41,6 @@ using namespace std;
 
 
 int main(int argc, char *argv[]){
-
     gameSettings = new Settings("settings");
     //Create Window and Scene
     SDL mainwindow = SDL(gameSettings->width,gameSettings->height,gameSettings->sdlFlags,"Cryolite Engine");
