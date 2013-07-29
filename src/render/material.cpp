@@ -4,6 +4,9 @@
 using namespace std;
 
 
+TextureCache *Material::TexCache;
+
+
 
 Material::Material()
 {
@@ -47,6 +50,9 @@ void Material::initMaterial()
     specularExponent = 0.0;
 
     illuminationMode = 0;
+
+    if(TexCache == NULL)
+        TexCache = new TextureCache();
 }
 
 
@@ -112,23 +118,23 @@ bool Material::loadMaterial(const char *filename, const char *matname)
         }
         else if(!strncmp(line, "map_Ka", 6))     // ambiant texture
         {
-            ambiantTexture = new Texture(extractStringFromLine(line, string));
+            ambiantTexture = TexCache->requestTexture(extractStringFromLine(line, string));
         }
         else if(!strncmp(line, "map_Kd", 6))     // diffuse texture
         {
-            diffuseTexture = new Texture(extractStringFromLine(line, string));
+            diffuseTexture = TexCache->requestTexture(extractStringFromLine(line, string));
         }
         else if(!strncmp(line, "map_Ks", 6))     // specular texture
         {
-            specularTexture = new Texture(extractStringFromLine(line, string));
+            specularTexture = TexCache->requestTexture(extractStringFromLine(line, string));
         }
         else if(!strncmp(line, "map_d", 5))     // alpha texture
         {
-            alphaTexture = new Texture(extractStringFromLine(line, string));
+            alphaTexture = TexCache->requestTexture(extractStringFromLine(line, string));
         }
         else if(!strncmp(line, "map_bump", 8) || !strncmp(line, "bump", 4))     // bump map
         {
-            bumpMap = new Texture(extractStringFromLine(line, string));
+            bumpMap = TexCache->requestTexture(extractStringFromLine(line, string));
         }
         else if(!strncmp(line, "d", 1) || !strncmp(line, "Tr", 2))     // transparancy
         {

@@ -37,5 +37,24 @@ class Texture
 };
 
 
+class TextureCache
+{
+    public:
+        TextureCache();
+        ~TextureCache();
+
+        Texture *requestTexture(const char *filename);
+
+        Texture *searchTexture(const char *filename);
+        Texture *searchTexture(GLuint texnr);
+
+        bool unloadTexture(const char *filename);
+        bool unloadTexture(GLuint texnr);
+
+
+    protected:
+        List<Texture> *cachedTextures;
+};
+
 
 #endif

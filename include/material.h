@@ -34,6 +34,8 @@ class Material
         SDL_Color emissiveMatColor;
         SDL_Color transparancyMatColor;
 
+        static TextureCache *TexCache;
+
         Texture *ambiantTexture;
         Texture *diffuseTexture;
         Texture *specularTexture;
