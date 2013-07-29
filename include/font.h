@@ -49,18 +49,18 @@ class Font
         Font();
         ~Font();
 
-        bool loadTTF(char *font,char *name, int ptsize);
-        bool unloadTTF(char *name);
+        bool loadTTF(const char *font,const char *name, int ptsize);
+        bool unloadTTF(const char *name);
 
         GLuint surftotex(SDL_Surface *surf);
 
-        GLuint atotex(char *text, char *fontname);
-        GLuint atotex(char *text, char *fontname, SDL_Color fontcolor);
-        GLuint atotex(char *text, char *fontname, SDL_Color fontcolor, SDL_Color backgroundcolor);
+        GLuint atotex(const char *text, const char *fontname);
+        GLuint atotex(const char *text, const char *fontname, SDL_Color fontcolor);
+        GLuint atotex(const char *text, const char *fontname, SDL_Color fontcolor, SDL_Color backgroundcolor);
 
-        SDL_Surface *atosurf(char *text, char *fontname);
-        SDL_Surface *atosurf(char *text, char *fontname, SDL_Color fontcolor);
-        SDL_Surface *atosurf(char *text, char *fontname, SDL_Color fontcolor, SDL_Color backgroundcolor);
+        SDL_Surface *atosurf(const char *text, const char *fontname);
+        SDL_Surface *atosurf(const char *text, const char *fontname, SDL_Color fontcolor);
+        SDL_Surface *atosurf(const char *text, const char *fontname, SDL_Color fontcolor, SDL_Color backgroundcolor);
 
         static void TTFListCleaner(struct fontEntry *element);              // The cleaner for the TTF-Lit
         static void PatternFontListCleaner(struct patternFont *element);    // The cleaner for the Pattern-Font-List

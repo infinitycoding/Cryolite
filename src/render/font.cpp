@@ -41,7 +41,7 @@ Font:: ~Font()
 // You need to give the filename, the intern fontname and the pointsize to it.
 // It returns if the function is completed successfully or not.
 
-bool Font::loadTTF(char *font, char *name, int ptsize)
+bool Font::loadTTF(const char *font, const char *name, int ptsize)
 {
     TTF_Font* font_ptr;              // the font handle
     struct fontEntry *new_font;     // the complete font
@@ -69,7 +69,7 @@ bool Font::loadTTF(char *font, char *name, int ptsize)
 // You need to give the intern fontname to it.
 // It returns if the function is completed successfully or not.
 
-bool Font::unloadTTF(char *name)
+bool Font::unloadTTF(const char *name)
 {
     bool found_font = false;                // shows me after searching loop if i found the correct font
     struct fontEntry *font_for_deletion;    // a pointer to the font the function should unload
@@ -134,19 +134,19 @@ GLuint Font::surftotex(SDL_Surface *surf)
 }
 
 
-GLuint Font::atotex(char *text, char *fontname)
+GLuint Font::atotex(const char *text, const char *fontname)
 {
     return surftotex(atosurf(text, fontname));      // first convert ascii to surface and then convert surface to texture
 }
 
 
-GLuint Font::atotex(char *text, char *fontname, SDL_Color fontcolor)
+GLuint Font::atotex(const char *text, const char *fontname, SDL_Color fontcolor)
 {
     return surftotex(atosurf(text, fontname, fontcolor));   // first convert ascii to surface and then convert surface to texture
 }
 
 
-GLuint Font::atotex(char *text, char *fontname, SDL_Color fontcolor, SDL_Color backgroundcolor)
+GLuint Font::atotex(const char *text, const char *fontname, SDL_Color fontcolor, SDL_Color backgroundcolor)
 {
     return surftotex(atosurf(text, fontname, fontcolor, backgroundcolor));
 }
@@ -156,7 +156,7 @@ GLuint Font::atotex(char *text, char *fontname, SDL_Color fontcolor, SDL_Color b
 // You need to give to it the text and the fontname.
 // It uses the standart fontcolor and the standart backgroundcolor.
 
-SDL_Surface *Font::atosurf(char *text, char *fontname)
+SDL_Surface *Font::atosurf(const char *text, const char *fontname)
 {
     SDL_Color fcolor = STANDART_FCOLOR;     // i need this because there are no SDL_Color constants
     SDL_Color bgcolor = STANDART_BGCOLOR;   // i need this because there are no SDL_Color constants
@@ -169,7 +169,7 @@ SDL_Surface *Font::atosurf(char *text, char *fontname)
 // You need to give to it the text, the fontname and the fontcolor.
 // It uses the standart backgroundcolor.
 
-SDL_Surface *Font::atosurf(char *text, char *fontname, SDL_Color fontcolor)
+SDL_Surface *Font::atosurf(const char *text, const char *fontname, SDL_Color fontcolor)
 {
     SDL_Color bgcolor = STANDART_BGCOLOR;   // i need this because there are no SDL_Color constants
 
@@ -180,7 +180,7 @@ SDL_Surface *Font::atosurf(char *text, char *fontname, SDL_Color fontcolor)
 // This function converts a text and a font to a sdl-surface.
 // You need to give to it the text, the fontname, the fontcolor and the backgroundcolor.
 
-SDL_Surface *Font::atosurf(char *text, char *fontname, SDL_Color fontcolor, SDL_Color backgroundcolor)
+SDL_Surface *Font::atosurf(const char *text, const char *fontname, SDL_Color fontcolor, SDL_Color backgroundcolor)
 {
     bool found_font = false;               // shows me after searching loop if i found the correct font
 
