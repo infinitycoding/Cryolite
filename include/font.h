@@ -38,8 +38,8 @@ struct patternFont
 
 struct patternEntry
 {
-  char character;
-  SDL_Surface *pattern;
+    char character;
+    SDL_Surface *pattern;
 };
 
 

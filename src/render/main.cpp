@@ -74,7 +74,7 @@ int main(int argc, char *argv[]){
     // Skysphere
     GLUquadric *q =gluNewQuadric();
     gluQuadricTexture(q, true);
-    GLuint sky = Material::loadTexture(IMAGE(sky1.jpg));;
+    GLuint sky = Texture::loadTexture(IMAGE(sky1.jpg));;
 
     //Background Music
     Music *bgMusic = new Music(SOUND(moon.mp3),-1);

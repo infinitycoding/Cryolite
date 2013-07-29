@@ -2,17 +2,11 @@
 #define MATERIAL_H
 
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
 
-#include <iostream>
-#include <cstring>
 #include <cstdio>
 #include <cstdlib>
 
-#include <List.h>
+#include <texture.h>
 
 
 #define MAX_STRING_LENGTH 40
@@ -30,8 +24,6 @@ class Material
 
         bool loadMaterial(const char *filename, const char *matname);
 
-        static GLuint loadTexture(const char *filename);
-
 
 
         char name[MAX_STRING_LENGTH];
@@ -42,11 +34,11 @@ class Material
         SDL_Color emissiveMatColor;
         SDL_Color transparancyMatColor;
 
-        GLuint ambiantTexture;
-        GLuint diffuseTexture;
-        GLuint specularTexture;
-        GLuint alphaTexture;
-        GLuint bumpMap;
+        Texture *ambiantTexture;
+        Texture *diffuseTexture;
+        Texture *specularTexture;
+        Texture *alphaTexture;
+        Texture *bumpMap;
 
         GLfloat transparancy;
         GLfloat sharpness;

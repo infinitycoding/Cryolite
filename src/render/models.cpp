@@ -9,7 +9,7 @@ Object *iccube;
 
 void INIT_Models(Scene *sce)
 {
-    MAN = Material::loadTexture(IMAGE(man.png));
+    MAN = Texture::loadTexture(IMAGE(man.png));
 
     iccube = new Object(OBJECT(iccube.obj), "iccube", vector(0, 0, 0));
     sce->addObject(iccube);

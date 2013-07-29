@@ -102,7 +102,7 @@ void Scene::render()
                         glEnable(GL_TEXTURE_2D);
 
                         if(currentObject->ObjectMaterial)
-                            glBindTexture( GL_TEXTURE_2D, currentObject->ObjectMaterial->ambiantTexture);
+                            glBindTexture( GL_TEXTURE_2D, currentObject->ObjectMaterial->ambiantTexture->nr);
                         else
                             glBindTexture( GL_TEXTURE_2D, 0);
 
