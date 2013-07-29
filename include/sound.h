@@ -4,6 +4,7 @@
 
 #include <AL/al.h>
 #include <AL/alut.h>
+#include <SDL_mixer.h>
 
 
 // put defines here

@@ -53,6 +53,7 @@
 		<Unit filename="include/controls.h" />
 		<Unit filename="include/font.h" />
 		<Unit filename="include/general_def.h" />
+		<Unit filename="include/level.h" />
 		<Unit filename="include/light.h" />
 		<Unit filename="include/material.h" />
 		<Unit filename="include/models.h" />
@@ -67,6 +68,7 @@
 		<Unit filename="include/settings.h" />
 		<Unit filename="include/sound.h" />
 		<Unit filename="include/texture.h" />
+		<Unit filename="include/ui.h" />
 		<Unit filename="include/vector.h" />
 		<Unit filename="include/vertex.h" />
 		<Unit filename="settings" />
@@ -77,6 +79,7 @@
 		<Unit filename="src/render/camera.cpp" />
 		<Unit filename="src/render/controls.cpp" />
 		<Unit filename="src/render/font.cpp" />
+		<Unit filename="src/render/level.cpp" />
 		<Unit filename="src/render/light.cpp" />
 		<Unit filename="src/render/main.cpp" />
 		<Unit filename="src/render/material.cpp" />
@@ -89,6 +92,7 @@
 		<Unit filename="src/render/settings.cpp" />
 		<Unit filename="src/render/sound.cpp" />
 		<Unit filename="src/render/texture.cpp" />
+		<Unit filename="src/render/ui.cpp" />
 		<Unit filename="src/render/vector.cpp" />
 		<Unit filename="src/render/vertex.cpp" />
 		<Extensions>
