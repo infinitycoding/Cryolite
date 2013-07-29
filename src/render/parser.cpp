@@ -85,3 +85,84 @@ bool BasicParser::getValueBool(const char *line)
         return false;
     }
 }
+
+
+SDL_Color BasicParser::getValueColor(const char *line)
+{
+    int i, j;
+    SDL_Color returnValue = {0, 0, 0, 0};
+    char string[MAX_LINELENGTH];
+
+    for(i = 0; line[i] != '\n' && line[i] != '\0' && line[i] != ' ' && i < MAX_LINELENGTH; i++);
+
+    if(line[i] != ' ')
+    {
+        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
+        return returnValue;
+    }
+
+    for(; line[i] == ' ' && i < MAX_LINELENGTH; i++);
+
+    if(i == MAX_LINELENGTH)
+    {
+        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
+        return returnValue;
+    }
+
+    for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.') && i < MAX_LINELENGTH; i++, j++)
+        string[j] = line[i];
+
+    string[j] = '\0';
+
+    if(i == MAX_LINELENGTH || line[i] != ' ')
+    {
+        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
+        return returnValue;
+    }
+
+    returnValue.r = atof(string);
+
+    for(; line[i] == ' ' && i < MAX_LINELENGTH; i++);
+
+    if(i == MAX_LINELENGTH)
+    {
+        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
+        return returnValue;
+    }
+
+    for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.') && i < MAX_LINELENGTH; i++, j++)
+        string[j] = line[i];
+
+    string[j] = '\0';
+
+    if(i == MAX_LINELENGTH || line[i] != ' ')
+    {
+        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
+        return returnValue;
+    }
+
+    returnValue.g = atof(string);
+
+    for(; line[i] == ' ' && i < MAX_LINELENGTH; i++);
+
+    if(i == MAX_LINELENGTH)
+    {
+        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
+        return returnValue;
+    }
+
+    for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.') && i < MAX_LINELENGTH; i++, j++)
+        string[j] = line[i];
+
+    string[j] = '\0';
+
+    if(i == MAX_LINELENGTH)
+    {
+        cerr << "The following line is corrupted. Will return 0." << endl << line;
+        return returnValue;
+    }
+
+    returnValue.b = atof(string);
+
+    return returnValue;
+}

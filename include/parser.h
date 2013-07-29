@@ -3,6 +3,8 @@
 
 
 
+#include <SDL.h>
+
 #include <iostream>
 #include <cstring>
 #include <cstdlib>
@@ -25,6 +27,7 @@ class BasicParser
         int getValueInt(const char *line);
         long getValueLong(const char *line);
         bool getValueBool(const char *line);
+        SDL_Color getValueColor(const char *line);
 };
 
 

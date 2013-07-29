@@ -98,63 +98,63 @@ bool Material::loadMaterial(const char *filename, const char *matname)
 
         if(!strncmp(line, "Ka", 2))    // ambiant color
         {
-            ambiantMatColor = extractColorFromLine(line);
+            ambiantMatColor = getValueColor(line);
         }
         else if(!strncmp(line, "Kd", 2))   // diffuse color
         {
-            diffuseMatColor = extractColorFromLine(line);
+            diffuseMatColor = getValueColor(line);
         }
         else if(!strncmp(line, "Ks", 2))   // specular color
         {
-            specularMatColor = extractColorFromLine(line);
+            specularMatColor = getValueColor(line);
         }
         else if(!strncmp(line, "Ke", 2))     // emissive color
         {
-            emissiveMatColor = extractColorFromLine(line);
+            emissiveMatColor = getValueColor(line);
         }
         else if(!strncmp(line, "Tf", 2))     // transparancy color
         {
-            transparancyMatColor = extractColorFromLine(line);
+            transparancyMatColor = getValueColor(line);
         }
         else if(!strncmp(line, "map_Ka", 6))     // ambiant texture
         {
-            ambiantTexture = TexCache->requestTexture(extractStringFromLine(line, string));
+            ambiantTexture = TexCache->requestTexture(getValueString(line, string));
         }
         else if(!strncmp(line, "map_Kd", 6))     // diffuse texture
         {
-            diffuseTexture = TexCache->requestTexture(extractStringFromLine(line, string));
+            diffuseTexture = TexCache->requestTexture(getValueString(line, string));
         }
         else if(!strncmp(line, "map_Ks", 6))     // specular texture
         {
-            specularTexture = TexCache->requestTexture(extractStringFromLine(line, string));
+            specularTexture = TexCache->requestTexture(getValueString(line, string));
         }
         else if(!strncmp(line, "map_d", 5))     // alpha texture
         {
-            alphaTexture = TexCache->requestTexture(extractStringFromLine(line, string));
+            alphaTexture = TexCache->requestTexture(getValueString(line, string));
         }
         else if(!strncmp(line, "map_bump", 8) || !strncmp(line, "bump", 4))     // bump map
         {
-            bumpMap = TexCache->requestTexture(extractStringFromLine(line, string));
+            bumpMap = TexCache->requestTexture(getValueString(line, string));
         }
         else if(!strncmp(line, "d", 1) || !strncmp(line, "Tr", 2))     // transparancy
         {
-            transparancy = extractFloatFromLine(line);
+            transparancy = getValueFloat(line);
         }
         else if(!strncmp(line, "sharpness", 9))     // sharpness
         {
-            sharpness = extractFloatFromLine(line);
+            sharpness = getValueFloat(line);
         }
         else if(!strncmp(line, "Ni", 2))     // optical density
         {
-            opticalDensity = extractFloatFromLine(line);
+            opticalDensity = getValueFloat(line);
         }
         else if(!strncmp(line, "Ns", 2))     // specular exponent
         {
-            specularExponent = extractFloatFromLine(line);
+            specularExponent = getValueFloat(line);
         }
         else if(!strncmp(line, "illum", 5))     // illumination mode
         {
-            illuminationMode = extractIntFromLine(line);
+            illuminationMode = getValueInt(line);
         }
         else if(!strncmp(line, "newmtl", 6))
         {
@@ -166,195 +166,6 @@ bool Material::loadMaterial(const char *filename, const char *matname)
 
     return true;
 }
-
-
-int Material::extractIntFromLine(const char *line)
-{
-    int i, j;
-    char string[MAX_STRING_LENGTH];
-
-    for(i = 0; line[i] != '\n' && line[i] != '\0' && line[i] != ' ' && i < MAX_STRING_LENGTH; i++);
-
-    if(line[i] != ' ')
-    {
-        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
-        return 0;
-    }
-
-    for(; line[i] == ' ' && i < MAX_STRING_LENGTH; i++);
-
-    if(i == MAX_STRING_LENGTH)
-    {
-        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
-        return 0;
-    }
-
-    for(j = 0; line[i] >= '0' && line[i] <= '9' && i < MAX_STRING_LENGTH; i++, j++)
-        string[j] = line[i];
-
-    string[j] = '\0';
-
-    if(i == MAX_STRING_LENGTH)
-    {
-        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
-        return 0;
-    }
-
-    return atoi(string);
-}
-
-
-float Material::extractFloatFromLine(const char *line)
-{
-    int i, j;
-    char string[MAX_STRING_LENGTH];
-
-    for(i = 0; line[i] != '\n' && line[i] != '\0' && line[i] != ' ' && i < MAX_STRING_LENGTH; i++);
-
-    if(line[i] != ' ')
-    {
-        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
-        return 0;
-    }
-
-    for(; line[i] == ' ' && i < MAX_STRING_LENGTH; i++);
-
-    if(i == MAX_STRING_LENGTH)
-    {
-        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
-        return 0;
-    }
-
-    for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.') && i < MAX_STRING_LENGTH; i++, j++)
-        string[j] = line[i];
-
-    string[j] = '\0';
-
-    if(i == MAX_STRING_LENGTH)
-    {
-        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
-        return 0;
-    }
-
-    return atof(string);
-}
-
-
-SDL_Color Material::extractColorFromLine(const char *line)
-{
-    int i, j;
-    SDL_Color returnValue = {0, 0, 0, 0};
-    char string[MAX_STRING_LENGTH];
-
-    for(i = 0; line[i] != '\n' && line[i] != '\0' && line[i] != ' ' && i < MAX_STRING_LENGTH; i++);
-
-    if(line[i] != ' ')
-    {
-        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
-        return returnValue;
-    }
-
-    for(; line[i] == ' ' && i < MAX_STRING_LENGTH; i++);
-
-    if(i == MAX_STRING_LENGTH)
-    {
-        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
-        return returnValue;
-    }
-
-    for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.') && i < MAX_STRING_LENGTH; i++, j++)
-        string[j] = line[i];
-
-    string[j] = '\0';
-
-    if(i == MAX_STRING_LENGTH || line[i] != ' ')
-    {
-        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
-        return returnValue;
-    }
-
-    returnValue.r = atof(string);
-
-    for(; line[i] == ' ' && i < MAX_STRING_LENGTH; i++);
-
-    if(i == MAX_STRING_LENGTH)
-    {
-        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
-        return returnValue;
-    }
-
-    for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.') && i < MAX_STRING_LENGTH; i++, j++)
-        string[j] = line[i];
-
-    string[j] = '\0';
-
-    if(i == MAX_STRING_LENGTH || line[i] != ' ')
-    {
-        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
-        return returnValue;
-    }
-
-    returnValue.g = atof(string);
-
-    for(; line[i] == ' ' && i < MAX_STRING_LENGTH; i++);
-
-    if(i == MAX_STRING_LENGTH)
-    {
-        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
-        return returnValue;
-    }
-
-    for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.') && i < MAX_STRING_LENGTH; i++, j++)
-        string[j] = line[i];
-
-    string[j] = '\0';
-
-    if(i == MAX_STRING_LENGTH)
-    {
-        cerr << "The following line is corrupted. Will return 0." << endl << line;
-        return returnValue;
-    }
-
-    returnValue.b = atof(string);
-
-    return returnValue;
-}
-
-
-char *Material::extractStringFromLine(const char *line, char *string)
-{
-    int i, j;
-
-    for(i = 0; line[i] != '\n' && line[i] != '\0' && line[i] != ' ' && i < MAX_STRING_LENGTH; i++);
-
-    if(line[i] != ' ')
-    {
-        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
-        return NULL;
-    }
-
-    for(; line[i] == ' ' && i < MAX_STRING_LENGTH; i++);
-
-    if(i == MAX_STRING_LENGTH)
-    {
-        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
-        return NULL;
-    }
-
-    for(j = 0; line[i] != '\n' && line[i] != '\0' && i < MAX_STRING_LENGTH; i++, j++)
-        string[j] = line[i];
-
-    string[j] = '\0';
-
-    if(i == MAX_STRING_LENGTH)
-    {
-        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
-        return NULL;
-    }
-
-    return string;
-}
-
 
 
 MaterialCache::MaterialCache()
