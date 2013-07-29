@@ -4,7 +4,6 @@
 
 
 #include <SDL.h>
-#include <SDL_image.h>
 #include <GL/glu.h>
 #include <GL/gl.h>
 
