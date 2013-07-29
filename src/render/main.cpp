@@ -16,6 +16,7 @@
 #include <general_def.h>
 #include <scene.h>
 #include <font.h>
+#include <level.h>
 #include <light.h>
 #include <settings.h>
 #include <sound.h>
@@ -73,14 +74,18 @@ int main(int argc, char *argv[]){
     gluQuadricTexture(q, true);
     Texture *sky = Material::TexCache->requestTexture(IMAGE(sky1.jpg));
 
-    //Background Music
-    Music *bgMusic = new Music(SOUND(moon.mp3),-1);
-    bgMusic->toggle();
+    struct locationMusic *bgmusic = new struct locationMusic;
 
+    bgmusic->music = new Music(SOUND(moon.mp3), -1);
+    bgmusic->location.startPos = vector(-50, -10, -50);
+    bgmusic->location.endPos = vector(50, 10, 50);
+
+    Level testLevel = Level();
+
+    testLevel.addBackgroundMusic(bgmusic);
 
     float lastFPS = 0;
     mainScene->lasttick = SDL_GetTicks();
-
 
     while(render){ //render
         for(int i = 0; i<9;i++)
@@ -94,6 +99,8 @@ int main(int argc, char *argv[]){
             printf ("%4.1f FPS",mainScene->averageFPS);
             lastFPS = mainScene->averageFPS;
         }
+
+        testLevel.refreshBackgroundMusic(Player->position);
 
         mainwindow.pollEvents();    // Eventhandler
 
