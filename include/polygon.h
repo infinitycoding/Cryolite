@@ -29,7 +29,6 @@ using namespace std;
 class Polygon
 {
     public:
-        Polygon();                     // a backward compatibility constructor - don't use it
         Polygon(int numOfVertices);    // the constructor
         virtual ~Polygon();            // the destructor
 

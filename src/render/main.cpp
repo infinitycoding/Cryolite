@@ -28,8 +28,6 @@
 #undef main
 #endif
 
-#include <iostream>
-
 Settings *gameSettings;
 Scene *mainScene;
 
@@ -43,7 +41,6 @@ using namespace std;
 
 
 int main(int argc, char *argv[]){
-
     gameSettings = new Settings("settings");
     //Create Window and Scene
     SDL mainwindow = SDL(gameSettings->width,gameSettings->height,gameSettings->sdlFlags,"Cryolite Engine");
@@ -74,7 +71,7 @@ int main(int argc, char *argv[]){
     // Skysphere
     GLUquadric *q =gluNewQuadric();
     gluQuadricTexture(q, true);
-    GLuint sky = Material::loadTexture(IMAGE(sky1.jpg));;
+    Texture *sky = Material::TexCache->requestTexture(IMAGE(sky1.jpg));
 
     //Background Music
     Music *bgMusic = new Music(SOUND(moon.mp3),-1);
@@ -114,7 +111,7 @@ int main(int argc, char *argv[]){
         glTranslatef(Player->position.x,Player->position.y,Player->position.z);
         glRotated(90,1,0,0);
         glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-        glBindTexture( GL_TEXTURE_2D, sky);
+        glBindTexture( GL_TEXTURE_2D, sky->nr);
         gluSphere(q,50,100,100);
         glPopMatrix();
 

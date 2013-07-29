@@ -2,6 +2,7 @@
 #define SOUND_H_INCLUDED
 
 
+#include <AL/al.h>
 #include <AL/alut.h>
 
 
