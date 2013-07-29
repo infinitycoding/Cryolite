@@ -6,20 +6,13 @@
 #include <GL/gl.h>
 #include <SDL.h>
 
-#include <iostream>
-#include <string.h>
 
-
+#include <parser.h>
 #include <general_def.h>
 
 
 
-#define MAX_LINELENGTH 30
-
-
-
-
-class Settings
+class Settings : public BasicParser
 {
     public:
         Settings();
@@ -41,12 +34,6 @@ class Settings
 
     private:
         void initSettings();
-
-        void getValueString(const char *line, char *string);
-        float getValueFloat(const char *line);
-        int getValueInt(const char *line);
-        bool getValueBool(const char *line);
-
 };
 
 

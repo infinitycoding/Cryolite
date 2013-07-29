@@ -57,6 +57,7 @@
 		<Unit filename="include/material.h" />
 		<Unit filename="include/models.h" />
 		<Unit filename="include/object.h" />
+		<Unit filename="include/parser.h" />
 		<Unit filename="include/polygon.h" />
 		<Unit filename="include/profiler.h">
 			<Option target="Debug" />
@@ -81,6 +82,7 @@
 		<Unit filename="src/render/material.cpp" />
 		<Unit filename="src/render/models.cpp" />
 		<Unit filename="src/render/object.cpp" />
+		<Unit filename="src/render/parser.cpp" />
 		<Unit filename="src/render/polygon.cpp" />
 		<Unit filename="src/render/scene.cpp" />
 		<Unit filename="src/render/sdl.cpp" />
