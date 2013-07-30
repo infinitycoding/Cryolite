@@ -47,6 +47,7 @@
 		<Linker>
 			<Add option="`sdl-config --libs`" />
 		</Linker>
+		<Unit filename="include/ExtMaths.h" />
 		<Unit filename="include/List.h" />
 		<Unit filename="include/PhysicsEngine.h" />
 		<Unit filename="include/camera.h" />
@@ -75,6 +76,7 @@
 		<Unit filename="src/optimize/profiler.cpp">
 			<Option target="Debug" />
 		</Unit>
+		<Unit filename="src/physics/ExtMaths.cpp" />
 		<Unit filename="src/physics/PhysicsEngine.cpp" />
 		<Unit filename="src/render/camera.cpp" />
 		<Unit filename="src/render/controls.cpp" />
