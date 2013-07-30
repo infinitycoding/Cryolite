@@ -1,53 +1,80 @@
-/*#include "PhysicsEngine.h"
-#include "general_def.h"
+#include <PhysicsEngine.h>
+#include <math.h>
 
-PhysicsEngine::PhysicsEngine(Scene scene)
+using namespace std;
+
+PhysicalObject::PhysicalObject()
 {
-    initEngine();
+    F = new List<Force>;
+    A.a = 0;
+    V.v = 0;
+    m = 1;
 }
 
-PhysicsEngine::~PhysicsEngine()
+PhysicalObject::PhysicalObject(List<Force> *initF, Acceleration initA, Velocity initV,float initm)
 {
-    //dtor
-}
-void PhysicsEngine::initEngine(Scene scene)
-{
-actors = this.loadAllActors(scene) //actor list
-
-numofObjects = ListSize(actors);
-
-actorCache = new ActorCache(STANDARD_SIZED_CACHE); //cache of actors, which are currently simulated
+    //F = initF;
+    A.a = initA.a;
+    A.Da = (initA.Da).unifyc();
+    V.v = initV.v;
+    V.Dv = (initV.Dv).unifyc();
+    m = initm;
 }
 
-List *PhysicsEngine::loadAllActors(Scene *scene)
+PhysicalObject::~PhysicalObject()
 {
-actorsList = ListCreate()
-
-ListSetFirst(scene->objectList);
-
-while(!ListIsLast(scene->objectList))
-    {
-        if (ListGetCurrent(scene->objectList).isPhysicalActor)
-            {
-            ListPushBack(scene->objectList, ListGetCurrent(scene->objectList));
-            }
-    ListNext(scene->objectList);
-    }
-
-
-    return *actorsList;
+    delete F;
 }
 
-void PhysicsEngine::addActor(Actor *newActor)
-{
-numofObjects++;
 
-ListPushFront(actors, *newActor);
+
+
+
+
+Force* PhysicalObject::addForce(Force *newForce)
+{
+    (*newForce).Df.unify();
+    F ->ListPushFront(newForce);
+    return newForce;
 }
 
-void PhysicsEngine::update(){
+void PhysicalObject::removeForce(Force *oldForce)
+{
+    F ->ListSetFirst();
+    while (oldForce != F->ListGetCurrent()){
+        F->ListNext();
+    };
+    F ->ListRemove();
+}
 
+Force PhysicalObject::resultingForce()
+{
+    Force resF;
+    if(!F->ListIsEmpty()){
+        F->ListSetFirst();
+        do{
+            resF.Df += (*F->ListGetCurrent()).Df * (*F->ListGetCurrent()).f;
+            resF.f +=  (*F->ListGetCurrent()).f *  (*F->ListGetCurrent()).f;
+            F->ListNext();
+        }while(!F->ListIsLast());
+    };
+    resF.f = sqrt(resF.f);
+    resF.Df.unify();
+    return resF;
+}
 
+void PhysicalObject::calc_acceleration()
+{
+    Force tempForce = resultingForce();
+    A.Da = tempForce.Df;
+    A.a = tempForce.f / m;
+}
 
-
-}*/
+void PhysicalObject::calc_velocity()
+{
+    float dt;//zeit, noch unberechnet, Platzhalter
+    calc_acceleration();
+    V.Dv = (V.Dv * V.v +A.Da * A.a *dt);
+    V.Dv.unify();
+    V.v = sqrt(V.v*V.v +A.a*A.a*dt*dt);
+}
