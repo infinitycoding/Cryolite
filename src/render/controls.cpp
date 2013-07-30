@@ -136,12 +136,19 @@ void Controls::controls_handler(Camera *cam)
 
 
 void Controls::rotation_handler(Camera *cam){    // Rotates the camera if a key is pressed.
+
+    cam->rotateY(ROTATION_WIDTH*right_rotation);
+
+    vector lookDirectSave = vector(&cam->lookingDirection);
+
     vector temp = vector(cam->lookingDirection.x, 0, cam->lookingDirection.z);
     temp.unify();
 
     cam->rotateX(-ROTATION_WIDTH*temp.z*down_rotation);
-    cam->rotateY(ROTATION_WIDTH*right_rotation);
     cam->rotateZ(-ROTATION_WIDTH*temp.x*down_rotation);
+
+    if((lookDirectSave.x > 0 ? true : false) !=(cam->lookingDirection.x > 0 ? true : false))
+        cam->lookingDirection = lookDirectSave;
 
     down_rotation = 0;
     right_rotation = 0;
