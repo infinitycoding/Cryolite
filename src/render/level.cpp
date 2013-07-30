@@ -29,6 +29,7 @@ Level::~Level()
 void Level::initLevel()
 {
     bgmusic = new Music();
+    bgmusicActivated = true;
     actualBackgroundMusic = NULL;
     backgroundMusics = new List<struct locationMusic>;
 }
@@ -55,34 +56,63 @@ struct locationMusic *Level::addBackgroundMusic(struct locationMusic *newBackgro
 
 bool Level::refreshBackgroundMusic(vector playerPos)
 {
-    if(actualBackgroundMusic != NULL && vectorInCube(playerPos, actualBackgroundMusic->location))
-        return false;
-
-    if(backgroundMusics->IsEmpty())
-        return false;
-
-    ListIterator<locationMusic> i = ListIterator<locationMusic>(backgroundMusics);
-    i.SetFirst();
-
-    do
+    if(bgmusicActivated)
     {
-        if(vectorInCube(playerPos, i.GetCurrent()->location))
-        {
-            actualBackgroundMusic = i.GetCurrent();
-            bgmusic->selectMusic(actualBackgroundMusic->musicname, -1);
-            bgmusic->toggle();
-            return true;
-        }
+        if(actualBackgroundMusic != NULL && vectorInCube(playerPos, actualBackgroundMusic->location))
+            return false;
 
-        i.Next();
-    }while(!i.IsLast());
+        if(backgroundMusics->IsEmpty())
+            return false;
+
+        ListIterator<locationMusic> i = ListIterator<locationMusic>(backgroundMusics);
+        i.SetFirst();
+
+        do
+        {
+            if(vectorInCube(playerPos, i.GetCurrent()->location))
+            {
+                actualBackgroundMusic = i.GetCurrent();
+                bgmusic->selectMusic(actualBackgroundMusic->musicname, -1);
+                bgmusic->toggle();
+                return true;
+            }
+
+            i.Next();
+        }while(!i.IsLast());
+
+        if(actualBackgroundMusic != NULL)
+                bgmusic->toggle();
+
+        actualBackgroundMusic = NULL;
+    }
+
+    return false;
+}
+
+
+void Level::activateBackgroundMusic()
+{
+    bgmusicActivated = true;
+}
+
+
+void Level::deactivateBackgroundMusic()
+{
+    bgmusicActivated = false;
 
     if(actualBackgroundMusic != NULL)
             bgmusic->toggle();
 
     actualBackgroundMusic = NULL;
+}
 
-    return false;
+
+void Level::toggleBackgroundMusic()
+{
+    if(bgmusicActivated)
+        deactivateBackgroundMusic();
+    else
+        activateBackgroundMusic();
 }
 
 

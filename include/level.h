@@ -33,15 +33,34 @@ class Level
         void initLevel();
         bool loadLevelFile(const char *filename);
 
+
+        // Background Music
         bool vectorInCube(vector v, struct cube c);
 
         struct locationMusic *addBackgroundMusic(struct locationMusic *newBackgroundMusic);
         bool refreshBackgroundMusic(vector playerPos);
+        void activateBackgroundMusic();
+        void deactivateBackgroundMusic();
+        void toggleBackgroundMusic();
 
         void testMusic(); //only to debug
 
+
+        // TODO: write script integration
+
+
+        // TODO: write object integration
+
+
+        // TODO: write chunk system
+
+
+        // TODO: write groundmap system
+
+
     protected:
         Music *bgmusic;
+        bool bgmusicActivated;
         struct locationMusic *actualBackgroundMusic;
         List<struct locationMusic> *backgroundMusics;
 };
