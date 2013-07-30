@@ -66,7 +66,6 @@ bool Level::refreshBackgroundMusic(vector playerPos)
 
     do
     {
-
         if(vectorInCube(playerPos, i.GetCurrent()->location))
         {
             actualBackgroundMusic = i.GetCurrent();
@@ -93,13 +92,13 @@ void Level::testMusic()
     struct locationMusic *moon = new struct locationMusic;
     strncpy(moon->musicname, SOUND(moon.mp3), 40);
     moon->location.startPos = vector(-50, -10, -50);
-    moon->location.endPos = vector(0, 10, 0);
+    moon->location.endPos = vector(0, 10, 50);
     addBackgroundMusic(moon);
 
-    /*bgmusic->addMusic(SOUND(majestic-theme.wav));
+    bgmusic->addMusic(SOUND(majestic-theme.wav));
     struct locationMusic *majestic = new struct locationMusic;
     strncpy(majestic->musicname, SOUND(majestic-theme.wav), 40);
-    majestic->location.startPos = vector(0, -10, 0);
+    majestic->location.startPos = vector(0, -10, -50);
     majestic->location.endPos = vector(50, 10, 50);
-    addBackgroundMusic(majestic);*/
+    addBackgroundMusic(majestic);
 }

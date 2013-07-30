@@ -49,7 +49,10 @@ bool Music::addMusic(const char *musicfile)
         {
             return false;
         }
+
+        M.Next();
     }
+
 
     Mix_Music *mixmusic = Mix_LoadMUS(musicfile);
     if(mixmusic == NULL)
@@ -83,6 +86,8 @@ bool Music::removeMusic(const char* musicfile)
             delete entry;
             return true;
         }
+
+        M.Next();
     }
     return false;
 }
@@ -101,6 +106,8 @@ bool Music::selectMusic(const char *name, int mode)
             activ = false;
             return true;
         }
+
+        M.Next();
     }
     return false;
 }
