@@ -28,6 +28,7 @@ Level::~Level()
 
 void Level::initLevel()
 {
+    bgmusic = new Music();
     actualBackgroundMusic = NULL;
     backgroundMusics = new List<struct locationMusic>;
 }
@@ -68,12 +69,9 @@ bool Level::refreshBackgroundMusic(vector playerPos)
 
         if(vectorInCube(playerPos, i.GetCurrent()->location))
         {
-
-         if(actualBackgroundMusic != NULL)
-                actualBackgroundMusic->music->toggle();
-
             actualBackgroundMusic = i.GetCurrent();
-            actualBackgroundMusic->music->toggle();
+            bgmusic->selectMusic(actualBackgroundMusic->musicname, -1);
+            bgmusic->toggle();
             return true;
         }
 
@@ -81,9 +79,27 @@ bool Level::refreshBackgroundMusic(vector playerPos)
     }while(!i.IsLast());
 
     if(actualBackgroundMusic != NULL)
-            actualBackgroundMusic->music->toggle();
+            bgmusic->toggle();
 
     actualBackgroundMusic = NULL;
 
     return false;
+}
+
+
+void Level::testMusic()
+{
+    bgmusic->addMusic(SOUND(moon.mp3));
+    struct locationMusic *moon = new struct locationMusic;
+    strncpy(moon->musicname, SOUND(moon.mp3), 40);
+    moon->location.startPos = vector(-50, -10, -50);
+    moon->location.endPos = vector(0, 10, 0);
+    addBackgroundMusic(moon);
+
+    /*bgmusic->addMusic(SOUND(majestic-theme.wav));
+    struct locationMusic *majestic = new struct locationMusic;
+    strncpy(majestic->musicname, SOUND(majestic-theme.wav), 40);
+    majestic->location.startPos = vector(0, -10, 0);
+    majestic->location.endPos = vector(50, 10, 50);
+    addBackgroundMusic(majestic);*/
 }

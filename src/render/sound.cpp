@@ -2,15 +2,17 @@
 #include <SDL/SDL_audio.h>
 #include <SDL/SDL_mixer.h>
 #include <string.h>
-
+#include <iostream>
 
 #include <sound.h>
+
+using namespace std;
 
 
 Music::Music()
 {
     musiclist = List<MusicEntry>();
-    M = ListIterator<MusicEntry>(musiclist);
+    M = ListIterator<MusicEntry>(&musiclist);
     currentMusic = NULL;
     currentMode = -1;
     activ = false;
@@ -19,11 +21,11 @@ Music::Music()
 Music::Music(const char *musicfile)
 {
     musiclist = List<MusicEntry>();
-    M = ListIterator<MusicEntry>(musiclist);
+    M = ListIterator<MusicEntry>(&musiclist);
     currentMode = -1;
     activ = false;
 
-    mixmusic = Mix_LoadMUS(musicfile);
+    Mix_Music *mixmusic = Mix_LoadMUS(musicfile);
     if(mixmusic == NULL)
     {
         cerr<<"Could not Load Muisc file:"<<musicfile<<endl;
@@ -31,9 +33,9 @@ Music::Music(const char *musicfile)
     else
     {
         currentMusic = new MusicEntry;
-        currentMusic->name = musicfile;
+        currentMusic->name = (char*)musicfile;
         currentMusic->music = mixmusic;
-        music.PushFront(currentMusic);
+        musiclist.PushFront(currentMusic);
     }
 }
 
@@ -43,13 +45,13 @@ bool Music::addMusic(const char *musicfile)
     M.SetFirst();
     while(!M.IsLast())
     {
-        if(!strncmp(musicfile,M.GetCurrent().name,strlen(M.GetCurrent().name)))
+        if(!strncmp(musicfile,M.GetCurrent()->name,strlen(M.GetCurrent()->name)))
         {
             return false;
         }
     }
 
-    mixmusic = Mix_LoadMUS(musicfile);
+    Mix_Music *mixmusic = Mix_LoadMUS(musicfile);
     if(mixmusic == NULL)
     {
         cerr<<"Could not Load Muisc file:"<<musicfile<<endl;
@@ -57,9 +59,9 @@ bool Music::addMusic(const char *musicfile)
     }
 
     MusicEntry *newMusicEntry = new MusicEntry;
-    newMusicEntry->name = musicfile;
+    newMusicEntry->name = (char*)musicfile;
     newMusicEntry->music = mixmusic;
-    music.PushFront(newMusicEntry);
+    musiclist.PushFront(newMusicEntry);
     return true;
 }
 
@@ -68,7 +70,7 @@ bool Music::removeMusic(const char* musicfile)
     M.SetFirst();
     while(!M.IsLast())
     {
-        if(!strncmp(musicfile,M.GetCurrent().name,strlen(M.GetCurrent().name)))
+        if(!strncmp(musicfile,M.GetCurrent()->name,strlen(M.GetCurrent()->name)))
         {
             if(M.GetCurrent() == currentMusic)
             {
@@ -77,7 +79,7 @@ bool Music::removeMusic(const char* musicfile)
                 activ = false;
             }
             MusicEntry *entry = M.Remove();
-            Mix_FreeMusic(entry.music);
+            Mix_FreeMusic(entry->music);
             delete entry;
             return true;
         }
@@ -90,11 +92,11 @@ bool Music::selectMusic(const char *name, int mode)
     M.SetFirst();
     while(!M.IsLast())
     {
-        if(!strncmp(musicfile,M.GetCurrent().name,strlen(M.GetCurrent().name)))
+        if(!strncmp(name,M.GetCurrent()->name,strlen(M.GetCurrent()->name)))
         {
             currentMode = mode;
             currentMusic = M.GetCurrent();
-            Mix_PlayMusic( currentMusic.music, currentMode );
+            Mix_PlayMusic( currentMusic->music, currentMode );
             Mix_PauseMusic();
             activ = false;
             return true;

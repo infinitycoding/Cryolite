@@ -74,14 +74,8 @@ int main(int argc, char *argv[]){
     gluQuadricTexture(q, true);
     Texture *sky = Material::TexCache->requestTexture(IMAGE(sky1.jpg));
 
-    struct locationMusic *bgmusic = new struct locationMusic;
-
-    bgmusic->music = new Music(SOUND(moon.mp3), -1);
-    bgmusic->location.startPos = vector(-50, -10, -50);
-    bgmusic->location.endPos = vector(50, 10, 50);
-
     Level testLevel = Level();
-    testLevel.addBackgroundMusic(bgmusic);
+    testLevel.testMusic();
 
     float lastFPS = 0;
     mainScene->lasttick = SDL_GetTicks();
