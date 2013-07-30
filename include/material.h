@@ -49,10 +49,6 @@ class Material : public BasicParser
         GLfloat specularExponent;
 
         int illuminationMode;
-
-
-    protected:
-        SDL_Color extractColorFromLine(const char *line);
 };
 
 

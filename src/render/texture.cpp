@@ -116,26 +116,46 @@ Texture *TextureCache::searchTexture(GLuint texnr)
 
 bool TextureCache::unloadTexture(const char *filename)
 {
-    Texture *texToDelete = searchTexture(filename);
+    Texture *texToDelete = NULL;
 
-    if(texToDelete != NULL)
-        delete texToDelete;
-    else
-        return false;
+    cachedTextures->ListSetFirst();
 
-    return true;
+    while(!(cachedTextures->ListIsLast()))
+    {
+        texToDelete = cachedTextures->ListGetCurrent();
+
+        if(!strncmp(texToDelete->file, filename, MAX_IMAGE_FILENAME_LENGTH))
+        {
+            cachedTextures->ListRemove();
+            return true;
+        }
+
+        cachedTextures->ListNext();
+    }
+
+    return false;
 }
 
 
 bool TextureCache::unloadTexture(GLuint texnr)
 {
-    Texture *texToDelete = searchTexture(texnr);
+    Texture *texToDelete = NULL;
 
-    if(texToDelete != NULL)
-        delete texToDelete;
-    else
-        return false;
+    cachedTextures->ListSetFirst();
 
-    return true;
+    while(!(cachedTextures->ListIsLast()))
+    {
+        texToDelete = cachedTextures->ListGetCurrent();
+
+        if(texToDelete->nr == texnr)
+        {
+            cachedTextures->ListRemove();
+            return true;
+        }
+
+        cachedTextures->ListNext();
+    }
+
+    return false;
 }
 

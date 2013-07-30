@@ -218,13 +218,23 @@ Material *MaterialCache::searchMaterial(const char *matname)
 
 bool MaterialCache::unloadMaterial(const char *matname)
 {
-    Material *matToDelete = searchMaterial(matname);
+    Material *matToDelete = NULL;
 
-    if(matToDelete != NULL)
-        delete matToDelete;
-    else
-        return false;
+    cachedMaterials->ListSetFirst();
 
-    return true;
+    while(!(cachedMaterials->ListIsLast()))
+    {
+        matToDelete = cachedMaterials->ListGetCurrent();
+
+        if(!strncmp(matToDelete->name, matname, MAX_STRING_LENGTH))
+        {
+            cachedMaterials->ListRemove();
+            return true;
+        }
+
+        cachedMaterials->ListNext();
+    }
+
+    return false;
 }
 
