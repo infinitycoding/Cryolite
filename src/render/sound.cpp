@@ -1,6 +1,7 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_audio.h>
 #include <SDL/SDL_mixer.h>
+#include <string.h>
 
 
 #include <sound.h>
@@ -8,54 +9,103 @@
 
 Music::Music()
 {
-    music = NULL;
+    musiclist = List<MusicEntry>();
+    M = ListIterator<MusicEntry>(musiclist);
+    currentMusic = NULL;
+    currentMode = -1;
     activ = false;
 }
 
-Music::Music(const char *musicfile, int mode)
+Music::Music(const char *musicfile)
 {
-    music = Mix_LoadMUS(musicfile);
-    if(music == NULL)
+    musiclist = List<MusicEntry>();
+    M = ListIterator<MusicEntry>(musiclist);
+    currentMode = -1;
+    activ = false;
+
+    mixmusic = Mix_LoadMUS(musicfile);
+    if(mixmusic == NULL)
     {
-        fprintf(stderr,"Could not Load Muisc file: %s \n", musicfile);
+        cerr<<"Could not Load Muisc file:"<<musicfile<<endl;
     }
     else
     {
-        Mix_PlayMusic( music, mode );
-        Mix_PauseMusic();
+        currentMusic = new MusicEntry;
+        currentMusic->name = musicfile;
+        currentMusic->music = mixmusic;
+        music.PushFront(currentMusic);
     }
-    activ = false;
 }
 
-Music::Music(const char *musicfile, int mode, bool play)
+
+bool Music::addMusic(const char *musicfile)
 {
-    music = Mix_LoadMUS(musicfile);
-    if(music == NULL)
+    M.SetFirst();
+    while(!M.IsLast())
     {
-        fprintf(stderr,"Could not Load Muisc file: %s \n", musicfile);
-        activ = false;
-    }
-    else
-    {
-        this->mode = mode;
-        Mix_PlayMusic( music, mode );
-        activ = play;
-        if(!play)
+        if(!strncmp(musicfile,M.GetCurrent().name,strlen(M.GetCurrent().name)))
         {
-            Mix_PauseMusic();
+            return false;
         }
     }
+
+    mixmusic = Mix_LoadMUS(musicfile);
+    if(mixmusic == NULL)
+    {
+        cerr<<"Could not Load Muisc file:"<<musicfile<<endl;
+        return false;
+    }
+
+    MusicEntry *newMusicEntry = new MusicEntry;
+    newMusicEntry->name = musicfile;
+    newMusicEntry->music = mixmusic;
+    music.PushFront(newMusicEntry);
+    return true;
 }
 
-Music::~Music()
+bool Music::removeMusic(const char* musicfile)
 {
-    Mix_HaltMusic();
-    Mix_FreeMusic(music);
+    M.SetFirst();
+    while(!M.IsLast())
+    {
+        if(!strncmp(musicfile,M.GetCurrent().name,strlen(M.GetCurrent().name)))
+        {
+            if(M.GetCurrent() == currentMusic)
+            {
+                Mix_HaltMusic();
+                currentMusic = NULL;
+                activ = false;
+            }
+            MusicEntry *entry = M.Remove();
+            Mix_FreeMusic(entry.music);
+            delete entry;
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Music::selectMusic(const char *name, int mode)
+{
+    M.SetFirst();
+    while(!M.IsLast())
+    {
+        if(!strncmp(musicfile,M.GetCurrent().name,strlen(M.GetCurrent().name)))
+        {
+            currentMode = mode;
+            currentMusic = M.GetCurrent();
+            Mix_PlayMusic( currentMusic.music, currentMode );
+            Mix_PauseMusic();
+            activ = false;
+            return true;
+        }
+    }
+    return false;
 }
 
 void Music::toggle()
 {
-    if(activ)
+    if(activ && currentMusic)
     {
         activ = false;
         Mix_PauseMusic();
@@ -66,6 +116,21 @@ void Music::toggle()
         Mix_ResumeMusic();
     }
 }
+
+Music::~Music()
+{
+    Mix_HaltMusic();
+    while(!musiclist.IsEmpty())
+    {
+        MusicEntry *entry = musiclist.PopFront();
+        Mix_FreeMusic(entry->music);
+        delete entry;
+    }
+
+}
+
+
+
 
 // todo: flag toggle after finishing playloops via global music manager
 

@@ -6,6 +6,8 @@
 #include <AL/alut.h>
 #include <SDL_mixer.h>
 
+#include<List.h>
+
 
 // put defines here
 
@@ -15,19 +17,26 @@
 class Music
 {
     public:
-        Mix_Music *music;
+        struct MusicEntry
+        {
+            char *name;
+            Mix_Music *music;
+        };
+        List<MusicEntry> musiclist;
+        ListIterator<MusicEntry> M;
+        int currentMode;
+        MusicEntry *currentMusic;
+
         bool activ;
 
         Music();
-        Music(const char *musicfile, int mode);
-        Music(const char *musicfile, int mode,bool play);
-        ~Music();
+        Music(const char *musicfile);
+        bool addMusic(const char *musicfile);
+        bool removeMusic(const char* musicfile);
+        bool selectMusic(const char *name, int mode);
         void toggle();
 
-    private:
-
-        int mode;
-
+        ~Music();
 };
 
 
