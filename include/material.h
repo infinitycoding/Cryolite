@@ -6,6 +6,7 @@
 #include <cstdio>
 #include <cstdlib>
 
+#include <parser.h>
 #include <texture.h>
 
 
@@ -13,7 +14,7 @@
 
 
 
-class Material
+class Material : public BasicParser
 {
     public:
         Material();
@@ -48,13 +49,6 @@ class Material
         GLfloat specularExponent;
 
         int illuminationMode;
-
-
-    protected:
-        int extractIntFromLine(const char *line);
-        float extractFloatFromLine(const char *line);
-        SDL_Color extractColorFromLine(const char *line);
-        char *extractStringFromLine(const char *line, char *string);
 };
 
 

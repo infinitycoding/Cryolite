@@ -1,5 +1,5 @@
 #include <texture.h>
-
+#include <sdl.h>
 
 using namespace std;
 
@@ -26,7 +26,7 @@ Texture::Texture(const char *filename)
 
     strncpy(file, filename, MAX_IMAGE_FILENAME_LENGTH);
 
-    nr = loadTexture(filename);
+    nr = SDL::loadTexture(filename);
 }
 
 
@@ -42,61 +42,6 @@ void Texture::initTexture()
     memset(file, '\0', sizeof(file));
 }
 
-
-GLuint Texture::loadTexture(const char *filename)
-{
-    GLint nOfColors = 0;
-    GLenum texture_format = 0;
-    SDL_Surface *SDL_Texture = IMG_Load(filename);
-    GLuint GL_Texture = 0;
-
-    if(SDL_Texture == NULL)
-    {
-        printf("textur %s not found\n",filename);
-        return 0;
-    }
-
-
-    nOfColors = SDL_Texture->format->BytesPerPixel;
-
-    if (nOfColors == 4)
-    {
-        if (SDL_Texture->format->Rmask == 0x000000ff)
-            texture_format = GL_RGBA;
-        else
-            texture_format = GL_BGRA;
-    }
-
-    else if (nOfColors == 3)
-    {
-        if (SDL_Texture->format->Rmask == 0x000000ff)
-            texture_format = GL_RGB;
-        else
-            texture_format = GL_BGR;
-    }
-    else
-    {
-        printf("warning: %s is not truecolor.. this will probably break\n", filename);
-    }
-
-    glEnable(GL_TEXTURE_2D);
-    glGenTextures( 1, &GL_Texture );
-    glActiveTextureARB(GL_Texture);
-
-
-
-
-    glBindTexture( GL_TEXTURE_2D, GL_Texture );
-    glTexImage2D( GL_TEXTURE_2D, 0, nOfColors, SDL_Texture->w, SDL_Texture->h, 0,texture_format, GL_UNSIGNED_BYTE, SDL_Texture->pixels );
-
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-
-
-    cout << "texur " << GL_Texture << " " << filename << " loaded" << endl;
-
-    return GL_Texture;
-}
 
 
 TextureCache::TextureCache()
@@ -171,26 +116,46 @@ Texture *TextureCache::searchTexture(GLuint texnr)
 
 bool TextureCache::unloadTexture(const char *filename)
 {
-    Texture *texToDelete = searchTexture(filename);
+    Texture *texToDelete = NULL;
 
-    if(texToDelete != NULL)
-        delete texToDelete;
-    else
-        return false;
+    cachedTextures->ListSetFirst();
 
-    return true;
+    while(!(cachedTextures->ListIsLast()))
+    {
+        texToDelete = cachedTextures->ListGetCurrent();
+
+        if(!strncmp(texToDelete->file, filename, MAX_IMAGE_FILENAME_LENGTH))
+        {
+            cachedTextures->ListRemove();
+            return true;
+        }
+
+        cachedTextures->ListNext();
+    }
+
+    return false;
 }
 
 
 bool TextureCache::unloadTexture(GLuint texnr)
 {
-    Texture *texToDelete = searchTexture(texnr);
+    Texture *texToDelete = NULL;
 
-    if(texToDelete != NULL)
-        delete texToDelete;
-    else
-        return false;
+    cachedTextures->ListSetFirst();
 
-    return true;
+    while(!(cachedTextures->ListIsLast()))
+    {
+        texToDelete = cachedTextures->ListGetCurrent();
+
+        if(texToDelete->nr == texnr)
+        {
+            cachedTextures->ListRemove();
+            return true;
+        }
+
+        cachedTextures->ListNext();
+    }
+
+    return false;
 }
 

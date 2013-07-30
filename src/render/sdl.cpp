@@ -1,7 +1,12 @@
-#include <sdl.h>
 #include <SDL_mixer.h>
+#include <SDL_image.h>
+#include <iostream>
+
+#include <sdl.h>
 #include <settings.h>
 
+
+using namespace std;
 extern Settings *gameSettings;
 
 
@@ -136,6 +141,113 @@ void SDL::pollEvents()
         }
     }
 }
+
+GLuint SDL::loadTexture(const char *filename){return loadTexture(filename,GL_NEAREST,GL_NEAREST);}
+
+GLuint SDL::loadTexture(const char *filename,GLenum MinFilter,GLenum MagFilter)
+{
+    GLint nOfColors = 0;
+    GLenum texture_format = 0;
+    SDL_Surface *SDL_Texture = IMG_Load(filename);
+    GLuint GL_Texture = 0;
+
+    if(SDL_Texture == NULL)
+    {
+        printf("textur %s not found\n",filename);
+        return 0;
+    }
+
+
+    nOfColors = SDL_Texture->format->BytesPerPixel;
+
+    if (nOfColors == 4)
+    {
+        if (SDL_Texture->format->Rmask == 0x000000ff)
+            texture_format = GL_RGBA;
+        else
+            texture_format = GL_BGRA;
+    }
+
+    else if (nOfColors == 3)
+    {
+        if (SDL_Texture->format->Rmask == 0x000000ff)
+            texture_format = GL_RGB;
+        else
+            texture_format = GL_BGR;
+    }
+    else
+    {
+        fprintf(stderr,"warning: %s is not truecolor.. this will probably break\n", filename);
+    }
+
+    glEnable(GL_TEXTURE_2D);
+    glGenTextures( 1, &GL_Texture );
+    glActiveTextureARB(GL_Texture);
+
+    glBindTexture( GL_TEXTURE_2D, GL_Texture );
+    glTexImage2D( GL_TEXTURE_2D, 0, nOfColors, SDL_Texture->w, SDL_Texture->h, 0,texture_format, GL_UNSIGNED_BYTE, SDL_Texture->pixels );
+
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, MinFilter );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, MagFilter );
+
+
+    cout << "texur " << GL_Texture << " " << filename << " loaded" << endl;
+
+    SDL_FreeSurface(SDL_Texture);
+    return GL_Texture;
+}
+
+GLuint SDL::surfToTexture(SDL_Surface *surf){return surfToTexture(surf,GL_NEAREST,GL_NEAREST);}
+
+GLuint SDL::surfToTexture(SDL_Surface *surf,GLenum MinFilter,GLenum MagFilter)
+{
+
+    GLint nOfColors = 0;
+    GLenum texture_format = 0;
+    GLuint GL_Texture = 0;
+
+    if(surf == NULL)
+    {
+        cerr<<"texture pointer is NULL. Returned NULL texture"<<endl;
+        return 0;
+    }
+
+
+    nOfColors = surf->format->BytesPerPixel;
+
+    if (nOfColors == 4)
+    {
+        if (surf->format->Rmask == 0x000000ff)
+            texture_format = GL_RGBA;
+        else
+            texture_format = GL_BGRA;
+    }
+
+    else if (nOfColors == 3)
+    {
+        if (surf->format->Rmask == 0x000000ff)
+            texture_format = GL_RGB;
+        else
+            texture_format = GL_BGR;
+    }
+    else
+    {
+        cerr<<"warning: surface is not a truecolor surface .. this will probably break"<<endl;
+    }
+
+    glEnable(GL_TEXTURE_2D);
+    glGenTextures( 1, &GL_Texture );
+    glActiveTextureARB(GL_Texture);
+
+    glBindTexture( GL_TEXTURE_2D, GL_Texture );
+    glTexImage2D( GL_TEXTURE_2D, 0, nOfColors, surf->w, surf->h, 0,texture_format, GL_UNSIGNED_BYTE, surf->pixels );
+
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, MinFilter );
+    glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, MagFilter );
+
+    return GL_Texture;
+}
+
 
 void SDL::SDLexit()
 {

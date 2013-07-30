@@ -3,10 +3,14 @@
 
 
 
+#include <SDL.h>
+
+#include <iostream>
+#include <cstring>
 #include <cstdlib>
 
 
-#define MAX_CHAR_LIST_SIZE 10
+#define MAX_LINELENGTH 30
 
 
 
@@ -14,36 +18,16 @@ class BasicParser
 {
     public:
         BasicParser();
-        ~BasicParser();
+        virtual ~BasicParser();
 
-
-        char *skipPlaceholders(char *string);
-
-        char *getString(char *string);
-
-        bool getBool(char *string);
-
-        short getShort(char *string);
-        int getInt(char *string);
-        long getLong(char *string);
-
-        float getFloat(char *string);
-        double getDouble(char *string);
-
-        void addPlaceholderChar(char character);
-        void addLineEndChar(char character);
-        void addValueEndChar(char character);
-
-        bool isInList(char character, char *list, unsigned int highestIndex);
-
-    protected:
-        unsigned int highestPlaceholderCharIndex;
-        unsigned int highestLineEndCharIndex;
-        unsigned int highestValueEndCharIndex;
-
-        char placeholderChars[MAX_CHAR_LIST_SIZE];
-        char lineEndChars[MAX_CHAR_LIST_SIZE];
-        char valueEndChars[MAX_CHAR_LIST_SIZE];
+        char *getValueString(const char *line, char *string);
+        float getValueFloat(const char *line);
+        double getValueDouble(const char *line);
+        short getValueShort(const char *line);
+        int getValueInt(const char *line);
+        long getValueLong(const char *line);
+        bool getValueBool(const char *line);
+        SDL_Color getValueColor(const char *line);
 };
 
 

@@ -46,6 +46,10 @@ class SDL
 
         SDL(int width, int height, int flags, const char* caption);
         ~SDL();
+        static GLuint loadTexture(const char *filename);
+        static GLuint loadTexture(const char *filename,GLenum MinFilter,GLenum MagFilter);
+        static GLuint surfToTexture(SDL_Surface *surf);
+        static GLuint surfToTexture(SDL_Surface *surf,GLenum MinFilter,GLenum MagFilter);
 
         void addHandle(EventHandle *Instance);
         int  removeHandle(EventHandle *Instance);
