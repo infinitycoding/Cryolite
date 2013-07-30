@@ -12,7 +12,7 @@ extern Settings *gameSettings;
 Camera::Camera()
 {
     position = vector();
-    lookingDirection = vector(0.0, 0.0, 1.0);
+    lookingDirection = vector(0, 0, 1);
 
     nearClip = STANDART_NEARCLIP;
     farClip = STANDART_FARCLIP;
@@ -64,6 +64,6 @@ void Camera::rotateY(float rotate)
 
 void Camera::rotateZ(float rotate)
 {
-    lookingDirection.x = lookingDirection.y * cos(rotate) + lookingDirection.x * sin(rotate);
-    lookingDirection.y = lookingDirection.x * cos(rotate) - lookingDirection.y * sin(rotate);
+    lookingDirection.x = lookingDirection.x * cos(rotate) - lookingDirection.y * sin(rotate);
+    lookingDirection.y = lookingDirection.x * sin(rotate) + lookingDirection.y * cos(rotate);
 }

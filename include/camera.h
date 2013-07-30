@@ -3,6 +3,7 @@
 
 #include <GL/gl.h>
 
+#include <iostream>
 
 #include <vector.h>
 

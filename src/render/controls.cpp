@@ -10,17 +10,15 @@
 #include <scene.h>
 #include <settings.h>
 
-#define ROTATION_SPEED 5
+#define ROTATION_SPEED 0.5
 #define MOVEMENT_SPEED 10
 
 #define ROTATION_WIDTH (ROTATION_SPEED/mainScene->averageFPS)
 #define MOVEMENT_WIDTH (MOVEMENT_SPEED/mainScene->averageFPS)
 
 
-bool Controls::right;
-bool Controls::left;
-bool Controls::up;
-bool Controls::down;
+float Controls::right_rotation;
+float Controls::down_rotation;
 
 bool Controls::move_right;
 bool Controls::move_left;
@@ -125,24 +123,8 @@ void Controls::handleKeyUp(SDL_KeyboardEvent *e)
 
 void Controls::handleMouseMotion(SDL_MouseMotionEvent *e)
 {
-    if(e->xrel>0)
-    {
-        right=true;
-    }
-    else
-    {
-        left=true;
-    }
-
-    if(e->yrel>0)
-    {
-        up = true;
-    }
-    else
-    {
-        down = true;
-    }
-
+    right_rotation = e->xrel;
+    down_rotation = e->yrel;
 }
 
 
@@ -154,34 +136,15 @@ void Controls::controls_handler(Camera *cam)
 
 
 void Controls::rotation_handler(Camera *cam){    // Rotates the camera if a key is pressed.
-    if(right)
-    {
-        cam->rotateY(ROTATION_WIDTH);
+    vector temp = vector(cam->lookingDirection.x, 0, cam->lookingDirection.z);
+    temp.unify();
 
-        right = false;
-    }
+    cam->rotateX(-ROTATION_WIDTH*temp.z*down_rotation);
+    cam->rotateY(ROTATION_WIDTH*right_rotation);
+    cam->rotateZ(-ROTATION_WIDTH*temp.x*down_rotation);
 
-    if(left)
-    {
-        cam->rotateY(-ROTATION_WIDTH);
-
-        left = false;
-    }
-
-    /*if(up)
-    {
-        cam->rotateX(-ROTATION_WIDTH);
-
-        up = false;
-    }
-
-    if(down)
-    {
-        cam->rotateX(ROTATION_WIDTH);
-
-        down = false;
-    }*/
-
+    down_rotation = 0;
+    right_rotation = 0;
 }
 
 void Controls::move_handler(Camera *cam){        // Moves the camera if a key is pressed

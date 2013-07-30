@@ -28,10 +28,8 @@ class Controls : EventHandle
         void move_handler(Camera *cam);
 
 
-        static bool right;
-        static bool left;
-        static bool up;
-        static bool down;
+        static float right_rotation;
+        static float down_rotation;
 
         static bool move_right;
         static bool move_left;
