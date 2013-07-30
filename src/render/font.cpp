@@ -59,7 +59,7 @@ bool Font::loadTTF(const char *font, const char *name, int ptsize)
     new_font->ptsize = ptsize;          // set the pointsize of the new font
     strncpy(new_font->name, name, MAX_NAMELENGTH);  // set the name of the new font
 
-    TrueTypeFonts->ListPushFront(new_font);     // push the new font in the ttf-list
+    TrueTypeFonts->PushFront(new_font);     // push the new font in the ttf-list
 
     return true;
 }
@@ -75,17 +75,18 @@ bool Font::unloadTTF(const char *name)
     struct fontEntry *font_for_deletion;    // a pointer to the font the function should unload
 
 
-    if(TrueTypeFonts->ListIsEmpty())        // first check if the list is empty
+    if(TrueTypeFonts->IsEmpty())        // first check if the list is empty
     {
         fprintf(stderr, "There is no font loaded, so it's impossible to unload one. \n");
         return false;
     }
 
-    TrueTypeFonts->ListSetFirst();          // start at the beginning of the list with the search
+    ListIterator<fontEntry> i = ListIterator<fontEntry>(TrueTypeFonts);
+    i.SetFirst();          // start at the beginning of the list with the search
 
-    while(!(TrueTypeFonts->ListIsLast()))     // searching loop
+    while(!(i.IsLast()))     // searching loop
     {
-        font_for_deletion = TrueTypeFonts->ListGetCurrent();    // get the actual element
+        font_for_deletion = i.GetCurrent();    // get the actual element
 
         if(!strncmp(font_for_deletion->name, name, MAX_NAMELENGTH))         // check if it's the correct one
         {
@@ -93,7 +94,7 @@ bool Font::unloadTTF(const char *name)
             break;
         }
 
-        TrueTypeFonts->ListNext();          // set the current pointer to the next element
+        i.Next();          // set the current pointer to the next element
     }
 
     if(found_font == false)                 // end function if the font is not in the list
@@ -103,7 +104,7 @@ bool Font::unloadTTF(const char *name)
     }
 
     TTF_CloseFont(font_for_deletion->font); // close the font (don't know why, maybe it is important)
-    TrueTypeFonts->ListRemove();            // remove the font out of the list
+    i.Remove();            // remove the font out of the list
     delete font_for_deletion;              // free the ram
 
     return true;
@@ -186,17 +187,18 @@ SDL_Surface *Font::atosurf(const char *text, const char *fontname, SDL_Color fon
 
     struct fontEntry *fontToUse;           // the font in which the text will be printed
 
-    if(TrueTypeFonts->ListIsEmpty())        // first check if the list is empty
+    if(TrueTypeFonts->IsEmpty())        // first check if the list is empty
     {
         fprintf(stderr, "There is no font loaded, so it's impossible to use one. \n");
         return false;
     }
 
-    TrueTypeFonts->ListSetFirst();          // start at the beginning of the list with the search
+    ListIterator<fontEntry> i = ListIterator<fontEntry>(TrueTypeFonts);
+    i.SetFirst(); // start at the beginning of the list with the search
 
-    while(!(TrueTypeFonts->ListIsLast()))     // searching loop
+    while(!(i.IsLast()))     // searching loop
     {
-        fontToUse = TrueTypeFonts->ListGetCurrent();    // get the actual element
+        fontToUse = i.GetCurrent();    // get the actual element
 
         if(!strncmp(fontToUse->name, fontname, MAX_NAMELENGTH))         // check if it's the correct one
         {
@@ -204,7 +206,7 @@ SDL_Surface *Font::atosurf(const char *text, const char *fontname, SDL_Color fon
             break;
         }
 
-        TrueTypeFonts->ListNext();          // set the current pointer to the next element
+        i.Next();          // set the current pointer to the next element
     }
 
     if(found_font == false)                 // end function if the font is not in the list

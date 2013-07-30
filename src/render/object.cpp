@@ -421,25 +421,25 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
 Vertex3D *Object::addObjectVertex(Vertex3D *newVertex)
 {
-    vertices->ListPushFront(newVertex);
+    vertices->PushFront(newVertex);
     return newVertex;
 }
 
 vector *Object::addNormalVector(vector *newNormVector)
 {
-    normvectors->ListPushFront(newNormVector);
+    normvectors->PushFront(newNormVector);
     return newNormVector;
 }
 
 Vertex2D *Object::addTextureVertex(Vertex2D *newTexVertex)
 {
-    texvertices->ListPushFront(newTexVertex);
+    texvertices->PushFront(newTexVertex);
     return newTexVertex;
 }
 
 Polygon *Object::addPolygon(Polygon *newPolygon)
 {
-    polygones->ListPushFront(newPolygon);
+    polygones->PushFront(newPolygon);
     return newPolygon;
 }
 

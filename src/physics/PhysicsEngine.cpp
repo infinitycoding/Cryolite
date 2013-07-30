@@ -5,7 +5,7 @@ using namespace std;
 
 PhysicalObject::PhysicalObject()
 {
-    F = new List<Force>;
+    F = new List<Force>();
     A.a = 0;
     V.v = 0;
     m = 1;
@@ -29,34 +29,35 @@ PhysicalObject::~PhysicalObject()
 
 
 
-
-
 Force* PhysicalObject::addForce(Force *newForce)
 {
     (*newForce).Df.unify();
-    F ->ListPushFront(newForce);
+    F->PushFront(newForce);
     return newForce;
 }
 
 void PhysicalObject::removeForce(Force *oldForce)
 {
-    F ->ListSetFirst();
-    while (oldForce != F->ListGetCurrent()){
-        F->ListNext();
-    };
-    F ->ListRemove();
+    ListIterator<Force> *i = new ListIterator<Force>(F);
+    i->SetFirst();
+    while (oldForce != i->GetCurrent())
+    {
+        i->Next();
+    }
+    i->Remove();
 }
 
 Force PhysicalObject::resultingForce()
 {
     Force resF;
-    if(!F->ListIsEmpty()){
-        F->ListSetFirst();
+    if(!F->IsEmpty()){
+        ListIterator<Force> *i = new ListIterator<Force>(F);
+        i->SetFirst();
         do{
-            resF.Df += (*F->ListGetCurrent()).Df * (*F->ListGetCurrent()).f;
-            resF.f +=  (*F->ListGetCurrent()).f *  (*F->ListGetCurrent()).f;
-            F->ListNext();
-        }while(!F->ListIsLast());
+            resF.Df += (*i->GetCurrent()).Df * (*i->GetCurrent()).f;
+            resF.f +=  (*i->GetCurrent()).f *  (*i->GetCurrent()).f;
+            i->Next();
+        }while(!i->IsLast());
     };
     resF.f = sqrt(resF.f);
     resF.Df.unify();
@@ -72,7 +73,7 @@ void PhysicalObject::calc_acceleration()
 
 void PhysicalObject::calc_velocity()
 {
-    float dt;//zeit, noch unberechnet, Platzhalter
+    float dt = 0;//zeit, noch unberechnet, Platzhalter
     calc_acceleration();
     V.Dv = (V.Dv * V.v +A.Da * A.a *dt);
     V.Dv.unify();

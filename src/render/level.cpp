@@ -47,7 +47,7 @@ bool Level::vectorInCube(vector v, struct cube c)
 
 struct locationMusic *Level::addBackgroundMusic(struct locationMusic *newBackgroundMusic)
 {
-    backgroundMusics->ListPushFront(newBackgroundMusic);
+    backgroundMusics->PushFront(newBackgroundMusic);
     return newBackgroundMusic;
 }
 
@@ -57,27 +57,28 @@ bool Level::refreshBackgroundMusic(vector playerPos)
     if(actualBackgroundMusic != NULL && vectorInCube(playerPos, actualBackgroundMusic->location))
         return false;
 
-    if(backgroundMusics->ListIsEmpty())
+    if(backgroundMusics->IsEmpty())
         return false;
 
-    backgroundMusics->ListSetFirst();
+    ListIterator<locationMusic> i = ListIterator<locationMusic>(backgroundMusics);
+    i.SetFirst();
 
     do
     {
 
-        if(vectorInCube(playerPos, backgroundMusics->ListGetCurrent()->location))
+        if(vectorInCube(playerPos, i.GetCurrent()->location))
         {
 
          if(actualBackgroundMusic != NULL)
                 actualBackgroundMusic->music->toggle();
 
-            actualBackgroundMusic = backgroundMusics->ListGetCurrent();
+            actualBackgroundMusic = i.GetCurrent();
             actualBackgroundMusic->music->toggle();
             return true;
         }
 
-        backgroundMusics->ListNext();
-    }while(!backgroundMusics->ListIsLast());
+        i.Next();
+    }while(!i.IsLast());
 
     if(actualBackgroundMusic != NULL)
             actualBackgroundMusic->music->toggle();

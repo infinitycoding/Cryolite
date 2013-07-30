@@ -49,7 +49,7 @@ int main(int argc, char *argv[]){
 
     // Create camera, Global light and Input controler
     Camera *Player = new Camera(vector(STARTING_X,STARTING_Y,STARTING_Z),vector(0,0,1),STANDART_NEARCLIP,STANDART_FARCLIP,gameSettings->fov,0,0,gameSettings->height,gameSettings->width);
-    mainScene->Camlist->ListPushFront(Player);
+    mainScene->Camlist->PushFront(Player);
     Controls playerControls = Controls(&mainwindow);
     mainScene->GlobalAmbience = new GlobalLight();
 
@@ -81,7 +81,6 @@ int main(int argc, char *argv[]){
     bgmusic->location.endPos = vector(50, 10, 50);
 
     Level testLevel = Level();
-
     testLevel.addBackgroundMusic(bgmusic);
 
     float lastFPS = 0;

@@ -1,228 +1,438 @@
 
 #ifndef _list_h_
 #define _list_h_
+struct Node
+{
+    struct Node *next;
+    struct Node *prev;
+    void *element;
+};
 
 template <typename T>
 
 class List
 {
     public:
-
         List();
+        List(List<T> *l);
+        List(List<T> *l,void(*copyTree)(T *destElement, T *srcElement));
         ~List();
 
-        void ListPushBack(T *element);
-        void ListPushFront(T *element);
-        void ListInsertAfter(T *element);
-        void ListInsertBefore(T *element);
-
-        T *ListPopBack();
-        T *ListPopFront();
-        T *ListRemove();
-        T *ListGetCurrent();
-
-        void ListNext();
-        void ListPrevious();
+        void PushFront(T *element);
+        void PushBack(T *element);
+        T *PopBack();
+        T *PopFront();
 
 
-        void ListSetLast();
-        void ListSetFirst();
-        bool ListIsEmpty();
-        bool ListIsLast();
+        bool IsEmpty();
+        void *GetNode(T *element);
 
+        size_t Size();
+        int NumOfElements();
 
-        size_t ListSize();
-
-        struct ListNode
-        {
-            struct ListNode *next;
-            struct ListNode *prev;
-            T *element;
-        };
-
-        void ListSplice(struct ListNode *start, struct ListNode *end, struct ListNode *target);
-        T *ListRemoveNode(struct ListNode *node);
+        T *Remove(Node *n);
+        void Destroy(Node *n);
 
         void (*structCleaner)(T *element);
-    private:
-        struct ListNode *head;
-        struct ListNode *current;
+        bool lock;
 
+        Node *dummy;
 };
 
+template <typename T>
 
+class ListIterator
+{
+    public:
+        ListIterator();
+        ListIterator(List<T> *L);
+
+        void PushFront(T *element);
+        void PushBack(T *element);
+
+        void InsertAfter(T *element);
+        void InsertBefore(T *element);
+
+        T *PopBack();
+        T *PopFront();
+
+        T *Remove();
+        void Destroy();
+        T *GetCurrent();
+        bool IsEmpty();
+
+        void Next();
+        void Previous();
+        void SetLast();
+        void SetFirst();
+        bool IsLast();
+        void set(void *n);
+
+        Node *currentNode;
+        List<T> *Instance;
+};
 
 template <typename T>
 List<T>::List()
 {
-    struct ListNode *dummy = new struct ListNode;
-    this->head = dummy;
-    this->current = dummy;
-    dummy->next = dummy;
-    dummy->prev = dummy;
-    dummy->element = NULL;
-    this->structCleaner = NULL;
+    lock = true;
+        dummy = new Node;
+        dummy->element = NULL;
+        dummy->prev = dummy;
+        dummy->next = dummy;
+        structCleaner = NULL;
+    lock = false;
 }
 
+template <typename T>
+List<T>::List(List<T> *l)
+{
+    lock = true;
+        structCleaner = l->structCleaner;
+        ListIterator<T> *lit = ListIterator<T>(l);
+        dummy = new Node;
+        dummy->element = NULL;
+        dummy->next = dummy;
+        dummy->prev = dummy;
+        while(!lit->IsLast())
+        {
+            T *currentEntry = new T;
+            *currentEntry = *lit->GetCurrent();
+            PushFront(currentEntry);
+            lit->Next();
+        }
+    lock = false;
+}
 
 template <typename T>
-List<T>::~List()
+List<T>::List(List<T> *l, void(*copyTree)(T *destElement, T *srcElement))
 {
-    while(!this->ListIsEmpty())
-    {
-        if(structCleaner)
+    lock = true;
+        structCleaner = l->structCleaner;
+        ListIterator<T> *srcIt = ListIterator<T>(l);
+        dummy = new Node;
+        dummy->element = NULL;
+        dummy->next = dummy;
+        dummy->prev = dummy;
+        while(!srcIt->IsLast())
         {
-            T *element = ListPopFront();
-            structCleaner(element);
+            T *currentEntry = new T;
+            *currentEntry = *srcIt->GetCurrent();
+            copyTree(currentEntry,srcIt->GetCurrent());
+            PushFront(currentEntry);
+            srcIt->Next();
+        }
+    lock = false;
+}
+
+template <typename T>
+List<T>::~List<T>()
+{
+    lock = true;
+        while(!IsEmpty())
+        {
+            T *element = PopFront();
+            if(structCleaner)
+                structCleaner(element);
             delete element;
         }
-        else
+}
+
+template <typename T>
+void List<T>::PushFront(T *element)
+{
+    Node *newNode = new Node;
+    newNode->element = (void*)element;
+
+    while(lock){}
+    lock = true;
+        newNode->next = dummy->next;
+        newNode->prev = dummy;
+        dummy->next->prev = newNode;
+        dummy->next = newNode;
+    lock = false;
+}
+
+template <typename T>
+void List<T>::PushBack(T *element)
+{
+    Node *newNode = new Node;
+    newNode->element = element;
+
+    while(lock){}
+    lock = true;
+        newNode->prev = dummy;
+        newNode->next = dummy->next;
+        dummy->next->prev = newNode;
+        dummy->next = newNode;
+    lock = false;
+}
+
+template <typename T>
+T* List<T>::PopBack()
+{
+    T* element = dummy->prev->element;
+    Remove(dummy->prev);
+    return element;
+}
+
+template <typename T>
+T* List<T>::PopFront()
+{
+    T* element = (T*)dummy->next->element;
+    Remove(dummy->next);
+    return element;
+}
+
+template <typename T>
+bool List<T>::IsEmpty()
+{
+    if(dummy->next == dummy && dummy->prev == dummy)
+        return true;
+    return false;
+}
+
+template <typename T>
+void *List<T>::GetNode(T *element)
+{
+    lock = true;
+        Node *n = dummy->next;
+        if(n->element == element)
         {
-            delete ListPopFront();
+            lock = false;
+            return (void *)n;
         }
-    }
+        while(n!=dummy)
+        {
+            if(n->element == element)
+            {
+                lock = false;
+                return (void *)n;
+            }
+
+            n = n->next;
+        }
+    lock = false;
+    return NULL;
 }
 
 template <typename T>
-void List<T>::ListPushBack(T *element)
+size_t List<T>::Size()
 {
-    struct ListNode *node = new struct ListNode;
-    node->element = element;
-    node->next = node;
-    node->prev = node;
-    ListSplice(node, node, this->head->prev);
+    size_t s = 0;
+    lock = true;
+        ListIterator<T> i = new ListIterator<T>(this);
+        while(!i->IsLast())
+        {
+            s++;
+            i->Next();
+        }
+    lock = true;
+    return s*sizeof(T);
 }
 
 template <typename T>
-void List<T>::ListPushFront(T *element)
+int List<T>::NumOfElements()
 {
-    struct ListNode *node = new struct ListNode;
-    node->element = element;
-    node->next = node;
-    node->prev = node;
-    ListSplice(node, node, this->head);
+    int s = 0;
+    lock = true;
+        ListIterator<T> i = new ListIterator<T>(this);
+        while(!i->IsLast())
+        {
+            s++;
+            i->Next();
+        }
+    lock = true;
+    return s;
 }
 
 template <typename T>
-void List<T>::ListInsertAfter(T *element)
+T *List<T>::Remove(Node *n)
 {
-    struct ListNode *node = new struct ListNode;
-    node->element = element;
-    node->next = node;
-    node->prev = node;
-    ListSplice(node, node, this->current);
-}
-
-template <typename T>
-void List<T>::ListInsertBefore(T *element)
-{
-    struct ListNode *node = new struct ListNode;
-    node->element = element;
-    node->next = node;
-    node->prev = node;
-    ListSplice(node, node, this->current->prev);
-}
-
-template <typename T>
-T *List<T>::ListPopBack()
-{
-    struct ListNode *last = this->head->prev;
-    return ListRemoveNode(last);
-}
-
-template <typename T>
-T *List<T>::ListPopFront()
-{
-    struct ListNode *first = this->head->next;
-    return ListRemoveNode(first);
-}
-
-template <typename T>
-T *List<T>::ListRemoveNode(struct ListNode *node)
-{
-    T *element = node->element;
-    node->prev->next = node->next;
-    node->next->prev = node->prev;
-    delete node;
+    lock = true;
+        if(n == dummy)
+            return 0;
+        n->prev->next = n->next;
+        n->next->prev = n->prev;
+        T* element = (T*)n->element;
+        delete n;
+    lock = false;
     return element;
 }
 
 template <typename T>
-T *List<T>::ListRemove()
+void List<T>::Destroy(Node *n)
 {
-    T *element = ListGetCurrent();
-    struct ListNode *node = this->current;
-    this->current = this->current->next;
-        node->prev->next = node->next;
-        node->next->prev = node->prev;
-    delete node;
+    lock = true;
+        if(n == dummy)
+            return 0;
+        if(structCleaner)
+            structCleaner((T*)n->element);
+        n->prev->next = n->next;
+        n->next->prev = n->prev;
+        delete (T*)n->element;
+        delete n;
+    lock = false;
+}
+
+template <typename T>
+ListIterator<T>::ListIterator()
+{
+    List<T> *L = new List<T>();
+    Instance = L;
+    currentNode = L->dummy;
+}
+
+template <typename T>
+ListIterator<T>::ListIterator(List<T> *L)
+{
+    Instance = L;
+    currentNode = L->dummy;
+}
+
+template <typename T>
+void ListIterator<T>::PushFront(T *element)
+{
+    Node *newNode = new Node;
+    newNode->element = element;
+
+    while(Instance->lock){}
+    Instance->lock = true;
+        newNode->next = Instance->dummy->next;
+        newNode->prev = Instance->dummy;
+        Instance->dummy->next->prev = newNode;
+        Instance->dummy->next = newNode;
+    Instance->lock = false;
+}
+
+template <typename T>
+void ListIterator<T>::PushBack(T *element)
+{
+    Node *newNode = new Node;
+    newNode->element = element;
+
+    while(Instance->lock){}
+    Instance->lock = true;
+        newNode->prev = Instance->dummy;
+        newNode->next = Instance->dummy->next;
+        Instance->dummy->next->prev = newNode;
+        Instance->dummy->next = newNode;
+    Instance->lock = false;
+}
+
+template <typename T>
+void ListIterator<T>::InsertAfter(T *element)
+{
+    Node *newNode = new Node;
+    newNode->element = element;
+
+    while(Instance->lock){}
+    Instance->lock = true;
+        newNode->next = currentNode->next;
+        newNode->prev = currentNode;
+        currentNode->next->prev = newNode;
+        currentNode->next = newNode;
+    Instance->lock = false;
+}
+
+template <typename T>
+void ListIterator<T>::InsertBefore(T *element)
+{
+    Node *newNode = new Node;
+    newNode->element = element;
+
+    while(Instance->lock){}
+    Instance->lock = true;
+        newNode->prev = currentNode;
+        newNode->next = currentNode->next;
+        currentNode->next->prev = newNode;
+        currentNode->next = newNode;
+    Instance->lock = false;
+}
+
+template <typename T>
+T* ListIterator<T>::PopBack()
+{
+    T* element = Instance->dummy->prev->element;
+    Instance->Remove(Instance->dummy->prev);
     return element;
 }
 
 template <typename T>
-size_t List<T>::ListSize()
+T* ListIterator<T>::PopFront()
 {
-    struct ListNode *node = this->head->next;
-    struct ListNode *head = this->head;
-    size_t size = 0;
-        while (node != head) {
-            node = node->next;
-            size++;
-        }
-    return size;
+    T* element = Instance->dummy->next->element;
+    Instance->Remove(Instance->dummy->next);
+    return element;
+}
+
+
+template <typename T>
+T *ListIterator<T>::Remove()
+{
+    T *element = (T*)currentNode->element;
+    currentNode = currentNode->next;
+    Instance->Remove(currentNode->prev);
+    return element;
 }
 
 template <typename T>
-T *List<T>::ListGetCurrent()
+void ListIterator<T>::Destroy()
 {
-    return this->current->element;
+    currentNode = currentNode->next;
+    Instance->Destroy(currentNode->prev);
 }
 
 template <typename T>
-void List<T>::ListNext()
+T* ListIterator<T>::GetCurrent()
 {
-    this->current = this->current->next;
+    return (T*)currentNode->element;
+}
+
+
+template <typename T>
+void ListIterator<T>::Next()
+{
+    currentNode = currentNode->next;
 }
 
 template <typename T>
-void List<T>::ListPrevious()
+void ListIterator<T>::Previous()
 {
-    this->current = this->current->prev;
+    currentNode = currentNode->prev;
 }
 
 template <typename T>
-bool List<T>::ListIsLast()
+void ListIterator<T>::SetLast()
 {
-    return (this->current == this->head);
+    currentNode = Instance->dummy->prev;
 }
 
 template <typename T>
-void List<T>::ListSetFirst()
+void ListIterator<T>::SetFirst()
 {
-    this->current = this->head->next;
+    currentNode = Instance->dummy->next;
+}
+
+
+template <typename T>
+bool ListIterator<T>::IsLast()
+{
+    if(currentNode == Instance->dummy)
+        return true;
+    return false;
 }
 
 template <typename T>
-void List<T>::ListSetLast()
+void ListIterator<T>::set(void *n)
 {
-    this->current = this->head->prev;
+    currentNode = (Node *)n;
 }
 
 template <typename T>
-bool List<T>::ListIsEmpty()
+bool ListIterator<T>::IsEmpty()
 {
-    return (this->head == this->head->next);
-}
-
-template <typename T>
-void List<T>::ListSplice(struct ListNode *start, struct ListNode *end, struct ListNode *target)
-{
-    start->prev->next = end->next;
-    end->next->prev = start->prev;
-    start->prev = target;
-    end->next = target->next;
-    target->next->prev = end;
-    target->next = start;
+    return Instance->IsEmpty();
 }
 
 #endif

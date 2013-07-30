@@ -30,22 +30,23 @@ Scene::~Scene()
 
 void Scene::addObject(Object *obj)
 {
-    this->objectList->ListPushFront(obj);
+    this->objectList->PushFront(obj);
 }
 
 int Scene::removeObject(char *name)
 {
     int delObj = 0;
-    this->objectList->ListSetFirst();
-    while(!this->objectList->ListIsLast())
+    ListIterator<Object> i = ListIterator<Object>(objectList);
+    i.SetFirst();
+    while(!i.IsLast())
     {
-        Object *currentObject = (Object *)this->objectList->ListGetCurrent();
+        Object *currentObject = (Object *)i.GetCurrent();
         if(currentObject->objectname != name)
         {
-            this->objectList->ListRemove();
+            i.Remove();
             delObj++;
         }
-        this->objectList->ListNext();
+        i.Next();
     }
     return delObj;
 }
@@ -53,15 +54,16 @@ int Scene::removeObject(char *name)
 int Scene::removeObject(Object *obj)
 {
     int delObj = 0;
-    this->objectList->ListSetFirst();
-    while(!this->objectList->ListIsLast())
+    ListIterator<Object> i = ListIterator<Object>(objectList);
+    i.SetFirst();
+    while(!i.IsLast())
     {
-        if(this->objectList->ListGetCurrent() == obj)
+        if(i.GetCurrent() == obj)
         {
-            this->objectList->ListRemove();
+            i.Remove();
             delObj++;
         }
-        this->objectList->ListNext();
+        i.Next();
     }
     return delObj;
 }
@@ -84,18 +86,20 @@ void Scene::render()
 
 
     calculateFPS();
-    this->Camlist->ListSetFirst();
-    while(handleCams())
+    ListIterator<Camera> c = ListIterator<Camera>(Camlist);
+    c.SetFirst();
+    while(handleCams(&c))
     {
-        if(!objectList->ListIsEmpty())
+        if(!objectList->IsEmpty())
         {
             glMatrixMode(GL_MODELVIEW);
-            objectList->ListSetFirst();
+            ListIterator<Object> o = ListIterator<Object>(objectList);
+            o.SetFirst();
 
-            while(!objectList->ListIsLast())
+            while(!o.IsLast())
             {
-                Object *currentObject = (Object *)objectList->ListGetCurrent();
-                if(!currentObject->vertices->ListIsEmpty())
+                Object *currentObject = o.GetCurrent();
+                if(!currentObject->vertices->IsEmpty())
                 {
                     glPushMatrix();
 
@@ -116,14 +120,14 @@ void Scene::render()
                         glScalef(currentObject->scale.x,currentObject->scale.y,currentObject->scale.z);
 
                         //Render Polyganes
-                        if(!currentObject->polygones->ListIsEmpty())
+                        if(!currentObject->polygones->IsEmpty())
                             renderPolygones(currentObject);
 
 
                     glPopMatrix();
                 }
 
-                objectList->ListNext();
+                o.Next();
            }
         }
     }
@@ -173,13 +177,13 @@ void Scene::handleRotations(Object *currentObject)
     }
 }
 
-int Scene::handleCams(void)
+int Scene::handleCams(ListIterator<Camera> *c)
 {
 
-    if(!Camlist->ListIsEmpty() && !Camlist->ListIsLast())
+    if(!Camlist->IsEmpty() && !c->IsLast())
     {
-        Camera *currentCam = Camlist->ListGetCurrent();
-        Camlist->ListNext();
+        Camera *currentCam = c->GetCurrent();
+        c->Next();
 
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
@@ -201,11 +205,12 @@ int Scene::handleCams(void)
 void Scene::renderPolygones(Object *currentObject)
 {
 
-    currentObject->polygones->ListSetFirst();
+    ListIterator<Polygon> p = ListIterator<Polygon>(currentObject->polygones);
+    p.SetFirst();
 
-    while(!currentObject->polygones->ListIsLast())
+    while(!p.IsLast())
     {
-        Polygon *currentPolygon = (Polygon *)currentObject->polygones->ListGetCurrent();
+        Polygon *currentPolygon = (Polygon *)p.GetCurrent();
 
         glBegin( GL_POLYGON );
 
@@ -220,7 +225,7 @@ void Scene::renderPolygones(Object *currentObject)
 
         glEnd();
 
-        currentObject->polygones->ListNext();
+        p.Next();
     }
 }
 

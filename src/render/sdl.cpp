@@ -72,7 +72,7 @@ void SDL::addHandle(EventHandle *Instance)
 {
     while(this->lock){}
     this->lock = true;
-        this->events->ListPushFront(Instance);
+        this->events->PushFront(Instance);
     this->lock = false;
 }
 
@@ -80,17 +80,18 @@ int SDL::removeHandle(EventHandle *Instance)
 {
     while(this->lock){}
     this->lock = true;
-        this->events->ListSetFirst();
-        while(!this->events->ListIsLast())
+        ListIterator<EventHandle> E = ListIterator<EventHandle>(events);
+        E.SetFirst();
+        while(!E.IsLast())
         {
-            EventHandle* currentHandler = this->events->ListGetCurrent();
+            EventHandle* currentHandler = E.GetCurrent();
             if(currentHandler == Instance)
             {
-                this->events->ListRemove();
+                E.Remove();
             }
             else
             {
-                this->events->ListNext();
+                E.Next();
             }
 
         }
@@ -105,11 +106,11 @@ void SDL::pollEvents()
     while( SDL_PollEvent( &event ) ) {
         if(events)
         {
-            this->events->ListSetFirst();
-            while(!this->events->ListIsLast())
+            ListIterator<EventHandle> E = ListIterator<EventHandle>(events);
+            E.SetFirst();
+            while(!E.IsLast())
             {
-                EventHandle* currentEvent = (EventHandle*) this->events->ListGetCurrent();
-
+                EventHandle* currentEvent = (EventHandle*) E.GetCurrent();
                 switch(event.type)
                 {
                     case SDL_KEYDOWN:
@@ -135,7 +136,7 @@ void SDL::pollEvents()
                         break;
                 };
 
-                this->events->ListNext();
+                E.Next();
             }
 
         }

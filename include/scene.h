@@ -25,7 +25,7 @@ class Scene
         int lasttick;
         int accuracy;
         float averageFPS;
-        int handleCams(void);
+        int handleCams(ListIterator<Camera> *c);
 
     private:
         void calculateFPS(void);

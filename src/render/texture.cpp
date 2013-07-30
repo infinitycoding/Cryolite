@@ -63,7 +63,7 @@ Texture *TextureCache::requestTexture(const char *filename)
     if(requestedTexture == NULL)
     {
         requestedTexture = new Texture(filename);
-        cachedTextures->ListPushFront(requestedTexture);
+        cachedTextures->PushFront(requestedTexture);
     }
 
     return requestedTexture;
@@ -74,18 +74,19 @@ Texture *TextureCache::searchTexture(const char *filename)
 {
     Texture *result = NULL;
 
-    cachedTextures->ListSetFirst();
+    ListIterator<Texture> T = ListIterator<Texture>(cachedTextures);
+    T.SetFirst();
 
-    while(!(cachedTextures->ListIsLast()))
+    while(!(T.IsLast()))
     {
-        result = cachedTextures->ListGetCurrent();
+        result = T.GetCurrent();
 
         if(!strncmp(result->file, filename, MAX_IMAGE_FILENAME_LENGTH))
             break;
         else
             result = NULL;
 
-        cachedTextures->ListNext();
+        T.Next();
     }
 
     return result;
@@ -96,18 +97,19 @@ Texture *TextureCache::searchTexture(GLuint texnr)
 {
     Texture *result = NULL;
 
-    cachedTextures->ListSetFirst();
+    ListIterator<Texture> T = ListIterator<Texture>(cachedTextures);
+    T.SetFirst();
 
-    while(!(cachedTextures->ListIsLast()))
+    while(!(T.IsLast()))
     {
-        result = cachedTextures->ListGetCurrent();
+        result = T.GetCurrent();
 
         if(result->nr == texnr)
             break;
         else
             result = NULL;
 
-        cachedTextures->ListNext();
+        T.Next();
     }
 
     return result;
@@ -118,19 +120,20 @@ bool TextureCache::unloadTexture(const char *filename)
 {
     Texture *texToDelete = NULL;
 
-    cachedTextures->ListSetFirst();
+    ListIterator<Texture> T = ListIterator<Texture>(cachedTextures);
+    T.SetFirst();
 
-    while(!(cachedTextures->ListIsLast()))
+    while(!(T.IsLast()))
     {
-        texToDelete = cachedTextures->ListGetCurrent();
+        texToDelete = T.GetCurrent();
 
         if(!strncmp(texToDelete->file, filename, MAX_IMAGE_FILENAME_LENGTH))
         {
-            cachedTextures->ListRemove();
+            T.Remove();
             return true;
         }
 
-        cachedTextures->ListNext();
+        T.Next();
     }
 
     return false;
@@ -141,19 +144,20 @@ bool TextureCache::unloadTexture(GLuint texnr)
 {
     Texture *texToDelete = NULL;
 
-    cachedTextures->ListSetFirst();
+    ListIterator<Texture> T = ListIterator<Texture>(cachedTextures);
+    T.SetFirst();
 
-    while(!(cachedTextures->ListIsLast()))
+    while(!(T.IsLast()))
     {
-        texToDelete = cachedTextures->ListGetCurrent();
+        texToDelete = T.GetCurrent();
 
         if(texToDelete->nr == texnr)
         {
-            cachedTextures->ListRemove();
+            T.Remove();
             return true;
         }
 
-        cachedTextures->ListNext();
+        T.Next();
     }
 
     return false;

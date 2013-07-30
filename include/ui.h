@@ -247,9 +247,10 @@ class Image
 class UI
 {
     UI();
-    UI(int flag);
+    UI(char *layout);
     ~UI();
 
+    int loadLayout(char* layout);
     int addButton(Button *B);
     int addTabArray(TabArray *A);
     int addCheckBox(CheckBox *C);

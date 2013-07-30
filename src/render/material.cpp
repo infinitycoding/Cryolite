@@ -187,7 +187,7 @@ Material *MaterialCache::requestMaterial(const char *filename, const char *matna
     if(requestedMaterial == NULL)
     {
         requestedMaterial = new Material(filename, matname);
-        cachedMaterials->ListPushFront(requestedMaterial);
+        cachedMaterials->PushFront(requestedMaterial);
     }
 
     return requestedMaterial;
@@ -198,18 +198,19 @@ Material *MaterialCache::searchMaterial(const char *matname)
 {
     Material *result = NULL;
 
-    cachedMaterials->ListSetFirst();
+    ListIterator<Material> i = ListIterator<Material>(cachedMaterials);
+    i.SetFirst();
 
-    while(!(cachedMaterials->ListIsLast()))
+    while(!(i.IsLast()))
     {
-        result = cachedMaterials->ListGetCurrent();
+        result = i.GetCurrent();
 
         if(!strncmp(result->name, matname, MAX_STRING_LENGTH))
             break;
         else
             result = NULL;
 
-        cachedMaterials->ListNext();
+        i.Next();
     }
 
     return result;
@@ -220,19 +221,20 @@ bool MaterialCache::unloadMaterial(const char *matname)
 {
     Material *matToDelete = NULL;
 
-    cachedMaterials->ListSetFirst();
+    ListIterator<Material> i = ListIterator<Material>(cachedMaterials);
+    i.SetFirst();
 
-    while(!(cachedMaterials->ListIsLast()))
+    while(!(i.IsLast()))
     {
-        matToDelete = cachedMaterials->ListGetCurrent();
+        matToDelete = i.GetCurrent();
 
         if(!strncmp(matToDelete->name, matname, MAX_STRING_LENGTH))
         {
-            cachedMaterials->ListRemove();
+            i.Remove();
             return true;
         }
 
-        cachedMaterials->ListNext();
+        i.Next();
     }
 
     return false;
