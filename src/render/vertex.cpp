@@ -9,6 +9,13 @@ Vertex2D::Vertex2D()
 }
 
 
+Vertex2D::Vertex2D(Vertex2D *v)
+{
+    x = v->x;
+    y = v->y;
+}
+
+
 Vertex2D::Vertex2D(GLfloat startX, GLfloat startY)
 {
     x = startX;
@@ -68,6 +75,14 @@ Vertex3D::Vertex3D()
     x = 0.0;
     y = 0.0;
     z = 0.0;
+}
+
+
+Vertex3D::Vertex3D(Vertex3D *v)
+{
+    x = v->x;
+    y = v->y;
+    z = v->z;
 }
 
 

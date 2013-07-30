@@ -22,6 +22,8 @@ char *BasicParser::getValueString(const char *line, char *string)
 {
     int i, j;
 
+    memset(string, '\0', sizeof(string));
+
     for(i = 0; line[i] != ' ' && line[i] != '='; i++);
     for(i++; line[i] == ' ' || line[i] == '='; i++);
 
@@ -41,7 +43,6 @@ float BasicParser::getValueFloat(const char *line)
 double BasicParser::getValueDouble(const char *line)
 {
     char string[MAX_LINELENGTH];
-    memset(string, '\0', sizeof(string));
     getValueString(line, string);
     return atof(string);
 }
@@ -56,7 +57,6 @@ short BasicParser::getValueShort(const char *line)
 int BasicParser::getValueInt(const char *line)
 {
     char string[MAX_LINELENGTH];
-    memset(string, '\0', sizeof(string));
     getValueString(line, string);
     return atoi(string);
 }
@@ -71,7 +71,6 @@ long BasicParser::getValueLong(const char *line)
 bool BasicParser::getValueBool(const char *line)
 {
     char string[MAX_LINELENGTH];
-    memset(string, '\0', sizeof(string));
     getValueString(line, string);
 
     if((strncmp(string, "enable", 6) == 0) || (strncmp(string, "on", 2) == 0) || (strncmp(string, "yes", 3) == 0) || (strncmp(string, "activate", 8) == 0) || (strncmp(string, "true", 4) == 0) || (strncmp(string, "1", 1) == 0))
@@ -95,74 +94,108 @@ SDL_Color BasicParser::getValueColor(const char *line)
 
     for(i = 0; line[i] != '\n' && line[i] != '\0' && line[i] != ' ' && i < MAX_LINELENGTH; i++);
 
-    if(line[i] != ' ')
-    {
-        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
-        return returnValue;
-    }
-
     for(; line[i] == ' ' && i < MAX_LINELENGTH; i++);
 
-    if(i == MAX_LINELENGTH)
-    {
-        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
-        return returnValue;
-    }
-
-    for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.') && i < MAX_LINELENGTH; i++, j++)
+    for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.' || line[i] == '-') && i < MAX_LINELENGTH; i++, j++)
         string[j] = line[i];
 
     string[j] = '\0';
-
-    if(i == MAX_LINELENGTH || line[i] != ' ')
-    {
-        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
-        return returnValue;
-    }
 
     returnValue.r = atof(string);
 
     for(; line[i] == ' ' && i < MAX_LINELENGTH; i++);
 
-    if(i == MAX_LINELENGTH)
-    {
-        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
-        return returnValue;
-    }
-
-    for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.') && i < MAX_LINELENGTH; i++, j++)
+    for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.' || line[i] == '-') && i < MAX_LINELENGTH; i++, j++)
         string[j] = line[i];
 
     string[j] = '\0';
-
-    if(i == MAX_LINELENGTH || line[i] != ' ')
-    {
-        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
-        return returnValue;
-    }
 
     returnValue.g = atof(string);
 
     for(; line[i] == ' ' && i < MAX_LINELENGTH; i++);
 
-    if(i == MAX_LINELENGTH)
-    {
-        cerr <<  "The following line is corrupted. Will return 0." << endl << line;
-        return returnValue;
-    }
-
-    for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.') && i < MAX_LINELENGTH; i++, j++)
+    for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.' || line[i] == '-') && i < MAX_LINELENGTH; i++, j++)
         string[j] = line[i];
 
     string[j] = '\0';
 
-    if(i == MAX_LINELENGTH)
-    {
-        cerr << "The following line is corrupted. Will return 0." << endl << line;
-        return returnValue;
-    }
-
     returnValue.b = atof(string);
+
+    return returnValue;
+}
+
+
+vector BasicParser::getValueVector(const char *line)
+{
+    int i, j;
+    vector returnValue = vector();
+    char string[MAX_LINELENGTH];
+
+    for(i = 0; line[i] != '\n' && line[i] != '\0' && line[i] != ' ' && i < MAX_LINELENGTH; i++);
+
+    for(; line[i] == ' ' && i < MAX_LINELENGTH; i++);
+
+    for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.' || line[i] == '-') && i < MAX_LINELENGTH; i++, j++)
+        string[j] = line[i];
+
+    string[j] = '\0';
+
+    returnValue.x = atof(string);
+
+    for(; line[i] == ' ' && i < MAX_LINELENGTH; i++);
+
+    for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.' || line[i] == '-') && i < MAX_LINELENGTH; i++, j++)
+        string[j] = line[i];
+
+    string[j] = '\0';
+
+    returnValue.y = atof(string);
+
+    for(; line[i] == ' ' && i < MAX_LINELENGTH; i++);
+
+    for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.' || line[i] == '-') && i < MAX_LINELENGTH; i++, j++)
+        string[j] = line[i];
+
+    string[j] = '\0';
+
+    returnValue.z = atof(string);
+
+    return returnValue;
+}
+
+
+Vertex3D BasicParser::getValueVertex3D(const char *line)
+{
+    vector temp = getValueVector(line);
+    return Vertex3D(temp.x, temp.y, temp.z);
+}
+
+
+Vertex2D BasicParser::getValueVertex2D(const char *line)
+{
+    int i, j;
+    Vertex2D returnValue = Vertex2D();
+    char string[MAX_LINELENGTH];
+
+    for(i = 0; line[i] != '\n' && line[i] != '\0' && line[i] != ' ' && i < MAX_LINELENGTH; i++);
+
+    for(; line[i] == ' ' && i < MAX_LINELENGTH; i++);
+
+    for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.' || line[i] == '-') && i < MAX_LINELENGTH; i++, j++)
+        string[j] = line[i];
+
+    string[j] = '\0';
+
+    returnValue.setX(atof(string));
+
+    for(; line[i] == ' ' && i < MAX_LINELENGTH; i++);
+
+    for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.' || line[i] == '-') && i < MAX_LINELENGTH; i++, j++)
+        string[j] = line[i];
+
+    string[j] = '\0';
+
+    returnValue.setY(atof(string));
 
     return returnValue;
 }

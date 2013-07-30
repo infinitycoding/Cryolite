@@ -9,6 +9,9 @@
 #include <cstring>
 #include <cstdlib>
 
+#include <vector.h>
+#include <vertex.h>
+
 
 #define MAX_LINELENGTH 30
 
@@ -28,6 +31,9 @@ class BasicParser
         long getValueLong(const char *line);
         bool getValueBool(const char *line);
         SDL_Color getValueColor(const char *line);
+        vector getValueVector(const char *line);
+        Vertex3D getValueVertex3D(const char *line);
+        Vertex2D getValueVertex2D(const char *line);
 };
 
 

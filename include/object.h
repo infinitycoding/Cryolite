@@ -6,6 +6,7 @@
 #include <material.h>   // own headers
 #include <vector.h>
 #include <polygon.h>
+#include <parser.h>
 
 
 
@@ -56,7 +57,7 @@ struct boundCylinder
     GLfloat height;
 };
 
-class Object
+class Object : public BasicParser
 {
     public:
 

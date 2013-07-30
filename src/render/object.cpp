@@ -236,20 +236,15 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
         if(!strncmp(line, "mtllib", 6))
         {
-            for(i = 7, j = 0; line[i] != '\n'; i++, j++)
-                matfile[j] = line[i];
-
-            matfile[j] = '\0';
+            getValueString(line, matfile);
 
             continue;
         }
 
         if(!strncmp(line, "usemtl", 6))
         {
-            for(i = 7, j = 0; line[i] != '\n'; i++, j++)
-                string[j] = line[i];
-
-            string[j] = '\0';
+            memset(string, '\0', sizeof(string));
+            getValueString(line, string);
 
             loadMaterial(matfile, string);
 
@@ -258,12 +253,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
         if(line[0] == 'o')
         {
-            for(i = 2, j = 0; line[i] != '\n'; i++, j++)
-                string[j] = line[i];
-
-            string[j] = '\0';
-
-            if(!strncmp(string, objectName, strlen(string)))
+            if(!strncmp(getValueString(line, string), objectName, strlen(string)))
                 correctObject = true;
             else
                 break;
@@ -277,22 +267,8 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                 otherVertices.textureVertices++;
             else
             {
-
-                texvertex_ptr = new Vertex2D;
-
-                for(i = 3, j = 0; line[i] != ' ' && line[i] != '\0' && line[i] != '\n'; i++, j++)
-                    string[j] = line[i];
-
-                string[++j] = '\0';
-
-                texvertex_ptr->setX(atof(string));
-
-                for(i++, j = 0; line[i] != '\n' && line[i] != '\0'; i++, j++)
-                    string[j] = line[i];
-
-                string[++j] = '\0';
-
-                texvertex_ptr->setY(atof(string));
+                Vertex2D tempv2d = getValueVertex2D(line);
+                texvertex_ptr = new Vertex2D(&tempv2d);
 
                 this->addTextureVertex(texvertex_ptr);
 
@@ -309,37 +285,12 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
             else
             {
 
-                objvertex_ptr = new Vertex3D;
-
-                for(i = 2, j = 0; line[i] != ' ' && line[i] != '\0' && line[i] != '\n'; i++, j++)
-                    string[j] = line[i];
-
-                string[++j] = '\0';
-
-                objvertex_ptr->setX(atof(string));
-
-                for(i++, j = 0; line[i] != ' ' && line[i] != '\0' && line[i] != '\n'; i++, j++)
-                    string[j] = line[i];
-
-                string[++j] = '\0';
-
-                objvertex_ptr->setY(atof(string));
-
-                for(i++, j = 0; line[i] != '\n' && line[i] != '\0'; i++, j++)
-                    string[j] = line[i];
-
-                string[++j] = '\0';
-
-                objvertex_ptr->setZ(atof(string));
+                Vertex3D tempv3d = getValueVertex3D(line);
+                objvertex_ptr = new Vertex3D(&tempv3d);
 
                 this->addObjectVertex(objvertex_ptr);
 
                 objvertex_ptrs[myVertices.objectVertices++] = objvertex_ptr;
-
-                if(!strncmp("Polygon",  objectName, 8))
-                {
-                    cout << *objvertex_ptr << endl;
-                }
             }
 
 	    continue;
@@ -351,29 +302,8 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                 otherVertices.normalVectors++;
             else
             {
-
-                normvector_ptr = new vector();
-
-                for(i = 3, j = 0; line[i] != ' ' && line[i] != '\0' && line[i] != '\n'; i++, j++)
-                    string[j] = line[i];
-
-                string[++j] = '\0';
-
-                normvector_ptr->x = atof(string);
-
-                for(i++, j = 0; line[i] != ' ' && line[i] != '\0' && line[i] != '\n'; i++, j++)
-                    string[j] = line[i];
-
-                string[++j] = '\0';
-
-                normvector_ptr->y = atof(string);
-
-                for(i++, j = 0; line[i] != '\n' && line[i] != '\0'; i++, j++)
-                    string[j] = line[i];
-
-                string[++j] = '\0';
-
-                normvector_ptr->z = atof(string);
+                vector tempvec = getValueVector(line);
+                normvector_ptr = new vector(&tempvec);
 
                 this->addNormalVector(normvector_ptr);
 

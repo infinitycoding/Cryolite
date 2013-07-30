@@ -25,6 +25,7 @@ class Vertex2D
 {
     public:
         Vertex2D();
+        Vertex2D(Vertex2D *v);
         Vertex2D(GLfloat startX, GLfloat startY);
         ~Vertex2D();
 
@@ -48,6 +49,7 @@ class Vertex3D
 {
     public:
         Vertex3D();
+        Vertex3D(Vertex3D *v);
         Vertex3D(GLfloat startX, GLfloat startY, GLfloat startZ);
         ~Vertex3D();
 
