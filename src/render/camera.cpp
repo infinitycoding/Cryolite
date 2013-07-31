@@ -11,7 +11,9 @@ extern Settings *gameSettings;
 
 Camera::Camera()
 {
-    position = vector();
+    relativeToObject = NULL;
+    localPosition = vector();
+
     lookingDirection = vector(0, 0, 1);
 
     nearClip = STANDART_NEARCLIP;
@@ -27,9 +29,11 @@ Camera::Camera()
 }
 
 
-Camera::Camera(vector pos, vector looking, GLfloat nClip, GLfloat fClip, GLfloat viewfield, GLint vpx, GLint vpy, GLint vpheight, GLint vpwidth)
+Camera::Camera(Object *relObj, vector pos, vector looking, GLfloat nClip, GLfloat fClip, GLfloat viewfield, GLint vpx, GLint vpy, GLint vpheight, GLint vpwidth)
 {
-    position = vector(&pos);
+    relativeToObject = relObj;
+    localPosition = vector(&pos);
+
     lookingDirection = vector(&looking);
     lookingDirection.unify();
 
@@ -66,4 +70,12 @@ void Camera::rotateZ(float rotate)
 {
     lookingDirection.x = lookingDirection.x * cos(rotate) - lookingDirection.y * sin(rotate);
     lookingDirection.y = lookingDirection.x * sin(rotate) + lookingDirection.y * cos(rotate);
+}
+
+vector Camera::getPosition()
+{
+    if(relativeToObject == NULL)
+        return localPosition;
+    else
+        return relativeToObject->getPosition() + localPosition;
 }

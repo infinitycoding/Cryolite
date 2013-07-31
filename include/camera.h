@@ -1,11 +1,10 @@
 #ifndef CAMERA_H_INCLUDED
 #define CAMERA_H_INCLUDED
 
-#include <GL/gl.h>
 
-#include <iostream>
 
-#include <vector.h>
+#include <object.h>
+
 
 
 class Camera
@@ -13,7 +12,7 @@ class Camera
     public:
 
         Camera();
-        Camera(vector pos, vector looking, GLfloat nClip, GLfloat fClip, GLfloat viewfield, GLint vpx, GLint vpy, GLint vpheight, GLint vpwidth);
+        Camera(Object *relObj, vector pos, vector looking, GLfloat nClip, GLfloat fClip, GLfloat viewfield, GLint vpx, GLint vpy, GLint vpheight, GLint vpwidth);
 
         ~Camera();
 
@@ -22,8 +21,12 @@ class Camera
         void rotateY(float rotate);
         void rotateZ(float rotate);
 
+        vector getPosition();
 
-        vector position;
+
+        Object *relativeToObject;
+        vector localPosition;
+
         vector lookingDirection;
 
         GLfloat nearClip;

@@ -40,6 +40,7 @@ using namespace std;
 
 extern Sound *shotSound;
 extern Object *iccube;
+extern Object *gravelcube;
 
 
 int main(int argc, char *argv[]){
@@ -49,7 +50,7 @@ int main(int argc, char *argv[]){
     mainScene = new Scene();
 
     // Create camera, Global light and Input controler
-    Camera *Player = new Camera(vector(STARTING_X,STARTING_Y,STARTING_Z),vector(0,0,1),STANDART_NEARCLIP,STANDART_FARCLIP,gameSettings->fov,0,0,gameSettings->height,gameSettings->width);
+    Camera *Player = new Camera(NULL, vector(STARTING_X,STARTING_Y,STARTING_Z),vector(0,0,1),STANDART_NEARCLIP,STANDART_FARCLIP,gameSettings->fov,0,0,gameSettings->height,gameSettings->width);
     mainScene->Camlist->PushFront(Player);
 
     Controls playerControls = Controls(&mainwindow);
@@ -57,6 +58,8 @@ int main(int argc, char *argv[]){
 
     // Draw test models
     INIT_Models(mainScene);
+
+    gravelcube->relativeToObject = iccube;
 
     //GL Settigs
     glMatrixMode( GL_PROJECTION );
@@ -98,7 +101,7 @@ int main(int argc, char *argv[]){
             lastFPS = mainScene->averageFPS;
         }
 
-        testLevel.refreshBackgroundMusic(Player->position);
+        testLevel.refreshBackgroundMusic(Player->getPosition());
 
         mainwindow.pollEvents();    // Eventhandler
 
@@ -111,12 +114,12 @@ int main(int argc, char *argv[]){
         glBindTexture( GL_TEXTURE_2D, 0);
 
         mainScene->render();
-        shotSound->refreshPosition(Player->position,iccube->position);
+        shotSound->refreshPosition(Player->getPosition(),iccube->getPosition());
 
 
 
         glPushMatrix();
-        glTranslatef(Player->position.x,Player->position.y,Player->position.z);
+        glTranslatef(Player->getPosition().x,Player->getPosition().y,Player->getPosition().z);
 
         glRotated(90,1,0,0);
         glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);

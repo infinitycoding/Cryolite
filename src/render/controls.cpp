@@ -171,7 +171,7 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
         moveDirection.unify();
         moveDirection *= MOVEMENT_WIDTH;
 
-        cam->position += moveDirection;
+        cam->localPosition += moveDirection;
     }
 
     if(move_left)
@@ -180,7 +180,7 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
         moveDirection.unify();
         moveDirection *= MOVEMENT_WIDTH;
 
-        cam->position += moveDirection;
+        cam->localPosition += moveDirection;
     }
 
     if(move_foreward)
@@ -189,7 +189,7 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
         moveDirection.unify();
         moveDirection *= MOVEMENT_WIDTH;
 
-        cam->position += moveDirection;
+        cam->localPosition += moveDirection;
     }
 
     if(move_backward)
@@ -198,7 +198,7 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
         moveDirection.unify();
         moveDirection *= MOVEMENT_WIDTH;
 
-        cam->position += moveDirection;
+        cam->localPosition += moveDirection;
     }
 
     if(move_up)
@@ -206,7 +206,7 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
         moveDirection =  vector(0 , 1, 0);
         moveDirection *= MOVEMENT_WIDTH;
 
-        cam->position += moveDirection;
+        cam->localPosition += moveDirection;
     }
 
     if(move_down)
@@ -214,7 +214,7 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
         moveDirection =  vector(0 , -1, 0);
         moveDirection *= MOVEMENT_WIDTH;
 
-        cam->position += moveDirection;
+        cam->localPosition += moveDirection;
     }
 
 }

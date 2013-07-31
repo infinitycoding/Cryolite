@@ -15,12 +15,14 @@ ObjectType::ObjectType()
     initObjectType();
 }
 
+
 ObjectType::ObjectType(const char *filename, const char *objname)
 {
     initObjectType();
 
     loadObjectTypeFile(filename, objname);
 }
+
 
 ObjectType::~ObjectType()
 {
@@ -38,6 +40,7 @@ ObjectType::~ObjectType()
     delete boundCylinders;
     delete boundTriangles;
 }
+
 
 void ObjectType::initObjectType()
 {
@@ -64,6 +67,7 @@ void ObjectType::initObjectType()
 
     ObjectTypeMaterial = NULL;
 }
+
 
 usedVertices ObjectType::verticesInPolygon(char *line)
 {
@@ -99,6 +103,7 @@ usedVertices ObjectType::verticesInPolygon(char *line)
 
     return used;
 }
+
 
 vertexNumber ObjectType::countVertices(const char *filename, const char *objectname)
 {
@@ -154,6 +159,7 @@ vertexNumber ObjectType::countVertices(const char *filename, const char *objectn
 
     return vertexCounter;
 }
+
 
 void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectName)
 {
@@ -396,15 +402,20 @@ void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectNa
 }
 
 
+
+
+
 ObjectTypeCache::ObjectTypeCache()
 {
     cachedObjectTypes = new List<ObjectType>;
 }
 
+
 ObjectTypeCache::~ObjectTypeCache()
 {
     delete cachedObjectTypes;
 }
+
 
 ObjectType *ObjectTypeCache::requestObjectType(const char *filename, const char *objtypename)
 {
@@ -418,6 +429,7 @@ ObjectType *ObjectTypeCache::requestObjectType(const char *filename, const char 
 
     return requestedObjectType;
 }
+
 
 ObjectType *ObjectTypeCache::searchObjectType(const char *objtypename)
 {
@@ -440,6 +452,7 @@ ObjectType *ObjectTypeCache::searchObjectType(const char *objtypename)
 
     return result;
 }
+
 
 bool ObjectTypeCache::unloadObjectType(const char *objtypename)
 {
@@ -465,10 +478,14 @@ bool ObjectTypeCache::unloadObjectType(const char *objtypename)
 }
 
 
+
+
+
 Object::Object()
 {
     initObject();
 }
+
 
 Object::Object(const char *filename, const char *objname)
 {
@@ -477,25 +494,29 @@ Object::Object(const char *filename, const char *objname)
     objType = ObjTypeCache->requestObjectType(filename, objname);
 }
 
+
 Object::Object(const char *filename, const char *objname, vector pos)
 {
     initObject();
 
     objType = ObjTypeCache->requestObjectType(filename, objname);
 
-    position.setvalue(pos);
+    localPosition.setvalue(pos);
 }
+
 
 Object::~Object()
 {
 
 }
 
+
 void Object::initObject()
 {
     scale = vector(1, 1, 1);
 
-    position = vector();
+    relativeToObject = NULL;
+    localPosition = vector();
 
     rotationAxis = vector();
 
@@ -518,6 +539,16 @@ void Object::initObject()
 
     objType = NULL;
 }
+
+
+vector Object::getPosition()
+{
+    if(relativeToObject == NULL)
+        return localPosition;
+    else
+        return relativeToObject->getPosition() + localPosition;
+}
+
 
 void Object::moveObject(float a ,vector D, float v)
 {

@@ -151,6 +151,8 @@ class Object                // the main object
         void initObject();       // init functions, so i don't have to write the things in every constructor
 
 
+        vector getPosition();
+
         // experimental physical functions
         void moveObject(float a, vector D,float v = 0);                         // move function
 
@@ -160,7 +162,9 @@ class Object                // the main object
         static ObjectTypeCache *ObjTypeCache;       // the static object type cache (you know what a cache is, don't you?)
 
         vector scale;                               // the scale of the object (if you need an overdimensional cup of tea)
-        vector position;                            // the position
+
+        Object *relativeToObject;
+        vector localPosition;                          // the position
 
         // experimental physical variables
         vector rotationAxis;
@@ -177,6 +181,8 @@ class Object                // the main object
         float V0m; // Velocity Motion
         float Am; // Acceleration Motion
         int Tms; //Time Motion Start
+
+        boundSphere approximationSphere;
 };
 
 

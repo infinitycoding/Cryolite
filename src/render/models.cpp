@@ -5,6 +5,7 @@
 
 Texture *MAN;
 Object *iccube;
+Object *gravelcube;
 
 
 void INIT_Models(Scene *sce)
@@ -18,8 +19,9 @@ void INIT_Models(Scene *sce)
     Object *woodcube = new Object(OBJECT(bettercube.obj), "Cube", vector(5, 0, 0));
     sce->addObject(woodcube);
 
-    Object *gravelcube = new Object(OBJECT(cube.obj), "cube.001", vector(-5, 0, 0));
+    gravelcube = new Object(OBJECT(cube.obj), "cube.001", vector(-5, 0, 0));
     sce->addObject(gravelcube);
+
 
     MAN = Material::TexCache->requestTexture(IMAGE(man.png));
 }
