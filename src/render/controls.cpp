@@ -9,6 +9,7 @@
 #include <vector.h>
 #include <scene.h>
 #include <settings.h>
+#include <sound.h>
 
 #define ROTATION_SPEED 0.5
 #define MOVEMENT_SPEED 10
@@ -34,6 +35,7 @@ extern bool printFPS;
 extern bool render;
 extern Settings *gameSettings;
 extern Scene *mainScene;
+Sound *shotSound;
 
 Controls::Controls(SDL* window) : EventHandle()
 {
@@ -46,6 +48,10 @@ Controls::Controls(SDL* window) : EventHandle()
         types.Quit = true;
         window->addHandle(object);
     }
+    SoundCache *SC = new SoundCache();
+    SC->addSound((char*)SOUND(shot.wav));
+    shotSound = new Sound();
+    shotSound->loadSound((char*)SOUND(shot.wav),SC);
 }
 
 void Controls::handleQuit()
@@ -85,7 +91,7 @@ void Controls::handleKeyDown(SDL_KeyboardEvent *e)
             moveCube();
             break;
         case SDLK_r:
-            rotateCube();
+            shotSound->playSound();
             break;
         default:
             break;

@@ -55,6 +55,10 @@ SDL::SDL(int width, int height, int flags, const char* caption)
         exit(-1);
     }
 
+    device = alcOpenDevice(NULL);
+    context = alcCreateContext(device, NULL);
+    alcMakeContextCurrent(context);
+
     this->events = new List<EventHandle>;
 }
 

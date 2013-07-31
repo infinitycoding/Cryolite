@@ -71,23 +71,40 @@ class Sound
 {
 
     public:
+        struct SoundSettings
+        {
+            vector relation;
+            Object *relativObject;
+            vector direction;
+            vector velocity;
+            float Gain;
+            float MaxGain;
+            float MinGain;
+            float pitch;
+            float refDistance;
+            int times;
+            bool loop;
+        };
 
-        Sound(char *filename);
+        Sound();
+        Sound(char *filename, SoundCache *cache);
+        Sound(Object *relativObject);
+        Sound(Object *relativObject,vector relation);
+        Sound(Object *relativObject,vector relation, char *filename, SoundCache *cache);
+
         ~Sound();
 
         bool loadSound(char *filename);
         bool loadSound(char *filename, SoundCache *cache);
         bool playSound();
+        void refreshpProperties();
+        void refreshpPosition();
 
-        vector relation;
-        Object *relativObject;
 
-        vector direction;
-        vector velocity;
-        float MaxGain;
-        float MinGain;
-        float pitch;
-        float refDistance;
+        ALuint source;
+        ALuint buffer;
+        SoundSettings *settings;
+        SoundCache *cache;
 
     private:
         void initSound();

@@ -33,7 +33,8 @@ Music::Music(const char *musicfile)
     else
     {
         currentMusic = new MusicEntry;
-        currentMusic->name = (char*)musicfile;
+        currentMusic->name = new char[strlen(musicfile)+1];
+        strcpy(currentMusic->name,musicfile);
         currentMusic->music = mixmusic;
         musiclist.PushFront(currentMusic);
     }
@@ -62,7 +63,8 @@ bool Music::addMusic(const char *musicfile)
     }
 
     MusicEntry *newMusicEntry = new MusicEntry;
-    newMusicEntry->name = (char*)musicfile;
+    newMusicEntry->name = new char[strlen(musicfile)+1];
+    strcpy(newMusicEntry->name,musicfile);
     newMusicEntry->music = mixmusic;
     musiclist.PushFront(newMusicEntry);
     return true;
@@ -83,6 +85,7 @@ bool Music::removeMusic(const char* musicfile)
             }
             MusicEntry *entry = M.Remove();
             Mix_FreeMusic(entry->music);
+            delete entry->name;
             delete entry;
             return true;
         }
@@ -244,4 +247,146 @@ ALuint SoundCache::getSound(char *file)
 
     cerr<<file<<" does not exist in this Soundcache return NULL Buffer"<<endl;
     return 0;
+}
+
+
+Sound::Sound()
+{
+    initSound();
+}
+
+Sound::Sound(char *filename, SoundCache *cache)
+{
+    initSound();
+    this->cache = cache;
+    cache->addSound(filename);
+    buffer = cache->getSound(filename);
+    if(buffer)
+    {
+        alGenSources(1, &source);
+        alSourcei(source, AL_BUFFER, buffer);
+        cerr<<"Sound loaded"<<endl;
+    }
+}
+
+Sound::Sound(Object *relativObject)
+{
+    initSound();
+    settings->relativObject = relativObject;
+}
+
+Sound::Sound(Object *relativObject, vector relation)
+{
+    initSound();
+    settings->relativObject = relativObject;
+    settings->relation = relation;
+}
+
+Sound::Sound(Object *relativObject,vector relation, char *filename, SoundCache *cache)
+{
+    initSound();
+    this->cache = cache;
+    settings->relativObject = relativObject;
+    settings->relation = relation;
+
+    cache->addSound(filename);
+    buffer = cache->getSound(filename);
+    if(buffer)
+    {
+        alGenSources(1, &source);
+        alSourcei(source, AL_BUFFER, buffer);
+    }
+}
+
+Sound::~Sound()
+{
+    int sourceState = 0;
+    alGetSourcei(source,AL_SOURCE_STATE, &sourceState);
+    if( sourceState == AL_PLAYING || sourceState == AL_PAUSED)
+        alSourcei(source,AL_SOURCE_STATE, AL_STOPPED);
+
+    if(source)
+        alDeleteSources(1,&source);
+
+    delete settings;
+}
+
+
+bool Sound::loadSound(char *filename)
+{
+    if(!cache)
+    {
+        cerr<<"Sound: Cache was not registert"<<endl;
+        return false;
+    }
+
+    cache->addSound(filename);
+    buffer = cache->getSound(filename);
+    if(buffer)
+    {
+        alGenSources(1, &source);
+        alSourcei(source, AL_BUFFER, buffer);
+    }
+
+    return true;
+}
+
+bool Sound::loadSound(char *filename,SoundCache *cache)
+{
+    if(!cache)
+    {
+        cerr<<"Sound: Cache was not registert"<<endl;
+        return false;
+    }
+    this->cache = cache;
+
+    cache->addSound(filename);
+    buffer = cache->getSound(filename);
+    if(buffer)
+    {
+        alGenSources(1, &source);
+        alSourcei(source, AL_BUFFER, buffer);
+    }
+
+    return true;
+}
+
+
+bool Sound::playSound()
+{
+    cerr<<"play!"<<endl;
+    if(source && buffer)
+    {
+        int sourceState = 0;
+        alGetSourcei(source,AL_SOURCE_STATE, &sourceState);
+        alSourcePlay(source);
+        return true;
+    }
+
+    if(settings->relativObject)
+        cerr<<"No Sound is loaded for Object"<< settings->relativObject->objType->objectTypeName<<endl;
+    else
+        cerr<<"No Sound is loaded for current Object"<<endl;
+
+    return false;
+}
+
+
+void Sound::initSound()
+{
+    source = 0;
+    buffer = 0;
+    settings = new SoundSettings;
+    settings->relativObject = NULL;
+    settings->relation = vector(0,0,0);
+    settings->direction = vector(0,0,0);
+    settings->velocity = vector(0,0,0);
+    settings->Gain = 1;
+    settings->MaxGain = 1;
+    settings->MinGain = 0;
+    settings->pitch = 1;
+    settings->refDistance = 5;
+    settings->times = 1;
+    settings->loop = false;
+    cache = NULL;
 }

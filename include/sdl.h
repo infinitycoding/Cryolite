@@ -5,6 +5,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <AL/al.h>
+#include <AL/alut.h>
 #include <SDL_mixer.h>
 
 #include <List.h>
@@ -60,6 +61,9 @@ class SDL
         int  removeHandle(EventHandle *Instance);
         void pollEvents();
         static void SDLexit();
+
+        ALCdevice* device;
+        ALCcontext* context;
 
     private:
         List<EventHandle> *events;
