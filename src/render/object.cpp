@@ -5,6 +5,7 @@ using namespace std;
 
 
 MaterialCache *ObjectType::MatCache;
+ObjectTypeCache *Object::ObjTypeCache;
 
 
 ObjectType::ObjectType()
@@ -389,6 +390,74 @@ void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectNa
 }
 
 
+ObjectTypeCache::ObjectTypeCache()
+{
+    cachedObjectTypes = new List<ObjectType>;
+}
+
+ObjectTypeCache::~ObjectTypeCache()
+{
+    delete cachedObjectTypes;
+}
+
+ObjectType *ObjectTypeCache::requestObjectType(const char *filename, const char *objtypename)
+{
+    ObjectType *requestedObjectType = searchObjectType(objtypename);
+
+    if(requestedObjectType == NULL)
+    {
+        requestedObjectType = new ObjectType(filename, objtypename);
+        cachedObjectTypes->PushFront(requestedObjectType);
+    }
+
+    return requestedObjectType;
+}
+
+ObjectType *ObjectTypeCache::searchObjectType(const char *objtypename)
+{
+    ObjectType *result = NULL;
+
+    ListIterator<ObjectType> i = ListIterator<ObjectType>(cachedObjectTypes);
+    i.SetFirst();
+
+    while(!(i.IsLast()))
+    {
+        result = i.GetCurrent();
+
+        if(!strncmp(result->objectTypeName, objtypename, MAX_STRING_LENGTH))
+            break;
+        else
+            result = NULL;
+
+        i.Next();
+    }
+
+    return result;
+}
+
+bool ObjectTypeCache::unloadObjectType(const char *objtypename)
+{
+    ObjectType *objTypeToDelete = NULL;
+
+    ListIterator<ObjectType> i = ListIterator<ObjectType>(cachedObjectTypes);
+    i.SetFirst();
+
+    while(!(i.IsLast()))
+    {
+        objTypeToDelete = i.GetCurrent();
+
+        if(!strncmp(objTypeToDelete->objectTypeName, objtypename, MAX_STRING_LENGTH))
+        {
+            i.Remove();
+            return true;
+        }
+
+        i.Next();
+    }
+
+    return false;
+}
+
 
 Object::Object()
 {
@@ -399,14 +468,14 @@ Object::Object(const char *filename, const char *objname)
 {
     initObject();
 
-    objType = new ObjectType(filename, objname);
+    objType = ObjTypeCache->requestObjectType(filename, objname);
 }
 
 Object::Object(const char *filename, const char *objname, vector pos)
 {
     initObject();
 
-    objType = new ObjectType(filename, objname);
+    objType = ObjTypeCache->requestObjectType(filename, objname);
 
     position.setvalue(pos);
 }
@@ -418,9 +487,6 @@ Object::~Object()
 
 void Object::initObject()
 {
-
-
-
     scale = vector(1, 1, 1);
 
     position = vector();
@@ -440,6 +506,11 @@ void Object::initObject()
     V0m = 0; // Velocity Motion
     Am = 0; // Acceleration Motion
     Tms = 0; //Time Motion Start
+
+    if(ObjTypeCache == NULL)
+        ObjTypeCache = new ObjectTypeCache();
+
+    objType = NULL;
 }
 
 void Object::moveObject(float a ,vector D, float v)

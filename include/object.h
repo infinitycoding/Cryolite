@@ -95,6 +95,21 @@ class ObjectType : public BasicParser
         bool isPhysicalActor;
 };
 
+class ObjectTypeCache
+{
+    public:
+        ObjectTypeCache();
+        ~ObjectTypeCache();
+
+        ObjectType *requestObjectType(const char *filename, const char *objtypename);
+        ObjectType *searchObjectType(const char *objtypename);
+        bool unloadObjectType(const char *objtypename);
+
+
+    protected:
+        List<ObjectType> *cachedObjectTypes;
+};
+
 class Object
 {
     public:
@@ -108,13 +123,13 @@ class Object
 
 
 
-
         void moveObject(float a, vector D,float v = 0);
         void rotateObject(float angle,float v,float a,vector rotationAxis);
 
 
 
         ObjectType *objType;
+        static ObjectTypeCache *ObjTypeCache;
 
         vector scale;
         vector position;
