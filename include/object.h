@@ -3,18 +3,28 @@
 
 
 
-#include <material.h>   // own headers
-#include <vector.h>
-#include <polygon.h>
-#include <parser.h>
-#include <sound.h>
+/****************************************
+ *                                      *
+ *  Object-Module                       *
+ *  -------------                       *
+ *                                      *
+ *  Author: Peter Hösch                 *
+ *                                      *
+ ****************************************/
+
+
+// own headers
+#include <material.h>       // objects have materials, don't they?
+#include <polygon.h>        // objects have polygone, don't they?
+#include <sound.h>          // objects have sound, don't they?
 
 
 
 enum usedVertices       // enumberation which says if a vertex has a texture coordinate and/or a normal vector too
 {
-    nothingUsed = 0, textureUsed = 1, normalsUsed = 2, allUsed = 3
+    nothingUsed, textureUsed, normalsUsed, allUsed
 };
+
 
 struct vertexNumber     // a struct which shows the number of object vertices, texture vertices and normal vectors in an object
 {
@@ -23,7 +33,8 @@ struct vertexNumber     // a struct which shows the number of object vertices, t
     int normalVectors;
 };
 
-struct boundBox         // many structs are following here, all defining bound objects
+// many structs are following here, all defining bound objects
+struct boundBox         // Bound Box
 {
     Vertex3D base;
     vector height;
@@ -31,27 +42,27 @@ struct boundBox         // many structs are following here, all defining bound o
     vector length;
 };
 
-struct boundSphere
+struct boundSphere      // Bound Sphere
 {
     Vertex3D center;
     GLfloat radian;
 };
 
-struct boundPlane
+struct boundPlane       // Bound Plane
 {
     Vertex3D base;
     vector widht;
     vector length;
 };
 
-struct boundTriangel
+struct boundTriangel    // Bound Triangel
 {
     Vertex3D vert0;
     Vertex3D vert1;
     Vertex3D vert2;
 };
 
-struct boundCylinder
+struct boundCylinder    // Bound Cylinder
 {
     Vertex3D center;
     GLfloat radian;
@@ -59,84 +70,99 @@ struct boundCylinder
 };
 
 
-class ObjectType : public BasicParser
+// many typedefs so i don't have to place struct before the structs
+typedef struct vertexNumber vertexNumber;
+typedef struct boundBox boundBox;
+typedef struct boundSphere boundSphere;
+typedef struct boundPlane boundPlane;
+typedef struct boundTriangel boundTriangel;
+typedef struct boundCylinder boundCylinder;
+
+
+
+class ObjectType : public BasicParser   // The object type class
 {
     public:
-        ObjectType();
-        ObjectType(const char *filename, const char *objname);
-        ~ObjectType();
+        ObjectType();                                               // zero constructor (better than nothing)
+        ObjectType(const char *filename, const char *objname);    // standart constructor
+        ~ObjectType();                                              // destructor
 
-        void initObjectType();
-
-
-        void loadObjectTypeFile(const char *objectFile, const char *objectName);
-
-        struct vertexNumber countVertices(const char *filename, const char *objectname);
-        usedVertices verticesInPolygon(char *line);
+        void initObjectType();                                      // init functions, so i don't have to write the things in every constructor
 
 
+        void loadObjectTypeFile(const char *objectFile, const char *objectName);       // the wavefront parser function
 
-        char objectTypeName[20];
+        vertexNumber countVertices(const char *filename, const char *objectname);       // function which counts the vertices, texvertices and normvectors in an object (used by loadObjectTypeFile)
+        usedVertices verticesInPolygon(char *line);                                       // function which loooks which types of vertices are in a polygon (used by loadObjectTypeFile)
 
-        List<Sound> *sounds;
 
-        List<Vertex3D> *vertices;
-        List<vector> *normvectors;
-        List<Vertex2D> *texvertices;
-        List<Polygon> *polygones;
 
-        // Bounds
-        List<struct boundBox> *boundBoxes;
-        List<struct boundSphere> *boundSpheres;
-        List<struct boundPlane> *boundPlanes;
-        List<struct boundCylinder> *boundCylinders;
-        List<struct boundTriangel> *boundTriangles;
+        char objectTypeName[20];                // the name of the object type
 
-        static MaterialCache *MatCache;
-        Material *ObjectTypeMaterial;
+        List<Sound> *sounds;                    // the list of sounds connected to this object type
 
-        bool isPhysicalActor;
+        List<Vertex3D> *vertices;               // the list of vertices of the object type
+        List<vector> *normvectors;              // the list of normvectors of the object type
+        List<Vertex2D> *texvertices;            // the list of texture vertices of the object type
+
+        List<Polygon> *polygones;               // the list of polygones of the object type
+
+        // Bounds object lists
+        List<boundBox> *boundBoxes;             // the list of bound boxes of the object type
+        List<boundSphere> *boundSpheres;        // the list of bound spheres of the object type
+        List<boundPlane> *boundPlanes;          // the list of bound planes of the object type
+        List<boundCylinder> *boundCylinders;    // the list of bound cylinders of the object type
+        List<boundTriangel> *boundTriangles;    // the list of bound triangles of the object type
+
+        static MaterialCache *MatCache;         // the static material cache (you know what a cache is, don't you?)
+        Material *ObjectTypeMaterial;            // the material of this object type
+
+        bool isPhysicalActor;                   // says if there are physical reactions on this object type
 };
 
-class ObjectTypeCache
+
+
+class ObjectTypeCache       // the cache for object types
 {
     public:
-        ObjectTypeCache();
-        ~ObjectTypeCache();
+        ObjectTypeCache();  // constructor
+        ~ObjectTypeCache(); // destructor
 
-        ObjectType *requestObjectType(const char *filename, const char *objtypename);
-        ObjectType *searchObjectType(const char *objtypename);
-        bool unloadObjectType(const char *objtypename);
+        ObjectType *requestObjectType(const char *filename, const char *objtypename);   // the request function to get a object type from cache
+        ObjectType *searchObjectType(const char *objtypename);                            // intern function which finds an object type in the list
+        bool unloadObjectType(const char *objtypename);                                  // function to unload an object type
 
 
     protected:
-        List<ObjectType> *cachedObjectTypes;
+        List<ObjectType> *cachedObjectTypes;    // the list of cached object types
 };
 
-class Object
+
+
+class Object                // the main object
 {
     public:
 
-        Object();
-        Object(const char *filename, const char *objname);
-        Object(const char *filename, const char *objname, vector pos);
-        ~Object();
+        Object();                                                           // zero-constructor, don't use!
+        Object(const char *filename, const char *objname);               // don't know why somebody should want to do this, but he can!
+        Object(const char *filename, const char *objname, vector pos);   // standart constructor
+        ~Object();                                                          // destructor
 
-        void initObject();
-
-
-
-        void moveObject(float a, vector D,float v = 0);
-        void rotateObject(float angle,float v,float a,vector rotationAxis);
+        void initObject();       // init functions, so i don't have to write the things in every constructor
 
 
+        // experimental physical functions
+        void moveObject(float a, vector D,float v = 0);                         // move function
 
-        ObjectType *objType;
-        static ObjectTypeCache *ObjTypeCache;
 
-        vector scale;
-        vector position;
 
+        ObjectType *objType;                         // the object type
+        static ObjectTypeCache *ObjTypeCache;       // the static object type cache (you know what a cache is, don't you?)
+
+        vector scale;                               // the scale of the object (if you need an overdimensional cup of tea)
+        vector position;                            // the position
+
+        // experimental physical variables
         vector rotationAxis;
         GLfloat Angle;
         GLfloat remeaningAngle;

@@ -237,11 +237,3 @@ void Controls::moveCube()
 
     return;
 }
-
-void Controls::rotateCube()
-{
-    vector direction = vector(0, 0, 1);
-    iccube->rotateObject(360,2,0.05,direction);
-
-    return;
-}

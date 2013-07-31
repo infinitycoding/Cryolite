@@ -1,10 +1,12 @@
-#include <object.h>
+#include <object.h>         // makes somehow sense, doesn't it?
 
 
-using namespace std;
+
+using namespace std;      // i want to use the iostream functions
 
 
-MaterialCache *ObjectType::MatCache;
+
+MaterialCache *ObjectType::MatCache;        // this have to be like this to initialize the static variables on startup
 ObjectTypeCache *Object::ObjTypeCache;
 
 
@@ -22,7 +24,7 @@ ObjectType::ObjectType(const char *filename, const char *objname)
 
 ObjectType::~ObjectType()
 {
-    delete sounds;
+    delete sounds;      // delete everything
 
     delete vertices;
     delete normvectors;
@@ -49,11 +51,11 @@ void ObjectType::initObjectType()
 
     polygones = new List<Polygon>;
 
-    boundBoxes = new List<struct boundBox>;
-    boundSpheres = new List<struct boundSphere>;
-    boundPlanes = new List<struct boundPlane>;
-    boundCylinders = new List<struct boundCylinder>;
-    boundTriangles = new List<struct boundTriangel>;
+    boundBoxes = new List<boundBox>;
+    boundSpheres = new List<boundSphere>;
+    boundPlanes = new List<boundPlane>;
+    boundCylinders = new List<boundCylinder>;
+    boundTriangles = new List<boundTriangel>;
 
     isPhysicalActor = false;
 
@@ -69,24 +71,24 @@ usedVertices ObjectType::verticesInPolygon(char *line)
     bool firstSlash = true;
     bool resultFound = false;
 
-    for(int i = 2; line[i] != '\n' && line[i] != '\0' && line[i] != ' ' && resultFound == false; i++)
+    for(int i = 2; line[i] != '\n' && line[i] != '\0' && line[i] != ' ' && resultFound == false; i++)   // look through the polygone
     {
-        if(line[i] == '/')
+        if(line[i] == '/')              // the vertices, texvertices and normalvectors are seperated by slashes
         {
             if(firstSlash == true)
             {
                 firstSlash = false;
 
-                if(line[++i] == '/')
+                if(line[++i] == '/')    // if the second slash is directly after the first slash, only normvectors are used
                 {
                     used = normalsUsed;
 
                     resultFound = true;
                 }
-                else
+                else                    // if the second slash isn't directly after the first slash, texvertices are used
                     used = textureUsed;
             }
-            else
+            else        // if there are two slashes, texture vertices and normal vectors are used
             {
                 used = allUsed;
 
@@ -98,14 +100,14 @@ usedVertices ObjectType::verticesInPolygon(char *line)
     return used;
 }
 
-struct vertexNumber ObjectType::countVertices(const char *filename, const char *objectname)
+vertexNumber ObjectType::countVertices(const char *filename, const char *objectname)
 {
     FILE *f;
     int i, j;
     char line[50];
     char string[50];
     bool correctObject = false;
-    struct vertexNumber vertexCounter = {0, 0, 0};
+    vertexNumber vertexCounter = {0, 0, 0};
 
     f = fopen(filename, "r");
 
@@ -164,16 +166,16 @@ void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectNa
     int h, i , j;
     int vert_id[4], tex_id[4], norm_id[4];
 
-    int vertexNumber = 0;
+    int vertexnumber = 0;
 
     bool correctObject = false;
     bool auto_texv_loaded = false;
 
     usedVertices used = nothingUsed;
 
-    struct vertexNumber otherVertices = {0, 0, 0};
-    struct vertexNumber myVertices = {0, 0, 0};
-    struct vertexNumber allObjectVertices = countVertices(objectFile, objectName);
+    vertexNumber otherVertices = {0, 0, 0};
+    vertexNumber myVertices = {0, 0, 0};
+    vertexNumber allObjectVertices = countVertices(objectFile, objectName);
 
     Vertex2D *texvertex_ptr = NULL;
     Vertex2D *autotexvertex_ptrs[4];
@@ -293,19 +295,19 @@ void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectNa
                 continue;
             else
             {
-                for(i = 2, vertexNumber = 1; line[i] != '\n' && line[i] != '\0'; i++) // check if it is a triangle or a square
+                for(i = 2, vertexnumber = 1; line[i] != '\n' && line[i] != '\0'; i++) // check if it is a triangle or a square
                     if(line[i] == ' ')
-                        vertexNumber++;
+                        vertexnumber++;
 
                 used = verticesInPolygon(line);
 
-                polygon_ptr = new Polygon(vertexNumber);
+                polygon_ptr = new Polygon(vertexnumber);
 
                 polygones->PushFront(polygon_ptr);
 
                 i = 1;
 
-                for(h = 0; h < vertexNumber; h++)
+                for(h = 0; h < vertexnumber; h++)
                 {
 
                     for(++i, j = 0; line[i] != ' ' && line[i] != '/' && line[i] != '\n' && line[i] != '\0'; i++, j++)
@@ -353,7 +355,7 @@ void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectNa
 
                 }
 
-                for(i = 0; i < vertexNumber; i++)
+                for(i = 0; i < vertexnumber; i++)
                 {
 
                     polygon_ptr->setObjVertex(i, objvertex_ptrs[vert_id[i]]);
@@ -544,18 +546,4 @@ void Object::moveObject(float a ,vector D, float v)
     // save current time
     this->Tms = currentTime;
 
-}
-
-void Object::rotateObject(float angle,float v,float a,vector rotationAxis)
-{
-    this->startRotationTime = SDL_GetTicks();
-    this->remeaningAngle = angle;
-    if(angle<0)
-        this->remAngleSing = -1;
-    else
-        this->remAngleSing = 1;
-    this->rotationVelocity = v;
-    this->rotationAcceleration = a;
-    this->rotationAxis = rotationAxis;
-    this->destAngle = this->Angle+angle;
 }
