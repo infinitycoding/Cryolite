@@ -377,7 +377,6 @@ void Sound::refreshPosition()
         currenPosition = (settings->relativObject->position + settings->relation);
     else
         currenPosition = settings->relation;
-    cout<<currenPosition<<endl;
     alSource3f(source, AL_POSITION, currenPosition.x, currenPosition.y, currenPosition.z);
 }
 
@@ -385,11 +384,9 @@ void Sound::refreshPosition(vector p)
 {
     vector currenPosition;
     if(settings->relativObject)
-        currenPosition = (settings->relativObject->position + settings->relation)-p;
+        currenPosition = p-(settings->relativObject->position + settings->relation);
     else
         currenPosition = settings->relation-p;
-    cout<<currenPosition<<endl;
-    currenPosition*=-1;
     alSource3f(source, AL_POSITION, currenPosition.x, currenPosition.y, currenPosition.z);
 }
 
