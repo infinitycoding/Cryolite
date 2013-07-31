@@ -98,7 +98,7 @@ void Scene::render()
 
                         //Modify Model Matrix
                         glRotatef(currentObject->Angle, currentObject->rotationAxis.x, currentObject->rotationAxis.y, currentObject->rotationAxis.z);
-                        glTranslatef(currentObject->position.x,currentObject->position.y,currentObject->position.z);
+                        glTranslatef(currentObject->getPosition().x,currentObject->getPosition().y,currentObject->getPosition().z);
                         glScalef(currentObject->scale.x,currentObject->scale.y,currentObject->scale.z);
 
                         //Render Polyganes
@@ -123,21 +123,10 @@ void Scene::handleMotions(Object *currentObject)
     if(currentObject->Am || currentObject->V0m)
     {
         vector direction = vector(currentObject->Dm);
-        float acc = currentObject->Am;
-        if(currentObject->position.y > -2)
-        {
-            acc = len( (direction * acc) + vector(0,-10,0) );
-            direction = unify( (direction * acc) + vector(0,-10,0) );
-        }
-
-        else
-        {
-            currentObject->position.y = -2;
-        }
 
         currentObject->V0m +=  currentObject->Am* ((SDL_GetTicks()-currentObject->Tms)/1000);
         double MPF = (double)currentObject->V0m/averageFPS;
-        currentObject->position = (currentObject->position) + (direction * MPF);
+        currentObject->localPosition += direction * MPF;
     }
 }
 
@@ -175,7 +164,7 @@ int Scene::handleCams(ListIterator<Camera> *c)
 
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-        gluLookAt(currentCam->position.x,currentCam->position.y,currentCam->position.z,currentCam->lookingDirection.x+currentCam->position.x,currentCam->lookingDirection.y+currentCam->position.y,currentCam->lookingDirection.z+currentCam->position.z,0.0,1.0,0.0);
+        gluLookAt(currentCam->getPosition().x,currentCam->getPosition().y,currentCam->getPosition().z,currentCam->lookingDirection.x+currentCam->getPosition().x,currentCam->lookingDirection.y+currentCam->getPosition().y,currentCam->lookingDirection.z+currentCam->getPosition().z,0.0,1.0,0.0);
 
         return true;
     }
