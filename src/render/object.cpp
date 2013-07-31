@@ -41,7 +41,7 @@ void ObjectType::initObjectType()
 {
     memset(objectTypeName, '\0', sizeof(objectTypeName));
 
-    sounds = new List<Sounds>;
+    sounds = new List<Sound>;
 
     vertices = new List<Vertex3D>;
     normvectors = new List<vector>;

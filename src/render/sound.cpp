@@ -269,24 +269,17 @@ Sound::Sound(const char *filename, SoundCache *cache)
     }
 }
 
-Sound::Sound(Object *relativObject)
-{
-    initSound();
-    settings->relativObject = relativObject;
-}
 
-Sound::Sound(Object *relativObject, vector relation)
+Sound::Sound(vector relation)
 {
     initSound();
-    settings->relativObject = relativObject;
     settings->relation = relation;
 }
 
-Sound::Sound(Object *relativObject,vector relation,const char *filename, SoundCache *cache)
+Sound::Sound(vector relation,const char *filename, SoundCache *cache)
 {
     initSound();
     this->cache = cache;
-    settings->relativObject = relativObject;
     settings->relation = relation;
 
     cache->addSound(filename);
@@ -356,37 +349,20 @@ bool Sound::playSound()
 {
     if(source && buffer)
     {
-        refreshPosition();
-
         alSourcePlay(source);
         return true;
     }
 
-    if(settings->relativObject)
-        cerr<<"No Sound is loaded for Object"<< settings->relativObject->objType->objectTypeName<<endl;
-    else
-        cerr<<"No Sound is loaded for current Object"<<endl;
+    cerr<<"No Sound is loaded for current Object"<<endl;
 
     return false;
 }
 
-void Sound::refreshPosition()
-{
-    vector currenPosition;
-    if(settings->relativObject)
-        currenPosition = (settings->relativObject->position + settings->relation);
-    else
-        currenPosition = settings->relation;
-    alSource3f(source, AL_POSITION, currenPosition.x, currenPosition.y, currenPosition.z);
-}
 
-void Sound::refreshPosition(vector p)
+void Sound::refreshPosition(vector listener, vector pos)
 {
     vector currenPosition;
-    if(settings->relativObject)
-        currenPosition = p-(settings->relativObject->position + settings->relation);
-    else
-        currenPosition = settings->relation-p;
+    currenPosition = listener-(pos+ settings->relation);
     alSource3f(source, AL_POSITION, currenPosition.x, currenPosition.y, currenPosition.z);
 }
 
@@ -396,7 +372,6 @@ void Sound::initSound()
     source = 0;
     buffer = 0;
     settings = new SoundSettings;
-    settings->relativObject = NULL;
     settings->relation = vector(0,0,0);
     settings->direction = vector(0,0,0);
     settings->velocity = vector(0,0,0);
@@ -413,16 +388,6 @@ void Sound::initSound()
 
 void Sound::refreshProperties()
 {
-    vector currenPosition;
-    if(settings->relativObject)
-    {
-        currenPosition = settings->relativObject->position + settings->relation;
-    }
-
-    else
-        currenPosition = settings->relation;
-
-    alSource3f(source, AL_POSITION, currenPosition.x, currenPosition.y, currenPosition.z);
     alSource3f(source, AL_DIRECTION, settings->direction.x, settings->direction.y, settings->direction.z);
     alSource3f(source, AL_VELOCITY, settings->velocity.x, settings->velocity.y, settings->velocity.z);
 

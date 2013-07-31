@@ -39,6 +39,7 @@ bool render = true;
 using namespace std;
 
 extern Sound *shotSound;
+extern Object *iccube;
 
 
 int main(int argc, char *argv[]){
@@ -110,7 +111,7 @@ int main(int argc, char *argv[]){
         glBindTexture( GL_TEXTURE_2D, 0);
 
         mainScene->render();
-        shotSound->refreshPosition(Player->position);
+        shotSound->refreshPosition(Player->position,iccube->position);
 
 
 

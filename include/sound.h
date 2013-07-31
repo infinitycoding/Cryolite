@@ -7,7 +7,6 @@
 #include <SDL_mixer.h>
 
 #include <List.h>
-#include <object.h>
 #include <vector.h>
 #include <sdl.h>
 
@@ -74,7 +73,6 @@ class Sound
         struct SoundSettings
         {
             vector relation;
-            Object *relativObject;
             vector direction;
             vector velocity;
             float Gain;
@@ -89,9 +87,8 @@ class Sound
 
         Sound();
         Sound(const char *filename, SoundCache *cache);
-        Sound(Object *relativObject);
-        Sound(Object *relativObject,vector relation);
-        Sound(Object *relativObject,vector relation,const char *filename, SoundCache *cache);
+        Sound(vector relation);
+        Sound(vector relation,const char *filename, SoundCache *cache);
 
         ~Sound();
 
@@ -101,8 +98,7 @@ class Sound
         bool stopSound();
         bool toggleLoop();
         void refreshProperties();
-        void refreshPosition();
-        void refreshPosition(vector p);
+        void refreshPosition(vector listener,vector pos);
 
 
         ALuint source;

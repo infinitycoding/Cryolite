@@ -7,6 +7,7 @@
 #include <vector.h>
 #include <polygon.h>
 #include <parser.h>
+#include <sound.h>
 
 
 

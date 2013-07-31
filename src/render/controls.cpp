@@ -93,7 +93,6 @@ void Controls::handleKeyDown(SDL_KeyboardEvent *e)
             moveCube();
             break;
         case SDLK_r:
-            shotSound->settings->relativObject = iccube;
             shotSound->playSound();
             break;
         default:
