@@ -255,6 +255,14 @@ Sound::Sound()
     initSound();
 }
 
+Sound::Sound(SoundSettings *settings)
+{
+    source = 0;
+    buffer = 0;
+    this->cache = NULL;
+    this->settings = settings;
+}
+
 Sound::Sound(const char *filename, SoundCache *cache)
 {
     initSound();
@@ -270,24 +278,20 @@ Sound::Sound(const char *filename, SoundCache *cache)
 }
 
 
-Sound::Sound(vector relation)
-{
-    initSound();
-    settings->relation = relation;
-}
 
-Sound::Sound(vector relation,const char *filename, SoundCache *cache)
+Sound::Sound(const char *filename, SoundCache *cache, SoundSettings *settings)
 {
-    initSound();
+    source = 0;
+    buffer = 0;
     this->cache = cache;
-    settings->relation = relation;
-
+    this->settings = settings;
     cache->addSound(filename);
     buffer = cache->getSound(filename);
     if(buffer)
     {
         alGenSources(1, &source);
         alSourcei(source, AL_BUFFER, buffer);
+        cerr<<"Sound loaded"<<endl;
     }
 }
 
@@ -345,24 +349,50 @@ bool Sound::loadSound(const char *filename,SoundCache *cache)
 }
 
 
-bool Sound::playSound()
+void Sound::play()
 {
     if(source && buffer)
     {
         alSourcePlay(source);
-        return true;
+        return;
     }
 
     cerr<<"No Sound is loaded for current Object"<<endl;
 
-    return false;
+}
+
+void Sound::stop()
+{
+    alSourcei(source,AL_SOURCE_STATE, AL_STOPPED);
+}
+
+void Sound::pause()
+{
+    alSourcei(source,AL_SOURCE_STATE, AL_PAUSED);
+}
+
+void Sound::resum()
+{
+    alSourcei(source,AL_SOURCE_STATE, AL_PLAYING);
+}
+
+void Sound::toggleLoop()
+{
+    int sourceState = 0;
+    alGetSourcei(source,AL_LOOPING, &sourceState);
+    sourceState = !sourceState;
+    settings->loop = sourceState;
+    if(sourceState && source && buffer)
+        alSourcePlay(source);
+
+    alSourcei(source,AL_LOOPING, sourceState);
 }
 
 
 void Sound::refreshPosition(vector listener, vector pos)
 {
     vector currenPosition;
-    currenPosition = listener-(pos+ settings->relation);
+    currenPosition = listener-pos;
     alSource3f(source, AL_POSITION, currenPosition.x, currenPosition.y, currenPosition.z);
 }
 
@@ -372,7 +402,6 @@ void Sound::initSound()
     source = 0;
     buffer = 0;
     settings = new SoundSettings;
-    settings->relation = vector(0,0,0);
     settings->direction = vector(0,0,0);
     settings->velocity = vector(0,0,0);
     settings->Gain = 1;
@@ -380,7 +409,6 @@ void Sound::initSound()
     settings->MinGain = 0;
     settings->pitch = 1;
     settings->refDistance = 0;
-    settings->times = 1;
     settings->loop = false;
     settings->maxDistance = 50;
     cache = NULL;
@@ -399,5 +427,6 @@ void Sound::refreshProperties()
     alSourcef(source, AL_MAX_DISTANCE, settings->maxDistance);
     if(settings->loop)
         alSourcei(source, AL_LOOPING, AL_TRUE);
-
+    else
+        alSourcei(source, AL_LOOPING, AL_FALSE);
 }

@@ -54,6 +54,7 @@ Controls::Controls(SDL* window) : EventHandle()
     shotSound->loadSound(SOUND(shot.wav));
     shotSound->settings->loop = true;
     shotSound->refreshProperties();
+    shotSound->play();
 }
 
 void Controls::handleQuit()
@@ -93,7 +94,7 @@ void Controls::handleKeyDown(SDL_KeyboardEvent *e)
             moveCube();
             break;
         case SDLK_r:
-            shotSound->playSound();
+            shotSound->toggleLoop();
             break;
         default:
             break;

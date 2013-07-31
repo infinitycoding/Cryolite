@@ -72,7 +72,6 @@ class Sound
     public:
         struct SoundSettings
         {
-            vector relation;
             vector direction;
             vector velocity;
             float Gain;
@@ -81,22 +80,24 @@ class Sound
             float pitch;
             float refDistance;
             float maxDistance;
-            int times;
             bool loop;
         };
 
         Sound();
+        Sound(SoundSettings *settings);
         Sound(const char *filename, SoundCache *cache);
-        Sound(vector relation);
-        Sound(vector relation,const char *filename, SoundCache *cache);
+        Sound(const char *filename, SoundCache *cache,SoundSettings *settings);
+
 
         ~Sound();
 
         bool loadSound(const char *filename);
         bool loadSound(const char *filename, SoundCache *cache);
-        bool playSound();
-        bool stopSound();
-        bool toggleLoop();
+        void play();
+        void stop();
+        void pause();
+        void resum();
+        void toggleLoop();
         void refreshProperties();
         void refreshPosition(vector listener,vector pos);
 
