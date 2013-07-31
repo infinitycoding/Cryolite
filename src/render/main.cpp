@@ -4,8 +4,6 @@
 #include <AL/alut.h>
 #include <GL/glu.h>
 
-#include <stdio.h>
-#include <string.h>
 #include <SDL_thread.h>
 #include <SDL_mixer.h>
 
@@ -20,6 +18,7 @@
 #include <light.h>
 #include <settings.h>
 #include <sound.h>
+#include <luaRapper.h>
 
 #ifdef DEBUG
 #include <profiler.h>
@@ -44,6 +43,14 @@ extern Object *gravelcube;
 
 
 int main(int argc, char *argv[]){
+    LUASkript testSkript = LUASkript(SKRIPT(testscript.lua));
+    testSkript.insertDoubleVar("cppvar", 5.5);
+    testSkript.runSkript();
+    double luavar = testSkript.getDoubleVar("luavar");
+    cout << "luavar = " << luavar << endl;
+
+    cout << endl;
+
     gameSettings = new Settings("settings");
     //Create Window and Scene
     SDL mainwindow = SDL(gameSettings->width,gameSettings->height,gameSettings->sdlFlags,"Cryolite Engine");

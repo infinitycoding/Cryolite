@@ -17,12 +17,15 @@
 #define FONT_PATH "resource/fonts/"
 #define SOUND_PATH "resource/sounds/"
 #define RESOURCE_PATH "resource/"
+#define SKRIPT_PATH "skripts/"
 
 #define OBJECT(FILE) OBJECT_PATH #FILE
 #define RESOURCE(FILE) RESOURCE_PATH #FILE
 #define IMAGE(FILE) IMAGE_PATH #FILE
 #define FONT(FILE) FONT_PATH #FILE
 #define SOUND(FILE) SOUND_PATH #FILE
+#define SKRIPT(FILE) SKRIPT_PATH #FILE
+
 
 
 
