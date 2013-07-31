@@ -356,8 +356,8 @@ bool Sound::playSound()
 {
     if(source && buffer)
     {
-        int sourceState = 0;
-        alGetSourcei(source,AL_SOURCE_STATE, &sourceState);
+        refreshPosition();
+
         alSourcePlay(source);
         return true;
     }
@@ -368,6 +368,29 @@ bool Sound::playSound()
         cerr<<"No Sound is loaded for current Object"<<endl;
 
     return false;
+}
+
+void Sound::refreshPosition()
+{
+    vector currenPosition;
+    if(settings->relativObject)
+        currenPosition = (settings->relativObject->position + settings->relation);
+    else
+        currenPosition = settings->relation;
+    cout<<currenPosition<<endl;
+    alSource3f(source, AL_POSITION, currenPosition.x, currenPosition.y, currenPosition.z);
+}
+
+void Sound::refreshPosition(vector p)
+{
+    vector currenPosition;
+    if(settings->relativObject)
+        currenPosition = (settings->relativObject->position + settings->relation)-p;
+    else
+        currenPosition = settings->relation-p;
+    cout<<currenPosition<<endl;
+    currenPosition*=-1;
+    alSource3f(source, AL_POSITION, currenPosition.x, currenPosition.y, currenPosition.z);
 }
 
 
@@ -384,8 +407,35 @@ void Sound::initSound()
     settings->MaxGain = 1;
     settings->MinGain = 0;
     settings->pitch = 1;
-    settings->refDistance = 5;
+    settings->refDistance = 0;
     settings->times = 1;
     settings->loop = false;
+    settings->maxDistance = 50;
     cache = NULL;
+}
+
+void Sound::refreshProperties()
+{
+    vector currenPosition;
+    if(settings->relativObject)
+    {
+        currenPosition = settings->relativObject->position + settings->relation;
+    }
+
+    else
+        currenPosition = settings->relation;
+
+    alSource3f(source, AL_POSITION, currenPosition.x, currenPosition.y, currenPosition.z);
+    alSource3f(source, AL_DIRECTION, settings->direction.x, settings->direction.y, settings->direction.z);
+    alSource3f(source, AL_VELOCITY, settings->velocity.x, settings->velocity.y, settings->velocity.z);
+
+    alSourcef(source, AL_GAIN , settings->Gain);
+    alSourcef(source, AL_MAX_GAIN, settings->MaxGain);
+    alSourcef(source, AL_MIN_GAIN, settings->MinGain);
+    alSourcef(source, AL_PITCH, settings->pitch);
+    alSourcef(source, AL_REFERENCE_DISTANCE, settings->refDistance);
+    alSourcef(source, AL_MAX_DISTANCE, settings->maxDistance);
+    if(settings->loop)
+        alSourcei(source, AL_LOOPING, AL_TRUE);
+
 }

@@ -82,6 +82,7 @@ class Sound
             float MinGain;
             float pitch;
             float refDistance;
+            float maxDistance;
             int times;
             bool loop;
         };
@@ -97,8 +98,11 @@ class Sound
         bool loadSound(const char *filename);
         bool loadSound(const char *filename, SoundCache *cache);
         bool playSound();
-        void refreshpProperties();
-        void refreshpPosition();
+        bool stopSound();
+        bool toggleLoop();
+        void refreshProperties();
+        void refreshPosition();
+        void refreshPosition(vector p);
 
 
         ALuint source;

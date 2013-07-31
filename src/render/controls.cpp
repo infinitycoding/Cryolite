@@ -35,6 +35,7 @@ extern bool printFPS;
 extern bool render;
 extern Settings *gameSettings;
 extern Scene *mainScene;
+extern Object *iccube;
 Sound *shotSound;
 
 Controls::Controls(SDL* window) : EventHandle()
@@ -51,6 +52,8 @@ Controls::Controls(SDL* window) : EventHandle()
     SoundCache *SC = new SoundCache();
     shotSound = new Sound(SOUND(shot.wav),SC);
     shotSound->loadSound(SOUND(shot.wav));
+    shotSound->settings->loop = true;
+    shotSound->refreshProperties();
 }
 
 void Controls::handleQuit()
@@ -90,6 +93,7 @@ void Controls::handleKeyDown(SDL_KeyboardEvent *e)
             moveCube();
             break;
         case SDLK_r:
+            shotSound->settings->relativObject = iccube;
             shotSound->playSound();
             break;
         default:
@@ -225,12 +229,12 @@ void Controls::toggle_printFPS()
 
     return;
 }
-extern Object *iccube;
+
 
 void Controls::moveCube()
 {
-    vector direction = vector(0, 0, 1);
-    iccube->moveObject(0.2,direction, 20);
+    vector direction = vector(-1, 0, 0);
+    iccube->moveObject(0.0,direction, 1);
 
     return;
 }

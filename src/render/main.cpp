@@ -38,7 +38,7 @@ bool render = true;
 
 using namespace std;
 
-
+extern Sound *shotSound;
 
 
 int main(int argc, char *argv[]){
@@ -50,6 +50,7 @@ int main(int argc, char *argv[]){
     // Create camera, Global light and Input controler
     Camera *Player = new Camera(vector(STARTING_X,STARTING_Y,STARTING_Z),vector(0,0,1),STANDART_NEARCLIP,STANDART_FARCLIP,gameSettings->fov,0,0,gameSettings->height,gameSettings->width);
     mainScene->Camlist->PushFront(Player);
+
     Controls playerControls = Controls(&mainwindow);
     mainScene->GlobalAmbience = new GlobalLight();
 
@@ -76,6 +77,11 @@ int main(int argc, char *argv[]){
 
     Level testLevel = Level();
     testLevel.testMusic();
+    testLevel.deactivateBackgroundMusic();
+
+    alDistanceModel( AL_LINEAR_DISTANCE );
+
+
 
     float lastFPS = 0;
     mainScene->lasttick = SDL_GetTicks();
@@ -102,18 +108,24 @@ int main(int argc, char *argv[]){
         playerControls.controls_handler(Player);
 
 
+
         glBindTexture( GL_TEXTURE_2D, 0);
 
         mainScene->render();
+        shotSound->refreshPosition(Player->position);
+
 
 
         glPushMatrix();
         glTranslatef(Player->position.x,Player->position.y,Player->position.z);
+
         glRotated(90,1,0,0);
         glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
         glBindTexture( GL_TEXTURE_2D, sky->nr);
         gluSphere(q,50,100,100);
         glPopMatrix();
+
+
 
 
 
