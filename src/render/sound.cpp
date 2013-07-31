@@ -139,45 +139,109 @@ Music::~Music()
 }
 
 
-
-
-// todo: flag toggle after finishing playloops via global music manager
-
-
-
-Sound::Sound()
+SoundCache::SoundCache()
 {
-    initSound();
+    SoundList = List<SoundEntry>();
 }
 
-
-Sound::Sound(const char *filename)
+SoundCache::~SoundCache()
 {
-    initSound();
-
-    loadSoundFile(filename);
+    while(!SoundList.IsEmpty())
+    {
+        SoundEntry *entry = SoundList.PopFront();
+        delete entry->name;
+        Mix_FreeChunk(entry->chunk);
+        delete entry;
+    }
 }
 
-
-Sound::~Sound()
+bool SoundCache::addSound(char * file)
 {
+    ListIterator<SoundEntry> i = ListIterator<SoundEntry>(&SoundList);
+    i.SetFirst();
+    while(!i.IsLast())
+    {
+        if(!strncmp(file,i.GetCurrent()->name,strlen(i.GetCurrent()->name)))
+        {
+            return false;
+        }
 
-}
+        i.Next();
+    }
+    Mix_Chunk *sound = Mix_LoadWAV(file);
+    if(!sound)
+    {
+        cerr<< "could not load sound file " << file << endl;
+        return false;
+    }
 
+    SoundEntry *newEntry = new SoundEntry;
+    newEntry->chunk = sound;
+    newEntry->buffer = SDL::chuckToBuffer(sound);
+    newEntry->name = new char[strlen(file)+1];
+    strcpy(newEntry->name,file);
+    SoundList.PushFront(newEntry);
 
-bool Sound::loadSoundFile(const char *filename)
-{
     return true;
 }
 
-
-bool Sound::playSound(struct soundSettings *settings)
+bool SoundCache::removeSound(char *file)
 {
-    return true;
+    ListIterator<SoundEntry> i = ListIterator<SoundEntry>(&SoundList);
+    i.SetFirst();
+    while(!i.IsLast())
+    {
+        if(!strncmp(file,i.GetCurrent()->name,strlen(i.GetCurrent()->name)))
+        {
+            SoundEntry *entry = i.Remove();
+            delete entry->name;
+            Mix_FreeChunk(entry->chunk);
+            delete entry;
+            return true;
+        }
+
+        i.Next();
+    }
+    cerr<<file<<" does not exist in this Soundcache"<<endl;
+    return false;
+}
+
+bool SoundCache::removeSound(ALuint buffer)
+{
+    ListIterator<SoundEntry> i = ListIterator<SoundEntry>(&SoundList);
+    i.SetFirst();
+    while(!i.IsLast())
+    {
+        if(i.GetCurrent()->buffer == buffer)
+        {
+            SoundEntry *entry = i.Remove();
+            delete entry->name;
+            Mix_FreeChunk(entry->chunk);
+            delete entry;
+            return true;
+        }
+
+        i.Next();
+    }
+    cerr<<"sound "<<buffer<<" does not exist in this Soundcache"<<endl;
+    return false;
 }
 
 
-void Sound::initSound()
+ALuint SoundCache::getSound(char *file)
 {
+    ListIterator<SoundEntry> i = ListIterator<SoundEntry>(&SoundList);
+    i.SetFirst();
+    while(!i.IsLast())
+    {
+        if(!strncmp(file,i.GetCurrent()->name,strlen(i.GetCurrent()->name)))
+        {
+            return i.GetCurrent()->buffer;
+        }
 
+        i.Next();
+    }
+
+    cerr<<file<<" does not exist in this Soundcache return NULL Buffer"<<endl;
+    return 0;
 }

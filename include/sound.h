@@ -6,7 +6,11 @@
 #include <AL/alut.h>
 #include <SDL_mixer.h>
 
-#include<List.h>
+#include <List.h>
+#include <object.h>
+#include <vector.h>
+#include <sdl.h>
+
 
 
 // put defines here
@@ -39,11 +43,28 @@ class Music
         ~Music();
 };
 
-
-struct soundSettings
+class SoundCache
 {
+    public:
+        struct SoundEntry
+        {
+            char *name;
+            Mix_Chunk *chunk;
+            ALuint buffer;
+        };
 
+
+    SoundCache();
+    ~SoundCache();
+
+    bool addSound(char * file);
+    bool removeSound(char *file);
+    bool removeSound(ALuint buffer);
+    ALuint getSound(char *file);
+
+    List<SoundEntry> SoundList;
 };
+
 
 
 class Sound
@@ -51,18 +72,25 @@ class Sound
 
     public:
 
-        Sound();
-        Sound(const char *filename);
+        Sound(char *filename);
         ~Sound();
 
-        bool loadSoundFile(const char *filename);
-        bool playSound(struct soundSettings *settings);
+        bool loadSound(char *filename);
+        bool loadSound(char *filename, SoundCache *cache);
+        bool playSound();
+
+        vector relation;
+        Object *relativObject;
+
+        vector direction;
+        vector velocity;
+        float MaxGain;
+        float MinGain;
+        float pitch;
+        float refDistance;
 
     private:
         void initSound();
-
-
-
 
 };
 
