@@ -57,35 +57,64 @@ struct boundCylinder
     GLfloat height;
 };
 
-class Object : public BasicParser
+
+class ObjectType : public BasicParser
+{
+    public:
+        ObjectType();
+        ObjectType(const char *filename, const char *objname);
+        ~ObjectType();
+
+        void initObjectType();
+
+
+        void loadObjectTypeFile(const char *objectFile, const char *objectName);
+
+        struct vertexNumber countVertices(const char *filename, const char *objectname);
+        usedVertices verticesInPolygon(char *line);
+
+
+
+        char objectTypeName[20];
+
+        List<Vertex3D> *vertices;
+        List<vector> *normvectors;
+        List<Vertex2D> *texvertices;
+        List<Polygon> *polygones;
+
+        // Bounds
+        List<struct boundBox> *boundBoxes;
+        List<struct boundSphere> *boundSpheres;
+        List<struct boundPlane> *boundPlanes;
+        List<struct boundCylinder> *boundCylinders;
+        List<struct boundTriangel> *boundTriangles;
+
+        static MaterialCache *MatCache;
+        Material *ObjectTypeMaterial;
+
+        bool isPhysicalActor;
+};
+
+class Object
 {
     public:
 
-        Object();                                                                  // zero-constructor. for self-created objects.
-        Object(const char *filename, const char *objname);                      // template-constructor. for templates.
-        Object(const char *filename, const char *objname, vector pos);          // direct-constrocter. for unique objects.
+        Object();
+        Object(const char *filename, const char *objname);
+        Object(const char *filename, const char *objname, vector pos);
         ~Object();
 
         void initObject();
 
 
-        Vertex3D *addObjectVertex(Vertex3D *newVertex);         // functions to add new members to the lists
-        vector *addNormalVector(vector *newNormVector);
-        Vertex2D *addTextureVertex(Vertex2D *newTexVertex);
-        Polygon *addPolygon(Polygon *newPolygon);
 
-        void loadMaterial(const char *file, const char *matname);
-        void loadObjectFile(const char *objectFile, const char *objectName);
-
-        struct vertexNumber countVertices(const char *filename, const char *objectname);
-        usedVertices verticesInPolygon(char *line);
 
         void moveObject(float a, vector D,float v = 0);
         void rotateObject(float angle,float v,float a,vector rotationAxis);
 
 
 
-        char objectname[20];
+        ObjectType *objType;
 
         vector scale;
         vector position;
@@ -104,23 +133,6 @@ class Object : public BasicParser
         float V0m; // Velocity Motion
         float Am; // Acceleration Motion
         int Tms; //Time Motion Start
-
-        List<Vertex3D> *vertices;
-        List<vector> *normvectors;
-        List<Vertex2D> *texvertices;
-        List<Polygon> *polygones;
-
-        // Bounds
-        List<struct boundBox> *boundBoxes;
-        List<struct boundSphere> *boundSpheres;
-        List<struct boundPlane> *boundPlanes;
-        List<struct boundCylinder> *boundCylinders;
-        List<struct boundTriangel> *boundTriangles;
-
-        static MaterialCache *MatCache;
-        Material *ObjectMaterial;
-
-        bool isPhysicalActor;
 };
 
 

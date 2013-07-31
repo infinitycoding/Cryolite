@@ -4,31 +4,22 @@
 using namespace std;
 
 
-MaterialCache *Object::MatCache;
+MaterialCache *ObjectType::MatCache;
 
 
-Object::Object()
+ObjectType::ObjectType()
 {
-    initObject();
+    initObjectType();
 }
 
-Object::Object(const char *filename, const char *objname)
+ObjectType::ObjectType(const char *filename, const char *objname)
 {
-    initObject();
+    initObjectType();
 
-    loadObjectFile(filename, objname);
+    loadObjectTypeFile(filename, objname);
 }
 
-Object::Object(const char *filename, const char *objname, vector pos)
-{
-    initObject();
-
-    loadObjectFile(filename, objname);
-
-    position.setvalue(pos);
-}
-
-Object::~Object()
+ObjectType::~ObjectType()
 {
     delete vertices;
     delete normvectors;
@@ -43,8 +34,10 @@ Object::~Object()
     delete boundTriangles;
 }
 
-void Object::initObject()
+void ObjectType::initObjectType()
 {
+    memset(objectTypeName, '\0', sizeof(objectTypeName));
+
     vertices = new List<Vertex3D>;
     normvectors = new List<vector>;
     texvertices = new List<Vertex2D>;
@@ -57,41 +50,15 @@ void Object::initObject()
     boundCylinders = new List<struct boundCylinder>;
     boundTriangles = new List<struct boundTriangel>;
 
-
-    scale = vector(1, 1, 1);
-
-    position = vector();
-
-    rotationAxis = vector();
-
-    Angle = 0;
-    remeaningAngle = 0;
-    destAngle = 0;
-    rotationVelocity = 0;
-    rotationAcceleration = 0;
-    startRotationTime = 0;
-    remAngleSing = 0;
-
-
-
-
-    Dm = vector();
-
-
-
-    V0m = 0; // Velocity Motion
-    Am = 0; // Acceleration Motion
-    Tms = 0; //Time Motion Start
-
     isPhysicalActor = false;
 
     if(MatCache == NULL)
         MatCache = new MaterialCache();
 
-    ObjectMaterial = NULL;
+    ObjectTypeMaterial = NULL;
 }
 
-usedVertices Object::verticesInPolygon(char *line)
+usedVertices ObjectType::verticesInPolygon(char *line)
 {
     usedVertices used = nothingUsed;
     bool firstSlash = true;
@@ -126,7 +93,7 @@ usedVertices Object::verticesInPolygon(char *line)
     return used;
 }
 
-struct vertexNumber Object::countVertices(const char *filename, const char *objectname)
+struct vertexNumber ObjectType::countVertices(const char *filename, const char *objectname)
 {
     FILE *f;
     int i, j;
@@ -181,7 +148,7 @@ struct vertexNumber Object::countVertices(const char *filename, const char *obje
     return vertexCounter;
 }
 
-void Object::loadObjectFile(const char *objectFile, const char *objectName)
+void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectName)
 {
     FILE *f;
 
@@ -214,7 +181,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
     Polygon *polygon_ptr = NULL;
 
-    strncpy(objectname, objectName, 20);
+    strncpy(objectTypeName, objectName, 20);
 
     if(allObjectVertices.objectVertices == 0)
     {
@@ -236,6 +203,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
         if(!strncmp(line, "mtllib", 6))
         {
+            memset(matfile, '\0', sizeof(matfile));
             getValueString(line, matfile);
 
             continue;
@@ -246,16 +214,17 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
             memset(string, '\0', sizeof(string));
             getValueString(line, string);
 
-            loadMaterial(matfile, string);
+            ObjectTypeMaterial = MatCache->requestMaterial(matfile, string);
 
             continue;
         }
 
         if(line[0] == 'o')
         {
+            memset(string, '\0', sizeof(string));
             if(!strncmp(getValueString(line, string), objectName, strlen(string)))
                 correctObject = true;
-            else
+            else if(correctObject == true)
                 break;
 
             continue;
@@ -270,7 +239,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                 Vertex2D tempv2d = getValueVertex2D(line);
                 texvertex_ptr = new Vertex2D(&tempv2d);
 
-                this->addTextureVertex(texvertex_ptr);
+                texvertices->PushFront(texvertex_ptr);
 
                 texvertex_ptrs[myVertices.textureVertices++] = texvertex_ptr;
             }
@@ -288,7 +257,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                 Vertex3D tempv3d = getValueVertex3D(line);
                 objvertex_ptr = new Vertex3D(&tempv3d);
 
-                this->addObjectVertex(objvertex_ptr);
+                vertices->PushFront(objvertex_ptr);
 
                 objvertex_ptrs[myVertices.objectVertices++] = objvertex_ptr;
             }
@@ -305,7 +274,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
                 vector tempvec = getValueVector(line);
                 normvector_ptr = new vector(&tempvec);
 
-                this->addNormalVector(normvector_ptr);
+                normvectors->PushFront(normvector_ptr);
 
                 normvector_ptrs[myVertices.normalVectors++] = normvector_ptr;
             }
@@ -327,7 +296,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
                 polygon_ptr = new Polygon(vertexNumber);
 
-                addPolygon(polygon_ptr);
+                polygones->PushFront(polygon_ptr);
 
                 i = 1;
 
@@ -386,7 +355,7 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
                     if(used == textureUsed || used == allUsed)
                         polygon_ptr->setTexVertex(i, texvertex_ptrs[tex_id[i]]);
-                    else if(ObjectMaterial != NULL)
+                    else if(ObjectTypeMaterial != NULL)
                     {
                         if(auto_texv_loaded == false)
                         {
@@ -419,33 +388,58 @@ void Object::loadObjectFile(const char *objectFile, const char *objectName)
 
 }
 
-Vertex3D *Object::addObjectVertex(Vertex3D *newVertex)
+
+
+Object::Object()
 {
-    vertices->PushFront(newVertex);
-    return newVertex;
+    initObject();
 }
 
-vector *Object::addNormalVector(vector *newNormVector)
+Object::Object(const char *filename, const char *objname)
 {
-    normvectors->PushFront(newNormVector);
-    return newNormVector;
+    initObject();
+
+    objType = new ObjectType(filename, objname);
 }
 
-Vertex2D *Object::addTextureVertex(Vertex2D *newTexVertex)
+Object::Object(const char *filename, const char *objname, vector pos)
 {
-    texvertices->PushFront(newTexVertex);
-    return newTexVertex;
+    initObject();
+
+    objType = new ObjectType(filename, objname);
+
+    position.setvalue(pos);
 }
 
-Polygon *Object::addPolygon(Polygon *newPolygon)
+Object::~Object()
 {
-    polygones->PushFront(newPolygon);
-    return newPolygon;
+
 }
 
-void Object::loadMaterial(const char *file, const char *matname)
+void Object::initObject()
 {
-    ObjectMaterial = MatCache->requestMaterial(file, matname);
+
+
+
+    scale = vector(1, 1, 1);
+
+    position = vector();
+
+    rotationAxis = vector();
+
+    Angle = 0;
+    remeaningAngle = 0;
+    destAngle = 0;
+    rotationVelocity = 0;
+    rotationAcceleration = 0;
+    startRotationTime = 0;
+    remAngleSing = 0;
+
+    Dm = vector();
+
+    V0m = 0; // Velocity Motion
+    Am = 0; // Acceleration Motion
+    Tms = 0; //Time Motion Start
 }
 
 void Object::moveObject(float a ,vector D, float v)

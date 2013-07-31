@@ -33,24 +33,6 @@ void Scene::addObject(Object *obj)
     this->objectList->PushFront(obj);
 }
 
-int Scene::removeObject(char *name)
-{
-    int delObj = 0;
-    ListIterator<Object> i = ListIterator<Object>(objectList);
-    i.SetFirst();
-    while(!i.IsLast())
-    {
-        Object *currentObject = (Object *)i.GetCurrent();
-        if(currentObject->objectname != name)
-        {
-            i.Remove();
-            delObj++;
-        }
-        i.Next();
-    }
-    return delObj;
-}
-
 int Scene::removeObject(Object *obj)
 {
     int delObj = 0;
@@ -99,14 +81,14 @@ void Scene::render()
             while(!o.IsLast())
             {
                 Object *currentObject = o.GetCurrent();
-                if(!currentObject->vertices->IsEmpty())
+                if(!currentObject->objType->vertices->IsEmpty())
                 {
                     glPushMatrix();
 
                         glEnable(GL_TEXTURE_2D);
 
-                        if(currentObject->ObjectMaterial)
-                            glBindTexture( GL_TEXTURE_2D, currentObject->ObjectMaterial->ambiantTexture->nr);
+                        if(currentObject->objType->ObjectTypeMaterial)
+                            glBindTexture( GL_TEXTURE_2D, currentObject->objType->ObjectTypeMaterial->ambiantTexture->nr);
                         else
                             glBindTexture( GL_TEXTURE_2D, 0);
 
@@ -120,7 +102,7 @@ void Scene::render()
                         glScalef(currentObject->scale.x,currentObject->scale.y,currentObject->scale.z);
 
                         //Render Polyganes
-                        if(!currentObject->polygones->IsEmpty())
+                        if(!currentObject->objType->polygones->IsEmpty())
                             renderPolygones(currentObject);
 
 
@@ -205,7 +187,7 @@ int Scene::handleCams(ListIterator<Camera> *c)
 void Scene::renderPolygones(Object *currentObject)
 {
 
-    ListIterator<Polygon> p = ListIterator<Polygon>(currentObject->polygones);
+    ListIterator<Polygon> p = ListIterator<Polygon>(currentObject->objType->polygones);
     p.SetFirst();
 
     while(!p.IsLast())
@@ -216,7 +198,7 @@ void Scene::renderPolygones(Object *currentObject)
 
             for(int i=0;i < currentPolygon->getVertexAmount();i++)
             {
-                if(currentObject->ObjectMaterial && currentObject->ObjectMaterial->ambiantTexture && currentPolygon->getTexVertex(i) != NULL)
+                if(currentObject->objType->ObjectTypeMaterial && currentObject->objType->ObjectTypeMaterial->ambiantTexture && currentPolygon->getTexVertex(i) != NULL)
                         glTexCoord2f( currentPolygon->getTexVertex(i)->getX(), currentPolygon->getTexVertex(i)->getY() );
 
                 if(currentPolygon->getObjVertex(i) != NULL)
