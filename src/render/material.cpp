@@ -32,11 +32,10 @@ void Material::initMaterial()
 {
     memset(name, '\0', sizeof(name));
 
-    memset(&ambiantMatColor, 0.0, sizeof(ambiantMatColor));
-    memset(&diffuseMatColor, 0.0, sizeof(diffuseMatColor));
-    memset(&specularMatColor, 0.0, sizeof(specularMatColor));
-    memset(&emissiveMatColor, 0.0, sizeof(emissiveMatColor));
-    memset(&transparancyMatColor, 0.0, sizeof(transparancyMatColor));
+    ambiantMatColor = new float[4]  {0.2, 0.2, 0.2, 1.0};
+    diffuseMatColor = new float[4]  {0.8, 0.8, 0.8, 1.0};
+    specularMatColor = new float[4] {0.0, 0.0, 0.0, 1.0};
+    emissiveMatColor = new float[4] {0.0, 0.0, 0.0, 1.0};
 
     ambiantTexture = 0;
     diffuseTexture = 0;
@@ -98,23 +97,19 @@ bool Material::loadMaterial(const char *filename, const char *matname)
 
         if(!strncmp(line, "Ka", 2))    // ambiant color
         {
-            ambiantMatColor = getValueColor(line);
+            getValueGLColor(line,ambiantMatColor);
         }
         else if(!strncmp(line, "Kd", 2))   // diffuse color
         {
-            diffuseMatColor = getValueColor(line);
+            getValueGLColor(line,diffuseMatColor);
         }
         else if(!strncmp(line, "Ks", 2))   // specular color
         {
-            specularMatColor = getValueColor(line);
+            getValueGLColor(line,specularMatColor);
         }
         else if(!strncmp(line, "Ke", 2))     // emissive color
         {
-            emissiveMatColor = getValueColor(line);
-        }
-        else if(!strncmp(line, "Tf", 2))     // transparancy color
-        {
-            transparancyMatColor = getValueColor(line);
+            getValueGLColor(line,emissiveMatColor);
         }
         else if(!strncmp(line, "map_Ka", 6))     // ambiant texture
         {

@@ -26,14 +26,12 @@ class Material : public BasicParser
         bool loadMaterial(const char *filename, const char *matname);
 
 
-
         char name[MAX_STRING_LENGTH];
 
-        SDL_Color ambiantMatColor;
-        SDL_Color diffuseMatColor;
-        SDL_Color specularMatColor;
-        SDL_Color emissiveMatColor;
-        SDL_Color transparancyMatColor;
+        float *ambiantMatColor;
+        float *diffuseMatColor;
+        float *specularMatColor;
+        float *emissiveMatColor;
 
         static TextureCache *TexCache;
 
@@ -49,7 +47,9 @@ class Material : public BasicParser
         GLfloat specularExponent;
 
         int illuminationMode;
+
 };
+
 
 
 class MaterialCache

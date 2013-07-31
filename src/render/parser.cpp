@@ -85,7 +85,46 @@ bool BasicParser::getValueBool(const char *line)
 }
 
 
-SDL_Color BasicParser::getValueColor(const char *line)
+float *BasicParser::getValueGLColor(const char *line, float *target)
+{
+    int i, j;
+    char string[MAX_LINELENGTH];
+    memset(string, '\0', sizeof(string));
+
+    for(i = 0; line[i] != '\n' && line[i] != '\0' && line[i] != ' ' && i < MAX_LINELENGTH; i++);
+
+    for(;  (line[i] == ' ' || line[i] == '=') && i < MAX_LINELENGTH; i++);
+
+    for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.' || line[i] == '-') && i < MAX_LINELENGTH; i++, j++)
+        string[j] = line[i];
+
+    string[j] = '\0';
+
+    target[0] = atof(string);
+
+    for(; line[i] == ' ' && i < MAX_LINELENGTH; i++);
+
+    for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.' || line[i] == '-') && i < MAX_LINELENGTH; i++, j++)
+        string[j] = line[i];
+
+    string[j] = '\0';
+
+    target[1] = atof(string);
+
+    for(; line[i] == ' ' && i < MAX_LINELENGTH; i++);
+
+    for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.' || line[i] == '-') && i < MAX_LINELENGTH; i++, j++)
+        string[j] = line[i];
+
+    string[j] = '\0';
+
+    target[2] = atof(string);
+
+    return target;
+}
+
+
+SDL_Color BasicParser::getValueSDLColor(const char *line)
 {
     int i, j;
     SDL_Color returnValue = {0, 0, 0, 0};

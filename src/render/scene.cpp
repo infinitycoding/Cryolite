@@ -68,19 +68,27 @@ void Scene::render()
 
 
     calculateFPS();
-    ListIterator<Camera> c = ListIterator<Camera>(Camlist);
-    c.SetFirst();
+
+    // Interpolate Physics
+    ListIterator<Object> O = *ListIterator<Object>(objectList).SetFirst();
+    while(!O.IsLast())
+    {
+        interpolatePhysics(O.GetCurrent());
+        O.Next();
+    }
+
+
+    ListIterator<Camera> c = *ListIterator<Camera>(Camlist).SetFirst();
     while(handleCams(&c))
     {
         if(!objectList->IsEmpty())
         {
             glMatrixMode(GL_MODELVIEW);
-            ListIterator<Object> o = ListIterator<Object>(objectList);
-            o.SetFirst();
 
-            while(!o.IsLast())
+            O.SetFirst();
+            while(!O.IsLast())
             {
-                Object *currentObject = o.GetCurrent();
+                Object *currentObject = O.GetCurrent();
                 if(!currentObject->objType->vertices->IsEmpty())
                 {
                     glPushMatrix();
@@ -92,9 +100,6 @@ void Scene::render()
                         else
                             glBindTexture( GL_TEXTURE_2D, 0);
 
-                        //Modify Model position
-                        handleMotions(currentObject);
-                        handleRotations(currentObject);
 
                         //Modify Model Matrix
                         glRotatef(currentObject->Angle, currentObject->rotationAxis.x, currentObject->rotationAxis.y, currentObject->rotationAxis.z);
@@ -109,7 +114,7 @@ void Scene::render()
                     glPopMatrix();
                 }
 
-                o.Next();
+                O.Next();
            }
         }
     }
@@ -118,35 +123,11 @@ void Scene::render()
 
 
 
-void Scene::handleMotions(Object *currentObject)
+void Scene::interpolatePhysics(Object *currentObject)
 {
-    if(currentObject->Am || currentObject->V0m)
-    {
-        vector direction = vector(currentObject->Dm);
 
-        currentObject->V0m +=  currentObject->Am* ((SDL_GetTicks()-currentObject->Tms)/1000);
-        double MPF = (double)currentObject->V0m/averageFPS;
-        currentObject->localPosition += direction * MPF;
-    }
 }
 
-void Scene::handleRotations(Object *currentObject)
-{
-    if(currentObject->remeaningAngle*currentObject->remAngleSing>0)
-    {
-        double APF = (double)(currentObject->rotationVelocity+currentObject->rotationAcceleration*(SDL_GetTicks()-currentObject->startRotationTime))/averageFPS;
-        currentObject->remeaningAngle -=APF;
-        currentObject->Angle += APF;
-    }
-    else if(currentObject->rotationVelocity)
-    {
-        currentObject->Angle = currentObject->destAngle;
-        currentObject->rotationVelocity = 0;
-        currentObject->rotationAcceleration = 0;
-        currentObject->remeaningAngle = 0;
-        printf("Angle: %f\n",currentObject->Angle);
-    }
-}
 
 int Scene::handleCams(ListIterator<Camera> *c)
 {
@@ -183,10 +164,18 @@ void Scene::renderPolygones(Object *currentObject)
     {
         Polygon *currentPolygon = (Polygon *)p.GetCurrent();
 
+        glMaterialfv(GL_AMBIENT, GL_FRONT_AND_BACK,currentObject->objType->ObjectTypeMaterial->ambiantMatColor);
+        glMaterialfv(GL_DIFFUSE, GL_FRONT_AND_BACK,currentObject->objType->ObjectTypeMaterial->diffuseMatColor);
+        glMaterialfv(GL_SPECULAR, GL_FRONT_AND_BACK,currentObject->objType->ObjectTypeMaterial->specularMatColor);
+        glMaterialfv(GL_EMISSION, GL_FRONT_AND_BACK,currentObject->objType->ObjectTypeMaterial->emissiveMatColor);
+
         glBegin( GL_POLYGON );
 
             for(int i=0;i < currentPolygon->getVertexAmount();i++)
             {
+                if(currentPolygon->getNormVector(i) != NULL)
+                    glNormal3f(currentPolygon->getNormVector(i)->x,currentPolygon->getNormVector(i)->y,currentPolygon->getNormVector(i)->z);
+
                 if(currentObject->objType->ObjectTypeMaterial && currentObject->objType->ObjectTypeMaterial->ambiantTexture && currentPolygon->getTexVertex(i) != NULL)
                         glTexCoord2f( currentPolygon->getTexVertex(i)->getX(), currentPolygon->getTexVertex(i)->getY() );
 

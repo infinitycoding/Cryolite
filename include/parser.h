@@ -34,7 +34,8 @@ class BasicParser
 
         bool getValueBool(const char *line);
 
-        SDL_Color getValueColor(const char *line);
+        SDL_Color getValueSDLColor(const char *line);
+        float *getValueGLColor(const char *line, float *target);
         vector getValueVector(const char *line);
         Vertex3D getValueVertex3D(const char *line);
         Vertex2D getValueVertex2D(const char *line);
