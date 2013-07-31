@@ -1,4 +1,3 @@
-#include <SDL_mixer.h>
 #include <SDL_image.h>
 #include <iostream>
 
@@ -50,7 +49,7 @@ SDL::SDL(int width, int height, int flags, const char* caption)
         exit(-1);
     }
 
-    if( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 )
+    if( Mix_OpenAudio( AUDIORATE, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 )
     {
         fprintf(stderr,"Faild to initiate SDL Mixer %s\n",Mix_GetError());
         exit(-1);
@@ -247,6 +246,14 @@ GLuint SDL::surfToTexture(SDL_Surface *surf,GLenum MinFilter,GLenum MagFilter)
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, MagFilter );
 
     return GL_Texture;
+}
+
+ALuint SDL::chuckToBuffer(Mix_Chunk *sound)
+{
+    ALuint buffer;
+    alGenBuffers(1, &buffer);
+    alBufferData(buffer, AL_FORMAT_MONO16, sound->abuf, sound->alen, 44100);
+    return buffer;
 }
 
 
