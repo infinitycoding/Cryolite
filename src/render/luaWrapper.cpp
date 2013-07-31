@@ -1,4 +1,4 @@
-#include <luaRapper.h>
+#include <luaWrapper.h>
 
 
 
@@ -22,7 +22,7 @@ LUASkript::LUASkript(const char *skriptname)
 
 LUASkript::~LUASkript()
 {
-
+    lua_close(lState);
 }
 
 

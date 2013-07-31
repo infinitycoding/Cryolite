@@ -18,7 +18,7 @@
 #include <light.h>
 #include <settings.h>
 #include <sound.h>
-#include <luaRapper.h>
+#include <luaWrapper.h>
 
 #ifdef DEBUG
 #include <profiler.h>

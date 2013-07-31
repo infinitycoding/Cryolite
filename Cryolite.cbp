@@ -61,7 +61,7 @@
 		<Unit filename="include/general_def.h" />
 		<Unit filename="include/level.h" />
 		<Unit filename="include/light.h" />
-		<Unit filename="include/luaRapper.h" />
+		<Unit filename="include/luaWrapper.h" />
 		<Unit filename="include/material.h" />
 		<Unit filename="include/models.h" />
 		<Unit filename="include/object.h" />
@@ -89,7 +89,7 @@
 		<Unit filename="src/render/font.cpp" />
 		<Unit filename="src/render/level.cpp" />
 		<Unit filename="src/render/light.cpp" />
-		<Unit filename="src/render/luaRapper.cpp" />
+		<Unit filename="src/render/luaWrapper.cpp" />
 		<Unit filename="src/render/main.cpp" />
 		<Unit filename="src/render/material.cpp" />
 		<Unit filename="src/render/models.cpp" />
