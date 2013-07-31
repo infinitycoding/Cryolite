@@ -22,6 +22,8 @@ ObjectType::ObjectType(const char *filename, const char *objname)
 
 ObjectType::~ObjectType()
 {
+    delete sounds;
+
     delete vertices;
     delete normvectors;
     delete texvertices;
@@ -38,6 +40,8 @@ ObjectType::~ObjectType()
 void ObjectType::initObjectType()
 {
     memset(objectTypeName, '\0', sizeof(objectTypeName));
+
+    sounds = new List<Sounds>;
 
     vertices = new List<Vertex3D>;
     normvectors = new List<vector>;

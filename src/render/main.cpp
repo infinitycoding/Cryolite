@@ -76,8 +76,6 @@ int main(int argc, char *argv[]){
     Texture *sky = Material::TexCache->requestTexture(IMAGE(sky1.jpg));
 
     Level testLevel = Level();
-    testLevel.testMusic();
-    testLevel.deactivateBackgroundMusic();
 
     alDistanceModel( AL_LINEAR_DISTANCE );
 

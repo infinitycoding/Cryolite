@@ -24,12 +24,16 @@ class BasicParser
         virtual ~BasicParser();
 
         char *getValueString(const char *line, char *string);
+
         float getValueFloat(const char *line);
         double getValueDouble(const char *line);
+
         short getValueShort(const char *line);
         int getValueInt(const char *line);
         long getValueLong(const char *line);
+
         bool getValueBool(const char *line);
+
         SDL_Color getValueColor(const char *line);
         vector getValueVector(const char *line);
         Vertex3D getValueVertex3D(const char *line);

@@ -77,6 +77,8 @@ class ObjectType : public BasicParser
 
         char objectTypeName[20];
 
+        List<Sound> *sounds;
+
         List<Vertex3D> *vertices;
         List<vector> *normvectors;
         List<Vertex2D> *texvertices;

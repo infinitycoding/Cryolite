@@ -32,6 +32,8 @@ void Level::initLevel()
     bgmusicActivated = true;
     actualBackgroundMusic = NULL;
     backgroundMusics = new List<struct locationMusic>;
+
+    testMusic();
 }
 
 

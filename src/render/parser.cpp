@@ -43,6 +43,7 @@ float BasicParser::getValueFloat(const char *line)
 double BasicParser::getValueDouble(const char *line)
 {
     char string[MAX_LINELENGTH];
+    memset(string, '\0', sizeof(string));
     getValueString(line, string);
     return atof(string);
 }
@@ -57,6 +58,7 @@ short BasicParser::getValueShort(const char *line)
 int BasicParser::getValueInt(const char *line)
 {
     char string[MAX_LINELENGTH];
+    memset(string, '\0', sizeof(string));
     getValueString(line, string);
     return atoi(string);
 }
@@ -71,6 +73,7 @@ long BasicParser::getValueLong(const char *line)
 bool BasicParser::getValueBool(const char *line)
 {
     char string[MAX_LINELENGTH];
+    memset(string, '\0', sizeof(string));
     getValueString(line, string);
 
     if((strncmp(string, "enable", 6) == 0) || (strncmp(string, "on", 2) == 0) || (strncmp(string, "yes", 3) == 0) || (strncmp(string, "activate", 8) == 0) || (strncmp(string, "true", 4) == 0) || (strncmp(string, "1", 1) == 0))
@@ -78,11 +81,7 @@ bool BasicParser::getValueBool(const char *line)
     else if((strncmp(string, "disable", 7) == 0) || (strncmp(string, "off", 3) == 0) || (strncmp(string, "no", 2) == 0) || (strncmp(string, "deactivate", 10) == 0) || (strncmp(string, "false", 5) == 0) || (strncmp(string, "0", 1) == 0))
         return false;
     else
-    {
-        cout << "The following line is incorrect:" << endl;
-        cout << line << endl;
         return false;
-    }
 }
 
 
@@ -91,10 +90,11 @@ SDL_Color BasicParser::getValueColor(const char *line)
     int i, j;
     SDL_Color returnValue = {0, 0, 0, 0};
     char string[MAX_LINELENGTH];
+    memset(string, '\0', sizeof(string));
 
     for(i = 0; line[i] != '\n' && line[i] != '\0' && line[i] != ' ' && i < MAX_LINELENGTH; i++);
 
-    for(; line[i] == ' ' && i < MAX_LINELENGTH; i++);
+    for(;  (line[i] == ' ' || line[i] == '=') && i < MAX_LINELENGTH; i++);
 
     for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.' || line[i] == '-') && i < MAX_LINELENGTH; i++, j++)
         string[j] = line[i];
@@ -130,10 +130,11 @@ vector BasicParser::getValueVector(const char *line)
     int i, j;
     vector returnValue = vector();
     char string[MAX_LINELENGTH];
+    memset(string, '\0', sizeof(string));
 
     for(i = 0; line[i] != '\n' && line[i] != '\0' && line[i] != ' ' && i < MAX_LINELENGTH; i++);
 
-    for(; line[i] == ' ' && i < MAX_LINELENGTH; i++);
+    for(; (line[i] == ' ' || line[i] == '=') && i < MAX_LINELENGTH; i++);
 
     for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.' || line[i] == '-') && i < MAX_LINELENGTH; i++, j++)
         string[j] = line[i];
