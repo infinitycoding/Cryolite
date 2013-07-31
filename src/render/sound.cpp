@@ -158,7 +158,7 @@ SoundCache::~SoundCache()
     }
 }
 
-bool SoundCache::addSound(char * file)
+bool SoundCache::addSound(const char * file)
 {
     ListIterator<SoundEntry> i = ListIterator<SoundEntry>(&SoundList);
     i.SetFirst();
@@ -188,7 +188,7 @@ bool SoundCache::addSound(char * file)
     return true;
 }
 
-bool SoundCache::removeSound(char *file)
+bool SoundCache::removeSound(const char *file)
 {
     ListIterator<SoundEntry> i = ListIterator<SoundEntry>(&SoundList);
     i.SetFirst();
@@ -231,7 +231,7 @@ bool SoundCache::removeSound(ALuint buffer)
 }
 
 
-ALuint SoundCache::getSound(char *file)
+ALuint SoundCache::getSound(const char *file)
 {
     ListIterator<SoundEntry> i = ListIterator<SoundEntry>(&SoundList);
     i.SetFirst();
@@ -255,7 +255,7 @@ Sound::Sound()
     initSound();
 }
 
-Sound::Sound(char *filename, SoundCache *cache)
+Sound::Sound(const char *filename, SoundCache *cache)
 {
     initSound();
     this->cache = cache;
@@ -282,7 +282,7 @@ Sound::Sound(Object *relativObject, vector relation)
     settings->relation = relation;
 }
 
-Sound::Sound(Object *relativObject,vector relation, char *filename, SoundCache *cache)
+Sound::Sound(Object *relativObject,vector relation,const char *filename, SoundCache *cache)
 {
     initSound();
     this->cache = cache;
@@ -312,7 +312,7 @@ Sound::~Sound()
 }
 
 
-bool Sound::loadSound(char *filename)
+bool Sound::loadSound(const char *filename)
 {
     if(!cache)
     {
@@ -331,7 +331,7 @@ bool Sound::loadSound(char *filename)
     return true;
 }
 
-bool Sound::loadSound(char *filename,SoundCache *cache)
+bool Sound::loadSound(const char *filename,SoundCache *cache)
 {
     if(!cache)
     {
@@ -354,7 +354,6 @@ bool Sound::loadSound(char *filename,SoundCache *cache)
 
 bool Sound::playSound()
 {
-    cerr<<"play!"<<endl;
     if(source && buffer)
     {
         int sourceState = 0;

@@ -57,10 +57,10 @@ class SoundCache
     SoundCache();
     ~SoundCache();
 
-    bool addSound(char * file);
-    bool removeSound(char *file);
+    bool addSound(const char* file);
+    bool removeSound(const char *file);
     bool removeSound(ALuint buffer);
-    ALuint getSound(char *file);
+    ALuint getSound(const char *file);
 
     List<SoundEntry> SoundList;
 };
@@ -87,15 +87,15 @@ class Sound
         };
 
         Sound();
-        Sound(char *filename, SoundCache *cache);
+        Sound(const char *filename, SoundCache *cache);
         Sound(Object *relativObject);
         Sound(Object *relativObject,vector relation);
-        Sound(Object *relativObject,vector relation, char *filename, SoundCache *cache);
+        Sound(Object *relativObject,vector relation,const char *filename, SoundCache *cache);
 
         ~Sound();
 
-        bool loadSound(char *filename);
-        bool loadSound(char *filename, SoundCache *cache);
+        bool loadSound(const char *filename);
+        bool loadSound(const char *filename, SoundCache *cache);
         bool playSound();
         void refreshpProperties();
         void refreshpPosition();

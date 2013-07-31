@@ -49,9 +49,8 @@ Controls::Controls(SDL* window) : EventHandle()
         window->addHandle(object);
     }
     SoundCache *SC = new SoundCache();
-    SC->addSound((char*)SOUND(shot.wav));
-    shotSound = new Sound();
-    shotSound->loadSound((char*)SOUND(shot.wav),SC);
+    shotSound = new Sound(SOUND(shot.wav),SC);
+    shotSound->loadSound(SOUND(shot.wav));
 }
 
 void Controls::handleQuit()
