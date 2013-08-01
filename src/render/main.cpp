@@ -45,10 +45,10 @@ extern Object *gravelcube;
 
 
 int main(int argc, char *argv[]){
-    LUASkript testSkript = LUASkript(SKRIPT(testscript.lua));
-    testSkript.insertDoubleVar("cppvar", 5.5);
-    testSkript.runSkript();
-    double luavar = testSkript.getDoubleVar("luavar");
+    LUAScript testScript = LUAScript(SCRIPT(testscript.lua));
+    testScript.insertDoubleVar("cppvar", 5.5);
+    testScript.runScript();
+    double luavar = testScript.getDoubleVar("luavar");
     cout << "luavar = " << luavar << endl;
 
     cout << endl;
@@ -65,13 +65,16 @@ int main(int argc, char *argv[]){
     Lamp *Sun = new Lamp();
     Sun->setDiffuseLight(10, 0, 0, 1.0);
     Sun->setPosition(vector(0,0,0));
+    Sun->setDirection(vector(0,500,0));
+    Sun->setCutOf(90);
+    Sun->directed(true);
 
     Sun->activate();
     mainScene->addLamp(Sun);
 
 
     Controls playerControls = Controls(&mainwindow);
-    mainScene->GlobalAmbience = new GlobalLight(0.5,0.5,0.5,1);
+    mainScene->GlobalAmbience = new GlobalLight(0.2,0.2,0.2,1);
 
     // Draw test models
     INIT_Models(mainScene);

@@ -9,18 +9,18 @@
 
 
 
-class LUASkript
+class LUAScript
 {
     public:
-        LUASkript();
-        LUASkript(const char *skriptname);
-        ~LUASkript();
+        LUAScript();
+        LUAScript(const char *Scriptname);
+        ~LUAScript();
 
         void initLUA();
 
 
-        bool loadSkript(const char *skriptname);
-        bool runSkript();
+        bool loadScript(const char *Scriptname);
+        bool runScript();
 
         double insertDoubleVar(const char *varname, double value);
         double getDoubleVar(const char *varname);
