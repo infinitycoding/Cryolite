@@ -99,8 +99,6 @@ class ObjectType : public ExtParser   // The object type class
 
         char objectTypeName[20];                // the name of the object type
 
-        List<Sound> *sounds;                    // the list of sounds connected to this object type
-
         List<Vertex3D> *vertices;               // the list of vertices of the object type
         List<vector> *normvectors;              // the list of normvectors of the object type
         List<Vertex2D> *texvertices;            // the list of texture vertices of the object type
@@ -165,6 +163,8 @@ class Object                // the main object
 
         Object *relativeToObject;
         vector localPosition;                          // the position
+
+        List<Sound> *sounds;                    // the list of sounds connected to this object
 
         // experimental physical variables
         vector rotationAxis;

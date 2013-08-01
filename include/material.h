@@ -12,6 +12,11 @@
 
 #define MAX_STRING_LENGTH 40
 
+#define STD_AMBIANT_MAT_COLOR {0.2, 0.2, 0.2, 1.0}
+#define STD_DIFFUSE_MAT_COLOR {0.8, 0.8, 0.8, 1.0}
+#define STD_SPECULAR_MAT_COLOR {0.0, 0.0, 0.0, 1.0}
+#define STD_EMISSIVE_MAT_COLOR {0.0, 0.0, 0.0, 1.0}
+
 
 
 class Material : public ExtParser

@@ -24,7 +24,10 @@ Material::Material(const char *filename, const char *matname)
 
 Material::~Material()
 {
-
+    delete[] ambiantMatColor;
+    delete[] diffuseMatColor;
+    delete[] specularMatColor;
+    delete[] emissiveMatColor;
 }
 
 
@@ -32,16 +35,16 @@ void Material::initMaterial()
 {
     memset(name, '\0', sizeof(name));
 
-    ambiantMatColor = new float[4]  {0.2, 0.2, 0.2, 1.0};
-    diffuseMatColor = new float[4]  {0.8, 0.8, 0.8, 1.0};
-    specularMatColor = new float[4] {0.0, 0.0, 0.0, 1.0};
-    emissiveMatColor = new float[4] {0.0, 0.0, 0.0, 1.0};
+    ambiantMatColor = new float[4] STD_AMBIANT_MAT_COLOR;
+    diffuseMatColor = new float[4] STD_DIFFUSE_MAT_COLOR;
+    specularMatColor = new float[4] STD_SPECULAR_MAT_COLOR;
+    emissiveMatColor = new float[4] STD_EMISSIVE_MAT_COLOR;
 
-    ambiantTexture = 0;
-    diffuseTexture = 0;
-    specularTexture = 0;
-    alphaTexture = 0;
-    bumpMap = 0;
+    ambiantTexture = NULL;
+    diffuseTexture = NULL;
+    specularTexture = NULL;
+    alphaTexture = NULL;
+    bumpMap = NULL;
 
     transparancy = 0.0;
     sharpness = 0.0;

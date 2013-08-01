@@ -26,9 +26,7 @@ ObjectType::ObjectType(const char *filename, const char *objname)
 
 ObjectType::~ObjectType()
 {
-    delete sounds;      // delete everything
-
-    delete vertices;
+    delete vertices;    // delete everything
     delete normvectors;
     delete texvertices;
 
@@ -45,8 +43,6 @@ ObjectType::~ObjectType()
 void ObjectType::initObjectType()
 {
     memset(objectTypeName, '\0', sizeof(objectTypeName));
-
-    sounds = new List<Sound>;
 
     vertices = new List<Vertex3D>;
     normvectors = new List<vector>;
@@ -532,7 +528,7 @@ Object::Object(const char *filename, const char *objname, vector pos)
 
 Object::~Object()
 {
-
+    delete sounds;
 }
 
 
@@ -542,6 +538,8 @@ void Object::initObject()
 
     relativeToObject = NULL;
     localPosition = vector();
+
+    sounds = new List<Sound>;
 
     rotationAxis = vector();
 
