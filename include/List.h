@@ -61,10 +61,11 @@ class ListIterator
         T *GetCurrent();
         bool IsEmpty();
 
-        void Next();
-        void Previous();
-        void SetLast();
-        void SetFirst();
+        ListIterator<T> *Next();
+        ListIterator<T> *Previous();
+        ListIterator<T> *SetLast();
+        ListIterator<T> *SetFirst();
+
         bool IsLast();
         void set(void *n);
 
@@ -391,27 +392,31 @@ T* ListIterator<T>::GetCurrent()
 
 
 template <typename T>
-void ListIterator<T>::Next()
+ListIterator<T> *ListIterator<T>::Next()
 {
     currentNode = currentNode->next;
+    return this;
 }
 
 template <typename T>
-void ListIterator<T>::Previous()
+ListIterator<T> *ListIterator<T>::Previous()
 {
     currentNode = currentNode->prev;
+    return this;
 }
 
 template <typename T>
-void ListIterator<T>::SetLast()
+ListIterator<T> *ListIterator<T>::SetLast()
 {
     currentNode = Instance->dummy->prev;
+    return this;
 }
 
 template <typename T>
-void ListIterator<T>::SetFirst()
+ListIterator<T> *ListIterator<T>::SetFirst()
 {
     currentNode = Instance->dummy->next;
+    return this;
 }
 
 
@@ -427,6 +432,7 @@ template <typename T>
 void ListIterator<T>::set(void *n)
 {
     currentNode = (Node *)n;
+    return this;
 }
 
 template <typename T>
