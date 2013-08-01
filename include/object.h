@@ -162,7 +162,7 @@ class Object                // the main object
         vector scale;                               // the scale of the object (if you need an overdimensional cup of tea)
 
         Object *relativeToObject;
-        vector localPosition;                          // the position
+        vector localPosition;                    // the position
 
         List<Sound> *sounds;                    // the list of sounds connected to this object
 
@@ -182,7 +182,9 @@ class Object                // the main object
         float Am; // Acceleration Motion
         int Tms; //Time Motion Start
 
-        boundSphere approximationSphere;
+        float approximationSphere;
+
+        bool physicalActor;
 };
 
 

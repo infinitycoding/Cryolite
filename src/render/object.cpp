@@ -550,6 +550,7 @@ void Object::initObject()
     rotationAcceleration = 0;
     startRotationTime = 0;
     remAngleSing = 0;
+    approximationSphere = 10.0;
 
     Dm = vector();
 
@@ -561,6 +562,8 @@ void Object::initObject()
         ObjTypeCache = new ObjectTypeCache();
 
     objType = NULL;
+
+    physicalActor = false;
 }
 
 

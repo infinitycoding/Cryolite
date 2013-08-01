@@ -28,6 +28,8 @@ bool Controls::move_backward;
 bool Controls::move_up;
 bool Controls::move_down;
 
+bool Controls::ghost_mode;
+
 bool Controls::already_initialized;
 
 
@@ -137,6 +139,14 @@ void Controls::handleMouseMotion(SDL_MouseMotionEvent *e)
 }
 
 
+void Controls::toggle_ghost()
+{
+    if(ghost_mode)
+        ghost_mode = false;
+    else
+        ghost_mode = true;
+}
+
 void Controls::controls_handler(Camera *cam)
 {
     rotation_handler(cam);
@@ -186,7 +196,11 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
 
     if(move_foreward)
     {
-        moveDirection =  vector(cam->lookingDirection.x, 0, cam->lookingDirection.z);
+        if(ghost_mode)
+            moveDirection =  vector(cam->lookingDirection.x, cam->lookingDirection.y, cam->lookingDirection.z);
+        else
+            moveDirection =  vector(cam->lookingDirection.x, 0, cam->lookingDirection.z);
+
         moveDirection.unify();
         moveDirection *= MOVEMENT_WIDTH;
 
@@ -195,7 +209,11 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
 
     if(move_backward)
     {
-        moveDirection =  vector(-cam->lookingDirection.x, 0, -cam->lookingDirection.z);
+        if(ghost_mode)
+            moveDirection =  vector(-cam->lookingDirection.x, -cam->lookingDirection.y, -cam->lookingDirection.z);
+        else
+            moveDirection =  vector(-cam->lookingDirection.x, 0, -cam->lookingDirection.z);
+
         moveDirection.unify();
         moveDirection *= MOVEMENT_WIDTH;
 

@@ -20,8 +20,10 @@ class Controls : EventHandle
         virtual void handleMouseMotion(SDL_MouseMotionEvent *e);
 
         virtual void toggle_printFPS();
+
         static void moveCube();
         static void rotateCube();
+        static void toggle_ghost();
 
     private:
         void rotation_handler(Camera *cam);
@@ -37,6 +39,8 @@ class Controls : EventHandle
         static bool move_backward;
         static bool move_up;
         static bool move_down;
+
+        static bool ghost_mode;
 
         static bool already_initialized;
 };

@@ -8,7 +8,7 @@
 #include <vector.h>
 
 
-struct Colision
+struct Collision
 {
     Object *object1;
     Object *object2;
@@ -35,7 +35,7 @@ class Scene
         List<Object> *objectList;
         List<Camera> *Camlist;
         List<Lamp> *globalLamps;
-        List<Colision> *colisions;
+        List<Collision> *collisions;
 
         bool currentScene;
         GlobalLight *GlobalAmbience;
@@ -53,8 +53,11 @@ class Scene
         void calculateFPS(void);
         void renderPolygones(Object *currentObject);
         void interpolatePhysics(Object *currentObject);
-        void calculateColisions(void);
         void resetLights(void);
+        void calculateCollisions(void);
+        bool approximation(Object *obj1, Object *obj2);
+        Collision *collision(Object *obj1, Object *obj2);
+
         LightManager *LM;
         int currenttick;
         int ticcount;
