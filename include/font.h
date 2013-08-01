@@ -17,8 +17,8 @@
 #include <List.h>
 
 #define MAX_NAMELENGTH 20
-#define STANDART_FCOLOR {1.0, 1.0, 1.0, 0.0}
-#define STANDART_BGCOLOR {0.0, 0.0, 0.0, 0.0}
+#define STANDART_FCOLOR {255, 255, 255, 0}
+#define STANDART_BGCOLOR {0, 0, 0, 0}
 
 
 
