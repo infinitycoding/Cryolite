@@ -14,7 +14,7 @@
 
 
 
-class Material : public BasicParser
+class Material : public ExtParser
 {
     public:
         Material();

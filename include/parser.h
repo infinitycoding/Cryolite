@@ -14,7 +14,14 @@
 
 
 #define MAX_LINELENGTH 40
+#define NUMBER_STRING_SIZE 15
 
+
+typedef struct charList
+{
+    int number;
+    char *chars;
+}charList;
 
 
 class BasicParser
@@ -23,24 +30,43 @@ class BasicParser
         BasicParser();
         virtual ~BasicParser();
 
-        char *getValueString(const char *line, char *string);
+        bool charInList(char character, const charList list);
+        bool validNumber(char *string, bool allowFloat, bool allowSigned);
 
-        bool checkValidNumber(const char *string);
+        char **skipCharacters(char **string, const charList characters);
+        char **skipUntilCharacters(char **string, const charList characters);
 
-        float getValueFloat(const char *line);
-        double getValueDouble(const char *line);
+        char *getString(char **instring, char *outstring, const charList endCharacters);
 
-        short getValueShort(const char *line);
-        int getValueInt(const char *line);
-        long getValueLong(const char *line);
+        bool getBool(char **string, const charList endCharacters);
 
-        bool getValueBool(const char *line);
+        short getShort(char **string, const charList endCharacters);
+        int getInt(char **string, const charList endCharacters);
+        long getLong(char **string, const charList endCharacters);
 
-        float *getValueGLColor(const char *line, float *target);
-        vector getValueVector(const char *line);
-        Vertex3D getValueVertex3D(const char *line);
-        Vertex2D getValueVertex2D(const char *line);
+        float getFloat(char **string, const charList endCharacters);
+        double getDouble(char **string, const charList endCharacters);
 };
+
+
+class ExtParser : public BasicParser
+{
+    public:
+        ExtParser();
+        virtual ~ExtParser();
+
+
+        float *getGLColor(char **string, float *target);
+        vector getVector(char **string);
+        Vertex2D getVertex2D(char **string);
+        Vertex3D getVertex3D(char **string);
+
+    protected:
+        charList placeholders;
+        charList lineEndChars;
+        charList breakChars;
+};
+
 
 
 #endif

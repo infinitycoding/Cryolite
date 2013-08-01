@@ -80,7 +80,7 @@ typedef struct boundCylinder boundCylinder;
 
 
 
-class ObjectType : public BasicParser   // The object type class
+class ObjectType : public ExtParser   // The object type class
 {
     public:
         ObjectType();                                               // zero constructor (better than nothing)

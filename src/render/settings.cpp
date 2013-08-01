@@ -30,6 +30,7 @@ bool Settings::loadSettingsFile(const char *filename)
 {
     FILE *f;
     char line[MAX_LINELENGTH];
+    char *line_ptr;
 
     if((f = fopen(filename, "r")) == NULL)
         return false;
@@ -38,38 +39,43 @@ bool Settings::loadSettingsFile(const char *filename)
     {
         fgets(line, MAX_LINELENGTH, f);
 
+        line_ptr = line;
+
+        skipUntilCharacters(&line_ptr, breakChars);
+        skipCharacters(&line_ptr, placeholders);
+
         if(strncmp(line, "width", 5) == 0)
         {
-            width = getValueInt(line);
+            width = getInt(&line_ptr, breakChars);
         }
         else if(strncmp(line, "height", 6) == 0)
         {
-            height = getValueInt(line);
+            height = getInt(&line_ptr, breakChars);
         }
         else if(strncmp(line, "fullscreen", 10) == 0)
         {
-            if(getValueBool(line) == true)
+            if(getBool(&line_ptr, breakChars) == true)
                 sdlFlags |= SDL_FULLSCREEN;
         }
         else if(strncmp(line, "catchCourser", 12) == 0)
         {
-            captureMouse = getValueBool(line);
+            captureMouse = getBool(&line_ptr, breakChars);
         }
         else if(strncmp(line, "multisamples", 12) == 0)
         {
-            multisamples = getValueInt(line);
+            multisamples = getInt(&line_ptr, breakChars);
         }
         else if(strncmp(line, "linewidth", 9) == 0)
         {
-            lineWidth = getValueFloat(line);
+            lineWidth = getFloat(&line_ptr, breakChars);
         }
         else if(strncmp(line, "pointsize", 9) == 0)
         {
-            pointSize = getValueFloat(line);
+            pointSize = getFloat(&line_ptr, breakChars);
         }
         else if(strncmp(line, "fov", 3) == 0)
         {
-            fov = getValueFloat(line);
+            fov = getFloat(&line_ptr, breakChars);
         }
 
     }while(!feof(f));

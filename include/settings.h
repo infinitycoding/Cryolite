@@ -12,7 +12,7 @@
 
 
 
-class Settings : public BasicParser
+class Settings : public ExtParser
 {
     public:
         Settings();

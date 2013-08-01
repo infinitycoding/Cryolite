@@ -169,6 +169,8 @@ void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectNa
     char string[50];
     char matfile[50];
 
+    char *line_ptr;
+
     int h, i , j;
     int vert_id[4], tex_id[4], norm_id[4];
 
@@ -214,10 +216,15 @@ void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectNa
     {
         fgets(line, 40, f);
 
+        line_ptr = line;
+
+        skipUntilCharacters(&line_ptr, breakChars);
+        skipCharacters(&line_ptr, placeholders);
+
         if(!strncmp(line, "mtllib", 6))
         {
             memset(matfile, '\0', sizeof(matfile));
-            getValueString(line, matfile);
+            getString(&line_ptr, matfile, breakChars);
 
             continue;
         }
@@ -225,7 +232,7 @@ void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectNa
         if(!strncmp(line, "usemtl", 6))
         {
             memset(string, '\0', sizeof(string));
-            getValueString(line, string);
+            getString(&line_ptr, string, breakChars);
 
             ObjectTypeMaterial = MatCache->requestMaterial(matfile, string);
 
@@ -235,7 +242,7 @@ void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectNa
         if(line[0] == 'o')
         {
             memset(string, '\0', sizeof(string));
-            if(!strncmp(getValueString(line, string), objectName, strlen(string)))
+            if(!strncmp(getString(&line_ptr, string, breakChars), objectName, strlen(string)))
                 correctObject = true;
             else if(correctObject == true)
                 break;
@@ -249,7 +256,7 @@ void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectNa
                 otherVertices.textureVertices++;
             else
             {
-                Vertex2D tempv2d = getValueVertex2D(line);
+                Vertex2D tempv2d = getVertex2D(&line_ptr);
                 texvertex_ptr = new Vertex2D(&tempv2d);
 
                 texvertices->PushFront(texvertex_ptr);
@@ -267,7 +274,7 @@ void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectNa
             else
             {
 
-                Vertex3D tempv3d = getValueVertex3D(line);
+                Vertex3D tempv3d = getVertex3D(&line_ptr);
                 objvertex_ptr = new Vertex3D(&tempv3d);
 
                 vertices->PushFront(objvertex_ptr);
@@ -284,7 +291,7 @@ void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectNa
                 otherVertices.normalVectors++;
             else
             {
-                vector tempvec = getValueVector(line);
+                vector tempvec = getVector(&line_ptr);
                 normvector_ptr = new vector(&tempvec);
 
                 normvectors->PushFront(normvector_ptr);

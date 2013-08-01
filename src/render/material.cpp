@@ -95,61 +95,66 @@ bool Material::loadMaterial(const char *filename, const char *matname)
         if(fgets(line, MAX_STRING_LENGTH, f) == NULL)
             break;
 
+        char *line_ptr = line;
+
+        skipUntilCharacters(&line_ptr, breakChars);
+        skipCharacters(&line_ptr, placeholders);
+
         if(!strncmp(line, "Ka", 2))    // ambiant color
         {
-            getValueGLColor(line,ambiantMatColor);
+            getGLColor(&line_ptr,ambiantMatColor);
         }
         else if(!strncmp(line, "Kd", 2))   // diffuse color
         {
-            getValueGLColor(line,diffuseMatColor);
+            getGLColor(&line_ptr,diffuseMatColor);
         }
         else if(!strncmp(line, "Ks", 2))   // specular color
         {
-            getValueGLColor(line,specularMatColor);
+            getGLColor(&line_ptr,specularMatColor);
         }
         else if(!strncmp(line, "Ke", 2))     // emissive color
         {
-            getValueGLColor(line,emissiveMatColor);
+            getGLColor(&line_ptr,emissiveMatColor);
         }
         else if(!strncmp(line, "map_Ka", 6))     // ambiant texture
         {
-            ambiantTexture = TexCache->requestTexture(getValueString(line, string));
+            ambiantTexture = TexCache->requestTexture(getString(&line_ptr, string, breakChars));
         }
         else if(!strncmp(line, "map_Kd", 6))     // diffuse texture
         {
-            diffuseTexture = TexCache->requestTexture(getValueString(line, string));
+            diffuseTexture = TexCache->requestTexture(getString(&line_ptr, string, breakChars));
         }
         else if(!strncmp(line, "map_Ks", 6))     // specular texture
         {
-            specularTexture = TexCache->requestTexture(getValueString(line, string));
+            specularTexture = TexCache->requestTexture(getString(&line_ptr, string, breakChars));
         }
         else if(!strncmp(line, "map_d", 5))     // alpha texture
         {
-            alphaTexture = TexCache->requestTexture(getValueString(line, string));
+            alphaTexture = TexCache->requestTexture(getString(&line_ptr, string, breakChars));
         }
         else if(!strncmp(line, "map_bump", 8) || !strncmp(line, "bump", 4))     // bump map
         {
-            bumpMap = TexCache->requestTexture(getValueString(line, string));
+            bumpMap = TexCache->requestTexture(getString(&line_ptr, string, breakChars));
         }
         else if(!strncmp(line, "d", 1) || !strncmp(line, "Tr", 2))     // transparancy
         {
-            transparancy = getValueFloat(line);
+            transparancy = getFloat(&line_ptr, breakChars);
         }
         else if(!strncmp(line, "sharpness", 9))     // sharpness
         {
-            sharpness = getValueFloat(line);
+            sharpness = getFloat(&line_ptr, breakChars);
         }
         else if(!strncmp(line, "Ni", 2))     // optical density
         {
-            opticalDensity = getValueFloat(line);
+            opticalDensity = getFloat(&line_ptr, breakChars);
         }
         else if(!strncmp(line, "Ns", 2))     // specular exponent
         {
-            specularExponent = getValueFloat(line);
+            specularExponent = getFloat(&line_ptr, breakChars);
         }
         else if(!strncmp(line, "illum", 5))     // illumination mode
         {
-            illuminationMode = getValueInt(line);
+            illuminationMode = getInt(&line_ptr, breakChars);
         }
         else if(!strncmp(line, "newmtl", 6))
         {
