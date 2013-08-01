@@ -13,7 +13,7 @@
 #include <vertex.h>
 
 
-#define MAX_LINELENGTH 30
+#define MAX_LINELENGTH 40
 
 
 
@@ -25,6 +25,8 @@ class BasicParser
 
         char *getValueString(const char *line, char *string);
 
+        bool checkValidNumber(const char *string);
+
         float getValueFloat(const char *line);
         double getValueDouble(const char *line);
 
@@ -34,7 +36,6 @@ class BasicParser
 
         bool getValueBool(const char *line);
 
-        SDL_Color getValueSDLColor(const char *line);
         float *getValueGLColor(const char *line, float *target);
         vector getValueVector(const char *line);
         Vertex3D getValueVertex3D(const char *line);

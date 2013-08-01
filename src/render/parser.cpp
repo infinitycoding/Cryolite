@@ -22,15 +22,42 @@ char *BasicParser::getValueString(const char *line, char *string)
 {
     int i, j;
 
-    memset(string, '\0', sizeof(string));
+    for(i = 0; line[i] != ' ' && line[i] != '=' && i < MAX_LINELENGTH; i++);
 
-    for(i = 0; line[i] != ' ' && line[i] != '='; i++);
-    for(i++; line[i] == ' ' || line[i] == '='; i++);
+    if(i >= MAX_LINELENGTH)
+    {
+        cerr << "error from parser: line too long or foregotten \0" << endl;
+        exit(-1);
+    }
 
-    for(j = 0; line[i] != '\0' && line[i] != '\n'; i++, j++)
+    for(i++; (line[i] == ' ' || line[i] == '=') && i < MAX_LINELENGTH; i++);
+
+    if(i >= MAX_LINELENGTH)
+    {
+        cerr << "error from parser: line too long or foregotten \0" << endl;
+        exit(-1);
+    }
+
+    for(j = 0; line[i] != '\0' && line[i] != '\n' && i < MAX_LINELENGTH; i++, j++)
         string[j] = line[i];
 
+    if(i >= MAX_LINELENGTH)
+    {
+        cerr << "error from parser: line too long or foregotten \0" << endl;
+        exit(-1);
+    }
+
     return string;
+}
+
+
+bool BasicParser::checkValidNumber(const char *string)
+{
+    for(int i = 0; string[i] != '\n' && string[i] != '\0' && i < MAX_LINELENGTH; i++)
+        if(!((string[i] >= '0' && string[i] <= '9') || string[i] == '-' || string[i] == '+' || string[i] == '.'))
+            return false;
+
+    return true;
 }
 
 
@@ -45,6 +72,13 @@ double BasicParser::getValueDouble(const char *line)
     char string[MAX_LINELENGTH];
     memset(string, '\0', sizeof(string));
     getValueString(line, string);
+
+    if(!checkValidNumber(string))
+    {
+        cerr << "error from parser: \"" << string << "\" is not a valid number." << endl;
+        exit(-1);
+    }
+
     return atof(string);
 }
 
@@ -60,6 +94,13 @@ int BasicParser::getValueInt(const char *line)
     char string[MAX_LINELENGTH];
     memset(string, '\0', sizeof(string));
     getValueString(line, string);
+
+    if(!checkValidNumber(string))
+    {
+        cerr << "error from parser: \"" << string << "\" is not a valid number." << endl;
+        exit(-1);
+    }
+
     return atoi(string);
 }
 
@@ -81,7 +122,10 @@ bool BasicParser::getValueBool(const char *line)
     else if((strncmp(string, "disable", 7) == 0) || (strncmp(string, "off", 3) == 0) || (strncmp(string, "no", 2) == 0) || (strncmp(string, "deactivate", 10) == 0) || (strncmp(string, "false", 5) == 0) || (strncmp(string, "0", 1) == 0))
         return false;
     else
-        return false;
+    {
+        cerr << "error from parser: \"" << string << "\" is not a bool value";
+        exit(-1);
+    }
 }
 
 
@@ -93,7 +137,19 @@ float *BasicParser::getValueGLColor(const char *line, float *target)
 
     for(i = 0; line[i] != '\n' && line[i] != '\0' && line[i] != ' ' && i < MAX_LINELENGTH; i++);
 
+    if(i >= MAX_LINELENGTH)
+    {
+        cerr << "error from parser: line too long or foregotten \0" << endl;
+        exit(-1);
+    }
+
     for(;  (line[i] == ' ' || line[i] == '=') && i < MAX_LINELENGTH; i++);
+
+    if(i >= MAX_LINELENGTH)
+    {
+        cerr << "error from parser: line too long or foregotten \0" << endl;
+        exit(-1);
+    }
 
     for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.' || line[i] == '-') && i < MAX_LINELENGTH; i++, j++)
         string[j] = line[i];
@@ -102,7 +158,19 @@ float *BasicParser::getValueGLColor(const char *line, float *target)
 
     target[0] = atof(string);
 
+    if(i >= MAX_LINELENGTH)
+    {
+        cerr << "error from parser: line too long or foregotten \0" << endl;
+        exit(-1);
+    }
+
     for(; line[i] == ' ' && i < MAX_LINELENGTH; i++);
+
+    if(i >= MAX_LINELENGTH)
+    {
+        cerr << "error from parser: line too long or foregotten \0" << endl;
+        exit(-1);
+    }
 
     for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.' || line[i] == '-') && i < MAX_LINELENGTH; i++, j++)
         string[j] = line[i];
@@ -111,7 +179,19 @@ float *BasicParser::getValueGLColor(const char *line, float *target)
 
     target[1] = atof(string);
 
+        if(i >= MAX_LINELENGTH)
+    {
+        cerr << "error from parser: line too long or foregotten \0" << endl;
+        exit(-1);
+    }
+
     for(; line[i] == ' ' && i < MAX_LINELENGTH; i++);
+
+    if(i >= MAX_LINELENGTH)
+    {
+        cerr << "error from parser: line too long or foregotten \0" << endl;
+        exit(-1);
+    }
 
     for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.' || line[i] == '-') && i < MAX_LINELENGTH; i++, j++)
         string[j] = line[i];
@@ -120,47 +200,13 @@ float *BasicParser::getValueGLColor(const char *line, float *target)
 
     target[2] = atof(string);
 
+    if(i >= MAX_LINELENGTH)
+    {
+        cerr << "error from parser: line too long or foregotten \0" << endl;
+        exit(-1);
+    }
+
     return target;
-}
-
-
-SDL_Color BasicParser::getValueSDLColor(const char *line)
-{
-    int i, j;
-    SDL_Color returnValue = {0, 0, 0, 0};
-    char string[MAX_LINELENGTH];
-    memset(string, '\0', sizeof(string));
-
-    for(i = 0; line[i] != '\n' && line[i] != '\0' && line[i] != ' ' && i < MAX_LINELENGTH; i++);
-
-    for(;  (line[i] == ' ' || line[i] == '=') && i < MAX_LINELENGTH; i++);
-
-    for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.' || line[i] == '-') && i < MAX_LINELENGTH; i++, j++)
-        string[j] = line[i];
-
-    string[j] = '\0';
-
-    returnValue.r = atof(string);
-
-    for(; line[i] == ' ' && i < MAX_LINELENGTH; i++);
-
-    for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.' || line[i] == '-') && i < MAX_LINELENGTH; i++, j++)
-        string[j] = line[i];
-
-    string[j] = '\0';
-
-    returnValue.g = atof(string);
-
-    for(; line[i] == ' ' && i < MAX_LINELENGTH; i++);
-
-    for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.' || line[i] == '-') && i < MAX_LINELENGTH; i++, j++)
-        string[j] = line[i];
-
-    string[j] = '\0';
-
-    returnValue.b = atof(string);
-
-    return returnValue;
 }
 
 
@@ -173,10 +219,28 @@ vector BasicParser::getValueVector(const char *line)
 
     for(i = 0; line[i] != '\n' && line[i] != '\0' && line[i] != ' ' && i < MAX_LINELENGTH; i++);
 
+    if(i >= MAX_LINELENGTH)
+    {
+        cerr << "error from parser: line too long or foregotten \0" << endl;
+        exit(-1);
+    }
+
     for(; (line[i] == ' ' || line[i] == '=') && i < MAX_LINELENGTH; i++);
+
+    if(i >= MAX_LINELENGTH)
+    {
+        cerr << "error from parser: line too long or foregotten \0" << endl;
+        exit(-1);
+    }
 
     for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.' || line[i] == '-') && i < MAX_LINELENGTH; i++, j++)
         string[j] = line[i];
+
+    if(i >= MAX_LINELENGTH)
+    {
+        cerr << "error from parser: line too long or foregotten \0" << endl;
+        exit(-1);
+    }
 
     string[j] = '\0';
 
@@ -184,8 +248,20 @@ vector BasicParser::getValueVector(const char *line)
 
     for(; line[i] == ' ' && i < MAX_LINELENGTH; i++);
 
+    if(i >= MAX_LINELENGTH)
+    {
+        cerr << "error from parser: line too long or foregotten \0" << endl;
+        exit(-1);
+    }
+
     for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.' || line[i] == '-') && i < MAX_LINELENGTH; i++, j++)
         string[j] = line[i];
+
+    if(i >= MAX_LINELENGTH)
+    {
+        cerr << "error from parser: line too long or foregotten \0" << endl;
+        exit(-1);
+    }
 
     string[j] = '\0';
 
@@ -219,10 +295,28 @@ Vertex2D BasicParser::getValueVertex2D(const char *line)
 
     for(i = 0; line[i] != '\n' && line[i] != '\0' && line[i] != ' ' && i < MAX_LINELENGTH; i++);
 
+    if(i >= MAX_LINELENGTH)
+    {
+        cerr << "error from parser: line too long or foregotten \0" << endl;
+        exit(-1);
+    }
+
     for(; line[i] == ' ' && i < MAX_LINELENGTH; i++);
+
+    if(i >= MAX_LINELENGTH)
+    {
+        cerr << "error from parser: line too long or foregotten \0" << endl;
+        exit(-1);
+    }
 
     for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.' || line[i] == '-') && i < MAX_LINELENGTH; i++, j++)
         string[j] = line[i];
+
+    if(i >= MAX_LINELENGTH)
+    {
+        cerr << "error from parser: line too long or foregotten \0" << endl;
+        exit(-1);
+    }
 
     string[j] = '\0';
 
@@ -230,8 +324,20 @@ Vertex2D BasicParser::getValueVertex2D(const char *line)
 
     for(; line[i] == ' ' && i < MAX_LINELENGTH; i++);
 
+    if(i >= MAX_LINELENGTH)
+    {
+        cerr << "error from parser: line too long or foregotten \0" << endl;
+        exit(-1);
+    }
+
     for(j = 0; ((line[i] >= '0' && line[i] <= '9') || line[i] == '.' || line[i] == '-') && i < MAX_LINELENGTH; i++, j++)
         string[j] = line[i];
+
+    if(i >= MAX_LINELENGTH)
+    {
+        cerr << "error from parser: line too long or foregotten \0" << endl;
+        exit(-1);
+    }
 
     string[j] = '\0';
 

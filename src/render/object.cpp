@@ -326,6 +326,12 @@ void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectNa
                     vert_id[h] = atoi(string);
                     vert_id[h] -= otherVertices.objectVertices+1;
 
+                    if(vert_id[h] >= allObjectVertices.objectVertices)             // look if the used vertices are defined
+                    {
+                        cerr << "the file " << objectFile << " is corrupted: undefined vertices used" << endl;
+                        exit(-1);
+                    }
+
                     if(used == textureUsed || used == allUsed)
                     {
 
@@ -339,6 +345,12 @@ void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectNa
 
                         tex_id[h] = atoi(string);
                         tex_id[h] -= otherVertices.textureVertices+1;
+
+                        if(tex_id[h] >= allObjectVertices.textureVertices)             // if the polygon uses texvertices, look if they are defined
+                        {
+                            cerr << "the file " << objectFile << " is corrupted: undefined texture vertices used" << endl;
+                            exit(-1);
+                        }
 
                     }
 
@@ -357,6 +369,12 @@ void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectNa
 
                         norm_id[h] = atoi(string);
                         norm_id[h] -= otherVertices.normalVectors+1;
+
+                        if(norm_id[h] >= allObjectVertices.normalVectors)             // if the polygon uses normals, look if they are defined
+                        {
+                            cerr << "the file " << objectFile << " is corrupted: undefined normals used" << endl;
+                            exit(-1);
+                        }
                     }
 
                 }
