@@ -8,6 +8,84 @@ GLfloat defaultDirection[] = {0.0, 0.0, -1.0};
 GLfloat defaultExponent    =  0.0;
 GLfloat defaultCutof       =  180.0 ;
 
+
+LightManager::LightManager()
+{
+    lightNums = new List<GLint>();
+    numCounter = 0;
+}
+
+LightManager::~LightManager()
+{
+    for(int i = 0; i<numCounter; i++)
+    {
+        ListIterator<GLint> I = *ListIterator<GLint>(lightNums).SetFirst();
+        while(!I.IsLast())
+        {
+            if(*I.GetCurrent() == i)
+                break;
+            I.Next();
+        }
+
+        if(*I.GetCurrent() != i)
+            glDisable(GL_LIGHT0+i);
+    }
+    delete lightNums;
+}
+
+GLint LightManager::getLightNum()
+{
+    if(lightNums->IsEmpty())
+    {
+        if(numCounter <= GL_MAX_LIGHTS)
+            return GL_LIGHT0+numCounter++;
+        else
+        {
+            cerr << "Too many lights in the scene. This will overwrite Lamp 0"<<endl;
+            return GL_LIGHT0;
+        }
+    }
+    else
+    {
+        GLint *num = lightNums->PopFront();
+        GLint r = *num;
+        delete num;
+        return r;
+    }
+}
+
+void LightManager::returnLightNum(GLint n)
+{
+    if(numCounter-1 == n)
+    {
+        numCounter--;
+        ListIterator<GLint> I = *ListIterator<GLint>(lightNums).SetFirst();
+        while(!I.IsLast())
+        {
+            if(*I.GetCurrent() == numCounter-1)
+            {
+                numCounter--;
+                I.Destroy();
+                I.SetFirst();
+            }
+            else
+            {
+                I.Next();
+            }
+
+        }
+        return;
+    }
+    else
+    {
+        GLint *v = new GLint;
+        *v = n;
+        lightNums->PushFront(v);
+    }
+}
+
+
+
 GlobalLight::GlobalLight()
 {
     ambient[0] = 1.0;
@@ -44,20 +122,21 @@ GlobalLight::~GlobalLight()
 
 Lamp::Lamp()
 {
-    //get Lamp number
     setStandart();
+    modified = true;
+    reg = false;
+    activ = false;
 }
 
 Lamp::~Lamp()
 {
-    // remove lamp from Lamplist
-    // disable it
+    if(reg)
+        glDisable(Lightnum);
 }
 
 
 Lamp::Lamp(Lamp *L)
 {
-    //get lamp number
     for(int i = 0; i < 4; i++)
     {
         ambient[i]   = L->ambient[i];
@@ -69,38 +148,45 @@ Lamp::Lamp(Lamp *L)
 
     exponent = L->exponent;
     cutof = L->cutof;
-    attType = L->attType;
-    attenaution = L->attenaution;
+    ConstAttenaution = L->ConstAttenaution;
+    LinAttenaution = L->LinAttenaution;
+    QuadAttenaution = L->QuadAttenaution;
     activ = L->activ;
+    modified = true;
+    reg = false;
+    activ = L->activ;
+    relativeToObject = L->relativeToObject;
 }
 
 
 Lamp::Lamp(Lamp *L, vector pos)
 {
-    //get lamp number
     for(int i = 0; i < 4; i++)
     {
         ambient[i]   = L->ambient[i];
         diffuse[i]   = L->diffuse[i];
         specular[i]  = L->specular[i];
+        position[i]  = L->position[i];
         direction[i] = L->direction[i];
     }
-
-    position[0]  = pos.x;
-    position[1]  = pos.y;
-    position[2]  = pos.z;
-
+    position[0] = pos.x;
+    position[1] = pos.y;
+    position[2] = pos.z;
     exponent = L->exponent;
     cutof = L->cutof;
-    attType = L->attType;
-    attenaution = L->attenaution;
+    ConstAttenaution = L->ConstAttenaution;
+    LinAttenaution = L->LinAttenaution;
+    QuadAttenaution = L->QuadAttenaution;
     activ = L->activ;
+    modified = true;
+    reg = false;
+    activ = L->activ;
+    relativeToObject = L->relativeToObject;
 }
 
 
 Lamp::Lamp(Lamp *L, vector *pos)
 {
-    //get lamp number
     for(int i = 0; i < 4; i++)
     {
         ambient[i]   = L->ambient[i];
@@ -108,21 +194,24 @@ Lamp::Lamp(Lamp *L, vector *pos)
         specular[i]  = L->specular[i];
         direction[i] = L->direction[i];
     }
-
-    position[0]  = pos->x;
-    position[1]  = pos->y;
-    position[2]  = pos->z;
-
+    position[0] = pos->x;
+    position[1] = pos->y;
+    position[2] = pos->z;
+    position[3] = 0;
     exponent = L->exponent;
     cutof = L->cutof;
-    attType = L->attType;
-    attenaution = L->attenaution;
+    ConstAttenaution = L->ConstAttenaution;
+    LinAttenaution = L->LinAttenaution;
+    QuadAttenaution = L->QuadAttenaution;
     activ = L->activ;
+    modified = true;
+    reg = false;
+    activ = L->activ;
+    relativeToObject = L->relativeToObject;
 }
 
 Lamp::Lamp(Lamp *L, vector pos, vector dir)
 {
-    //get lamp number
     for(int i = 0; i < 4; i++)
     {
         ambient[i]   = L->ambient[i];
@@ -141,14 +230,18 @@ Lamp::Lamp(Lamp *L, vector pos, vector dir)
 
     exponent = L->exponent;
     cutof = L->cutof;
-    attType = L->attType;
-    attenaution = L->attenaution;
+    ConstAttenaution = L->ConstAttenaution;
+    LinAttenaution = L->LinAttenaution;
+    QuadAttenaution = L->QuadAttenaution;
     activ = L->activ;
+    modified = true;
+    reg = false;
+    activ = L->activ;
+    relativeToObject = L->relativeToObject;
 }
 
 Lamp::Lamp(Lamp *L, vector *pos, vector *dir)
 {
-    //get lamp number
     for(int i = 0; i < 4; i++)
     {
         ambient[i]   = L->ambient[i];
@@ -167,9 +260,14 @@ Lamp::Lamp(Lamp *L, vector *pos, vector *dir)
 
     exponent = L->exponent;
     cutof = L->cutof;
-    attType = L->attType;
-    attenaution = L->attenaution;
+    ConstAttenaution = L->ConstAttenaution;
+    LinAttenaution = L->LinAttenaution;
+    QuadAttenaution = L->QuadAttenaution;
     activ = L->activ;
+    modified = true;
+    reg = false;
+    activ = L->activ;
+    relativeToObject = L->relativeToObject;
 }
 
 
@@ -179,6 +277,13 @@ void Lamp::setAmbientLight(GLfloat r, GLfloat g, GLfloat b, GLfloat t)
     ambient[1] = g;
     ambient[2] = b;
     ambient[3] = t;
+
+    if(reg)
+    {
+        glLightfv(Lightnum, GL_AMBIENT,  ambient);
+    }
+    else
+        modified = true;
 }
 
 void Lamp::setDiffuseLight(GLfloat r, GLfloat g, GLfloat b, GLfloat t)
@@ -187,6 +292,13 @@ void Lamp::setDiffuseLight(GLfloat r, GLfloat g, GLfloat b, GLfloat t)
     diffuse[1] = g;
     diffuse[2] = b;
     diffuse[3] = t;
+
+    if(reg)
+    {
+        glLightfv(Lightnum, GL_DIFFUSE,  diffuse);
+    }
+    else
+        modified = true;
 }
 
 void Lamp::setSpecularLight(GLfloat r, GLfloat g, GLfloat b, GLfloat t)
@@ -195,6 +307,13 @@ void Lamp::setSpecularLight(GLfloat r, GLfloat g, GLfloat b, GLfloat t)
     specular[1] = g;
     specular[2] = b;
     specular[3] = t;
+
+    if(reg)
+    {
+        glLightfv(Lightnum, GL_SPECULAR,  specular);
+    }
+    else
+        modified = true;
 }
 
 void Lamp::setAmbientLight(GLfloat *L)
@@ -203,6 +322,13 @@ void Lamp::setAmbientLight(GLfloat *L)
     {
         ambient[i] = L[i];
     }
+
+    if(reg)
+    {
+        glLightfv(Lightnum, GL_AMBIENT,  ambient);
+    }
+    else
+        modified = true;
 }
 
 void Lamp::setDiffuseLight(GLfloat *L)
@@ -211,6 +337,13 @@ void Lamp::setDiffuseLight(GLfloat *L)
     {
         diffuse[i] = L[i];
     }
+
+    if(reg)
+    {
+        glLightfv(Lightnum, GL_DIFFUSE,  diffuse);
+    }
+    else
+        modified = true;
 }
 
 void Lamp::setSpecularLight(GLfloat *L)
@@ -219,6 +352,13 @@ void Lamp::setSpecularLight(GLfloat *L)
     {
         specular[i] = L[i];
     }
+
+    if(reg)
+    {
+        glLightfv(Lightnum, GL_SPECULAR,  specular);
+    }
+    else
+        modified = true;
 }
 
 void Lamp::setDirection(vector d)
@@ -232,6 +372,13 @@ void Lamp::setDirection(vector d)
     direction[0] = d.x;
     direction[1] = d.y;
     direction[2] = d.z;
+
+    if(reg)
+    {
+        glLightfv(Lightnum, GL_SPOT_DIRECTION, direction);
+    }
+    else
+        modified = true;
 }
 
 void Lamp::setDirection(vector *d)
@@ -244,6 +391,13 @@ void Lamp::setDirection(vector *d)
     direction[0] = d->x;
     direction[1] = d->y;
     direction[2] = d->z;
+
+    if(reg)
+    {
+        glLightfv(Lightnum, GL_SPOT_DIRECTION, direction);
+    }
+    else
+        modified = true;
 }
 
 void Lamp::setDirection(GLfloat *L)
@@ -257,6 +411,13 @@ void Lamp::setDirection(GLfloat *L)
     {
         direction[i] = L[i];
     }
+
+    if(reg)
+    {
+        glLightfv(Lightnum, GL_SPOT_DIRECTION, direction);
+    }
+    else
+        modified = true;
 }
 
 
@@ -265,6 +426,13 @@ void Lamp::setPosition(vector p)
     position[0] = p.x;
     position[1] = p.y;
     position[2] = p.z;
+
+    if(reg)
+    {
+        glLightfv(Lightnum, GL_POSITION, position);
+    }
+    else
+        modified = true;
 }
 
 
@@ -273,6 +441,13 @@ void Lamp::setPosition(vector *p)
     position[0] = p->x;
     position[1] = p->y;
     position[2] = p->z;
+
+    if(reg)
+    {
+        glLightfv(Lightnum, GL_POSITION, position);
+    }
+    else
+        modified = true;
 }
 void Lamp::setPosition(GLfloat *L)
 {
@@ -280,6 +455,13 @@ void Lamp::setPosition(GLfloat *L)
     {
         position[i] = L[i];
     }
+
+    if(reg)
+    {
+        glLightfv(Lightnum, GL_POSITION, position);
+    }
+    else
+        modified = true;
 }
 
 void Lamp::directed(bool b)
@@ -292,6 +474,13 @@ void Lamp::directed(bool b)
     {
         direction[3] = 1;
     }
+
+    if(reg)
+    {
+        glLightfv(Lightnum, GL_SPOT_DIRECTION, direction);
+    }
+    else
+        modified = true;
 }
 
 bool Lamp::isDirected(void)
@@ -311,4 +500,112 @@ void Lamp::setStandart()
     setPosition(defaultPosition);
     exponent = defaultExponent;
     cutof = defaultCutof;
+    ConstAttenaution = 1;
+    LinAttenaution = 0;
+    QuadAttenaution = 0;
+    if(reg)
+        refresh();
+    else
+        modified = true;
+}
+
+void Lamp::refresh()
+{
+    if(reg)
+    {
+        glLightfv(Lightnum, GL_AMBIENT,  ambient);
+        glLightfv(Lightnum, GL_DIFFUSE,  diffuse);
+        glLightfv(Lightnum, GL_SPECULAR,  specular);
+        glLightfv(Lightnum, GL_POSITION, position);
+        glLightfv(Lightnum, GL_SPOT_DIRECTION, direction);
+        glLightf(Lightnum, GL_SPOT_EXPONENT, exponent);
+        glLightf(Lightnum, GL_SPOT_CUTOFF, cutof);
+        glLightf(Lightnum, GL_CONSTANT_ATTENUATION, ConstAttenaution);
+        glLightf(Lightnum, GL_LINEAR_ATTENUATION, LinAttenaution);
+        glLightf(Lightnum, GL_QUADRATIC_ATTENUATION, QuadAttenaution);
+        modified = false;
+        if(activ)
+            glEnable(Lightnum);
+        else
+            glDisable(Lightnum);
+
+    }
+    else
+    {
+        modified = true;
+        cerr << "WARNING: LightRefresh called without registration" <<endl;
+    }
+
+}
+
+
+void Lamp::setExponent(GLfloat e)
+{
+    exponent = e;
+    if(reg)
+        glLightf(Lightnum, GL_SPOT_EXPONENT, e);
+    else
+        modified = true;
+}
+
+void Lamp::setCutOf(GLfloat c)
+{
+    cutof = c;
+    if(reg)
+        glLightf(Lightnum, GL_SPOT_CUTOFF, c);
+    else
+        modified = true;
+}
+
+void Lamp::setConstAttenaution(GLfloat a)
+{
+    ConstAttenaution = a;
+    if(reg)
+        glLightf(Lightnum, GL_CONSTANT_ATTENUATION, a);
+    else
+        modified = true;
+}
+
+void Lamp::setLinAttenaution(GLfloat a)
+{
+    LinAttenaution = a;
+    if(reg)
+        glLightf(Lightnum, GL_LINEAR_ATTENUATION, a);
+    else
+        modified = true;
+}
+
+void Lamp::setQuadAttenaution(GLfloat a)
+{
+    QuadAttenaution = a;
+    if(reg)
+        glLightf(Lightnum, GL_QUADRATIC_ATTENUATION, a);
+    else
+        modified = true;
+}
+
+void Lamp::refreshPosition(void)
+{
+    if(reg)
+        glLightfv(Lightnum, GL_POSITION, position);
+    else
+        modified = true;
+}
+
+void Lamp::activate()
+{
+    activ = true;
+    if(reg)
+        glEnable(Lightnum);
+    else
+        modified = true;
+}
+
+void Lamp::deactivate()
+{
+    activ = false;
+    if(reg)
+        glDisable(Lightnum);
+    else
+        modified = true;
 }

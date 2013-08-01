@@ -9,9 +9,12 @@
 
 Scene::Scene()
 {
-    this->objectList = new List<Object>;
-    this->Camlist = new List<Camera>;
-    this->GlobalAmbience = NULL;
+    objectList = new List<Object>;
+    Camlist = new List<Camera>;
+    globalLamps = new List<Lamp>;
+    colisions = new List<Colision>;
+    LM = new LightManager();
+    GlobalAmbience = NULL;
     currenttick = 0;
     ticcount = 0;
     tickbundle = 3;
@@ -19,6 +22,7 @@ Scene::Scene()
     lasttick = SDL_GetTicks();
     accuracy = 60;
     averageFPS = 60;
+    listenerPosition = vector(0,0,0);
 
 }
 
@@ -36,8 +40,7 @@ void Scene::addObject(Object *obj)
 int Scene::removeObject(Object *obj)
 {
     int delObj = 0;
-    ListIterator<Object> i = ListIterator<Object>(objectList);
-    i.SetFirst();
+    ListIterator<Object> i = *ListIterator<Object>(objectList).SetFirst();
     while(!i.IsLast())
     {
         if(i.GetCurrent() == obj)
@@ -50,6 +53,56 @@ int Scene::removeObject(Object *obj)
     return delObj;
 }
 
+void Scene::addCam(Camera *cam)
+{
+    Camlist->PushFront(cam);
+}
+
+int Scene::removeCam(Camera *cam)
+{
+    int delCams = 0;
+    ListIterator<Camera> C = *ListIterator<Camera>(Camlist).SetFirst();
+    while(!C.IsLast() && C.IsEmpty())
+    {
+        if(C.GetCurrent() == cam)
+        {
+            C.Remove();
+            delCams++;
+        }
+        C.Next();
+    }
+    return delCams;
+}
+
+void Scene::addLamp(Lamp *L)
+{
+    globalLamps->PushFront(L);
+    L->Lightnum = LM->getLightNum();
+    L->reg = true;
+    L->refresh();
+}
+
+int Scene::removeLamp(Lamp *L)
+{
+    int delLamps = 0;
+    ListIterator<Lamp> I = *ListIterator<Lamp>(globalLamps).SetFirst();
+    while(!I.IsLast() && I.IsEmpty())
+    {
+        if(I.GetCurrent() == L)
+        {
+            I.Remove();
+            L->reg = false;
+            LM->returnLightNum(L->Lightnum);
+            L->Lightnum = 0;
+            delLamps++;
+        }
+        I.Next();
+    }
+    return delLamps;
+
+}
+
+
 
 void Scene::render()
 {
@@ -58,12 +111,22 @@ void Scene::render()
     if(GlobalAmbience && !currentScene)
         GlobalAmbience->activateLight();
 
-    else if(!GlobalAmbience)
+    if(!globalLamps->IsEmpty() && !currentScene)
+        resetLights();
+
+    else if(!GlobalAmbience && globalLamps->IsEmpty())
     {
         GLboolean activlight;
         glGetBooleanv(GL_LIGHTING, &activlight);
         if(activlight)
             glDisable(GL_LIGHTING);
+    }
+    else
+    {
+        GLboolean activlight;
+        glGetBooleanv(GL_LIGHTING, &activlight);
+        if(!activlight)
+            glEnable(GL_LIGHTING);
     }
 
 
@@ -81,6 +144,23 @@ void Scene::render()
     ListIterator<Camera> c = *ListIterator<Camera>(Camlist).SetFirst();
     while(handleCams(&c))
     {
+        if(!globalLamps->IsEmpty())
+        {
+            ListIterator<Lamp> L = *ListIterator<Lamp>(globalLamps).SetFirst();
+            while(!L.IsLast())
+            {
+                Lamp *currentLamp = L.GetCurrent();
+                if(currentLamp->activ)
+                {
+                    if(currentLamp->relativeToObject)
+                        currentLamp->setPosition(currentLamp->relativeToObject->getPosition());
+                    else
+                        currentLamp->refreshPosition();
+                }
+                L.Next();
+            }
+        }
+
         if(!objectList->IsEmpty())
         {
             glMatrixMode(GL_MODELVIEW);
@@ -112,16 +192,39 @@ void Scene::render()
 
 
                     glPopMatrix();
+
                 }
+
+                /*if(!currentObject->sounds->IsEmpty())
+                {
+                    ListIterator<Sound> S = ListIterator<Sound>(currentObject->sounds).SetFirst();
+                    while(!S.IsLast())
+                    {
+                        S.GetCurrent()->refreshPosition(listenerPosition,currentObject->getPosition());
+                        S.Next();
+                    }
+                }*/
 
                 O.Next();
            }
         }
+
     }
 
+    currentScene = true;
+    //calculateColisions();
 }
 
-
+void Scene::resetLights(void)
+{
+    ListIterator<Lamp> L = *ListIterator<Lamp>(globalLamps).SetFirst();
+    while(!L.IsLast())
+    {
+        if(L.GetCurrent()->activ)
+            L.GetCurrent()->refresh();
+        L.Next();
+    }
+}
 
 void Scene::interpolatePhysics(Object *currentObject)
 {
@@ -163,13 +266,14 @@ void Scene::renderPolygones(Object *currentObject)
     while(!p.IsLast())
     {
         Polygon *currentPolygon = (Polygon *)p.GetCurrent();
-
-        glMaterialfv(GL_AMBIENT, GL_FRONT_AND_BACK,currentObject->objType->ObjectTypeMaterial->ambiantMatColor);
-        glMaterialfv(GL_DIFFUSE, GL_FRONT_AND_BACK,currentObject->objType->ObjectTypeMaterial->diffuseMatColor);
-        glMaterialfv(GL_SPECULAR, GL_FRONT_AND_BACK,currentObject->objType->ObjectTypeMaterial->specularMatColor);
-        glMaterialfv(GL_EMISSION, GL_FRONT_AND_BACK,currentObject->objType->ObjectTypeMaterial->emissiveMatColor);
-
         glBegin( GL_POLYGON );
+
+            glMaterialfv(GL_AMBIENT, GL_FRONT_AND_BACK,currentObject->objType->ObjectTypeMaterial->ambiantMatColor);
+            glMaterialfv(GL_DIFFUSE, GL_FRONT_AND_BACK,currentObject->objType->ObjectTypeMaterial->diffuseMatColor);
+            glMaterialfv(GL_SPECULAR, GL_FRONT_AND_BACK,currentObject->objType->ObjectTypeMaterial->specularMatColor);
+            glMaterialfv(GL_EMISSION, GL_FRONT_AND_BACK,currentObject->objType->ObjectTypeMaterial->emissiveMatColor);
+            glMaterialf(GL_SHININESS, GL_FRONT_AND_BACK,currentObject->objType->ObjectTypeMaterial->specularExponent);
+
 
             for(int i=0;i < currentPolygon->getVertexAmount();i++)
             {

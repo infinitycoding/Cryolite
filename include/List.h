@@ -266,7 +266,7 @@ void List<T>::Destroy(Node *n)
 {
     lock = true;
         if(n == dummy)
-            return 0;
+            return;
         if(structCleaner)
             structCleaner((T*)n->element);
         n->prev->next = n->next;

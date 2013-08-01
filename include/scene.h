@@ -21,8 +21,14 @@ class Scene
 
         Scene(void);
         ~Scene(void);
+
         void addObject(Object *obj);
         int removeObject(Object *obj);
+        void addCam(Camera *cam);
+        int removeCam(Camera *cam);
+        void addLamp(Lamp *L);
+        int removeLamp(Lamp *L);
+
         void render(void);
         int handleCams(ListIterator<Camera> *c);
 
@@ -34,6 +40,7 @@ class Scene
         bool currentScene;
         GlobalLight *GlobalAmbience;
 
+
         int lasttick;
         int accuracy;
         float averageFPS;
@@ -44,9 +51,11 @@ class Scene
 
     private:
         void calculateFPS(void);
-
         void renderPolygones(Object *currentObject);
         void interpolatePhysics(Object *currentObject);
+        void calculateColisions(void);
+        void resetLights(void);
+        LightManager *LM;
         int currenttick;
         int ticcount;
         int tickbundle;

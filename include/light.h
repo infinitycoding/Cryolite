@@ -6,7 +6,7 @@
 #include <GL/glu.h>
 
 #include <object.h>
-
+#include <List.h>
 
 typedef enum
 {
@@ -15,6 +15,19 @@ typedef enum
     quadric
 }attenaution_t;
 
+
+class LightManager
+{
+    public:
+       LightManager();
+       ~LightManager();
+
+       GLint getLightNum();
+       void returnLightNum(GLint n);
+
+        List<GLint> *lightNums;
+        int numCounter;
+};
 
 
 class GlobalLight
@@ -58,10 +71,23 @@ class Lamp
          void setPosition(vector *p);
          void setPosition(GLfloat *L);
 
+         void refreshPosition(void);
+         void activate();
+         void deactivate();
+
          void directed(bool b);
          bool isDirected(void);
 
+         void setExponent(GLfloat e);
+         void setCutOf(GLfloat c);
+
+         void setConstAttenaution(GLfloat a);
+         void setLinAttenaution(GLfloat a);
+         void setQuadAttenaution(GLfloat a);
+
          void setStandart();
+
+         void refresh();
 
         ~Lamp();
 
@@ -73,9 +99,14 @@ class Lamp
         GLfloat direction[4];
         GLfloat exponent;
         GLfloat cutof;
-        attenaution_t attType;
-        GLfloat attenaution;
+        GLfloat ConstAttenaution;
+        GLfloat LinAttenaution;
+        GLfloat QuadAttenaution;
         bool activ;
+        bool modified;
+        bool reg;
+        Object *relativeToObject;
+        LightManager *LM;
 
 };
 

@@ -42,6 +42,8 @@ extern Object *iccube;
 extern Object *gravelcube;
 
 
+
+
 int main(int argc, char *argv[]){
     LUASkript testSkript = LUASkript(SKRIPT(testscript.lua));
     testSkript.insertDoubleVar("cppvar", 5.5);
@@ -58,10 +60,18 @@ int main(int argc, char *argv[]){
 
     // Create camera, Global light and Input controler
     Camera *Player = new Camera(NULL, vector(STARTING_X,STARTING_Y,STARTING_Z),vector(0,0,1),STANDART_NEARCLIP,STANDART_FARCLIP,gameSettings->fov,0,0,gameSettings->height,gameSettings->width);
-    mainScene->Camlist->PushFront(Player);
+    mainScene->addCam(Player);
+
+    Lamp *Sun = new Lamp();
+    Sun->setDiffuseLight(10, 0, 0, 1.0);
+    Sun->setPosition(vector(0,0,0));
+
+    Sun->activate();
+    mainScene->addLamp(Sun);
+
 
     Controls playerControls = Controls(&mainwindow);
-    mainScene->GlobalAmbience = new GlobalLight();
+    mainScene->GlobalAmbience = new GlobalLight(0.5,0.5,0.5,1);
 
     // Draw test models
     INIT_Models(mainScene);
@@ -78,6 +88,9 @@ int main(int argc, char *argv[]){
     glEnable( GL_TEXTURE_2D );
     glEnable(GL_MULTISAMPLE_ARB);
     glEnable(GL_COLOR_MATERIAL);
+
+
+
 
     gameSettings->activateSettings();
 
@@ -120,6 +133,7 @@ int main(int argc, char *argv[]){
 
         glBindTexture( GL_TEXTURE_2D, 0);
 
+
         mainScene->render();
         shotSound->refreshPosition(Player->getPosition(),iccube->getPosition());
 
@@ -127,12 +141,12 @@ int main(int argc, char *argv[]){
 
         glPushMatrix();
         glTranslatef(Player->getPosition().x,Player->getPosition().y,Player->getPosition().z);
-
         glRotated(90,1,0,0);
         glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
         glBindTexture( GL_TEXTURE_2D, sky->nr);
         gluSphere(q,50,100,100);
         glPopMatrix();
+
 
 
 
