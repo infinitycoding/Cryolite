@@ -41,7 +41,7 @@ extern Sound *shotSound;
 extern Object *iccube;
 extern Object *gravelcube;
 
-
+GLfloat fogcolor[4] = {0.5,0.5,0.5,1};
 
 
 int main(int argc, char *argv[]){
@@ -63,18 +63,30 @@ int main(int argc, char *argv[]){
     mainScene->addCam(Player);
 
     Lamp *Sun = new Lamp();
-    Sun->setDiffuseLight(10, 0, 0, 1.0);
-    Sun->setPosition(vector(0,0,0));
-    Sun->setDirection(vector(0,500,0));
-    Sun->setCutOf(90);
+    Sun->setDiffuseLight(10, 1, 0, 1.0);
+    Sun->setPosition(vector(0,0,50));
+    Sun->setQuadAttenaution(0.001);
+
     Sun->directed(true);
 
     Sun->activate();
     mainScene->addLamp(Sun);
 
 
+    Lamp *Spot = new Lamp();
+    Spot->setDiffuseLight(10, 0, 0, 1.0);
+    Spot->setPosition(vector(0,10,0));
+    Spot->setCutOf(90);
+    Spot->setQuadAttenaution(0.001);
+
+    Spot->directed(true);
+
+    Spot->activate();
+    mainScene->addLamp(Spot);
+
+
     Controls playerControls = Controls(&mainwindow);
-    mainScene->GlobalAmbience = new GlobalLight(0.2,0.2,0.2,1);
+    mainScene->GlobalAmbience = new GlobalLight(0.15,0.15,0.15,1);
 
     // Draw test models
     INIT_Models(mainScene);
@@ -91,6 +103,13 @@ int main(int argc, char *argv[]){
     glEnable( GL_TEXTURE_2D );
     glEnable(GL_MULTISAMPLE_ARB);
     glEnable(GL_COLOR_MATERIAL);
+
+    /*glEnable(GL_FOG);
+    glFogfv(GL_FOG_COLOR, fogcolor);
+    glFogi(GL_FOG_MODE, GL_LINEAR);
+    glFogf(GL_FOG_DENSITY, 0.05);
+    glFogf(GL_FOG_START, 40);
+    glFogf(GL_FOG_END, 50);*/
 
 
 
@@ -144,6 +163,7 @@ int main(int argc, char *argv[]){
 
         glPushMatrix();
         glTranslatef(Player->getPosition().x,Player->getPosition().y,Player->getPosition().z);
+
         glRotated(90,1,0,0);
         glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
         glBindTexture( GL_TEXTURE_2D, sky->nr);
@@ -155,7 +175,7 @@ int main(int argc, char *argv[]){
 
 
 
-        drawHUD();
+        //drawHUD();
 
         SDL_GL_SwapBuffers();   // Changes frontbuffer and backbuffer
     }

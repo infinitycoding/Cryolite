@@ -64,6 +64,19 @@ void Controls::handleQuit()
     render = false;
 }
 
+void Controls::screenshot(const char* filename)
+{
+    SDL_Surface *surface = SDL_CreateRGBSurface(0,1920,1080,24,0x000000FF, 0x0000FF00, 0x00FF0000,0);
+
+    glReadBuffer(GL_FRONT);
+    glReadPixels(0,0,1920,1080,GL_RGB,GL_UNSIGNED_BYTE,(void*)surface->pixels);
+
+    SDL_SaveBMP(surface,filename);
+
+    SDL_FreeSurface(surface);
+
+}
+
 void Controls::handleKeyDown(SDL_KeyboardEvent *e)
 {
     switch(e->keysym.sym)
@@ -94,6 +107,9 @@ void Controls::handleKeyDown(SDL_KeyboardEvent *e)
             break;
         case SDLK_e:
             move_cube();
+            break;
+        case SDLK_p:
+            Controls::screenshot("screenshot.bmp");
             break;
         case SDLK_r:
             shotSound->toggleLoop();
