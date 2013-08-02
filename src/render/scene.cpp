@@ -232,10 +232,20 @@ void Scene::resetLights(void)
 
 void Scene::interpolatePhysics(Object *currentObject)
 {
+    ListIterator<vector> F = *ListIterator<vector>(currentObject->forces).SetFirst();
+    vector *actualForce = NULL;
+
     if(currentObject->physicalActor == false)
         return;
 
+    while(!F.IsLast())
+    {
+        actualForce = F.GetCurrent();
+        currentObject->impulse += (*actualForce * (1 / averageFPS));
+        F.Next();
+    }
 
+    currentObject->localPosition += currentObject->impulse;
 }
 
 

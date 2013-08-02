@@ -20,9 +20,8 @@ class Controls : EventHandle
         virtual void handleMouseMotion(SDL_MouseMotionEvent *e);
 
         virtual void toggle_printFPS();
+        virtual void move_cube();
 
-        static void moveCube();
-        static void rotateCube();
         static void toggle_ghost();
 
     private:

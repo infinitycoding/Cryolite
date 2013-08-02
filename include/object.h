@@ -151,8 +151,6 @@ class Object                // the main object
 
         vector getPosition();
 
-        // experimental physical functions
-        void moveObject(float a, vector D,float v = 0);                         // move function
 
 
 
@@ -161,26 +159,17 @@ class Object                // the main object
 
         vector scale;                               // the scale of the object (if you need an overdimensional cup of tea)
 
+        GLfloat Angle;
+        vector rotationAxis;
+
         Object *relativeToObject;
         vector localPosition;                    // the position
 
         List<Sound> *sounds;                    // the list of sounds connected to this object
 
-        // experimental physical variables
-        vector rotationAxis;
-        GLfloat Angle;
-        GLfloat remeaningAngle;
-        GLfloat destAngle;
-        float rotationVelocity;
-        float rotationAcceleration;
-        int startRotationTime;
-        int remAngleSing;
 
-
-        vector Dm; // Direction Motion
-        float V0m; // Velocity Motion
-        float Am; // Acceleration Motion
-        int Tms; //Time Motion Start
+        List<vector> *forces;
+        vector impulse;
 
         float approximationSphere;
 

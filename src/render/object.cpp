@@ -529,6 +529,7 @@ Object::Object(const char *filename, const char *objname, vector pos)
 Object::~Object()
 {
     delete sounds;
+    delete forces;
 }
 
 
@@ -536,27 +537,18 @@ void Object::initObject()
 {
     scale = vector(1, 1, 1);
 
+    Angle = 0;
+    rotationAxis = vector();
+
     relativeToObject = NULL;
     localPosition = vector();
 
     sounds = new List<Sound>;
 
-    rotationAxis = vector();
+    forces = new List<vector>;
+    impulse = vector();
 
-    Angle = 0;
-    remeaningAngle = 0;
-    destAngle = 0;
-    rotationVelocity = 0;
-    rotationAcceleration = 0;
-    startRotationTime = 0;
-    remAngleSing = 0;
     approximationSphere = 10.0;
-
-    Dm = vector();
-
-    V0m = 0; // Velocity Motion
-    Am = 0; // Acceleration Motion
-    Tms = 0; //Time Motion Start
 
     if(ObjTypeCache == NULL)
         ObjTypeCache = new ObjectTypeCache();
@@ -573,34 +565,4 @@ vector Object::getPosition()
         return localPosition;
     else
         return relativeToObject->getPosition() + localPosition;
-}
-
-
-void Object::moveObject(float a ,vector D, float v)
-{
-    int currentTime = SDL_GetTicks();
-    //normize Direction
-    D.unify();
-
-    // calculate System V0
-    this->V0m = len( (D * v) + ( this->Dm * ( ( (currentTime - this->Tms) / 1000 ) + this->V0m) ) );
-
-
-    // calculate new acceleration
-    /*vector F = unify((D * a) + (this->Dm * this->Am));
-    vector Fd = unify(this->Dm);
-    int invert;
-    if(F.x == Fd.x && F.y == Fd.y && F.z == Fd.z)
-        invert = 1;
-    else
-        invert = -1;*/
-
-    this->Am = len( (D * a) + (this->Dm * this->Am) );
-
-    // generate Direction Vector
-    this->Dm = unify(this->Dm+D);
-
-    // save current time
-    this->Tms = currentTime;
-
 }

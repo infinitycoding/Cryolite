@@ -93,7 +93,7 @@ void Controls::handleKeyDown(SDL_KeyboardEvent *e)
             toggle_printFPS();
             break;
         case SDLK_e:
-            moveCube();
+            move_cube();
             break;
         case SDLK_r:
             shotSound->toggleLoop();
@@ -248,11 +248,9 @@ void Controls::toggle_printFPS()
     return;
 }
 
-
-void Controls::moveCube()
+void Controls::move_cube()
 {
-    vector direction = vector(-1, 0, 0);
-    iccube->moveObject(0.0,direction, 1);
-
-    return;
+    vector *testForce = new vector(0, 0, 0.05);
+    iccube->forces->PushFront(testForce);
+    iccube->physicalActor = true;
 }
