@@ -6,6 +6,7 @@
 #include <List.h>
 #include <light.h>
 #include <collision.h>
+#include <PhysicsEngine.h>
 
 
 
@@ -45,7 +46,6 @@ class Scene
     private:
         void calculateFPS(void);
         void renderPolygones(Object *currentObject);
-        void interpolatePhysics(Object *currentObject);
         void resetLights(void);
 
         LightManager *LM;

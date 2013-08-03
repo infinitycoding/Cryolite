@@ -529,7 +529,6 @@ Object::Object(const char *filename, const char *objname, vector pos)
 Object::~Object()
 {
     delete sounds;
-    delete forces;
 }
 
 
@@ -545,8 +544,7 @@ void Object::initObject()
 
     sounds = new List<Sound>;
 
-    forces = new List<vector>;
-    impulse = vector();
+    physObj = PhysicalObject();
 
     approximationSphere = 10.0;
 
@@ -554,8 +552,6 @@ void Object::initObject()
         ObjTypeCache = new ObjectTypeCache();
 
     objType = NULL;
-
-    physicalActor = false;
 }
 
 

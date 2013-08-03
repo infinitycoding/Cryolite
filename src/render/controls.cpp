@@ -10,6 +10,7 @@
 #include <scene.h>
 #include <settings.h>
 #include <sound.h>
+#include <PhysicsEngine.h>
 
 #define ROTATION_SPEED 0.5
 #define MOVEMENT_SPEED 10
@@ -268,7 +269,6 @@ void Controls::toggle_printFPS()
 
 void Controls::move_cube()
 {
-    vector *testForce = new vector(0, 0, 0.05);
-    iccube->forces->PushFront(testForce);
-    iccube->physicalActor = true;
+    vector *testForce = new vector(0, 0, 3.0);
+    iccube->physObj.forces->PushFront(testForce);
 }

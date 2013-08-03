@@ -41,9 +41,6 @@ void CollisionLocate::calculateCollisions(void)
 
         I1.Next();
 
-        if(obj1->physicalActor == false)
-            continue;
-
         I2.SetFirst();
 
         while(!I2.IsLast())
@@ -51,9 +48,6 @@ void CollisionLocate::calculateCollisions(void)
             obj2 = I2.GetCurrent();
 
             I2.Next();
-
-            if(obj2->physicalActor == false)
-                continue;
 
             if(obj1 == obj2)
                 continue;

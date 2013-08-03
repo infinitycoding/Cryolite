@@ -145,7 +145,7 @@ void List<T>::PushFront(T *element)
     Node *newNode = new Node;
     newNode->element = (void*)element;
 
-    while(lock){}
+    //while(lock){}
     lock = true;
         newNode->next = dummy->next;
         newNode->prev = dummy;

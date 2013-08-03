@@ -17,6 +17,7 @@
 #include <material.h>       // objects have materials, don't they?
 #include <polygon.h>        // objects have polygone, don't they?
 #include <sound.h>          // objects have sound, don't they?
+#include <PhysicsEngine.h>  // objects have physics, don't  they?
 
 
 
@@ -168,12 +169,9 @@ class Object                // the main object
         List<Sound> *sounds;                    // the list of sounds connected to this object
 
 
-        List<vector> *forces;
-        vector impulse;
+        PhysicalObject physObj;
 
         float approximationSphere;
-
-        bool physicalActor;
 };
 
 

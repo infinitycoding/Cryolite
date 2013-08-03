@@ -1,81 +1,51 @@
 #include <PhysicsEngine.h>
-#include <math.h>
+
+
 
 using namespace std;
 
+
+
 PhysicalObject::PhysicalObject()
 {
-    F = new List<Force>();
-    A.a = 0;
-    V.v = 0;
-    m = 1;
+    forces = new List<vector>;
+
+    impulse = vector();
+
+    mass = 1;
 }
 
-PhysicalObject::PhysicalObject(List<Force> *initF, Acceleration initA, Velocity initV,float initm)
+
+PhysicalObject::PhysicalObject(List<vector> *initForces, vector initImpulse, float initMass)
 {
-    //F = initF;
-    A.a = initA.a;
-    A.Da = (initA.Da).unifyc();
-    V.v = initV.v;
-    V.Dv = (initV.Dv).unifyc();
-    m = initm;
+    forces = initForces;
+
+    impulse = initImpulse;
+
+    mass = initMass;
 }
+
 
 PhysicalObject::~PhysicalObject()
 {
-    delete F;
+    delete forces;
 }
 
 
-
-
-Force* PhysicalObject::addForce(Force *newForce)
+void PhysicalObject::interpolatePhysics(vector *position, float fps)
 {
-    (*newForce).Df.unify();
-    F->PushFront(newForce);
-    return newForce;
-}
+    ListIterator<vector> F = *ListIterator<vector>(forces).SetFirst();
+    vector *actualForce = NULL;
 
-void PhysicalObject::removeForce(Force *oldForce)
-{
-    ListIterator<Force> *i = new ListIterator<Force>(F);
-    i->SetFirst();
-    while (oldForce != i->GetCurrent())
+    if(forces->IsEmpty())
+        return;
+
+    while(!F.IsLast())
     {
-        i->Next();
+        actualForce = F.GetCurrent();
+        impulse += (*actualForce * (1.0 / fps));
+        F.Next();
     }
-    i->Remove();
-}
 
-Force PhysicalObject::resultingForce()
-{
-    Force resF;
-    if(!F->IsEmpty()){
-        ListIterator<Force> *i = new ListIterator<Force>(F);
-        i->SetFirst();
-        do{
-            resF.Df += (*i->GetCurrent()).Df * (*i->GetCurrent()).f;
-            resF.f +=  (*i->GetCurrent()).f *  (*i->GetCurrent()).f;
-            i->Next();
-        }while(!i->IsLast());
-    };
-    resF.f = sqrt(resF.f);
-    resF.Df.unify();
-    return resF;
-}
-
-void PhysicalObject::calc_acceleration()
-{
-    Force tempForce = resultingForce();
-    A.Da = tempForce.Df;
-    A.a = tempForce.f / m;
-}
-
-void PhysicalObject::calc_velocity()
-{
-    float dt = 0;//zeit, noch unberechnet, Platzhalter
-    calc_acceleration();
-    V.Dv = (V.Dv * V.v +A.Da * A.a *dt);
-    V.Dv.unify();
-    V.v = sqrt(V.v*V.v +A.a*A.a*dt*dt);
+    *position += (impulse * (1.0 / fps));
 }

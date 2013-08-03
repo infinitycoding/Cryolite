@@ -137,13 +137,14 @@ void Scene::render()
     calculateFPS();
 
     // Interpolate Physics
+    Object *currentObject = NULL;
     ListIterator<Object> O = *ListIterator<Object>(objectList).SetFirst();
     while(!O.IsLast())
     {
-        interpolatePhysics(O.GetCurrent());
+        currentObject = O.GetCurrent();
+        currentObject->physObj.interpolatePhysics(&currentObject->localPosition, averageFPS);
         O.Next();
     }
-
 
     ListIterator<Camera> c = *ListIterator<Camera>(Camlist).SetFirst();
     while(handleCams(&c))
@@ -172,7 +173,7 @@ void Scene::render()
             O.SetFirst();
             while(!O.IsLast())
             {
-                Object *currentObject = O.GetCurrent();
+                currentObject = O.GetCurrent();
                 if(!currentObject->objType->vertices->IsEmpty())
                 {
                     glPushMatrix();
@@ -228,24 +229,6 @@ void Scene::resetLights(void)
             L.GetCurrent()->refresh();
         L.Next();
     }
-}
-
-void Scene::interpolatePhysics(Object *currentObject)
-{
-    ListIterator<vector> F = *ListIterator<vector>(currentObject->forces).SetFirst();
-    vector *actualForce = NULL;
-
-    if(currentObject->physicalActor == false)
-        return;
-
-    while(!F.IsLast())
-    {
-        actualForce = F.GetCurrent();
-        currentObject->impulse += (*actualForce * (1 / averageFPS));
-        F.Next();
-    }
-
-    currentObject->localPosition += currentObject->impulse;
 }
 
 
