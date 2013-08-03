@@ -175,7 +175,7 @@ int main(int argc, char *argv[]){
 
 
 
-        //drawHUD();
+        drawHUD();
 
         SDL_GL_SwapBuffers();   // Changes frontbuffer and backbuffer
     }
