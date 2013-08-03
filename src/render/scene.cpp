@@ -12,7 +12,7 @@ Scene::Scene()
     objectList = new List<Object>;
     Camlist = new List<Camera>;
     globalLamps = new List<Lamp>;
-    collisions = new List<Collision>;
+    CL = new CollisionLocate(objectList);
     LM = new LightManager();
     GlobalAmbience = NULL;
     currenttick = 0;
@@ -31,7 +31,7 @@ Scene::~Scene()
     delete objectList;
     delete Camlist;
     delete globalLamps;
-    delete collisions;
+    delete CL;
     delete LM;
 }
 
@@ -216,7 +216,7 @@ void Scene::render()
     }
 
     currentScene = true;
-    calculateCollisions();
+    CL->calculateCollisions();
 }
 
 void Scene::resetLights(void)
@@ -329,66 +329,3 @@ void Scene::calculateFPS(void)
     }
     lasttick = currenttick;
 }
-
-
-void Scene::calculateCollisions(void)
-{
-    Object *obj1 = NULL;
-    Object *obj2 = NULL;
-
-    Collision *newCollision = NULL;
-
-    ListIterator<Object> I1 = *ListIterator<Object>(objectList).SetFirst();
-    ListIterator<Object> I2 = *ListIterator<Object>(objectList).SetFirst();
-
-    if(objectList->IsEmpty())
-        return;
-
-    while(!I1.IsLast())
-    {
-        obj1 = I1.GetCurrent();
-
-        I1.Next();
-
-        if(obj1->physicalActor == false)
-            continue;
-
-        I2.SetFirst();
-
-        while(!I2.IsLast())
-        {
-            obj2 = I2.GetCurrent();
-
-            I2.Next();
-
-            if(obj2->physicalActor == false)
-                continue;
-
-            if(obj1 == obj2)
-                continue;
-
-            if(approximation(obj1, obj2))
-            {
-                newCollision = collision(obj1, obj2);
-
-                if(newCollision != NULL)
-                    collisions->PushFront(newCollision);
-            }
-        }
-    }
-}
-
-
-bool Scene::approximation(Object *obj1, Object *obj2)
-{
-    float distance = fabs(len(obj1->getPosition() - obj2->getPosition()));
-    float allowedDistance = obj1->approximationSphere + obj2->approximationSphere;
-    return (distance < allowedDistance);
-}
-
-
-Collision *Scene::collision(Object *obj1, Object *obj2)
-{
-    return NULL;
-}
-

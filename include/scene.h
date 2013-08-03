@@ -5,15 +5,9 @@
 #include <camera.h>
 #include <List.h>
 #include <light.h>
-#include <vector.h>
+#include <collision.h>
 
 
-struct Collision
-{
-    Object *object1;
-    Object *object2;
-    vector position;
-};
 
 class Scene
 {
@@ -35,11 +29,10 @@ class Scene
         List<Object> *objectList;
         List<Camera> *Camlist;
         List<Lamp> *globalLamps;
-        List<Collision> *collisions;
 
         bool currentScene;
         GlobalLight *GlobalAmbience;
-
+        CollisionLocate *CL;
 
         int lasttick;
         int accuracy;
@@ -54,9 +47,6 @@ class Scene
         void renderPolygones(Object *currentObject);
         void interpolatePhysics(Object *currentObject);
         void resetLights(void);
-        void calculateCollisions(void);
-        bool approximation(Object *obj1, Object *obj2);
-        Collision *collision(Object *obj1, Object *obj2);
 
         LightManager *LM;
         int currenttick;

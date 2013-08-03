@@ -66,12 +66,14 @@ void Controls::handleQuit()
 
 void Controls::screenshot(const char* filename)
 {
-    SDL_Surface *surface = SDL_CreateRGBSurface(0,1920,1080,24,0x000000FF, 0x0000FF00, 0x00FF0000,0);
+    SDL_Surface *surface = SDL_CreateRGBSurface(0,gameSettings->width,gameSettings->height,24,0x000000FF, 0x0000FF00, 0x00FF0000,0);
 
     glReadBuffer(GL_FRONT);
-    glReadPixels(0,0,1920,1080,GL_RGB,GL_UNSIGNED_BYTE,(void*)surface->pixels);
+    glReadPixels(0,0,gameSettings->width,gameSettings->height,GL_RGB,GL_UNSIGNED_BYTE,(void*)surface->pixels);
 
     SDL_SaveBMP(surface,filename);
+
+    cout << "screenshot saved as " << filename << "." << endl;
 
     SDL_FreeSurface(surface);
 

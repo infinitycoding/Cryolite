@@ -18,12 +18,12 @@ class Controls : EventHandle
         virtual void handleKeyDown(SDL_KeyboardEvent *e);
         virtual void handleKeyUp(SDL_KeyboardEvent *e);
         virtual void handleMouseMotion(SDL_MouseMotionEvent *e);
-        static void screenshot(const char* filename);
+        virtual void screenshot(const char* filename);
 
         virtual void toggle_printFPS();
         virtual void move_cube();
 
-        static void toggle_ghost();
+        virtual void toggle_ghost();
 
     private:
         void rotation_handler(Camera *cam);
