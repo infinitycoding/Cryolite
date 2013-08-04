@@ -76,7 +76,7 @@ int main(int argc, char *argv[]){
     Lamp *Spot = new Lamp();
     Spot->setDiffuseLight(10, 0, 0, 1.0);
     Spot->setPosition(vector(0,10,0));
-    Spot->setCutOf(90);
+    //Spot->setCutOf(90);
     Spot->setQuadAttenaution(0.001);
 
     Spot->directed(true);
@@ -84,12 +84,13 @@ int main(int argc, char *argv[]){
     Spot->activate();
     mainScene->addLamp(Spot);
 
+    INIT_Models(mainScene);
 
     Controls playerControls = Controls(&mainwindow);
     mainScene->GlobalAmbience = new GlobalLight(0.15,0.15,0.15,1);
 
     // Draw test models
-    INIT_Models(mainScene);
+
 
     gravelcube->relativeToObject = iccube;
 
@@ -155,9 +156,8 @@ int main(int argc, char *argv[]){
 
         glBindTexture( GL_TEXTURE_2D, 0);
 
-
+        mainScene->listenerPosition = Player->getPosition();
         mainScene->render();
-        shotSound->refreshPosition(Player->getPosition(),iccube->getPosition());
 
 
 

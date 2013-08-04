@@ -58,6 +58,7 @@ Controls::Controls(SDL* window) : EventHandle()
     shotSound->settings->loop = true;
     shotSound->refreshProperties();
     shotSound->play();
+    iccube->sounds->PushFront(shotSound);
 }
 
 void Controls::handleQuit()
