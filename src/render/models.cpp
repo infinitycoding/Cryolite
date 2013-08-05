@@ -11,12 +11,24 @@ Object *gravelcube;
 void INIT_Models(Scene *sce)
 {
     iccube = new Object(OBJECT(iccube.obj), "iccube", vector(0, 0, 0));
+    boundBox *bb = new boundBox;
+    bb->base = vector(-1, -1, -1);
+    bb->height = 2;
+    bb->length = 2;
+    bb->width = 2;
+    iccube->objType->boundBoxes->PushFront(bb);
     sce->addObject(iccube);
 
     Object *ground = new Object(OBJECT(ground.obj), "ground", vector(0, -3, 0));
     sce->addObject(ground);
 
     Object *woodcube = new Object(OBJECT(bettercube.obj), "Cube", vector(5, 0, 0));
+    bb = new boundBox;
+    bb->base = vector(-1, -1, -1);
+    bb->height = 2;
+    bb->length = 2;
+    bb->width = 2;
+    woodcube->objType->boundBoxes->PushFront(bb);
     sce->addObject(woodcube);
 
     gravelcube = new Object(OBJECT(cube.obj), "cube.001", vector(-5, 0, 0));
