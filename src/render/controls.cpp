@@ -109,6 +109,9 @@ void Controls::handleKeyDown(SDL_KeyboardEvent *e)
         case SDLK_f:
             toggle_printFPS();
             break;
+        case SDLK_g:
+            toggle_ghost();
+            break;
         case SDLK_e:
             move_cube();
             break;
@@ -242,18 +245,14 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
 
     if(move_up)
     {
-        moveDirection =  vector(0 , 1, 0);
-        moveDirection *= MOVEMENT_WIDTH;
-
-        cam->localPosition += moveDirection;
+        if(!ghost_mode)
+            cam->localPosition += vector(0, MOVEMENT_WIDTH, 0);
     }
 
     if(move_down)
     {
-        moveDirection =  vector(0 , -1, 0);
-        moveDirection *= MOVEMENT_WIDTH;
-
-        cam->localPosition += moveDirection;
+        if(!ghost_mode)
+            cam->localPosition += vector(0, -MOVEMENT_WIDTH, 0);
     }
 
 }
@@ -270,6 +269,6 @@ void Controls::toggle_printFPS()
 
 void Controls::move_cube()
 {
-    vector *testForce = new vector(0, 0, 3.0);
+    vector *testForce = new vector(3.0, 0, 0);
     iccube->physObj.forces->PushFront(testForce);
 }
