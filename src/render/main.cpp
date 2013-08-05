@@ -157,6 +157,7 @@ int main(int argc, char *argv[]){
         glBindTexture( GL_TEXTURE_2D, 0);
 
         mainScene->listenerPosition = Player->getPosition();
+        Sun->setPosition(Player->getPosition()-vector(0,0,60));
         mainScene->render();
 
 
