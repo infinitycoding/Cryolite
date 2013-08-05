@@ -37,10 +37,10 @@ struct vertexNumber     // a struct which shows the number of object vertices, t
 // many structs are following here, all defining bound objects
 struct boundBox         // Bound Box
 {
-    Vertex3D base;
-    vector height;
-    vector widht;
-    vector length;
+    vector base;
+    float height;
+    float width;
+    float length;
 };
 
 struct boundSphere      // Bound Sphere
@@ -69,15 +69,6 @@ struct boundCylinder    // Bound Cylinder
     GLfloat radian;
     GLfloat height;
 };
-
-
-// many typedefs so i don't have to place struct before the structs
-typedef struct vertexNumber vertexNumber;
-typedef struct boundBox boundBox;
-typedef struct boundSphere boundSphere;
-typedef struct boundPlane boundPlane;
-typedef struct boundTriangel boundTriangel;
-typedef struct boundCylinder boundCylinder;
 
 
 
