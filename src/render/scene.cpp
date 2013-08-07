@@ -157,10 +157,7 @@ void Scene::render()
                 Lamp *currentLamp = L.GetCurrent();
                 if(currentLamp->activ)
                 {
-                    if(currentLamp->relativeToObject)
-                        currentLamp->setPosition(currentLamp->relativeToObject->getPosition());
-                    else
-                        currentLamp->refreshPosition();
+                    currentLamp->refreshPosition();
                 }
                 L.Next();
             }

@@ -10,10 +10,10 @@
 
 typedef enum
 {
-    constant,
-    linear,
-    quadric
-}attenaution_t;
+    lamp,
+    object,
+    none,
+}relativt_t;
 
 
 class LightManager
@@ -48,10 +48,6 @@ class Lamp
          Lamp();
          Lamp(Lamp *L);
          Lamp(Lamp *L, vector pos);
-         Lamp(Lamp *L, vector pos, vector dir);
-
-         Lamp(Lamp *L, vector *pos);
-         Lamp(Lamp *L, vector *pos, vector *dir);
 
 
          void setAmbientLight(GLfloat r, GLfloat g, GLfloat b, GLfloat t);
@@ -89,7 +85,29 @@ class Lamp
 
          void refresh();
 
+
+
         ~Lamp();
+
+        vector getPosition();
+
+
+        relativt_t getRelation();
+
+        void setRelation(relativt_t r);
+        void setRelation(Object *o);
+        void setRelation(Lamp *l);
+
+        vector localPosition;
+
+        friend class Scene;
+
+        private:
+        LightManager *LM;
+        relativt_t rel;
+        Object *relativeToObject;
+        Lamp  *relativeToLamp;
+
 
         GLint Lightnum;
         GLfloat ambient[4];
@@ -105,8 +123,7 @@ class Lamp
         bool activ;
         bool modified;
         bool reg;
-        Object *relativeToObject;
-        LightManager *LM;
+
 
 };
 

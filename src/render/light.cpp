@@ -145,7 +145,7 @@ Lamp::Lamp(Lamp *L)
         position[i]  = L->position[i];
         direction[i] = L->direction[i];
     }
-
+    localPosition = L->localPosition;
     exponent = L->exponent;
     cutof = L->cutof;
     ConstAttenaution = L->ConstAttenaution;
@@ -156,6 +156,8 @@ Lamp::Lamp(Lamp *L)
     reg = false;
     activ = L->activ;
     relativeToObject = L->relativeToObject;
+    relativeToLamp = L->relativeToLamp;
+    rel = L->rel;
 }
 
 
@@ -172,6 +174,7 @@ Lamp::Lamp(Lamp *L, vector pos)
     position[0] = pos.x;
     position[1] = pos.y;
     position[2] = pos.z;
+    localPosition = pos;
     exponent = L->exponent;
     cutof = L->cutof;
     ConstAttenaution = L->ConstAttenaution;
@@ -182,93 +185,10 @@ Lamp::Lamp(Lamp *L, vector pos)
     reg = false;
     activ = L->activ;
     relativeToObject = L->relativeToObject;
+    relativeToLamp = L->relativeToLamp;
+    rel = L->rel;
 }
 
-
-Lamp::Lamp(Lamp *L, vector *pos)
-{
-    for(int i = 0; i < 4; i++)
-    {
-        ambient[i]   = L->ambient[i];
-        diffuse[i]   = L->diffuse[i];
-        specular[i]  = L->specular[i];
-        direction[i] = L->direction[i];
-    }
-    position[0] = pos->x;
-    position[1] = pos->y;
-    position[2] = pos->z;
-    position[3] = 0;
-    exponent = L->exponent;
-    cutof = L->cutof;
-    ConstAttenaution = L->ConstAttenaution;
-    LinAttenaution = L->LinAttenaution;
-    QuadAttenaution = L->QuadAttenaution;
-    activ = L->activ;
-    modified = true;
-    reg = false;
-    activ = L->activ;
-    relativeToObject = L->relativeToObject;
-}
-
-Lamp::Lamp(Lamp *L, vector pos, vector dir)
-{
-    for(int i = 0; i < 4; i++)
-    {
-        ambient[i]   = L->ambient[i];
-        diffuse[i]   = L->diffuse[i];
-        specular[i]  = L->specular[i];
-    }
-
-    position[0]  = pos.x;
-    position[1]  = pos.y;
-    position[2]  = pos.z;
-    position[3]  = 0;
-
-    direction[0]  = dir.x;
-    direction[1]  = dir.y;
-    direction[2]  = dir.z;
-
-    exponent = L->exponent;
-    cutof = L->cutof;
-    ConstAttenaution = L->ConstAttenaution;
-    LinAttenaution = L->LinAttenaution;
-    QuadAttenaution = L->QuadAttenaution;
-    activ = L->activ;
-    modified = true;
-    reg = false;
-    activ = L->activ;
-    relativeToObject = L->relativeToObject;
-}
-
-Lamp::Lamp(Lamp *L, vector *pos, vector *dir)
-{
-    for(int i = 0; i < 4; i++)
-    {
-        ambient[i]   = L->ambient[i];
-        diffuse[i]   = L->diffuse[i];
-        specular[i]  = L->specular[i];
-    }
-
-    position[0]  = pos->x;
-    position[1]  = pos->y;
-    position[2]  = pos->z;
-    position[3]  = 0;
-
-    direction[0]  = dir->x;
-    direction[1]  = dir->y;
-    direction[2]  = dir->z;
-
-    exponent = L->exponent;
-    cutof = L->cutof;
-    ConstAttenaution = L->ConstAttenaution;
-    LinAttenaution = L->LinAttenaution;
-    QuadAttenaution = L->QuadAttenaution;
-    activ = L->activ;
-    modified = true;
-    reg = false;
-    activ = L->activ;
-    relativeToObject = L->relativeToObject;
-}
 
 
 void Lamp::setAmbientLight(GLfloat r, GLfloat g, GLfloat b, GLfloat t)
@@ -423,9 +343,11 @@ void Lamp::setDirection(GLfloat *L)
 
 void Lamp::setPosition(vector p)
 {
-    position[0] = p.x;
-    position[1] = p.y;
-    position[2] = p.z;
+    localPosition.setvalue(p);
+
+    position[0] = getPosition().x;
+    position[1] = getPosition().y;
+    position[2] = getPosition().z;
 
     if(reg)
     {
@@ -436,19 +358,10 @@ void Lamp::setPosition(vector p)
 }
 
 
-void Lamp::setPosition(vector *p)
-{
-    position[0] = p->x;
-    position[1] = p->y;
-    position[2] = p->z;
+void Lamp::setPosition(vector *p){setPosition(*p);}
 
-    if(reg)
-    {
-        glLightfv(Lightnum, GL_POSITION, position);
-    }
-    else
-        modified = true;
-}
+
+
 void Lamp::setPosition(GLfloat *L)
 {
     for(int i = 0; i< 3; i++)
@@ -503,6 +416,10 @@ void Lamp::setStandart()
     ConstAttenaution = 1;
     LinAttenaution = 0;
     QuadAttenaution = 0;
+    rel = none;
+    relativeToObject = NULL;
+    relativeToLamp = NULL;
+    localPosition = vector();
     if(reg)
         refresh();
     else
@@ -513,10 +430,10 @@ void Lamp::refresh()
 {
     if(reg)
     {
+        refreshPosition();
         glLightfv(Lightnum, GL_AMBIENT,  ambient);
         glLightfv(Lightnum, GL_DIFFUSE,  diffuse);
         glLightfv(Lightnum, GL_SPECULAR,  specular);
-        glLightfv(Lightnum, GL_POSITION, position);
         glLightfv(Lightnum, GL_SPOT_DIRECTION, direction);
         glLightf(Lightnum, GL_SPOT_EXPONENT, exponent);
         glLightf(Lightnum, GL_SPOT_CUTOFF, cutof);
@@ -586,6 +503,10 @@ void Lamp::setQuadAttenaution(GLfloat a)
 
 void Lamp::refreshPosition(void)
 {
+        position[0] = getPosition().x;
+        position[1] = getPosition().y;
+        position[2] = getPosition().z;
+
     if(reg)
         glLightfv(Lightnum, GL_POSITION, position);
     else
@@ -608,4 +529,42 @@ void Lamp::deactivate()
         glDisable(Lightnum);
     else
         modified = true;
+}
+
+vector Lamp::getPosition()
+{
+    switch(rel)
+    {
+        case none:
+            return vector(localPosition);
+        break;
+
+        case lamp:
+            return vector(relativeToLamp->getPosition()+vector(localPosition));
+        break;
+
+        case object:
+            return vector(relativeToObject->getPosition()+vector(localPosition));
+        break;
+    };
+
+    return vector();
+}
+
+
+relativt_t Lamp::getRelation()
+{
+    return rel;
+}
+
+void Lamp::setRelation(Object *o)
+{
+    rel = object;
+    relativeToObject = o;
+}
+
+void Lamp::setRelation(Lamp *l)
+{
+    rel = lamp;
+    relativeToLamp = l;
 }

@@ -64,7 +64,7 @@ int main(int argc, char *argv[]){
 
     Lamp *Sun = new Lamp();
     Sun->setDiffuseLight(10, 1, 0, 1.0);
-    Sun->setPosition(vector(0,0,50));
+    Sun->setPosition(vector(0,0,60));
     Sun->setQuadAttenaution(0.001);
 
     Sun->directed(true);
@@ -89,6 +89,7 @@ int main(int argc, char *argv[]){
     Controls playerControls = Controls(&mainwindow);
     mainScene->GlobalAmbience = new GlobalLight(0.15,0.15,0.15,1);
 
+
     // Draw test models
 
 
@@ -106,11 +107,11 @@ int main(int argc, char *argv[]){
     glEnable(GL_COLOR_MATERIAL);
 
     /*glEnable(GL_FOG);
-    glFogfv(GL_FOG_COLOR, fogcolor);
-    glFogi(GL_FOG_MODE, GL_LINEAR);
-    glFogf(GL_FOG_DENSITY, 0.05);
-    glFogf(GL_FOG_START, 40);
-    glFogf(GL_FOG_END, 50);*/
+glFogfv(GL_FOG_COLOR, fogcolor);
+glFogi(GL_FOG_MODE, GL_LINEAR);
+glFogf(GL_FOG_DENSITY, 0.05);
+glFogf(GL_FOG_START, 40);
+glFogf(GL_FOG_END, 50);*/
 
 
 
@@ -146,7 +147,7 @@ int main(int argc, char *argv[]){
 
         testLevel.refreshBackgroundMusic(Player->getPosition());
 
-        mainwindow.pollEvents();    // Eventhandler
+        mainwindow.pollEvents(); // Eventhandler
 
         glMatrixMode(GL_MODELVIEW);
 
@@ -157,7 +158,6 @@ int main(int argc, char *argv[]){
         glBindTexture( GL_TEXTURE_2D, 0);
 
         mainScene->listenerPosition = Player->getPosition();
-        Sun->setPosition(Player->getPosition()-vector(0,0,60));
         mainScene->render();
 
 
@@ -178,7 +178,7 @@ int main(int argc, char *argv[]){
 
         drawHUD();
 
-        SDL_GL_SwapBuffers();   // Changes frontbuffer and backbuffer
+        SDL_GL_SwapBuffers(); // Changes frontbuffer and backbuffer
     }
 
     return 0;
