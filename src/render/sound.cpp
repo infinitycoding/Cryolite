@@ -180,7 +180,7 @@ bool SoundCache::addSound(const char * file)
 
     SoundEntry *newEntry = new SoundEntry;
     newEntry->chunk = sound;
-    newEntry->buffer = SDL::chuckToBuffer(sound);
+    newEntry->buffer = SDL::chunkToBuffer(sound);
     newEntry->name = new char[strlen(file)+1];
     strcpy(newEntry->name,file);
     SoundList.PushFront(newEntry);
