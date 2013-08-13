@@ -58,7 +58,7 @@ class SDL
         static GLuint loadTexture(const char *filename,GLenum MinFilter,GLenum MagFilter);
         static GLuint surfToTexture(SDL_Surface *surf);
         static GLuint surfToTexture(SDL_Surface *surf,GLenum MinFilter,GLenum MagFilter);
-        static ALuint chuckToBuffer(Mix_Chunk *sound);
+        static ALuint chunkToBuffer(Mix_Chunk *sound);
 
         void addHandle(EventHandle *Instance);
         int  removeHandle(EventHandle *Instance);

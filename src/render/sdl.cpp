@@ -263,7 +263,7 @@ GLuint SDL::surfToTexture(SDL_Surface *surf,GLenum MinFilter,GLenum MagFilter)
     return GL_Texture;
 }
 
-ALuint SDL::chuckToBuffer(Mix_Chunk *sound)
+ALuint SDL::chunkToBuffer(Mix_Chunk *sound)
 {
     ALuint buffer;
     alGenBuffers(1, &buffer);
