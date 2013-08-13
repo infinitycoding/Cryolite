@@ -103,7 +103,7 @@ int main(int argc, char *argv[]){
     glEnable(GL_BLEND);
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable( GL_TEXTURE_2D );
-    glEnable(GL_MULTISAMPLE_ARB);
+    glEnable(0x809D);//GL_MULTISAMPLE_ARB
     glEnable(GL_COLOR_MATERIAL);
 
     /*glEnable(GL_FOG);

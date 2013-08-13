@@ -190,7 +190,7 @@ SDL_Surface *Font::atosurf(const char *text, const char *fontname, SDL_Color fon
     if(TrueTypeFonts->IsEmpty())        // first check if the list is empty
     {
         fprintf(stderr, "There is no font loaded, so it's impossible to use one. \n");
-        return false;
+        return NULL;
     }
 
     ListIterator<fontEntry> i = ListIterator<fontEntry>(TrueTypeFonts);
@@ -212,7 +212,7 @@ SDL_Surface *Font::atosurf(const char *text, const char *fontname, SDL_Color fon
     if(found_font == false)                 // end function if the font is not in the list
     {
         fprintf(stderr, "The font could not be used, because it's not loaded. \n");
-        return false;
+        return NULL;
     }
 
 

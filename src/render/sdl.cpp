@@ -4,6 +4,15 @@
 #include <sdl.h>
 #include <settings.h>
 
+#ifdef _WIN32
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glext.h>
+#define ON_WINDOWS true
+#endif
+#ifndef _WIN32
+#define ON_WINDOWS false
+#endif
 
 using namespace std;
 extern Settings *gameSettings;
@@ -186,8 +195,9 @@ GLuint SDL::loadTexture(const char *filename,GLenum MinFilter,GLenum MagFilter)
 
     glEnable(GL_TEXTURE_2D);
     glGenTextures( 1, &GL_Texture );
+    #ifndef _WIN32
     glActiveTextureARB(GL_Texture);
-
+    #endif
     glBindTexture( GL_TEXTURE_2D, GL_Texture );
     glTexImage2D( GL_TEXTURE_2D, 0, nOfColors, SDL_Texture->w, SDL_Texture->h, 0,texture_format, GL_UNSIGNED_BYTE, SDL_Texture->pixels );
 
@@ -241,8 +251,9 @@ GLuint SDL::surfToTexture(SDL_Surface *surf,GLenum MinFilter,GLenum MagFilter)
 
     glEnable(GL_TEXTURE_2D);
     glGenTextures( 1, &GL_Texture );
+    #ifndef _WIN32
     glActiveTextureARB(GL_Texture);
-
+    #endif
     glBindTexture( GL_TEXTURE_2D, GL_Texture );
     glTexImage2D( GL_TEXTURE_2D, 0, nOfColors, surf->w, surf->h, 0,texture_format, GL_UNSIGNED_BYTE, surf->pixels );
 
