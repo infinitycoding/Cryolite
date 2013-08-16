@@ -97,10 +97,10 @@ bool Profiler::saveProfile(const char *filename)
     if((savefile = fopen(filename, "w")) == NULL)
         return false;
 
-    fprintf(savefile, "Gesamt : %u\n", allTicks);
+    fprintf(savefile, "Gesamt : %u : 100%%\n", allTicks);
 
     for(counter = 0; counter <= highestProfilePlot; counter++)
-        fprintf(savefile, "%u : %u\n", counter, profilePlots[counter]);
+        fprintf(savefile, "%u : %u : %g%%\n", counter, profilePlots[counter], 100 * ((float)profilePlots[counter] / allTicks));
 
     if(!fclose(savefile))
         return false;

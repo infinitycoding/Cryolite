@@ -61,6 +61,10 @@ bool Settings::loadSettingsFile(const char *filename)
         {
             captureMouse = getBool(&line_ptr, breakChars);
         }
+        else if(strncmp(line, "drawHUD", 7) == 0)
+        {
+            hud = getBool(&line_ptr, breakChars);
+        }
         else if(strncmp(line, "multisamples", 12) == 0)
         {
             multisamples = getInt(&line_ptr, breakChars);
@@ -108,6 +112,7 @@ void Settings::activateSettings()
 void Settings::initSettings()
 {
     captureMouse = true;
+    hud = true;
     width = 640;
     height = 480;
     sdlFlags = SDL_OPENGL|SDL_HWSURFACE;

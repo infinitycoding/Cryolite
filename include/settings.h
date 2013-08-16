@@ -24,6 +24,7 @@ class Settings : public ExtParser
 
 
         bool captureMouse;
+        bool hud;
         int width;
         int height;
         int sdlFlags;

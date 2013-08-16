@@ -107,10 +107,13 @@ void Controls::handleKeyDown(SDL_KeyboardEvent *e)
             move_down=true;
             break;
         case SDLK_f:
-            toggle_printFPS();
+            printFPS = toggle(printFPS);
             break;
         case SDLK_g:
-            toggle_ghost();
+            ghost_mode = toggle(ghost_mode);
+            break;
+        case SDLK_h:
+            gameSettings->hud = toggle(gameSettings->hud);
             break;
         case SDLK_e:
             move_cube();
@@ -161,14 +164,6 @@ void Controls::handleMouseMotion(SDL_MouseMotionEvent *e)
     down_rotation = e->yrel;
 }
 
-
-void Controls::toggle_ghost()
-{
-    if(ghost_mode)
-        ghost_mode = false;
-    else
-        ghost_mode = true;
-}
 
 void Controls::controls_handler(Camera *cam)
 {
@@ -257,18 +252,18 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
 
 }
 
-void Controls::toggle_printFPS()
-{
-        if(printFPS)
-            printFPS = false;
-        else
-            printFPS = true;
-
-    return;
-}
 
 void Controls::move_cube()
 {
     vector *testForce = new vector(3.0, 0, 0);
     iccube->physObj.forces->PushFront(testForce);
+}
+
+
+bool Controls::toggle(bool parameter)
+{
+    if(parameter)
+        return false;
+    else
+        return true;
 }

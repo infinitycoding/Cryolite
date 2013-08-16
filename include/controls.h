@@ -20,10 +20,9 @@ class Controls : EventHandle
         virtual void handleMouseMotion(SDL_MouseMotionEvent *e);
         virtual void screenshot(const char* filename);
 
-        virtual void toggle_printFPS();
         virtual void move_cube();
 
-        virtual void toggle_ghost();
+        virtual bool toggle(bool parameter);
 
     private:
         void rotation_handler(Camera *cam);

@@ -175,8 +175,8 @@ glFogf(GL_FOG_END, 50);*/
 
 
 
-
-        drawHUD();
+        if(gameSettings->hud)
+            drawHUD();
 
         SDL_GL_SwapBuffers(); // Changes frontbuffer and backbuffer
     }
