@@ -15,8 +15,8 @@
 #define ROTATION_SPEED 0.5
 #define MOVEMENT_SPEED 10
 
-#define ROTATION_WIDTH (ROTATION_SPEED/mainScene->averageFPS)
-#define MOVEMENT_WIDTH (MOVEMENT_SPEED/mainScene->averageFPS)
+#define ROTATION_WIDTH (ROTATION_SPEED/mainScene->fps.get())
+#define MOVEMENT_WIDTH (MOVEMENT_SPEED/mainScene->fps.get())
 
 
 float Controls::right_rotation;

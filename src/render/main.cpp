@@ -129,21 +129,9 @@ glFogf(GL_FOG_END, 50);*/
 
 
 
-    float lastFPS = 0;
-    mainScene->lasttick = SDL_GetTicks();
-
     while(render){ //render
-        for(int i = 0; i<9;i++)
-        {
-            printf("\b");
-        }
-
-        if(printFPS && (lastFPS<=mainScene->averageFPS-0.05 || lastFPS>=mainScene->averageFPS+0.05))
-        {
-
-            printf ("%4.1f FPS",mainScene->averageFPS);
-            lastFPS = mainScene->averageFPS;
-        }
+        if(printFPS)
+            mainScene->fps.print();
 
         testLevel.refreshBackgroundMusic(Player->getPosition());
 

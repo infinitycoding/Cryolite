@@ -60,6 +60,7 @@
 		<Unit filename="include/collision.h" />
 		<Unit filename="include/controls.h" />
 		<Unit filename="include/font.h" />
+		<Unit filename="include/fps.h" />
 		<Unit filename="include/general_def.h" />
 		<Unit filename="include/level.h" />
 		<Unit filename="include/light.h" />
@@ -75,6 +76,7 @@
 		<Unit filename="include/scene.h" />
 		<Unit filename="include/sdl.h" />
 		<Unit filename="include/settings.h" />
+		<Unit filename="include/shader.h" />
 		<Unit filename="include/sound.h" />
 		<Unit filename="include/texture.h" />
 		<Unit filename="include/ui.h" />
@@ -90,6 +92,7 @@
 		<Unit filename="src/render/camera.cpp" />
 		<Unit filename="src/render/controls.cpp" />
 		<Unit filename="src/render/font.cpp" />
+		<Unit filename="src/render/fps.cpp" />
 		<Unit filename="src/render/level.cpp" />
 		<Unit filename="src/render/light.cpp" />
 		<Unit filename="src/render/luaWrapper.cpp" />
@@ -102,6 +105,7 @@
 		<Unit filename="src/render/scene.cpp" />
 		<Unit filename="src/render/sdl.cpp" />
 		<Unit filename="src/render/settings.cpp" />
+		<Unit filename="src/render/shader.cpp" />
 		<Unit filename="src/render/sound.cpp" />
 		<Unit filename="src/render/texture.cpp" />
 		<Unit filename="src/render/ui.cpp" />

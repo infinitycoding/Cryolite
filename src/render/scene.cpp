@@ -15,14 +15,8 @@ Scene::Scene()
     CL = new CollisionLocate(objectList);
     LM = new LightManager();
     GlobalAmbience = NULL;
-    currenttick = 0;
-    ticcount = 0;
-    tickbundle = 3;
-    sum = 0;
-    lasttick = SDL_GetTicks();
-    accuracy = 60;
-    averageFPS = 60;
     listenerPosition = vector(0,0,0);
+    fps = FPS();
 
 }
 
@@ -134,7 +128,7 @@ void Scene::render()
     }
 
 
-    calculateFPS();
+    fps.calculate();
 
     // Interpolate Physics
     Object *currentObject = NULL;
@@ -142,7 +136,7 @@ void Scene::render()
     while(!O.IsLast())
     {
         currentObject = O.GetCurrent();
-        currentObject->physObj.interpolatePhysics(&currentObject->localPosition, averageFPS);
+        currentObject->physObj.interpolatePhysics(&currentObject->localPosition, fps.get());
         O.Next();
     }
 
@@ -288,24 +282,4 @@ void Scene::renderPolygones(Object *currentObject)
 
         p.Next();
     }
-}
-
-
-void Scene::calculateFPS(void)
-{
-    currenttick = SDL_GetTicks();
-    if(ticcount==tickbundle)
-    {
-        averageFPS = sum/tickbundle;
-        sum = 0;
-        ticcount = 0;
-        tickbundle = accuracy;
-    }
-    else
-    {
-        if(currenttick-lasttick > 0)
-            sum +=(1000.0/(float)(currenttick-lasttick));
-            ticcount++;
-    }
-    lasttick = currenttick;
 }

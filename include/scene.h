@@ -7,6 +7,7 @@
 #include <light.h>
 #include <collision.h>
 #include <PhysicsEngine.h>
+#include <fps.h>
 
 
 
@@ -34,26 +35,17 @@ class Scene
         bool currentScene;
         GlobalLight *GlobalAmbience;
         CollisionLocate *CL;
-
-        int lasttick;
-        int accuracy;
-        float averageFPS;
+        FPS fps;
 
         vector listenerPosition;
 
 
 
     private:
-        void calculateFPS(void);
         void renderPolygones(Object *currentObject);
         void resetLights(void);
 
         LightManager *LM;
-        int currenttick;
-        int ticcount;
-        int tickbundle;
-        double sum;
-
 };
 
 
