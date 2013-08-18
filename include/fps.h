@@ -7,6 +7,8 @@
 
 #include <SDL.h>
 
+#include <settings.h>
+
 
 
 class FPS

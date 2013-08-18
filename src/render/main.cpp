@@ -29,7 +29,7 @@
 #undef main
 #endif
 
-Settings *gameSettings;
+EngineSettings *gameSettings;
 Scene *mainScene;
 
 bool printFPS = false;
@@ -54,7 +54,7 @@ int main(int argc, char *argv[]){
 
     cout << endl;
 
-    gameSettings = new Settings("settings");
+    gameSettings = new EngineSettings("settings.ini");
     //Create Window and Scene
     SDL mainwindow = SDL(gameSettings->width,gameSettings->height,gameSettings->sdlFlags,"Cryolite Engine");
     mainScene = new Scene();

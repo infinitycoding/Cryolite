@@ -6,13 +6,34 @@ using namespace std;
 
 
 
-Settings::Settings()
+bool Settings::loadSettingsFile(const char *filename)
+{
+    return true;
+}
+
+
+void Settings::activateSettings()
+{
+
+}
+
+
+void Settings::initSettings()
+{
+
+}
+
+
+
+
+
+EngineSettings::EngineSettings()
 {
     initSettings();
 }
 
 
-Settings::Settings(const char *filename)
+EngineSettings::EngineSettings(const char *filename)
 {
     initSettings();
 
@@ -20,20 +41,33 @@ Settings::Settings(const char *filename)
 }
 
 
-Settings::~Settings()
+EngineSettings::~EngineSettings()
 {
 
 }
 
 
-bool Settings::loadSettingsFile(const char *filename)
+bool EngineSettings::loadSettingsFile(const char *filename)
 {
     FILE *f;
     char line[MAX_LINELENGTH];
     char *line_ptr;
 
+    memset(line, '\0', sizeof(line));
+
     if((f = fopen(filename, "r")) == NULL)
         return false;
+
+    while(!feof(f) && strncmp(line, "[EngineSettings]", 15))
+        if(fgets(line, MAX_LINELENGTH, f) == NULL)
+            break;
+
+    if(feof(f))
+    {
+        cerr << "warning: could not find \"[EngineSettings]\" in file " << filename << "." << endl;
+        fclose(f);
+        return false;
+    }
 
     do
     {
@@ -81,8 +115,12 @@ bool Settings::loadSettingsFile(const char *filename)
         {
             fov = getFloat(&line_ptr, breakChars);
         }
+        else if(strncmp(line, "FPSAccuracy", 11) == 0)
+        {
+            FPSAccuracy = getInt(&line_ptr, breakChars);
+        }
 
-    }while(!feof(f));
+    }while(!feof(f) && strncmp(line, "[", 1));
 
     if(fclose(f) == 0)
         return false;
@@ -91,7 +129,7 @@ bool Settings::loadSettingsFile(const char *filename)
 }
 
 
-void Settings::activateSettings()
+void EngineSettings::activateSettings()
 {
     glLineWidth(lineWidth);
     glPointSize(pointSize);
@@ -109,7 +147,7 @@ void Settings::activateSettings()
 }
 
 
-void Settings::initSettings()
+void EngineSettings::initSettings()
 {
     captureMouse = true;
     hud = true;
@@ -117,6 +155,7 @@ void Settings::initSettings()
     height = 480;
     sdlFlags = SDL_OPENGL|SDL_HWSURFACE;
     multisamples = 4;
+    FPSAccuracy = 60;
     lineWidth = 1;
     pointSize = 1;
     fov = 80;

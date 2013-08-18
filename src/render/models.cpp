@@ -40,7 +40,7 @@ void INIT_Models(Scene *sce)
 
 
 
-extern Settings *gameSettings;
+extern EngineSettings *gameSettings;
 
 void drawHUD(void)
 {

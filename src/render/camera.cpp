@@ -6,7 +6,7 @@
 #include <settings.h>
 
 
-extern Settings *gameSettings;
+extern EngineSettings *gameSettings;
 
 
 Camera::Camera()

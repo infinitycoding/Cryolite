@@ -2,6 +2,10 @@
 
 
 
+extern EngineSettings *gameSettings;
+
+
+
 FPS::FPS()
 {
     currenttick = 0;
@@ -9,7 +13,7 @@ FPS::FPS()
     tickbundle = 3;
     sum = 0;
     lasttick = SDL_GetTicks();
-    accuracy = 60;
+    accuracy = gameSettings->FPSAccuracy;
     averageFPS = 60;
     lastFPS = 0;
 }

@@ -85,9 +85,9 @@ bool BasicParser::getBool(char **string, const charList endCharacters)
 
     getString(string, temp, endCharacters);
 
-    if(!strncmp(temp, "yes", 3) || !strncmp(temp, "true", 4) || !strncmp(temp, "activate", 8) || !strncmp(temp, "on", 2) || !strncmp(temp, "1", 1) || !strncmp(temp, "enable", 6))
+    if(!strncmp(temp, "yes", 3) || !strncmp(temp, "true", 4) || !strncmp(temp, "activate", 8) || !strncmp(temp, "on", 2) || !strncmp(temp, "1", 1) || !strncmp(temp, "enable", 6) || !strncmp(temp, "correct", 7) || !strncmp(temp, "positive", 8))
         return true;
-    else if(!strncmp(temp, "no", 2) || !strncmp(temp, "false", 5) || !strncmp(temp, "deactivate", 10) || !strncmp(temp, "off", 3) || !strncmp(temp, "0", 1) || !strncmp(temp, "disable", 7))
+    else if(!strncmp(temp, "no", 2) || !strncmp(temp, "false", 5) || !strncmp(temp, "deactivate", 10) || !strncmp(temp, "off", 3) || !strncmp(temp, "0", 1) || !strncmp(temp, "disable", 7) || !strncmp(temp, "incorrect", 9) || !strncmp(temp, "negative", 8))
         return false;
     else
     {

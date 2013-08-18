@@ -15,7 +15,7 @@
 #endif
 
 using namespace std;
-extern Settings *gameSettings;
+extern EngineSettings *gameSettings;
 
 
 SDL::SDL(int width, int height, int flags, const char* caption)

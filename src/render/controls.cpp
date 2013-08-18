@@ -36,7 +36,7 @@ bool Controls::already_initialized;
 
 extern bool printFPS;
 extern bool render;
-extern Settings *gameSettings;
+extern EngineSettings *gameSettings;
 extern Scene *mainScene;
 extern Object *iccube;
 Sound *shotSound;

@@ -15,12 +15,23 @@
 class Settings : public ExtParser
 {
     public:
-        Settings();
-        Settings(const char *filename);
-        virtual ~Settings();
+        virtual bool loadSettingsFile(const char *filename);
+        virtual void activateSettings();
 
-        bool loadSettingsFile(const char *filename);
-        void activateSettings();
+    protected:
+        virtual void initSettings();
+};
+
+
+class EngineSettings : public Settings
+{
+    public:
+        EngineSettings();
+        EngineSettings(const char *filename);
+        virtual ~EngineSettings();
+
+        virtual bool loadSettingsFile(const char *filename);
+        virtual void activateSettings();
 
 
         bool captureMouse;
@@ -29,12 +40,13 @@ class Settings : public ExtParser
         int height;
         int sdlFlags;
         int multisamples;
+        int FPSAccuracy;
         float lineWidth;
         float pointSize;
         float fov;
 
-    private:
-        void initSettings();
+    protected:
+        virtual void initSettings();
 };
 
 
