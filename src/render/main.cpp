@@ -19,6 +19,7 @@
 #include <settings.h>
 #include <sound.h>
 #include <luaWrapper.h>
+#include <shader.h>
 
 #ifdef DEBUG
 #include <profiler.h>

@@ -18,6 +18,7 @@
 #define SOUND_PATH "resource/sounds/"
 #define RESOURCE_PATH "resource/"
 #define SCRIPT_PATH "scripts/"
+#define SHADER_PATH "shaders/"
 
 #define OBJECT(FILE) OBJECT_PATH #FILE
 #define RESOURCE(FILE) RESOURCE_PATH #FILE
@@ -25,7 +26,7 @@
 #define FONT(FILE) FONT_PATH #FILE
 #define SOUND(FILE) SOUND_PATH #FILE
 #define SCRIPT(FILE) SCRIPT_PATH #FILE
-
+#define SHADER(FILE) SHADER_PATH #FILE
 
 
 
