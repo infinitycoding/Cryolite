@@ -1,10 +1,9 @@
+#define LUA_COMPAT_MODULE
+
 #include <luaWrapper.h>
 
 
-
 using namespace std;
-
-
 
 LUAScript::LUAScript()
 {
@@ -33,6 +32,7 @@ void LUAScript::initLUA()
 }
 
 
+
 bool LUAScript::loadScript(const char *Scriptname)
 {
     if (luaL_loadfile(lState, Scriptname))
@@ -42,7 +42,6 @@ bool LUAScript::loadScript(const char *Scriptname)
         lua_pop(lState,1);
         return false;
     }
-
     return true;
 }
 
@@ -58,6 +57,15 @@ bool LUAScript::runScript()
     }
 
     return true;
+}
+
+void LUAScript::addMetatable(const char * classname ,luaL_Reg *metatable)
+{
+    luaL_newmetatable(lState, classname);
+    luaL_setfuncs (lState, metatable, 0);
+    lua_pushvalue(lState, -1);
+    lua_setfield(lState, -1, "__index");
+    lua_setglobal(lState, classname);
 }
 
 

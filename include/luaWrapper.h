@@ -5,7 +5,10 @@
 
 #include <lua.hpp>
 
+
 #include <iostream>
+
+#include <sdl.h>
 
 
 
@@ -24,10 +27,12 @@ class LUAScript
 
         double insertDoubleVar(const char *varname, double value);
         double getDoubleVar(const char *varname);
+        void addMetatable(const char * classname ,luaL_Reg *metatable);
 
     protected:
         lua_State *lState;
 };
+
 
 
 #endif
