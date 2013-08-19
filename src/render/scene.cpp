@@ -165,30 +165,33 @@ void Scene::render()
             while(!O.IsLast())
             {
                 currentObject = O.GetCurrent();
-                if(!currentObject->objType->vertices->IsEmpty())
+                if(currentObject->objType)
                 {
-                    glPushMatrix();
+                    if(!currentObject->objType->vertices->IsEmpty())
+                    {
+                        glPushMatrix();
 
-                        glEnable(GL_TEXTURE_2D);
+                            glEnable(GL_TEXTURE_2D);
 
-                        if(currentObject->objType->ObjectTypeMaterial)
-                            glBindTexture( GL_TEXTURE_2D, currentObject->objType->ObjectTypeMaterial->ambiantTexture->nr);
-                        else
-                            glBindTexture( GL_TEXTURE_2D, 0);
-
-
-                        //Modify Model Matrix
-                        glRotatef(currentObject->Angle, currentObject->rotationAxis.x, currentObject->rotationAxis.y, currentObject->rotationAxis.z);
-                        glTranslatef(currentObject->getPosition().x,currentObject->getPosition().y,currentObject->getPosition().z);
-                        glScalef(currentObject->scale.x,currentObject->scale.y,currentObject->scale.z);
-
-                        //Render Polyganes
-                        if(!currentObject->objType->polygones->IsEmpty())
-                            renderPolygones(currentObject);
+                            if(currentObject->objType->ObjectTypeMaterial)
+                                glBindTexture( GL_TEXTURE_2D, currentObject->objType->ObjectTypeMaterial->ambiantTexture->nr);
+                            else
+                                glBindTexture( GL_TEXTURE_2D, 0);
 
 
-                    glPopMatrix();
+                            //Modify Model Matrix
+                            glRotatef(currentObject->Angle, currentObject->rotationAxis.x, currentObject->rotationAxis.y, currentObject->rotationAxis.z);
+                            glTranslatef(currentObject->getPosition().x,currentObject->getPosition().y,currentObject->getPosition().z);
+                            glScalef(currentObject->scale.x,currentObject->scale.y,currentObject->scale.z);
 
+                            //Render Polyganes
+                            if(!currentObject->objType->polygones->IsEmpty())
+                                renderPolygones(currentObject);
+
+
+                        glPopMatrix();
+
+                    }
                 }
 
                 if(!currentObject->sounds->IsEmpty())

@@ -74,6 +74,8 @@ bool CollisionLocate::checkApproximation(Object *obj1, Object *obj2)
 
 collision *CollisionLocate::checkCollision(Object *obj1, Object *obj2)
 {
+    if(!obj1->objType || !obj2->objType)
+        return NULL;
     collision *foundCollision = new collision();
     foundCollision->object1 = obj1;
     foundCollision->object2 = obj2;
