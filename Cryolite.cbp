@@ -82,7 +82,7 @@
 		<Unit filename="include/ui.h" />
 		<Unit filename="include/vector.h" />
 		<Unit filename="include/vertex.h" />
-		<Unit filename="settings" />
+		<Unit filename="settings.ini" />
 		<Unit filename="src/optimize/profiler.cpp">
 			<Option target="Debug" />
 		</Unit>
