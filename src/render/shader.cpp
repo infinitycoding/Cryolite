@@ -38,22 +38,29 @@ Shader::~Shader()
 }
 
 
-bool Shader::loadShader(const char *filename, shaderObject *shaderObj, ShaderType kind)
+bool Shader::loadShader(const char *filename, ShaderType kind)
 {
-    if(!setType(shaderObj->type, kind))
+    if(kind == vertexShader)
+    {
+        if(!loadShader(filename, vertShader, kind))
+        {
+            cerr << "error: unable to load shader " << filename << " ." << endl;
+            return false;
+        }
+    }
+    else if(kind == fragmentShader)
+    {
+        if(!loadShader(filename, fragShader, kind))
+        {
+            cerr << "error: unable to load shader " << filename << " ." << endl;
+            return false;
+        }
+    }
+    else
+    {
+        cerr << "warning: tryed to load a shader of an unknown or unsupported type." << endl;
         return false;
-
-    shaderObj->fileBuffer = loadASCIIFile(filename, shaderObj->fileLen);
-
-    if(shaderObj->fileBuffer == NULL)
-        return false;
-
-
-    shaderObj->object = glCreateShader(kind);
-
-    glShaderSourceARB(shaderObj->object, 1, (const char **)&shaderObj->fileBuffer, &shaderObj->fileLen);
-
-    glCompileShaderARB(shaderObj->object);
+    }
 
     return true;
 }
@@ -106,6 +113,29 @@ void Shader::initShader()
     fragShader->object = 0;
     fragShader->type = undefined;
 
+}
+
+
+bool Shader::loadShader(const char *filename, shaderObject *shaderObj, ShaderType kind)
+{
+    if(!setType(shaderObj->type, kind))
+        return false;
+
+    shaderObj->fileBuffer = loadASCIIFile(filename, shaderObj->fileLen);
+
+    if(shaderObj->fileBuffer == NULL)
+        return false;
+
+
+    shaderObj->object = glCreateShader(kind);
+
+    glShaderSourceARB(shaderObj->object, 1, (const char **)&shaderObj->fileBuffer, &shaderObj->fileLen);
+
+    glCompileShaderARB(shaderObj->object);
+
+    cout << "shader " << shaderObj->object << " " << filename << " successfully loaded." << endl;
+
+    return true;
 }
 
 

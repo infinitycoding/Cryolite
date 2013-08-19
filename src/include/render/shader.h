@@ -42,7 +42,7 @@ class Shader
         Shader(const char *vsfile, const char *fsfile);
         ~Shader();
 
-        bool loadShader(const char *filename, shaderObject *shaderObj, ShaderType kind);
+        bool loadShader(const char *filename, ShaderType kind);
         void make();
 
         bool activate();
@@ -50,6 +50,8 @@ class Shader
 
     protected:
         void initShader();
+
+        bool loadShader(const char *filename, shaderObject *shaderObj, ShaderType kind);
 
         int getFileLength(const char *filename);
         char *loadASCIIFile(const char *filename, int &len);

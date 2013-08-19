@@ -122,8 +122,8 @@ int main(int argc, char *argv[]){
 
     alDistanceModel( AL_LINEAR_DISTANCE );
 
-    /*Shader testShader = Shader(SHADER(vertexshader.glsl), SHADER(fragmentshader.glsl));
-    testShader.activate();*/
+    Shader testShader = Shader(SHADER(basicvertshader.glsl), SHADER(basicfragshader.glsl));
+    testShader.activate();
 
     while(render){ //render
         if(printFPS)
