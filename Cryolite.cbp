@@ -15,7 +15,6 @@
 					<Add option="-std=c++0x" />
 					<Add option="-g" />
 					<Add option="-DDEBUG" />
-					<Add directory="~/lua-5.2.2/src" />
 				</Compiler>
 				<Linker>
 					<Add option="-lGL" />
@@ -27,8 +26,6 @@
 					<Add option="-lopenal" />
 					<Add option="-lluabind" />
 					<Add option="-llua" />
-					<Add option="-L~/lua-5.2.2/src" />
-					<Add option="-I~/lua-5.2.2/src" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -47,41 +44,46 @@
 		<Compiler>
 			<Add option="-Wall" />
 			<Add option="`sdl-config --cflags`" />
-			<Add option="-I include" />
+			<Add option="-I src/include" />
+			<Add option="-I src/include/game" />
+			<Add option="-I src/include/render" />
+			<Add option="-I src/include/util" />
 			<Add directory="/usr/include/SDL" />
 		</Compiler>
 		<Linker>
 			<Add option="`sdl-config --libs`" />
 		</Linker>
-		<Unit filename="include/ExtMaths.h" />
-		<Unit filename="include/List.h" />
-		<Unit filename="include/PhysicsEngine.h" />
-		<Unit filename="include/camera.h" />
-		<Unit filename="include/collision.h" />
-		<Unit filename="include/controls.h" />
-		<Unit filename="include/font.h" />
-		<Unit filename="include/fps.h" />
-		<Unit filename="include/general_def.h" />
-		<Unit filename="include/level.h" />
-		<Unit filename="include/light.h" />
-		<Unit filename="include/luaWrapper.h" />
-		<Unit filename="include/material.h" />
-		<Unit filename="include/models.h" />
-		<Unit filename="include/object.h" />
-		<Unit filename="include/parser.h" />
-		<Unit filename="include/polygon.h" />
-		<Unit filename="include/profiler.h">
+		<Unit filename="src/include/physics/ExtMaths.h" />
+		<Unit filename="src/include/util/List.h" />
+		<Unit filename="src/include/physics/PhysicsEngine.h" />
+		<Unit filename="src/include/render/camera.h" />
+		<Unit filename="src/include/physics/collision.h" />
+		<Unit filename="src/include/game/controls.h" />
+		<Unit filename="src/include/render/font.h" />
+		<Unit filename="src/include/render/fps.h" />
+		<Unit filename="src/include/util/general_def.h" />
+		<Unit filename="src/include/render/level.h" />
+		<Unit filename="src/include/render/light.h" />
+		<Unit filename="src/include/lua/script.h" />
+		<Unit filename="src/include/render/material.h" />
+		<Unit filename="src/include/game/models.h" />
+		<Unit filename="src/include/render/object.h" />
+		<Unit filename="src/include/util/parser.h" />
+		<Unit filename="src/include/render/polygon.h" />
+		<Unit filename="src/include/optimize/profiler.h">
 			<Option target="Debug" />
 		</Unit>
-		<Unit filename="include/scene.h" />
-		<Unit filename="include/sdl.h" />
-		<Unit filename="include/settings.h" />
-		<Unit filename="include/shader.h" />
-		<Unit filename="include/sound.h" />
-		<Unit filename="include/texture.h" />
-		<Unit filename="include/ui.h" />
-		<Unit filename="include/vector.h" />
-		<Unit filename="include/vertex.h" />
+		<Unit filename="src/include/render/scene.h" />
+		<Unit filename="src/include/render/sdl.h" />
+		<Unit filename="src/include/util/settings.h" />
+		<Unit filename="src/include/render/shader.h" />
+		<Unit filename="src/include/render/sound.h" />
+		<Unit filename="src/include/render/texture.h" />
+		<Unit filename="src/include/render/ui.h" />
+		<Unit filename="src/include/util/vector.h" />
+		<Unit filename="src/include/render/vertex.h" />
+		<Unit filename="src/include/physics/PhysicsHandler.h" />
+		<Unit filename="src/include/physics/PhysicsProperty.h" />
 		<Unit filename="settings.ini" />
 		<Unit filename="src/optimize/profiler.cpp">
 			<Option target="Debug" />
@@ -90,26 +92,26 @@
 		<Unit filename="src/physics/PhysicsEngine.cpp" />
 		<Unit filename="src/physics/collision.cpp" />
 		<Unit filename="src/render/camera.cpp" />
-		<Unit filename="src/render/controls.cpp" />
+		<Unit filename="src/game/controls.cpp" />
 		<Unit filename="src/render/font.cpp" />
 		<Unit filename="src/render/fps.cpp" />
 		<Unit filename="src/render/level.cpp" />
 		<Unit filename="src/render/light.cpp" />
-		<Unit filename="src/render/luaWrapper.cpp" />
-		<Unit filename="src/render/main.cpp" />
+		<Unit filename="src/lua/script.cpp" />
+		<Unit filename="src/game/main.cpp" />
 		<Unit filename="src/render/material.cpp" />
-		<Unit filename="src/render/models.cpp" />
+		<Unit filename="src/game/models.cpp" />
 		<Unit filename="src/render/object.cpp" />
-		<Unit filename="src/render/parser.cpp" />
+		<Unit filename="src/util/parser.cpp" />
 		<Unit filename="src/render/polygon.cpp" />
 		<Unit filename="src/render/scene.cpp" />
 		<Unit filename="src/render/sdl.cpp" />
-		<Unit filename="src/render/settings.cpp" />
+		<Unit filename="src/util/settings.cpp" />
 		<Unit filename="src/render/shader.cpp" />
 		<Unit filename="src/render/sound.cpp" />
 		<Unit filename="src/render/texture.cpp" />
 		<Unit filename="src/render/ui.cpp" />
-		<Unit filename="src/render/vector.cpp" />
+		<Unit filename="src/util/vector.cpp" />
 		<Unit filename="src/render/vertex.cpp" />
 		<Extensions>
 			<envvars />

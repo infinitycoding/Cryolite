@@ -1,6 +1,8 @@
 obj/
 bin/
+lib/
 *.depend
 *.layout
 *.*~
-settings
+settings.ini
+
