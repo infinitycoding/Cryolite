@@ -26,6 +26,8 @@ class Shader
         Shader(const char *filename, ShaderType kind);
         ~Shader();
 
+        bool loadShader(const char *filename, ShaderType kind);
+
     protected:
         void initShader();
 

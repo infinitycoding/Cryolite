@@ -53,38 +53,42 @@
 		<Linker>
 			<Add option="`sdl-config --libs`" />
 		</Linker>
-		<Unit filename="src/include/physics/ExtMaths.h" />
-		<Unit filename="src/include/util/List.h" />
-		<Unit filename="src/include/physics/PhysicsEngine.h" />
-		<Unit filename="src/include/render/camera.h" />
-		<Unit filename="src/include/physics/collision.h" />
+		<Unit filename="settings.ini" />
+		<Unit filename="src/game/controls.cpp" />
+		<Unit filename="src/game/main.cpp" />
+		<Unit filename="src/game/models.cpp" />
 		<Unit filename="src/include/game/controls.h" />
-		<Unit filename="src/include/render/font.h" />
-		<Unit filename="src/include/render/fps.h" />
-		<Unit filename="src/include/util/general_def.h" />
-		<Unit filename="src/include/render/level.h" />
-		<Unit filename="src/include/render/light.h" />
-		<Unit filename="src/include/lua/script.h" />
-		<Unit filename="src/include/render/material.h" />
 		<Unit filename="src/include/game/models.h" />
-		<Unit filename="src/include/render/object.h" />
-		<Unit filename="src/include/util/parser.h" />
-		<Unit filename="src/include/render/polygon.h" />
+		<Unit filename="src/include/lua/script.h" />
 		<Unit filename="src/include/optimize/profiler.h">
 			<Option target="Debug" />
 		</Unit>
+		<Unit filename="src/include/physics/ExtMaths.h" />
+		<Unit filename="src/include/physics/PhysicsEngine.h" />
+		<Unit filename="src/include/physics/PhysicsHandler.h" />
+		<Unit filename="src/include/physics/PhysicsProperty.h" />
+		<Unit filename="src/include/physics/collision.h" />
+		<Unit filename="src/include/render/camera.h" />
+		<Unit filename="src/include/render/font.h" />
+		<Unit filename="src/include/render/fps.h" />
+		<Unit filename="src/include/render/level.h" />
+		<Unit filename="src/include/render/light.h" />
+		<Unit filename="src/include/render/material.h" />
+		<Unit filename="src/include/render/object.h" />
+		<Unit filename="src/include/render/polygon.h" />
 		<Unit filename="src/include/render/scene.h" />
 		<Unit filename="src/include/render/sdl.h" />
-		<Unit filename="src/include/util/settings.h" />
 		<Unit filename="src/include/render/shader.h" />
 		<Unit filename="src/include/render/sound.h" />
 		<Unit filename="src/include/render/texture.h" />
 		<Unit filename="src/include/render/ui.h" />
-		<Unit filename="src/include/util/vector.h" />
 		<Unit filename="src/include/render/vertex.h" />
-		<Unit filename="src/include/physics/PhysicsHandler.h" />
-		<Unit filename="src/include/physics/PhysicsProperty.h" />
-		<Unit filename="settings.ini" />
+		<Unit filename="src/include/util/List.h" />
+		<Unit filename="src/include/util/general_def.h" />
+		<Unit filename="src/include/util/parser.h" />
+		<Unit filename="src/include/util/settings.h" />
+		<Unit filename="src/include/util/vector.h" />
+		<Unit filename="src/lua/script.cpp" />
 		<Unit filename="src/optimize/profiler.cpp">
 			<Option target="Debug" />
 		</Unit>
@@ -92,27 +96,26 @@
 		<Unit filename="src/physics/PhysicsEngine.cpp" />
 		<Unit filename="src/physics/collision.cpp" />
 		<Unit filename="src/render/camera.cpp" />
-		<Unit filename="src/game/controls.cpp" />
 		<Unit filename="src/render/font.cpp" />
 		<Unit filename="src/render/fps.cpp" />
 		<Unit filename="src/render/level.cpp" />
 		<Unit filename="src/render/light.cpp" />
-		<Unit filename="src/lua/script.cpp" />
-		<Unit filename="src/game/main.cpp" />
 		<Unit filename="src/render/material.cpp" />
-		<Unit filename="src/game/models.cpp" />
 		<Unit filename="src/render/object.cpp" />
-		<Unit filename="src/util/parser.cpp" />
 		<Unit filename="src/render/polygon.cpp" />
 		<Unit filename="src/render/scene.cpp" />
 		<Unit filename="src/render/sdl.cpp" />
-		<Unit filename="src/util/settings.cpp" />
 		<Unit filename="src/render/shader.cpp" />
 		<Unit filename="src/render/sound.cpp" />
 		<Unit filename="src/render/texture.cpp" />
 		<Unit filename="src/render/ui.cpp" />
-		<Unit filename="src/util/vector.cpp" />
 		<Unit filename="src/render/vertex.cpp" />
+		<Unit filename="src/shaders/fragmentshader.glsl" />
+		<Unit filename="src/shaders/petershader.glsl" />
+		<Unit filename="src/shaders/vertexshader.glsl" />
+		<Unit filename="src/util/parser.cpp" />
+		<Unit filename="src/util/settings.cpp" />
+		<Unit filename="src/util/vector.cpp" />
 		<Extensions>
 			<envvars />
 			<code_completion />

@@ -24,6 +24,7 @@ Shader::Shader(const char *filename, ShaderType kind)
 Shader::~Shader()
 {
     unloadASCIIFileBuffer(fileBuffer);
+    unloadShaderObject(shaderObject);
 }
 
 
@@ -50,9 +51,24 @@ bool Shader::loadShader(const char *filename, ShaderType kind)
 
     glLinkProgram(program);
 
+    return true;
+}
+
+
+bool Shader::activate()
+{
+    if(program == 0)
+        return false;
+
     glUseProgram(program);
 
     return true;
+}
+
+
+void deactivate()
+{
+    glUseProgram(0);
 }
 
 
@@ -120,26 +136,47 @@ char *Shader::loadASCIIFile(const char *filename)
 }
 
 
-void Shader::unloadASCIIFileBuffer(char *buffer)
+bool Shader::unloadASCIIFileBuffer(char *buffer)
 {
     if(buffer != NULL)
     {
         delete[] buffer;
         buffer = NULL;
+        return true;
     }
+    else
+    {
+        return false;
+    }
+}
+
+
+bool Shader::unloadShaderObject(GLuint obj)
+{
+    if(obj == 0)
+        return false;
+
+    glDeleteShader(obj);
+
+    return true;
 }
 
 
 bool Shader::setType(ShaderType kind)
 {
-    if(kind != vertexShader && kind != fragmentShader && kind != geometryShader)
-    {
-        type = other;
-        return false;
-    }
-    else
+    if(kind == vertexShader || kind == fragmentShader)    // types i know and like
     {
         type = kind;
         return true;
+    }
+    else if(kind == geometryShader || kind == tesselationControlShader || kind == tesselationEvaluationShader || kind == undefined)   // types i know and don't like
+    {
+        type = kind;
+        return false;
+    }
+    else    // types i don't know
+    {
+        type = other;
+        return false;
     }
 }
