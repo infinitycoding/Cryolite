@@ -102,11 +102,11 @@ int main(int argc, char *argv[]){
     glEnable(GL_COLOR_MATERIAL);
 
     /*glEnable(GL_FOG);
-glFogfv(GL_FOG_COLOR, fogcolor);
-glFogi(GL_FOG_MODE, GL_LINEAR);
-glFogf(GL_FOG_DENSITY, 0.05);
-glFogf(GL_FOG_START, 40);
-glFogf(GL_FOG_END, 50);*/
+    glFogfv(GL_FOG_COLOR, fogcolor);
+    glFogi(GL_FOG_MODE, GL_LINEAR);
+    glFogf(GL_FOG_DENSITY, 0.05);
+    glFogf(GL_FOG_START, 40);
+    glFogf(GL_FOG_END, 50);*/
 
 
 
@@ -122,7 +122,8 @@ glFogf(GL_FOG_END, 50);*/
 
     alDistanceModel( AL_LINEAR_DISTANCE );
 
-
+    /*Shader testShader = Shader(SHADER(vertexshader.glsl), SHADER(fragmentshader.glsl));
+    testShader.activate();*/
 
     while(render){ //render
         if(printFPS)

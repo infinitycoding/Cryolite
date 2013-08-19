@@ -25,15 +25,26 @@ enum ShaderType
 };
 
 
+struct shaderObject
+{
+    char *fileBuffer;
+    int fileLen;
+    GLuint object;
+    ShaderType type;
+};
+
+
 
 class Shader
 {
     public:
         Shader();
-        Shader(const char *filename, ShaderType kind);
+        Shader(const char *vsfile, const char *fsfile);
         ~Shader();
 
-        bool loadShader(const char *filename, ShaderType kind);
+        bool loadShader(const char *filename, shaderObject *shaderObj, ShaderType kind);
+        void make();
+
         bool activate();
         void deactivate();
 
@@ -41,9 +52,9 @@ class Shader
         void initShader();
 
         int getFileLength(const char *filename);
-        char *loadASCIIFile(const char *filename);
+        char *loadASCIIFile(const char *filename, int &len);
 
-        bool setType(ShaderType kind);
+        bool setType(ShaderType &typevar, ShaderType newType);
 
         bool unloadASCIIFileBuffer(char *buffer);
         bool unloadShaderObject(GLuint obj);
@@ -51,12 +62,8 @@ class Shader
 
         GLuint program;
 
-        char *fileBuffer;
-        int len;
-        GLuint shaderObject;
-        ShaderType type;
-
-
+        shaderObject *vertShader;
+        shaderObject *fragShader;
 };
 
 

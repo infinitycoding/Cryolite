@@ -12,46 +12,64 @@ Shader::Shader()
 }
 
 
-Shader::Shader(const char *filename, ShaderType kind)
+Shader::Shader(const char *vsfile, const char *fsfile)
 {
     initShader();
 
-    if(!loadShader(filename, kind))
-        cerr << "error: unable to load shader " << filename << " ." << endl;
+    if(!loadShader(vsfile, vertShader, vertexShader))
+        cerr << "error: unable to load shader " << vsfile << " ." << endl;
+
+    if(!loadShader(fsfile, fragShader, fragmentShader))
+        cerr << "error: unable to load shader " << fsfile << " ." << endl;
+
+    make();
 }
 
 
 Shader::~Shader()
 {
-    unloadASCIIFileBuffer(fileBuffer);
-    unloadShaderObject(shaderObject);
+    unloadASCIIFileBuffer(vertShader->fileBuffer);
+    unloadShaderObject(vertShader->object);
+    delete vertShader;
+
+    unloadASCIIFileBuffer(fragShader->fileBuffer);
+    unloadShaderObject(fragShader->object);
+    delete fragShader;
 }
 
 
-bool Shader::loadShader(const char *filename, ShaderType kind)
+bool Shader::loadShader(const char *filename, shaderObject *shaderObj, ShaderType kind)
 {
-    if(!setType(kind))
+    if(!setType(shaderObj->type, kind))
         return false;
 
-    fileBuffer = loadASCIIFile(filename);
+    shaderObj->fileBuffer = loadASCIIFile(filename, shaderObj->fileLen);
 
-    if(fileBuffer == NULL)
+    if(shaderObj->fileBuffer == NULL)
         return false;
 
 
-    shaderObject = glCreateShader(kind);
+    shaderObj->object = glCreateShader(kind);
 
-    glShaderSourceARB(shaderObject, 1, (const char **)&fileBuffer, &len);
+    glShaderSourceARB(shaderObj->object, 1, (const char **)&shaderObj->fileBuffer, &shaderObj->fileLen);
 
-    glCompileShaderARB(shaderObject);
-
-    program = glCreateProgram();
-
-    glAttachShader(program, shaderObject);
-
-    glLinkProgram(program);
+    glCompileShaderARB(shaderObj->object);
 
     return true;
+}
+
+
+void Shader::make()
+{
+    program = glCreateProgram();
+
+    if(vertShader->object)
+        glAttachShader(program, vertShader->object);
+
+    if(fragShader->object)
+        glAttachShader(program, fragShader->object);
+
+    glLinkProgram(program);
 }
 
 
@@ -76,10 +94,18 @@ void Shader::initShader()
 {
     program = 0;
 
-    fileBuffer = NULL;
-    len = 0;
-    shaderObject = 0;
-    type = undefined;
+    vertShader = new shaderObject;
+    vertShader->fileBuffer = NULL;
+    vertShader->fileLen = 0;
+    vertShader->object = 0;
+    vertShader->type = undefined;
+
+    fragShader = new shaderObject;
+    fragShader->fileBuffer = NULL;
+    fragShader->fileLen = 0;
+    fragShader->object = 0;
+    fragShader->type = undefined;
+
 }
 
 
@@ -98,7 +124,7 @@ int Shader::getFileLength(const char *filename)
 }
 
 
-char *Shader::loadASCIIFile(const char *filename)
+char *Shader::loadASCIIFile(const char *filename, int &len)
 {
     unsigned int i = 0;
     char *buffer = NULL;
@@ -162,21 +188,25 @@ bool Shader::unloadShaderObject(GLuint obj)
 }
 
 
-bool Shader::setType(ShaderType kind)
+bool Shader::setType(ShaderType &typevar, ShaderType newType)
 {
-    if(kind == vertexShader || kind == fragmentShader)    // types i know and like
+    if(newType == vertexShader || newType == fragmentShader)    // types i know and like
     {
-        type = kind;
+        typevar = newType;
         return true;
     }
-    else if(kind == geometryShader || kind == tesselationControlShader || kind == tesselationEvaluationShader || kind == undefined)   // types i know and don't like
+    else if(newType == geometryShader || newType == tesselationControlShader || newType == tesselationEvaluationShader || newType == undefined)   // types i know and don't like
     {
-        type = kind;
+        cerr << "warning: chosen shader-type is not supported by cryolite engine yet." << endl;
+
+        typevar = newType;
         return false;
     }
     else    // types i don't know
     {
-        type = other;
+        cerr << "warning: chosen shader-type is not known." << endl;
+
+        typevar = other;
         return false;
     }
 }
