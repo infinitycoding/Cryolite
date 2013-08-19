@@ -1,10 +1,11 @@
 #ifndef SHADER_H_INCLUDED
 #define SHADER_H_INCLUDED
+#define GL_GLEXT_PROTOTYPES
 
 
 
 #include <GL/gl.h>
-#include <GL/glu.h>
+#include <SDL/SDL_opengl.h>
 
 #include <iostream>
 #include <fstream>
@@ -26,17 +27,26 @@ class Shader
         Shader(const char *filename, ShaderType kind);
         ~Shader();
 
+        bool loadShader(const char *filename, ShaderType kind);
+
     protected:
         void initShader();
 
-        unsigned long getFileLength(const char *filename);
+        int getFileLength(const char *filename);
         char *loadASCIIFile(const char *filename);
         void unloadASCIIFileBuffer(char *buffer);
 
+        bool setType(ShaderType kind);
+
+
+        GLuint program;
 
         char *fileBuffer;
+        int len;
         GLuint shaderObject;
         ShaderType type;
+
+
 };
 
 

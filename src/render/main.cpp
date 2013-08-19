@@ -86,6 +86,7 @@ int main(int argc, char *argv[]){
     mainScene->addLamp(Spot);
 
     INIT_Models(mainScene);
+    mainScene->addObject(new Object());
 
     Controls playerControls = Controls(&mainwindow);
     mainScene->GlobalAmbience = new GlobalLight(0.15,0.15,0.15,1);

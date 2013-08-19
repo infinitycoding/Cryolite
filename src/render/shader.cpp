@@ -16,15 +16,8 @@ Shader::Shader(const char *filename, ShaderType kind)
 {
     initShader();
 
-    fileBuffer = loadASCIIFile(filename);
-
-    if(fileBuffer == NULL)
-    {
-        cerr << "error: unable to load file " << filename << " ." << endl;
-        return;
-    }
-
-    type = kind;
+    if(!loadShader(filename, kind))
+        cerr << "error: unable to load shader " << filename << " ." << endl;
 }
 
 
@@ -34,15 +27,47 @@ Shader::~Shader()
 }
 
 
+bool Shader::loadShader(const char *filename, ShaderType kind)
+{
+    if(!setType(kind))
+        return false;
+
+    fileBuffer = loadASCIIFile(filename);
+
+    if(fileBuffer == NULL)
+        return false;
+
+
+    shaderObject = glCreateShader(kind);
+
+    glShaderSourceARB(shaderObject, 1, (const char **)&fileBuffer, &len);
+
+    glCompileShaderARB(shaderObject);
+
+    program = glCreateProgram();
+
+    glAttachShader(program, shaderObject);
+
+    glLinkProgram(program);
+
+    glUseProgram(program);
+
+    return true;
+}
+
+
 void Shader::initShader()
 {
+    program = 0;
+
     fileBuffer = NULL;
+    len = 0;
     shaderObject = 0;
     type = undefined;
 }
 
 
-unsigned long Shader::getFileLength(const char *filename)
+int Shader::getFileLength(const char *filename)
 {
     ifstream file;
     file.open(filename, ios::in);
@@ -51,7 +76,7 @@ unsigned long Shader::getFileLength(const char *filename)
         return 0;
 
     file.seekg(0, ios::end);
-    unsigned long len = file.tellg();
+    int len = file.tellg();
 
     return len;
 }
@@ -60,7 +85,6 @@ unsigned long Shader::getFileLength(const char *filename)
 char *Shader::loadASCIIFile(const char *filename)
 {
     unsigned int i = 0;
-    unsigned int len = 0;
     char *buffer = NULL;
     ifstream file;
 
@@ -102,5 +126,20 @@ void Shader::unloadASCIIFileBuffer(char *buffer)
     {
         delete[] buffer;
         buffer = NULL;
+    }
+}
+
+
+bool Shader::setType(ShaderType kind)
+{
+    if(kind != vertexShader && kind != fragmentShader && kind != geometryShader)
+    {
+        type = other;
+        return false;
+    }
+    else
+    {
+        type = kind;
+        return true;
     }
 }
