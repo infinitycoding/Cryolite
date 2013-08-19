@@ -45,15 +45,9 @@ extern Object *gravelcube;
 GLfloat fogcolor[4] = {0.5,0.5,0.5,1};
 
 
+
+
 int main(int argc, char *argv[]){
-    LUAScript testScript = LUAScript(SCRIPT(testscript.lua));
-    testScript.insertDoubleVar("cppvar", 5.5);
-    testScript.runScript();
-    double luavar = testScript.getDoubleVar("luavar");
-    cout << "luavar = " << luavar << endl;
-
-    cout << endl;
-
     gameSettings = new EngineSettings("settings.ini");
     //Create Window and Scene
     SDL mainwindow = SDL(gameSettings->width,gameSettings->height,gameSettings->sdlFlags,"Cryolite Engine");
@@ -91,7 +85,7 @@ int main(int argc, char *argv[]){
     mainScene->GlobalAmbience = new GlobalLight(0.15,0.15,0.15,1);
 
 
-    // Draw test models
+
 
 
     gravelcube->relativeToObject = iccube;

@@ -54,7 +54,7 @@ bool Script::load(const char *Scriptname)
         return false;
     }
 
-    addMetatable("Peter",TestClassFunctions);
+    //add metatables
 
     return true;
 }
