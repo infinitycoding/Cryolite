@@ -15,7 +15,13 @@
 
 enum ShaderType
 {
-    vertexShader = GL_VERTEX_SHADER, fragmentShader = GL_FRAGMENT_SHADER, geometryShader = GL_GEOMETRY_SHADER, undefined, other
+    vertexShader = GL_VERTEX_SHADER,
+    fragmentShader = GL_FRAGMENT_SHADER,
+    geometryShader = GL_GEOMETRY_SHADER,
+    tesselationControlShader = GL_TESS_CONTROL_SHADER,
+    tesselationEvaluationShader = GL_TESS_EVALUATION_SHADER,
+    undefined = 0,
+    other = 0
 };
 
 
@@ -28,15 +34,19 @@ class Shader
         ~Shader();
 
         bool loadShader(const char *filename, ShaderType kind);
+        bool activate();
+        void deactivate();
 
     protected:
         void initShader();
 
         int getFileLength(const char *filename);
         char *loadASCIIFile(const char *filename);
-        void unloadASCIIFileBuffer(char *buffer);
 
         bool setType(ShaderType kind);
+
+        bool unloadASCIIFileBuffer(char *buffer);
+        bool unloadShaderObject(GLuint obj);
 
 
         GLuint program;
