@@ -57,6 +57,7 @@
 		<Unit filename="src/game/controls.cpp" />
 		<Unit filename="src/game/main.cpp" />
 		<Unit filename="src/game/models.cpp" />
+		<Unit filename="src/game/scripts/testscript.lua" />
 		<Unit filename="src/include/game/controls.h" />
 		<Unit filename="src/include/game/models.h" />
 		<Unit filename="src/include/lua/script.h" />
