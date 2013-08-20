@@ -7,13 +7,26 @@ using namespace std;
 
 /*example LUA function
 
-LCALL
-    peter
-BEGIN
+CBEGIN(peter)
     double *x = (double *)lua_newuserdata(L, sizeof(double));
     *x = 10.0;
-END(Peter)
+CEND(Peter)
 */
+
+/* example lua Call
+
+ALLOW_LCALL(); //call only once in a function! and please do not use the varriable LUAPARANUM
+
+LCALL(peter, INT(5) DBL(3));
+LRET(L);
+
+example 2:
+
+LCALL(simon, STR("XD"));
+int retunrvalue = LRET<char *>(L);
+
+*/
+
 
 
 Script::Script()
@@ -73,6 +86,7 @@ bool Script::run()
     return true;
 }
 
+
 void Script::addMetatable(const char * classname ,luaL_Reg *metatable)
 {
     luaL_newmetatable(lState, classname);
@@ -108,3 +122,5 @@ void *Script::getObject(lua_State *L, const char *luaClass)
     luaL_argcheck(L, ud != 0, 0,"NULL object pointer returned");
     return ud;
 }
+
+
