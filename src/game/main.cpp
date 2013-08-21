@@ -42,7 +42,7 @@ extern Sound *shotSound;
 extern Object *iccube;
 extern Object *gravelcube;
 
-GLfloat fogcolor[4] = {0.5,0.5,0.5,1};
+//GLfloat fogcolor[4] = {0.5,0.5,0.5,1};
 
 
 
@@ -124,6 +124,9 @@ int main(int argc, char *argv[]){
 
     Shader testShader = Shader(SHADER(basicvertshader.glsl), SHADER(basicfragshader.glsl));
     testShader.activate();
+
+    //Script testScript = Script(SCRIPT(testscript.lua));
+    //testScript.run();
 
     while(render){ //render
         if(printFPS)
