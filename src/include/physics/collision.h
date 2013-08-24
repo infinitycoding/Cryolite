@@ -28,8 +28,6 @@ class CollisionLocate
         bool checkApproximation(Object *obj1, Object *obj2);
         collision *checkCollision(Object *obj1, Object *obj2);
 
-        bool boxBoxCollisionQAD(boundBox *box1, vector bpos1, boundBox *box2, vector bpos2, vector *rpos);
-
 
         List<Object> *objects;
         List<collision> *collisions;
@@ -37,6 +35,9 @@ class CollisionLocate
     protected:
         vector *boxVertices(boundBox *box, vector *result);
         bool vectorInCube(vector v, vector cstart, vector cend);
+
+        bool boxBoxCollisionQAD(boundBox *box1, vector bpos1, boundBox *box2, vector bpos2, vector *rpos);
+        bool sphereSphereCollision(boundSphere *sphere1, vector spos1, boundSphere *sphere2, vector spos2, vector *rpos);
 };
 
 

@@ -76,6 +76,7 @@ collision *CollisionLocate::checkCollision(Object *obj1, Object *obj2)
 {
     if(!obj1->objType || !obj2->objType)
         return NULL;
+
     collision *foundCollision = new collision();
     foundCollision->object1 = obj1;
     foundCollision->object2 = obj2;
@@ -83,8 +84,14 @@ collision *CollisionLocate::checkCollision(Object *obj1, Object *obj2)
     boundBox *actualBox1 = NULL;
     boundBox *actualBox2 = NULL;
 
+    boundSphere *actualSphere1 = NULL;
+    boundSphere *actualSphere2 = NULL;
+
     ListIterator<boundBox> B1 = *ListIterator<boundBox>(obj1->objType->boundBoxes).SetFirst();
     ListIterator<boundBox> B2 = *ListIterator<boundBox>(obj2->objType->boundBoxes).SetFirst();
+
+    ListIterator<boundSphere> S1 = *ListIterator<boundSphere>(obj1->objType->boundSpheres).SetFirst();
+    ListIterator<boundSphere> S2 = *ListIterator<boundSphere>(obj2->objType->boundSpheres).SetFirst();
 
     while(!B1.IsLast())
     {
@@ -105,8 +112,49 @@ collision *CollisionLocate::checkCollision(Object *obj1, Object *obj2)
         }
     }
 
+    while(!S1.IsLast())
+    {
+        actualSphere1 = S1.GetCurrent();
+
+        S1.Next();
+
+        S2.SetFirst();
+
+        while(!S2.IsLast())
+        {
+            actualSphere2 = S2.GetCurrent();
+
+            S2.Next();
+
+            if(sphereSphereCollision(actualSphere1, obj1->getPosition(), actualSphere2, obj2->getPosition(), &foundCollision->position))
+                return foundCollision;
+        }
+    }
+
     delete foundCollision;
     return NULL;
+}
+
+
+vector *CollisionLocate::boxVertices(boundBox *box, vector *result)
+{
+    result[0] = box->base;
+    result[1] = box->base + vector(box->width, 0, 0);
+    result[2] = box->base + vector(0, box->height, 0);
+    result[3] = box->base + vector(0, 0, box->length);
+    result[4] = box->base + vector(box->width, box->height, 0);
+    result[5] = box->base + vector(box->width, 0, box->length);
+    result[6] = box->base + vector(0, box->height, box->length);
+    result[7] = box->base + vector(box->width, box->height, box->length);
+
+    return result;
+
+}
+
+
+bool CollisionLocate::vectorInCube(vector v, vector cstart, vector cend)
+{
+    return ((v.x >= cstart.x && v.x <= cend.x) && (v.y >= cstart.y && v.y <= cend.y) && (v.z >= cstart.z && v.z <= cend.z));
 }
 
 
@@ -138,23 +186,20 @@ bool CollisionLocate::boxBoxCollisionQAD(boundBox *box1, vector bpos1, boundBox 
 }
 
 
-vector *CollisionLocate::boxVertices(boundBox *box, vector *result)
+bool CollisionLocate::sphereSphereCollision(boundSphere *sphere1, vector spos1, boundSphere *sphere2, vector spos2, vector *rpos)
 {
-    result[0] = box->base;
-    result[1] = box->base + vector(box->width, 0, 0);
-    result[2] = box->base + vector(0, box->height, 0);
-    result[3] = box->base + vector(0, 0, box->length);
-    result[4] = box->base + vector(box->width, box->height, 0);
-    result[5] = box->base + vector(box->width, 0, box->length);
-    result[6] = box->base + vector(0, box->height, box->length);
-    result[7] = box->base + vector(box->width, box->height, box->length);
+    float distance = fabs(len(((sphere1->center + spos1) - (sphere2->center + spos2))));
+    float allowedDistance = sphere1->radian + sphere2->radian;
 
-    return result;
+    if(distance < allowedDistance)
+    {
+        vector sp1tosp2 = vector(((sphere2->center + spos2) - (sphere1->center + spos1)));
+        sp1tosp2.unify();
+        sp1tosp2 *= allowedDistance - distance;
+        *rpos = sphere2->center + spos2 + sp1tosp2;
+        cout << "collision!" << endl;
+        return true;
+    }
 
-}
-
-
-bool CollisionLocate::vectorInCube(vector v, vector cstart, vector cend)
-{
-    return ((v.x >= cstart.x && v.x <= cend.x) && (v.y >= cstart.y && v.y <= cend.y) && (v.z >= cstart.z && v.z <= cend.z));
+    return false;
 }

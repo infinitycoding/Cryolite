@@ -45,7 +45,7 @@ struct boundBox         // Bound Box
 
 struct boundSphere      // Bound Sphere
 {
-    Vertex3D center;
+    vector center;
     GLfloat radian;
 };
 
