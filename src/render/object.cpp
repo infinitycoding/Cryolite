@@ -338,11 +338,10 @@ void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectNa
                     if(used == textureUsed || used == allUsed)
                     {
 
-                        for(i++, j = 0; line[i] != ' ' && line[i] != '\n'; i++, j++)
+                        for(i++, j = 0; line[i] != ' ' && line[i] != '\n' && line[i] != '/'; i++, j++)
                         {
                             string[j] = line[i];
                         }
-
 
                         string[j+1] = '\0';
 
@@ -358,7 +357,9 @@ void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectNa
                     }
 
                     if(used == normalsUsed)
+                    {
                         i++;
+                    }
 
                     if(used == normalsUsed || used == allUsed)
                     {
@@ -375,7 +376,7 @@ void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectNa
 
                         if(norm_id[h] >= allObjectVertices.normalVectors)             // if the polygon uses normals, look if they are defined
                         {
-                            cerr << "the file " << objectFile << " is corrupted: undefined normals used" << endl;
+                            cerr << "the file " << objectFile << " is corrupted: undefined normals used" << " " << norm_id[h] << " " << allObjectVertices.normalVectors << endl;
                             exit(-1);
                         }
                     }
