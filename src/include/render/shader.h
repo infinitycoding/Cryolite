@@ -36,8 +36,10 @@
 enum ShaderType             // an enum of shader types (it brings the defines of opengl in one structure)
 {
     vertexShader = GL_VERTEX_SHADER,                            // vertex shader affect all drawn vertices
+    vertexShaderARB = GL_VERTEX_SHADER_ARB,                     // the same as the normal vertex shader, but opengl has two definitions so i have two too
     fragmentShader = GL_FRAGMENT_SHADER,                        // fragment shaders affect fragments (a fragment is a pixel before it is on the screen)
-    geometryShader = GL_GEOMETRY_SHADER,                        // don't ask what this is
+    fragmentShaderARB = GL_FRAGMENT_SHADER_ARB,                 // the same as the normal fragment shader, but opengl has two definitions so i have two too
+    geometryShader = GL_GEOMETRY_SHADER,                        // geometry shaders can add new geometry to the scene
     tesselationControlShader = GL_TESS_CONTROL_SHADER,          // don't ask what this is
     tesselationEvaluationShader = GL_TESS_EVALUATION_SHADER,    // don't ask what this is
     undefined = 0,                                              // i wanted to have a value with which i can initialize it

@@ -79,7 +79,7 @@ Shader::~Shader()
 
 bool Shader::loadShader(const char *filename, ShaderType kind)
 {
-    if(kind == vertexShader)                // check if it's a vertex shader
+    if(kind == vertexShader || kind == vertexShaderARB)                // check if it's a vertex shader
     {
         if(!loadShader(filename, vertShader, kind))                                         // try to load the shader
         {
@@ -87,7 +87,7 @@ bool Shader::loadShader(const char *filename, ShaderType kind)
             return false;   // tell the calling function it's an idiot
         }
     }
-    else if(kind == fragmentShader)         // check if it's a fragment shader
+    else if(kind == fragmentShader || kind == fragmentShaderARB)         // check if it's a fragment shader
     {
         if(!loadShader(filename, fragShader, kind))                                         // try to load the shader
         {
@@ -255,7 +255,7 @@ char *Shader::loadASCIIFile(const char *filename, int &len)
 
 bool Shader::setType(ShaderType &typevar, ShaderType newType)
 {
-    if(newType == vertexShader || newType == fragmentShader)    // types i know and like
+    if(newType == vertexShader || newType == vertexShaderARB || newType == fragmentShader || newType == fragmentShaderARB)    // types i know and like
     {
         typevar = newType;
         return true;
