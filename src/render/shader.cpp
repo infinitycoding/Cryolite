@@ -255,7 +255,8 @@ char *Shader::loadASCIIFile(const char *filename, int &len)
 
 bool Shader::setType(ShaderType &typevar, ShaderType newType)
 {
-    if(newType == vertexShader || newType == vertexShaderARB || newType == fragmentShader || newType == fragmentShaderARB)    // types i know and like
+    if(newType == vertexShader || newType == vertexShaderARB ||
+       newType == fragmentShader || newType == fragmentShaderARB)    // types i know and like
     {
         typevar = newType;
         return true;
