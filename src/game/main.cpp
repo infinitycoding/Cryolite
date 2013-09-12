@@ -122,8 +122,8 @@ int main(int argc, char *argv[]){
 
     alDistanceModel( AL_LINEAR_DISTANCE );
 
-    Shader testShader = Shader(SHADER(basicvertshader.glsl), SHADER(basicfragshader.glsl));
-    testShader.activate();
+    //Shader testShader = Shader(SHADER(basicvert.glsl), SHADER(basicfrag.glsl));
+    //testShader.activate();
 
     //Script testScript = Script(SCRIPT(testscript.lua));
     //testScript.run();

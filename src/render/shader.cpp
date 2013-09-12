@@ -27,13 +27,13 @@ Shader::Shader(const char *vsfile, const char *fsfile)
 
     if(!loadShader(vsfile, vertShader, vertexShader))       // try to load the vertex shader
     {
-        cerr << "error: unable to load shader " << vsfile << " ." << endl;  // if it fails, print an error message
+        cerr << "error: unable to load shader " << vsfile << "." << endl;  // if it fails, print an error message
         fail = true;                                                        // and remember the failture
     }
 
     if(!loadShader(fsfile, fragShader, fragmentShader))
     {
-        cerr << "error: unable to load shader " << fsfile << " ." << endl;  // if it fails, print an error message
+        cerr << "error: unable to load shader " << fsfile << "." << endl;  // if it fails, print an error message
         fail = true;                                                        // and remember the failture
     }
 
@@ -109,7 +109,7 @@ bool Shader::loadShader(const char *filename, ShaderType kind)
 
 bool Shader::make()
 {
-    if(vertShader->object == 0 || fragShader->object == 0)      // first we have to check if there are all needed shader objects
+    if(vertShader->object == 0 || vertShader->compileStatus == false || fragShader->object == 0 || fragShader->compileStatus == false)      // first we have to check if there are all needed shader objects and if they are ready to be linked
         return false;                                           // if not, we can't link them to the program object
 
     glAttachShader(program, vertShader->object);                // attach the vertex shader to the program object
@@ -155,12 +155,14 @@ void Shader::initShader()
     vertShader->fileLen = 0;
     vertShader->object = 0;
     vertShader->type = undefined;
+    vertShader->compileStatus = 0;
 
     fragShader = new shaderObject;      // create the fragment shader struct
     fragShader->fileBuffer = NULL;      // set erverthing to zero
     fragShader->fileLen = 0;
     fragShader->object = 0;
     fragShader->type = undefined;
+    fragShader->compileStatus = 0;
 
 }
 
@@ -186,9 +188,18 @@ bool Shader::loadShader(const char *filename, shaderObject *shaderObj, ShaderTyp
 
     glCompileShaderARB(shaderObj->object);          // compile the shader
 
-    cout << "shader " << shaderObj->object << " " << filename << " loaded and compiled. (shader object)" << endl;   // output a debug message
+    glGetObjectParameterivARB(shaderObj->object, GL_OBJECT_COMPILE_STATUS_ARB, &shaderObj->compileStatus);   // check if the shader is compiled successfully
 
-    return true;        // job done!
+    if(shaderObj->compileStatus == true)        // if success
+    {
+        cout << "shader " << shaderObj->object << " " << filename << " loaded and compiled. (shader object)" << endl;   // output a debug message
+        return true;        // job done!
+    }
+    else                                        // if failed
+    {
+        cerr << "error: failed to compile shader " << shaderObj->object << "." << endl;     // output a debug message
+        return false;       // exit function
+    }
 }
 
 
@@ -255,8 +266,7 @@ char *Shader::loadASCIIFile(const char *filename, int &len)
 
 bool Shader::setType(ShaderType &typevar, ShaderType newType)
 {
-    if(newType == vertexShader || newType == vertexShaderARB ||
-       newType == fragmentShader || newType == fragmentShaderARB)    // types i know and like
+    if(newType == vertexShader || newType == vertexShaderARB || newType == fragmentShader || newType == fragmentShaderARB)    // types i know and like
     {
         typevar = newType;
         return true;

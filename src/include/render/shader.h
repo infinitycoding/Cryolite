@@ -53,6 +53,7 @@ struct shaderObject         // a struct which stores all things one shader objec
     int fileLen;            // the length of the file (opengl want's to know this=
     GLuint object;          // the id of the shader object
     ShaderType type;        // the type of the shader object
+    int compileStatus;      // the compile status (true is compiled, false if not)
 };
 
 
@@ -87,6 +88,7 @@ class Shader                // a class which stores all things and functions one
 
         bool unloadASCIIFileBuffer(char *buffer);       // a function to unload the file buffer loaded with loadASCIIFile. needs a pointer to the buffer, returns if the operation was successfully or not.
         bool unloadShaderObject(GLuint obj);             // a function to unload a shader object. needs the id of the object, returns if the operation was successfully or not.
+
 
 
         GLuint program;                 // the id of the program object

@@ -122,8 +122,8 @@
 		<Unit filename="src/render/texture.cpp" />
 		<Unit filename="src/render/ui.cpp" />
 		<Unit filename="src/render/vertex.cpp" />
-		<Unit filename="src/shaders/basicfragshader.glsl" />
-		<Unit filename="src/shaders/basicvertshader.glsl" />
+		<Unit filename="src/shaders/basicfrag.glsl" />
+		<Unit filename="src/shaders/basicvert.glsl" />
 		<Unit filename="src/util/parser.cpp" />
 		<Unit filename="src/util/settings.cpp" />
 		<Unit filename="src/util/vector.cpp" />

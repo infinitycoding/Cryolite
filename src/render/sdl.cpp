@@ -196,7 +196,7 @@ GLuint SDL::loadTexture(const char *filename,GLenum MinFilter,GLenum MagFilter)
     glEnable(GL_TEXTURE_2D);
     glGenTextures( 1, &GL_Texture );
     #ifndef _WIN32
-    glActiveTextureARB(GL_Texture);
+    glActiveTexture(GL_Texture);
     #endif
     glBindTexture( GL_TEXTURE_2D, GL_Texture );
     glTexImage2D( GL_TEXTURE_2D, 0, nOfColors, SDL_Texture->w, SDL_Texture->h, 0,texture_format, GL_UNSIGNED_BYTE, SDL_Texture->pixels );
@@ -252,7 +252,7 @@ GLuint SDL::surfToTexture(SDL_Surface *surf,GLenum MinFilter,GLenum MagFilter)
     glEnable(GL_TEXTURE_2D);
     glGenTextures( 1, &GL_Texture );
     #ifndef _WIN32
-    glActiveTextureARB(GL_Texture);
+    glActiveTexture(GL_Texture);
     #endif
     glBindTexture( GL_TEXTURE_2D, GL_Texture );
     glTexImage2D( GL_TEXTURE_2D, 0, nOfColors, surf->w, surf->h, 0,texture_format, GL_UNSIGNED_BYTE, surf->pixels );
