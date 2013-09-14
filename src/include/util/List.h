@@ -139,6 +139,7 @@ List<T>::~List<T>()
                 structCleaner(element);
             delete element;
         }
+    lock = false;
 }
 
 template <typename T>
@@ -147,7 +148,7 @@ void List<T>::PushFront(T *element)
     Node *newNode = new Node;
     newNode->element = (void*)element;
 
-    //while(lock){}
+    while(lock){}
     lock = true;
         newNode->next = dummy->next;
         newNode->prev = dummy;
@@ -230,7 +231,7 @@ size_t List<T>::Size()
             s++;
             i->Next();
         }
-    lock = true;
+    lock = false;
     return s*sizeof(T);
 }
 
@@ -245,7 +246,7 @@ int List<T>::NumOfElements()
             s++;
             i->Next();
         }
-    lock = true;
+    lock = false;
     return s;
 }
 

@@ -214,6 +214,9 @@ class vector
     std::ostream& operator << (std::ostream& stream, vector const  v);
     std::ostream& operator << (std::ostream& stream, vector const *v);
 
+    bool operator == (vector const v0,vector const v1);
+    bool operator != (vector const v0,vector const v1);
+
 
 
 float len(vector v);

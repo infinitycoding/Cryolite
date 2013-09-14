@@ -990,3 +990,19 @@ std::ostream& operator << (std::ostream& stream, vector const *v)
     return stream;
 }
 
+bool operator == (vector const v0,vector const v1)
+{
+    if(v0.x == v1.x && v0.y == v1.y && v0.z == v1.z)
+        return true;
+    else
+        return false;
+}
+
+bool operator != (vector const v0,vector const v1)
+{
+    if(v0.x != v1.x || v0.y != v1.y || v0.z != v1.z)
+        return true;
+    else
+        return false;
+}
+
