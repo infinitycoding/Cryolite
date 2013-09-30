@@ -30,41 +30,6 @@ int retunrvalue = LRET<char *>(L);
 
 
 
-NEWBEGIN(new_Test)
-    cout << "Did nothing and I'm still alive!" <<endl;
-    cout << "params" << getargc() << endl;
-    double *x = addInstance(double);
-    cout << "params" << getargc() << endl;
-    *x = 20;
-NEWEND(Test)
-
-CBEGIN(default_test)
-    cout<<"here we are"<<endl;
-
-    cout << "params" << getargc() << endl;
-    //cout << luaL_checknumber (L, 2)<<endl;
-
-
-    cout<<lua_tonumber(L, -1)<<endl;
-    lua_pop(L,1);
-    lua_getfield(L, -1, "__self");
-    cout<<*((double *)luaL_checkudata(L, -1, "Test"))<<endl;
-
-    cout << "params" << getargc() << endl;
-    //cout<<*getInstance(double*,"Test")<<endl;
-    return 0;
-CEND
-
-luaL_Reg tab[]
-{
-    {"new", new_Test},
-    {"X", default_test},
-    {NULL, NULL}
-};
-
-
-
-
 
 Script::Script()
 {
@@ -92,8 +57,9 @@ void Script::initLUA()
     luaL_openlibs(lState);
 }
 
-//extern luaL_Reg cameraTable[];
 extern luaL_Reg fpsReg[];
+extern luaL_Reg vectorReg[];
+extern luaL_Reg objReg[];
 
 bool Script::load(const char *Scriptname)
 {
@@ -106,8 +72,9 @@ bool Script::load(const char *Scriptname)
     }
 
     //add metatables
-    addMetatable("Test", tab);
     addMetatable("fps", fpsReg);
+    addMetatable("vector", vectorReg);
+    addMetatable("object", objReg);
     //addMetatable("Camera",cameraTable);
 
     return true;
