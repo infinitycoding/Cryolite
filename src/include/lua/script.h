@@ -35,7 +35,8 @@ class Script
 #define CBEGIN(NAME) int NAME(lua_State *L){
 #define CEND }
 
-#define NEWBEGIN(NAME) int NAME(lua_State *L){ luaL_checktype(L, 1, LUA_TTABLE); lua_newtable(L); lua_pushvalue(L,1); lua_setmetatable(L, -2); lua_pushvalue(L,1); lua_setfield(L, 1, "__index");
+#define NEWBEGIN(NAME) int NAME(lua_State *L){
+#define CONSTRUCT(...) luaL_checktype(L, 1, LUA_TTABLE); lua_newtable(L); lua_pushvalue(L,1); lua_setmetatable(L, -2); lua_pushvalue(L,1); lua_setfield(L, 1, "__index")
 #define NEWEND(CLASS) luaL_getmetatable(L, #CLASS);lua_setmetatable(L, -2); lua_setfield(L, -2, "__self"); return 1;}
 
 
