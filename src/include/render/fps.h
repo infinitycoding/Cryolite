@@ -6,8 +6,6 @@
 
 #include <SDL.h>
 
-#include <settings.h>
-
 
 
 class FPS
@@ -22,8 +20,9 @@ class FPS
         float get();
 
     protected:
+        const int accuracy;
+
         int lasttick;
-        int accuracy;
         float averageFPS;
 
         int currenttick;

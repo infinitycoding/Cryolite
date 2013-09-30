@@ -92,7 +92,7 @@ void Script::initLUA()
     luaL_openlibs(lState);
 }
 
-extern luaL_Reg cameraTable[];
+//extern luaL_Reg cameraTable[];
 
 bool Script::load(const char *Scriptname)
 {
@@ -106,7 +106,7 @@ bool Script::load(const char *Scriptname)
 
     //add metatables
     addMetatable("Test", tab);
-    addMetatable("Camera",cameraTable);
+    //addMetatable("Camera",cameraTable);
 
     return true;
 }

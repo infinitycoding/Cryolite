@@ -16,7 +16,6 @@ Scene::Scene()
     LM = new LightManager();
     GlobalAmbience = NULL;
     listenerPosition = vector(0,0,0);
-    fps = FPS();
 
 }
 
@@ -100,7 +99,7 @@ int Scene::removeLamp(Lamp *L)
 
 }
 
-
+extern FPS *fps;
 
 void Scene::render()
 {
@@ -128,7 +127,7 @@ void Scene::render()
     }
 
 
-    fps.calculate();
+    fps->calculate();
 
     // Interpolate Physics
     Object *currentObject = NULL;
@@ -136,7 +135,7 @@ void Scene::render()
     while(!O.IsLast())
     {
         currentObject = O.GetCurrent();
-        currentObject->physObj.interpolatePhysics(&currentObject->localPosition, fps.get());
+        currentObject->physObj.interpolatePhysics(&currentObject->localPosition, fps->get());
         O.Next();
     }
 

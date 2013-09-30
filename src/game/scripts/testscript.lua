@@ -1,3 +1,4 @@
 print("** Message form LUA: Script testscript.lua loaded **")
-print("** Message from LUA: cppvar = "..cppvar.." **")
-luavar = cppvar * 13
+x = Test:new()
+x:X(2)
+x:X(5)

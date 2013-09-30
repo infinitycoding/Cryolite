@@ -31,6 +31,7 @@
 
 EngineSettings *gameSettings;
 Scene *mainScene;
+FPS *fps;
 
 bool printFPS = false;
 bool render = true;
@@ -52,6 +53,8 @@ int main(int argc, char *argv[]){
     //Create Window and Scene
     SDL mainwindow = SDL(gameSettings->width,gameSettings->height,gameSettings->sdlFlags,"Cryolite Engine");
     mainScene = new Scene();
+
+    fps = new FPS();
 
     // Create camera, Global light and Input controler
     Camera *Player = new Camera(NULL, vector(STARTING_X,STARTING_Y,STARTING_Z),vector(0,0,1),STANDART_NEARCLIP,STANDART_FARCLIP,gameSettings->fov,0,0,gameSettings->height,gameSettings->width);
@@ -125,12 +128,12 @@ int main(int argc, char *argv[]){
     //Shader testShader = Shader(SHADER(basicvert.glsl), SHADER(basicfrag.glsl));
     //testShader.activate();
 
-    //Script testScript = Script(SCRIPT(testscript.lua));
-    //testScript.run();
+    Script testScript = Script(SCRIPT(testscript.lua));
+    testScript.run();
 
     while(render){ //render
         if(printFPS)
-            mainScene->fps.print();
+            fps->print();
 
         testLevel.refreshBackgroundMusic(Player->getPosition());
 
@@ -157,10 +160,6 @@ int main(int argc, char *argv[]){
         glBindTexture( GL_TEXTURE_2D, sky->nr);
         gluSphere(q,50,100,100);
         glPopMatrix();
-
-
-
-
 
         if(gameSettings->hud)
             drawHUD();

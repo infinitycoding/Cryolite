@@ -115,10 +115,6 @@ bool EngineSettings::loadSettingsFile(const char *filename)
         {
             fov = getFloat(&line_ptr, breakChars);
         }
-        else if(strncmp(line, "FPSAccuracy", 11) == 0)
-        {
-            FPSAccuracy = getInt(&line_ptr, breakChars);
-        }
 
     }while(!feof(f) && strncmp(line, "[", 1));
 
@@ -155,7 +151,6 @@ void EngineSettings::initSettings()
     height = 480;
     sdlFlags = SDL_OPENGL|SDL_HWSURFACE;
     multisamples = 4;
-    FPSAccuracy = 60;
     lineWidth = 1;
     pointSize = 1;
     fov = 80;

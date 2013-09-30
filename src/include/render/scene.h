@@ -35,7 +35,6 @@ class Scene
         bool currentScene;
         GlobalLight *GlobalAmbience;
         CollisionLocate *CL;
-        FPS fps;
 
         vector listenerPosition;
 

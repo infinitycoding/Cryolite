@@ -15,8 +15,8 @@
 #define ROTATION_SPEED 0.5
 #define MOVEMENT_SPEED 10
 
-#define ROTATION_WIDTH (ROTATION_SPEED/mainScene->fps.get())
-#define MOVEMENT_WIDTH (MOVEMENT_SPEED/mainScene->fps.get())
+#define ROTATION_WIDTH (ROTATION_SPEED/fps->get())
+#define MOVEMENT_WIDTH (MOVEMENT_SPEED/fps->get())
 
 
 float Controls::right_rotation;
@@ -39,6 +39,7 @@ extern bool render;
 extern EngineSettings *gameSettings;
 extern Scene *mainScene;
 extern Object *iccube;
+extern FPS *fps;
 Sound *shotSound;
 
 Controls::Controls(SDL* window) : EventHandle()

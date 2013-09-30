@@ -40,7 +40,6 @@ class EngineSettings : public Settings
         int height;
         int sdlFlags;
         int multisamples;
-        int FPSAccuracy;
         float lineWidth;
         float pointSize;
         float fov;
