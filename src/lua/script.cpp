@@ -93,6 +93,7 @@ void Script::initLUA()
 }
 
 //extern luaL_Reg cameraTable[];
+extern luaL_Reg fpsReg[];
 
 bool Script::load(const char *Scriptname)
 {
@@ -106,6 +107,7 @@ bool Script::load(const char *Scriptname)
 
     //add metatables
     addMetatable("Test", tab);
+    addMetatable("fps", fpsReg);
     //addMetatable("Camera",cameraTable);
 
     return true;

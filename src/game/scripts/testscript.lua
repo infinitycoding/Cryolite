@@ -1,4 +1,3 @@
 print("** Message form LUA: Script testscript.lua loaded **")
-x = Test:new()
-x:X(2)
-x:X(5)
+x = fps:new()
+print(x:get())
