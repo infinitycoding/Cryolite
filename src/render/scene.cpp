@@ -12,7 +12,6 @@ Scene::Scene()
     objectList = new List<Object>;
     Camlist = new List<Camera>;
     globalLamps = new List<Lamp>;
-    CL = new CollisionLocate(objectList);
     LM = new LightManager();
     GlobalAmbience = NULL;
     listenerPosition = vector(0,0,0);
@@ -24,7 +23,6 @@ Scene::~Scene()
     delete objectList;
     delete Camlist;
     delete globalLamps;
-    delete CL;
     delete LM;
 }
 
@@ -132,12 +130,12 @@ void Scene::render()
     // Interpolate Physics
     Object *currentObject = NULL;
     ListIterator<Object> O = *ListIterator<Object>(objectList).SetFirst();
-    while(!O.IsLast())
+    /*while(!O.IsLast())
     {
         currentObject = O.GetCurrent();
         currentObject->physObj.interpolatePhysics(&currentObject->localPosition, fps->get());
         O.Next();
-    }
+    }*/
 
     ListIterator<Camera> c = *ListIterator<Camera>(Camlist).SetFirst();
     while(handleCams(&c))
@@ -210,7 +208,6 @@ void Scene::render()
     }
 
     currentScene = true;
-    CL->calculateCollisions();
 }
 
 void Scene::resetLights(void)

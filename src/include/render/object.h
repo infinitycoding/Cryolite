@@ -138,9 +138,6 @@ class Object                // the main object
         Object(const char *filename, const char *objname, vector pos);   // standart constructor
         ~Object();                                                          // destructor
 
-        void initObject();       // init functions, so i don't have to write the things in every constructor
-
-
         vector getPosition();
 
 
@@ -163,6 +160,9 @@ class Object                // the main object
         PhysicalObject physObj;
 
         float approximationSphere;
+
+    protected:
+        void initObject();       // init functions, so i don't have to write the things in every constructor
 };
 
 

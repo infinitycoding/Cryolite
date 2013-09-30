@@ -6,7 +6,6 @@
 NEWBEGIN(new_vector)
     vector *v;
     vector v1;
-    std::cerr<<"vector:"<< getargc() << std::endl;
     switch(getargc())
     {
         case 1: //null constructor

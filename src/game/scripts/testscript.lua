@@ -1,3 +1,5 @@
 print("** Message form LUA: Script testscript.lua loaded **")
 x = fps:new()
 print(x:get())
+testobj = object:new("resource/objects/iccube.obj", "iccube", vector:new(0, -5, 5))
+testobj:activate()

@@ -17,7 +17,7 @@
 	"include/general_def.h"
 	"include/scene.h"
 
-1327665706 /usr/include/SDL/SDL.h
+1327664837 /usr/include/SDL/SDL.h
 	"SDL_main.h"
 	"SDL_stdinc.h"
 	"SDL_audio.h"
@@ -36,14 +36,14 @@
 	"begin_code.h"
 	"close_code.h"
 
-1327665706 /usr/include/SDL/SDL_main.h
+1327664837 /usr/include/SDL/SDL_main.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
 	"begin_code.h"
 	"close_code.h"
 
-1327665706 /usr/include/SDL/SDL_stdinc.h
+1327664837 /usr/include/SDL/SDL_stdinc.h
 	"SDL_config.h"
 	<sys/types.h>
 	<stdio.h>
@@ -69,17 +69,17 @@
 	<stdlib.h>
 	"close_code.h"
 
-1327665706 /usr/include/SDL/SDL_config.h
+1327664837 /usr/include/SDL/SDL_config.h
 	"SDL_platform.h"
 	<stdarg.h>
 
-1327665706 /usr/include/SDL/SDL_platform.h
+1327664837 /usr/include/SDL/SDL_platform.h
 
-1327665706 /usr/include/SDL/begin_code.h
+1327664837 /usr/include/SDL/begin_code.h
 
-1327665706 /usr/include/SDL/close_code.h
+1327664837 /usr/include/SDL/close_code.h
 
-1327665706 /usr/include/SDL/SDL_audio.h
+1327664837 /usr/include/SDL/SDL_audio.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_endian.h"
@@ -89,23 +89,23 @@
 	"begin_code.h"
 	"close_code.h"
 
-1327665706 /usr/include/SDL/SDL_error.h
+1327664837 /usr/include/SDL/SDL_error.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
 
-1327665706 /usr/include/SDL/SDL_endian.h
+1327664837 /usr/include/SDL/SDL_endian.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
 
-1327665706 /usr/include/SDL/SDL_mutex.h
+1327664837 /usr/include/SDL/SDL_mutex.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"begin_code.h"
 	"close_code.h"
 
-1327665706 /usr/include/SDL/SDL_thread.h
+1327664837 /usr/include/SDL/SDL_thread.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_mutex.h"
@@ -113,24 +113,24 @@
 	<process.h>
 	"close_code.h"
 
-1327665706 /usr/include/SDL/SDL_rwops.h
+1327664837 /usr/include/SDL/SDL_rwops.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"begin_code.h"
 	"close_code.h"
 
-1327665706 /usr/include/SDL/SDL_cdrom.h
+1327664837 /usr/include/SDL/SDL_cdrom.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"begin_code.h"
 	"close_code.h"
 
-1327665706 /usr/include/SDL/SDL_cpuinfo.h
+1327664837 /usr/include/SDL/SDL_cpuinfo.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
 
-1327665706 /usr/include/SDL/SDL_events.h
+1327664837 /usr/include/SDL/SDL_events.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_active.h"
@@ -141,63 +141,63 @@
 	"begin_code.h"
 	"close_code.h"
 
-1327665706 /usr/include/SDL/SDL_active.h
+1327664837 /usr/include/SDL/SDL_active.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"begin_code.h"
 	"close_code.h"
 
-1327665706 /usr/include/SDL/SDL_keyboard.h
+1327664837 /usr/include/SDL/SDL_keyboard.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_keysym.h"
 	"begin_code.h"
 	"close_code.h"
 
-1327665706 /usr/include/SDL/SDL_keysym.h
+1327664837 /usr/include/SDL/SDL_keysym.h
 
-1327665706 /usr/include/SDL/SDL_mouse.h
+1327664837 /usr/include/SDL/SDL_mouse.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_video.h"
 	"begin_code.h"
 	"close_code.h"
 
-1327665706 /usr/include/SDL/SDL_video.h
+1327664837 /usr/include/SDL/SDL_video.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"SDL_rwops.h"
 	"begin_code.h"
 	"close_code.h"
 
-1327665706 /usr/include/SDL/SDL_joystick.h
+1327664837 /usr/include/SDL/SDL_joystick.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"begin_code.h"
 	"close_code.h"
 
-1327665706 /usr/include/SDL/SDL_quit.h
+1327664837 /usr/include/SDL/SDL_quit.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 
-1327665706 /usr/include/SDL/SDL_loadso.h
-	"SDL_stdinc.h"
-	"SDL_error.h"
-	"begin_code.h"
-	"close_code.h"
-
-1327665706 /usr/include/SDL/SDL_timer.h
+1327664837 /usr/include/SDL/SDL_loadso.h
 	"SDL_stdinc.h"
 	"SDL_error.h"
 	"begin_code.h"
 	"close_code.h"
 
-1327665706 /usr/include/SDL/SDL_version.h
+1327664837 /usr/include/SDL/SDL_timer.h
+	"SDL_stdinc.h"
+	"SDL_error.h"
+	"begin_code.h"
+	"close_code.h"
+
+1327664837 /usr/include/SDL/SDL_version.h
 	"SDL_stdinc.h"
 	"begin_code.h"
 	"close_code.h"
 
-1325206088 /usr/include/SDL/SDL_image.h
+1325206101 /usr/include/SDL/SDL_image.h
 	"SDL.h"
 	"SDL_version.h"
 	"begin_code.h"
@@ -461,7 +461,7 @@
 	<general_def.h>
 	<settings.h>
 
-1325571826 /usr/include/SDL/SDL_mixer.h
+1325565747 /usr/include/SDL/SDL_mixer.h
 	"SDL_types.h"
 	"SDL_rwops.h"
 	"SDL_audio.h"
@@ -470,7 +470,7 @@
 	"begin_code.h"
 	"close_code.h"
 
-1327665706 /usr/include/SDL/SDL_types.h
+1327664837 /usr/include/SDL/SDL_types.h
 	"SDL_stdinc.h"
 
 1376908581 source:/home/simon/coding/Cryolite/src/optimize/profiler.cpp
@@ -589,4 +589,177 @@
 	<vector.h>
 	<cstdarg>
 	<stdio.h>
+
+1380544564 source:/home/peter/Programme/Cryolite/src/game/controls.cpp
+	<GL/gl.h>
+	<GL/glu.h>
+	<math.h>
+	<sdl.h>
+	<controls.h>
+	<general_def.h>
+	<object.h>
+	<vector.h>
+	<scene.h>
+	<settings.h>
+	<sound.h>
+	<physics/PhysicsEngine.h>
+
+1380555264 source:/home/peter/Programme/Cryolite/src/game/main.cpp
+	<SDL.h>
+	<GL/gl.h>
+	<AL/al.h>
+	<AL/alut.h>
+	<GL/glu.h>
+	<SDL_thread.h>
+	<SDL_mixer.h>
+	<sdl.h>
+	<controls.h>
+	<models.h>
+	<general_def.h>
+	<scene.h>
+	<font.h>
+	<level.h>
+	<light.h>
+	<settings.h>
+	<sound.h>
+	<lua/script.h>
+	<shader.h>
+	<optimize/profiler.h>
+
+1380538433 source:/home/peter/Programme/Cryolite/src/game/models.cpp
+	<models.h>
+	<material.h>
+	<font.h>
+	<settings.h>
+
+1380538433 source:/home/peter/Programme/Cryolite/src/lua/cameraLW.cpp
+
+1380554321 source:/home/peter/Programme/Cryolite/src/lua/fpsLW.cpp
+	<lua/script.h>
+	<fps.h>
+
+1380538433 source:/home/peter/Programme/Cryolite/src/lua/levelLW.cpp
+
+1380538433 source:/home/peter/Programme/Cryolite/src/lua/lightLW.cpp
+
+1380538433 source:/home/peter/Programme/Cryolite/src/lua/materialLW.cpp
+
+1380555198 source:/home/peter/Programme/Cryolite/src/lua/objectLW.cpp
+	<lua/script.h>
+	<object.h>
+	<scene.h>
+
+1380538433 source:/home/peter/Programme/Cryolite/src/lua/sceneLW.cpp
+
+1380538433 source:/home/peter/Programme/Cryolite/src/lua/sdlLW.cpp
+
+1380538433 source:/home/peter/Programme/Cryolite/src/lua/settingsLW.cpp
+
+1380538433 source:/home/peter/Programme/Cryolite/src/lua/soundLW.cpp
+
+1380538433 source:/home/peter/Programme/Cryolite/src/lua/uiLW.cpp
+
+1380538433 source:/home/peter/Programme/Cryolite/src/optimize/profiler.cpp
+	<optimize/profiler.h>
+
+1380538433 source:/home/peter/Programme/Cryolite/src/physics/ExtMaths.cpp
+	<physics/ExtMaths.h>
+	<math.h>
+
+1380538433 source:/home/peter/Programme/Cryolite/src/physics/PhysicsEngine.cpp
+	<physics/PhysicsEngine.h>
+
+1380538433 source:/home/peter/Programme/Cryolite/src/physics/collision.cpp
+	<physics/collision.h>
+
+1380538433 source:/home/peter/Programme/Cryolite/src/render/camera.cpp
+	<SDL.h>
+	<math.h>
+	<camera.h>
+	<general_def.h>
+	<settings.h>
+
+1380538433 source:/home/peter/Programme/Cryolite/src/render/font.cpp
+	<font.h>
+
+1380554720 source:/home/peter/Programme/Cryolite/src/render/fps.cpp
+	<fps.h>
+
+1380538433 source:/home/peter/Programme/Cryolite/src/render/level.cpp
+	<level.h>
+
+1380538433 source:/home/peter/Programme/Cryolite/src/render/light.cpp
+	<light.h>
+
+1380538433 source:/home/peter/Programme/Cryolite/src/render/material.cpp
+	<material.h>
+
+1380538433 source:/home/peter/Programme/Cryolite/src/render/object.cpp
+	<object.h>
+
+1380538433 source:/home/peter/Programme/Cryolite/src/render/polygon.cpp
+	<polygon.h>
+
+1380555082 source:/home/peter/Programme/Cryolite/src/render/scene.cpp
+	<GL/gl.h>
+	<GL/glu.h>
+	<math.h>
+	<SDL.h>
+	<general_def.h>
+	<scene.h>
+	<object.h>
+
+1380538433 source:/home/peter/Programme/Cryolite/src/render/sdl.cpp
+	<SDL_image.h>
+	<iostream>
+	<sdl.h>
+	<settings.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<GL/glext.h>
+
+1380538433 source:/home/peter/Programme/Cryolite/src/render/shader.cpp
+	<shader.h>
+	<iostream>
+	<fstream>
+
+1380538433 source:/home/peter/Programme/Cryolite/src/render/sound.cpp
+	<SDL/SDL.h>
+	<SDL/SDL_audio.h>
+	<SDL/SDL_mixer.h>
+	<string.h>
+	<iostream>
+	<sound.h>
+
+1380538433 source:/home/peter/Programme/Cryolite/src/render/texture.cpp
+	<texture.h>
+	<sdl.h>
+
+1380538433 source:/home/peter/Programme/Cryolite/src/render/ui.cpp
+	<sdl.h>
+	<SDL.h>
+	<ui.h>
+
+1380538433 source:/home/peter/Programme/Cryolite/src/render/vertex.cpp
+	<vertex.h>
+
+1380538433 source:/home/peter/Programme/Cryolite/src/util/parser.cpp
+	<parser.h>
+
+1380544499 source:/home/peter/Programme/Cryolite/src/util/settings.cpp
+	<settings.h>
+
+1380538433 source:/home/peter/Programme/Cryolite/src/util/vector.cpp
+	<math.h>
+	<vector.h>
+	<cstdarg>
+	<stdio.h>
+
+1380552935 source:/home/peter/Programme/Cryolite/src/lua/script.cpp
+	<lua/script.h>
+	<iostream>
+
+1380553083 source:/home/peter/Programme/Cryolite/src/lua/vectorLW.cpp
+	<lua/script.h>
+	<vector.h>
 

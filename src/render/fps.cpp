@@ -1,8 +1,11 @@
 #include <fps.h>
 
 
+const int FPS::accuracy = 60;
 
-FPS::FPS() : accuracy(60)
+
+
+FPS::FPS()
 {
     currenttick = 0;
     ticcount = 0;

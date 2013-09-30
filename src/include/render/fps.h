@@ -20,7 +20,7 @@ class FPS
         float get();
 
     protected:
-        const int accuracy;
+        static const int accuracy;
 
         int lasttick;
         float averageFPS;

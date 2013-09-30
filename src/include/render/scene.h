@@ -5,7 +5,6 @@
 #include <camera.h>
 #include <List.h>
 #include <light.h>
-#include <physics/collision.h>
 #include <physics/PhysicsEngine.h>
 #include <fps.h>
 
@@ -34,7 +33,6 @@ class Scene
 
         bool currentScene;
         GlobalLight *GlobalAmbience;
-        CollisionLocate *CL;
 
         vector listenerPosition;
 

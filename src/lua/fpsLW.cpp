@@ -8,19 +8,24 @@ extern FPS *fps;
 
 
 NEWBEGIN(newFPS)
+    if(getargc() != 1)
+    {
+        luaL_error(L, "\nnew(fps): invalid number of arguments; expected 1; got %d.\n", getargc());
+    }
+
+    CONSTRUCT();
+
     FPS **newInstance = addInstance(FPS *);
     *newInstance = fps;
 NEWEND(fps)
 
 CBEGIN(getFPS)
-    if(getargc() > 1)
+    if(getargc() != 1)
     {
-        luaL_error(L, "get(fps): invalid number of arguments; expected 1, got %d.\n", getargc());
+        luaL_error(L, "\nget(fps): invalid number of arguments; expected 1; got %d.\n", getargc());
     }
 
-    lua_getfield(L, -1, "__self");
-
-    lua_pushnumber(L, (double)(*((FPS **)luaL_checkudata(L, -1, "fps")))->get());
+    lua_pushnumber(L, (double)(*getInstance(FPS **, "fps"))->get());
 
     return 1;
 CEND
