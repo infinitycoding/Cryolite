@@ -123,7 +123,7 @@ static inline void LUA_DATA(lua_State *L, T value)
 #define LDBL(...) LUA_NUM(L, ##__VA_ARGS__);
 #define LSTR(...) LUA_STR(L, ##__VA_ARGS__);
 
-#define getarg(...)
+#define getarg(...) __VA_ARGS__
 
 #define LCINT(VALUE)
 #define LCDAT(VALUE)
