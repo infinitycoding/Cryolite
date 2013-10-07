@@ -85,7 +85,9 @@ static inline void LUA_STR(lua_State *L, char *str)
 template <typename T>
 static inline T LUA_DATA(lua_State *L, const char *Metatable)
 {
-    return GETINSTANCEFROMLUA<T>(L, Metatable);
+    T data = GETINSTANCEFROMLUA<T>(L, Metatable);
+    lua_pop(L, 2);
+    return data;
 }
 
 
@@ -118,10 +120,10 @@ static inline void LUA_DATA(lua_State *L, T value)
 #define ALLOW_LCALL(...) int LUAPARANUM = 0
 #define LCALL(FUNCTION, NRESULTS,...) lua_getglobal(L, #FUNCTION); LUAPARANUM = 0; __VA_ARGS__ lua_pcall(L,LUAPARANUM,NRESULTS,0)
 
-#define LINT(...) LUA_INT(L, ##__VA_ARGS__);
+#define LINT(...) LUA_INT(L,##__VA_ARGS__);
 #define LDAT(TYPE, TABLE_OR_VALUE) LUA_DATA<TYPE>(L, TABLE_OR_VALUE);
-#define LDBL(...) LUA_NUM(L, ##__VA_ARGS__);
-#define LSTR(...) LUA_STR(L, ##__VA_ARGS__);
+#define LDBL(...) LUA_NUM(L,##__VA_ARGS__);
+#define LSTR(...) LUA_STR(L,##__VA_ARGS__);
 
 #define getarg(...) __VA_ARGS__
 

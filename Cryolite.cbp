@@ -5,6 +5,7 @@
 		<Option title="Cryolite" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
+		<Option virtualFolders="src/game/;" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/Debug/Cryolite" prefix_auto="1" extension_auto="1" />
@@ -12,8 +13,8 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
-					<Add option="-std=c++0x" />
 					<Add option="-g" />
+					<Add option="-std=gnu++0x" />
 					<Add option="-DDEBUG" />
 				</Compiler>
 				<Linker>
@@ -68,7 +69,6 @@
 		<Unit filename="src/include/physics/PhysicsEngine.h" />
 		<Unit filename="src/include/physics/PhysicsHandler.h" />
 		<Unit filename="src/include/physics/PhysicsProperty.h" />
-		<Unit filename="src/include/physics/collision.h" />
 		<Unit filename="src/include/render/camera.h" />
 		<Unit filename="src/include/render/font.h" />
 		<Unit filename="src/include/render/fps.h" />
@@ -101,12 +101,12 @@
 		<Unit filename="src/lua/settingsLW.cpp" />
 		<Unit filename="src/lua/soundLW.cpp" />
 		<Unit filename="src/lua/uiLW.cpp" />
+		<Unit filename="src/lua/vectorLW.cpp" />
 		<Unit filename="src/optimize/profiler.cpp">
 			<Option target="Debug" />
 		</Unit>
 		<Unit filename="src/physics/ExtMaths.cpp" />
 		<Unit filename="src/physics/PhysicsEngine.cpp" />
-		<Unit filename="src/physics/collision.cpp" />
 		<Unit filename="src/render/camera.cpp" />
 		<Unit filename="src/render/font.cpp" />
 		<Unit filename="src/render/fps.cpp" />

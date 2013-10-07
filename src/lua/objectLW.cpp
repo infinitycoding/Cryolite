@@ -7,7 +7,7 @@
 NEWBEGIN(newObject)
     char *arg1 = NULL;
     char *arg2 = NULL;
-    vector arg3 = vector();
+    vector *arg3 = NULL;
     Object **newInstance = NULL;
 
     switch(getargc())
@@ -22,8 +22,7 @@ NEWBEGIN(newObject)
         case 3:
             if(lua_isstring(L, -1) && lua_isstring(L, -2))
             {
-                arg1 = (char *)lua_tostring(L, -2);
-                arg2 = (char *)lua_tostring(L, -1);
+                getarg(arg2=LSTR() arg1=LSTR());
             }
             else
             {
@@ -39,9 +38,7 @@ NEWBEGIN(newObject)
         case 4:
             if(lua_istable(L, -1) && lua_isstring(L, -2) && lua_isstring(L, -3))
             {
-                arg1 = (char *)lua_tostring(L, -3);
-                arg2 = (char *)lua_tostring(L, -2);
-                arg3 = *getInstance(vector *, "vector");
+                getarg(arg3=LDAT(vector *, "vector") arg2=LSTR() arg1=LSTR());
             }
             else
             {
@@ -51,7 +48,7 @@ NEWBEGIN(newObject)
             CONSTRUCT();
 
             newInstance = addInstance(Object *);
-            *newInstance = new Object(arg1, arg2, arg3);
+            *newInstance = new Object(arg1, arg2, *arg3);
         break;
 
         default:
