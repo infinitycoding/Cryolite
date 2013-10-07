@@ -1,5 +1,5 @@
-#ifndef LUARAPPER_H_INCLUDED
-#define LUARAPPER_H_INCLUDED
+#ifndef SCRIPT_H
+#define SCRIPT_H
 
 
 
@@ -122,6 +122,8 @@ static inline void LUA_DATA(lua_State *L, T value)
 #define LDAT(TYPE, TABLE_OR_VALUE) LUA_DATA<TYPE>(L, TABLE_OR_VALUE);
 #define LDBL(...) LUA_NUM(L, ##__VA_ARGS__);
 #define LSTR(...) LUA_STR(L, ##__VA_ARGS__);
+
+#define getarg(...)
 
 #define LCINT(VALUE)
 #define LCDAT(VALUE)
