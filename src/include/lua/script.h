@@ -69,9 +69,9 @@ static inline void LUA_NUM(lua_State *L, double value)
     lua_pushnumber(L, value);
 }
 
-static inline const char *LUA_STR(lua_State *L)
+static inline char *LUA_STR(lua_State *L)
 {
-    const char *str = lua_tostring(L, -1);
+    char *str = (char*) lua_tostring(L, -1);
     lua_pop(L, 1);
     return str;
 }
