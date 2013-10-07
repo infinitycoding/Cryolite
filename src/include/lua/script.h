@@ -100,8 +100,9 @@ static inline void LUA_DATA(lua_State *L, T value)
 
 
 
+
 #define CBEGIN(NAME) int NAME(lua_State *L){
-#define CEND }
+#define CEND(RETPARAM, ...) __VA_ARGS__ return RETPARAM;}
 
 #define NEWBEGIN(NAME) int NAME(lua_State *L){
 #define NEWEND(CLASS) luaL_getmetatable(L, #CLASS);lua_setmetatable(L, -2); lua_setfield(L, -2, "__self"); return 1;}
@@ -110,15 +111,14 @@ static inline void LUA_DATA(lua_State *L, T value)
 
 
 
-#define addInstance(TYPE) (TYPE *)lua_newuserdata(L, sizeof(TYPE))
+#define addInstance(TYPE, VALUE) LUA_DATA<TYPE>(L, VALUE);
 
 
 #define getargc(...) lua_gettop(L)
 #define getInstance(TYPE, METATABLE, ...) GETINSTANCEFROMLUA<TYPE>(L, METATABLE, ##__VA_ARGS__)
 
 
-#define ALLOW_LCALL(...) int LUAPARANUM = 0
-#define LCALL(FUNCTION, NRESULTS,...) lua_getglobal(L, #FUNCTION); LUAPARANUM = 0; __VA_ARGS__ lua_pcall(L,LUAPARANUM,NRESULTS,0)
+#define LCALL(FUNCTION, ARGC, ...) lua_getglobal(L, #FUNCTION); __VA_ARGS__ lua_pcall(L,ARGC,1,0)
 
 #define LINT(...) LUA_INT(L,##__VA_ARGS__);
 #define LDAT(TYPE, TABLE_OR_VALUE) LUA_DATA<TYPE>(L, TABLE_OR_VALUE);
@@ -126,15 +126,19 @@ static inline void LUA_DATA(lua_State *L, T value)
 #define LSTR(...) LUA_STR(L,##__VA_ARGS__);
 
 #define getarg(...) __VA_ARGS__
+#define CHECK(...) if(__VA_ARGS__){
+#define ELSE } else {
+#define CHECKEND }
+
+#define isstring(PARAM) lua_isstring(L, PARAM * -1)
+#define isobject(PARAM) lua_istable(L, PARAM * -1)
+#define isnumber(PARAM) lua_isnumber(L, PARAM * -1)
+#define lerror(FORMAT, ...) luaL_error(L, FORMAT, ##__VA_ARGS__)
 
 #define LCINT(VALUE)
 #define LCDAT(VALUE)
 #define LCDBL(VALUE)
 #define LCSTR(VALUE)
-
-
-
-
 
 
 
