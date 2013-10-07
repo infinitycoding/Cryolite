@@ -4,14 +4,12 @@
 
 
 NEWBEGIN(new_vector)
-    vector *v;
     vector v1;
     switch(getargc())
     {
         case 1: //null constructor
             CONSTRUCT();
-            v = addInstance(vector);
-            v[0] = vector();
+            addInstance(vector, vector());
         break;
 
         case 2:
@@ -21,12 +19,11 @@ NEWBEGIN(new_vector)
                 lua_pop(L,1);
                 CONSTRUCT();
                 lua_pop(L, 1);
-                vector *v = addInstance(vector);
-                *v = v1;
+                addInstance(vector, v1);
             }
             else if(lua_istable(L, -1)) //Copy constructor
             {
-                v = getInstance(vector *, "vector");
+                addInstance(vector, getInstance(vector *, "vector"));
                 lua_pop(L, 1);
             }
             else
@@ -41,8 +38,7 @@ NEWBEGIN(new_vector)
                 v1 = vector(lua_tonumber(L, -2),lua_tonumber(L, -1));
                 lua_pop(L,2);
                 CONSTRUCT();
-                vector *v = addInstance(vector);
-                *v = v1;
+                addInstance(vector, v1);
             }
             else
             {
@@ -56,8 +52,7 @@ NEWBEGIN(new_vector)
                 v1 = vector(lua_tonumber(L, -3), lua_tonumber(L, -2), lua_tonumber(L, -1));
                 lua_pop(L, 3);
                 CONSTRUCT();
-                vector *v = addInstance(vector);
-                *v = v1;
+                addInstance(vector, v1);
             }
             else
             {
@@ -83,8 +78,7 @@ CBEGIN(null_vector)
     {
         luaL_error(L, "\n vector(null): invalid number of arguments; got %d, expected none", getargc());
     }
-    return 0;
-CEND
+CEND(0)
 
 CBEGIN(len_vector)
     if(getargc() == 1)
@@ -97,8 +91,7 @@ CBEGIN(len_vector)
     {
         luaL_error(L, "\n vector(len): invalid number of arguments; got %d, expected none", getargc());
     }
-    return 0;
-CEND
+CEND(0)
 
 CBEGIN(print_vector)
     if(getargc() == 1)
@@ -110,12 +103,11 @@ CBEGIN(print_vector)
     {
         luaL_error(L, "\n vector(print): invalid number of arguments; got %d, expected none", getargc());
     }
-    return 0;
-CEND
+CEND(0)
 
 CBEGIN(set_vector)
-    return 0;
-CEND
+
+CEND(0)
 
 CBEGIN(unify_vector)
     if(getargc() == 1)
@@ -127,8 +119,7 @@ CBEGIN(unify_vector)
     {
         luaL_error(L, "\n vector(unify): invalid number of arguments; got %d, expected none", getargc());
     }
-    return 0;
-CEND
+CEND(0)
 
 NEWBEGIN(unifyc_vector)
     if(getargc() == 1)
@@ -147,7 +138,7 @@ NEWEND(vector)
 
 
 
-luaL_Reg vectorReg[]
+reg vectorReg[]
 {
     {"new", new_vector},
     {"null", null_vector},

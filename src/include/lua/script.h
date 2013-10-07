@@ -102,7 +102,7 @@ static inline void LUA_DATA(lua_State *L, T value)
 
 
 #define CBEGIN(NAME) int NAME(lua_State *L){
-#define CEND(RETPARAM, ...) __VA_ARGS__ return RETPARAM;}
+#define CEND(RETPARAM, ...) __VA_ARGS__; return RETPARAM;}
 
 #define NEWBEGIN(NAME) int NAME(lua_State *L){
 #define NEWEND(CLASS) luaL_getmetatable(L, #CLASS);lua_setmetatable(L, -2); lua_setfield(L, -2, "__self"); return 1;}
@@ -135,10 +135,7 @@ static inline void LUA_DATA(lua_State *L, T value)
 #define isnumber(PARAM) lua_isnumber(L, PARAM * -1)
 #define lerror(FORMAT, ...) luaL_error(L, FORMAT, ##__VA_ARGS__)
 
-#define LCINT(VALUE)
-#define LCDAT(VALUE)
-#define LCDBL(VALUE)
-#define LCSTR(VALUE)
+#define reg luaL_Reg
 
 
 
