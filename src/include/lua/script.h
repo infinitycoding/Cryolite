@@ -101,6 +101,8 @@ static inline void LUA_DATA(lua_State *L, T value)
 
 
 
+typedef luaL_Reg reg;
+
 #define CBEGIN(NAME) int NAME(lua_State *L){
 #define CEND(RETPARAM, ...) __VA_ARGS__; return RETPARAM;}
 
@@ -135,7 +137,6 @@ static inline void LUA_DATA(lua_State *L, T value)
 #define isnumber(PARAM) lua_isnumber(L, PARAM * -1)
 #define lerror(FORMAT, ...) luaL_error(L, FORMAT, ##__VA_ARGS__)
 
-#define reg luaL_Reg
 #define RET(RETPARAM, ...) __VA_ARGS__; return RETPARAM
 
 

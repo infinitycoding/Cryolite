@@ -47,6 +47,30 @@ NEWBEGIN(newObject)
     }
 NEWEND(object)
 
+
+CBEGIN(getAS)
+    CHECK(getargc() != 1)
+        lerror("\ngetApproximationSphere(object): invalid number of arguments; expected 1; got %d.\n", getargc());
+    CHECKEND
+CEND(1, LDBL((*getInstance(Object **, "object"))->approximationSphere))
+
+
+CBEGIN(setAS)
+    double newAS = 0.0;
+
+    CHECK(getargc() != 2)
+        lerror("\nsetApproximationSphere(object): invalid number of arguments; expected 2; got %d.\n", getargc());
+    CHECKEND
+
+    CHECK(isnumber(1))
+        getarg(newAS=LDBL());
+        (*getInstance(Object **, "object"))->approximationSphere = newAS;
+    ELSE
+        lerror("\nsetApproximationSphere(object): invalid types of arguments; expected one number.\n");
+    CHECKEND
+CEND(1, LDBL(newAS))
+
+
 extern Scene *mainScene;
 
 CBEGIN(addToScene)
@@ -61,6 +85,8 @@ CEND(0)
 reg objReg[]
 {
     {"new", newObject},
+    {"getApproximationSphere", getAS},
+    {"setApproximationSphere", setAS},
     {"activate", addToScene},
     {NULL, NULL}
 };
