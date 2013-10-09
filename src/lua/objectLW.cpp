@@ -75,7 +75,7 @@ extern Scene *mainScene;
 
 CBEGIN(addToScene)
     CHECK(getargc() != 1)
-        lerror("\nget(fps): invalid number of arguments; expected 1; got %d.\n", getargc());
+        lerror("\nactivate(object): invalid number of arguments; expected 1; got %d.\n", getargc());
     CHECKEND
 
     mainScene->addObject(*getInstance(Object **, "object"));

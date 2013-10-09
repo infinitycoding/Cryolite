@@ -167,5 +167,6 @@ int main(int argc, char *argv[]){
         SDL_GL_SwapBuffers(); // Changes frontbuffer and backbuffer
     }
 
+
     return 0;
 }

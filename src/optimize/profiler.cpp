@@ -1,27 +1,29 @@
 #include <optimize/profiler.h>
 
 
-// The standart constructor.
+// The zero constructor.
 // Set's all counter variables to zero and sets the time to the actual time.
+// The maximal profile plot number is a default one.
 
 Profiler::Profiler()
 {
+    profilePlots = new ticks[STANDART_MAX_PROFILE_PLOTS];
+    numOfProfilePlots = STANDART_MAX_PROFILE_PLOTS;
+
     resetProfile();
 }
 
 
-// The copy-constructor.
-// Copy's all variables to the new object.
+// The standart constructor.
+// Set's all counter variables to zero and sets the time to the actual time.
+// The maximal profile plot number is given as a parameter.
 
-Profiler::Profiler(Profiler *templ)
+Profiler::Profiler(unsigned int profilePlotNumber)
 {
-    lastAddTime = templ->lastAddTime;
-    allTicks = templ->allTicks;
+    profilePlots = new ticks[profilePlotNumber];
+    numOfProfilePlots = profilePlotNumber;
 
-    actualProfilePlot = templ->actualProfilePlot;
-    highestProfilePlot = templ->highestProfilePlot;
-
-    memcpy(profilePlots, templ->profilePlots, sizeof(profilePlots));
+    resetProfile();
 }
 
 
@@ -30,7 +32,7 @@ Profiler::Profiler(Profiler *templ)
 
 Profiler::~Profiler()
 {
-
+    delete[] profilePlots;
 }
 
 
@@ -44,7 +46,7 @@ void Profiler::resetProfile()
     actualProfilePlot = 0;
     highestProfilePlot = 0;
 
-    memset(profilePlots, 0, sizeof(profilePlots));
+    memset(profilePlots, 0, sizeof(ticks) * numOfProfilePlots);
 }
 
 
@@ -53,10 +55,10 @@ void Profiler::resetProfile()
 
 bool Profiler::addProfilePlot()
 {
-    unsigned int actualTime = getActualTime();
-    unsigned int timeDifference = actualTime - lastAddTime;
+    ticks actualTime = getActualTime();
+    ticks timeDifference = actualTime - lastAddTime;
 
-    if(!(actualProfilePlot > MAX_PROFILE_PLOTS))
+    if(!(actualProfilePlot > numOfProfilePlots))
         profilePlots[actualProfilePlot] += timeDifference;
     else
         return false;
@@ -112,7 +114,7 @@ bool Profiler::saveProfile(const char *filename)
 // This is an intern function, it's only reason of existing is to make the
 // profiler-class independant of SDL without big changes.
 
-unsigned int Profiler::getActualTime()
+ticks Profiler::getActualTime()
 {
     return SDL_GetTicks();
 }

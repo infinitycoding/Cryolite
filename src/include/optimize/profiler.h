@@ -6,8 +6,12 @@
 #include <SDL.h>
 
 
+#define STANDART_MAX_PROFILE_PLOTS 20
 
-#define MAX_PROFILE_PLOTS 20
+
+typedef unsigned int ticks;
+
+
 
 /********************************************************
  *                                                      *
@@ -23,13 +27,14 @@
  ********************************************************/
 
 
+
 class Profiler
 {
 
     public:
 
         Profiler();
-        Profiler(Profiler *templ);
+        Profiler(unsigned int profilePlotNumber);
         virtual ~Profiler();
 
         void resetProfile();
@@ -39,17 +44,20 @@ class Profiler
 
         bool saveProfile(const char *filename);
 
-    private:
 
-        unsigned int getActualTime();
+    protected:
+
+        ticks getActualTime();
 
 
-        unsigned int lastAddTime;
-        unsigned int allTicks;
+        ticks lastAddTime;
+        ticks allTicks;
 
         unsigned int actualProfilePlot;
         unsigned int highestProfilePlot;
-        unsigned int profilePlots[MAX_PROFILE_PLOTS];
+
+        unsigned int numOfProfilePlots;
+        ticks *profilePlots;
 
 
 };
