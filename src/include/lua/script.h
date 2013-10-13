@@ -82,6 +82,20 @@ static inline void LUA_STR(lua_State *L, char *str)
     lua_pushstring(L, str);
 }
 
+
+static inline bool LUA_BOOL(lua_State *L)
+{
+    bool value = lua_toboolean(L, -1);
+    lua_pop(L, 1);
+    return value;
+}
+
+
+static inline void LUA_BOOL(lua_State *L, bool value)
+{
+    lua_pushboolean(L, value);
+}
+
 template <typename T>
 static inline T LUA_DATA(lua_State *L, const char *Metatable)
 {
@@ -126,6 +140,7 @@ typedef luaL_Reg reg;
 #define LDAT(TYPE, TABLE_OR_VALUE) LUA_DATA<TYPE>(L, TABLE_OR_VALUE);
 #define LDBL(...) LUA_NUM(L,##__VA_ARGS__);
 #define LSTR(...) LUA_STR(L,##__VA_ARGS__);
+#define LBOOL(...) LUA_BOOL(L,##__VA_ARGS__);
 
 #define getarg(...) __VA_ARGS__
 #define CHECK(...) if(__VA_ARGS__){
