@@ -61,6 +61,7 @@ extern reg fpsReg[];
 extern reg vectorReg[];
 extern reg objReg[];
 extern reg profilerReg[];
+extern reg shaderReg[];
 
 bool Script::load(const char *Scriptname)
 {
@@ -77,6 +78,7 @@ bool Script::load(const char *Scriptname)
     addMetatable("vector", vectorReg);
     addMetatable("object", objReg);
     addMetatable("profiler", profilerReg);
+    addMetatable("shader", shaderReg);
     //addMetatable("Camera",cameraTable);
 
     return true;
