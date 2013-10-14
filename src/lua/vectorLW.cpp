@@ -99,8 +99,7 @@ CBEGIN(set_vector)
 
             case 3:
                 CHECK(isnumber(1) && isnumber(2))
-                    double y = getarg(LDBL());
-                    double x = getarg(LDBL());
+                    getarg(double y = LDBL(); double x = LDBL());
                     getInstance(vector *, "vector")->setvalue(x,y);
                 ELSE
                     luaL_error(L, "\n vector(set): invalid argument type; Two numbers expected.");
@@ -109,9 +108,7 @@ CBEGIN(set_vector)
 
             case 4:
                 CHECK(isnumber(1) && isnumber(2) && isnumber(3))
-                    double z = getarg(LDBL());
-                    double y = getarg(LDBL());
-                    double x = getarg(LDBL());
+                     getarg(double z = LDBL(); double y = LDBL(); double x = LDBL());
                     getInstance(vector *, "vector")->setvalue(x,y,z);
                 ELSE
                     luaL_error(L, "\n vector(set): invalid argument type; Three numbers expected.");
