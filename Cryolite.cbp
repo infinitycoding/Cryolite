@@ -100,6 +100,7 @@
 		<Unit filename="src/lua/script.cpp" />
 		<Unit filename="src/lua/sdlLW.cpp" />
 		<Unit filename="src/lua/settingsLW.cpp" />
+		<Unit filename="src/lua/shaderLW.cpp" />
 		<Unit filename="src/lua/soundLW.cpp" />
 		<Unit filename="src/lua/uiLW.cpp" />
 		<Unit filename="src/lua/vectorLW.cpp" />

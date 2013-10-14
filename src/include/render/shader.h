@@ -18,7 +18,7 @@
  * Activate the shader with activate(), deactivate it with deactivate().    *
  *                                                                          *
  * Author: Peter Hösch                                                      *
- * Date: 19.08.2013                                                         *
+ * Date: 14.10.2013                                                         *
  *                                                                          *
  ****************************************************************************/
 
