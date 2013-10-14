@@ -13,126 +13,135 @@ NEWBEGIN(new_vector)
         break;
 
         case 2:
-            if(lua_isnumber(L, -1)) //x-coordinate
-            {
-                v1 = vector(lua_tonumber(L, -1));
-                lua_pop(L,1);
+            CHECK(isnumber(1)) //x-coordinate
+                double x = getarg(LDBL());
                 CONSTRUCT();
-                lua_pop(L, 1);
-                addInstance(vector, v1);
-            }
-            else if(lua_istable(L, -1)) //Copy constructor
-            {
-                addInstance(vector, getInstance(vector *, "vector"));
-                lua_pop(L, 1);
-            }
-            else
-            {
+                addInstance(vector, vector(x));
+
+            ELSEIF(isobject(1)) //Copy constructor
+                addInstance(vector, *getInstance(vector *, "vector"));
+
+            ELSE
                 luaL_error(L, "\n vector(new): invalid arguments; expected vector, number, two numbers or three numbers");
-            }
+            CHECKEND
         break;
 
         case 3:
-            if(lua_isnumber(L, -1) && lua_isnumber(L, -2)) // x and y coordinate
-            {
-                v1 = vector(lua_tonumber(L, -2),lua_tonumber(L, -1));
-                lua_pop(L,2);
+            CHECK(isnumber(1) && isnumber(2)) // x and y coordinate
+                double y = getarg(LDBL());
+                double x = getarg(LDBL());
                 CONSTRUCT();
-                addInstance(vector, v1);
-            }
-            else
-            {
+                addInstance(vector, vector(x, y));
+
+            ELSE
                 luaL_error(L, "\n vector(new): invalid arguments; expected vector, number, two numbers or three numbers");
-            }
+            CHECKEND
         break;
 
         case 4:
-            if(lua_isnumber(L, -1) && lua_isnumber(L, -2) && lua_isnumber(L, -3)) // x, y and z coordinate
-            {
-                v1 = vector(lua_tonumber(L, -3), lua_tonumber(L, -2), lua_tonumber(L, -1));
-                lua_pop(L, 3);
+            CHECK(isnumber(1) && isnumber(2) && isnumber(3)) // x, y and z coordinate
+                double z = getarg(LDBL());
+                double y = getarg(LDBL());
+                double x = getarg(LDBL());
                 CONSTRUCT();
-                addInstance(vector, v1);
-            }
-            else
-            {
+                addInstance(vector, vector(x, y, z));
+            ELSE
                 luaL_error(L, "\n vector(new): invalid arguments; expected vector, number, two numbers or three numbers");
-            }
+            CHECKEND
         break;
 
         default:
             luaL_error(L, "\n vector(new): invalid number of arguments; got %d, expected 1,2 or 3", getargc());
         break;
-
     };
 NEWEND(vector)
 
 
 CBEGIN(null_vector)
-    if(getargc() == 1)
-    {
-        vector *v = getInstance(vector *, "vector");
-        v->null();
-    }
-    else
-    {
+    CHECK(getargc() == 1)
+        getInstance(vector *, "vector")->null();
+    ELSE
         luaL_error(L, "\n vector(null): invalid number of arguments; got %d, expected none", getargc());
-    }
+    CHECKEND
 CEND(0)
+
 
 CBEGIN(len_vector)
-    if(getargc() == 1)
-    {
-        vector *v = getInstance(vector *, "vector");
-        LDBL(v->len());
-        return 1;
-    }
-    else
-    {
+    CHECK(getargc() == 1)
+        RET(1,LDBL(getInstance(vector *, "vector")->len()));
+    ELSE
         luaL_error(L, "\n vector(len): invalid number of arguments; got %d, expected none", getargc());
-    }
+    CHECKEND
 CEND(0)
+
 
 CBEGIN(print_vector)
-    if(getargc() == 1)
-    {
-        vector *v = getInstance(vector *, "vector");
-        v->print();
-    }
-    else
-    {
+    CHECK(getargc() == 1)
+        getInstance(vector *, "vector")->print();
+    ELSE
         luaL_error(L, "\n vector(print): invalid number of arguments; got %d, expected none", getargc());
-    }
+    CHECKEND
 CEND(0)
+
 
 CBEGIN(set_vector)
+        switch(getargc())
+        {
+            case 2: //instance + 1. arg
+                CHECK(isnumber(1))
+                    getInstance(vector *, "vector")->setvalue(getarg(LDBL()));
+                ELSEIF(isobject(1))
+                    getInstance(vector *, "vector")->setvalue(getarg(LDAT(vector *, "vector")));
+                ELSE
+                    luaL_error(L, "\n vector(set): invalid argument type; Number or vector expected.");
+                CHECKEND
+            break;
 
+            case 3:
+                CHECK(isnumber(1) && isnumber(2))
+                    double y = getarg(LDBL());
+                    double x = getarg(LDBL());
+                    getInstance(vector *, "vector")->setvalue(x,y);
+                ELSE
+                    luaL_error(L, "\n vector(set): invalid argument type; Two numbers expected.");
+                CHECKEND
+            break;
+
+            case 4:
+                CHECK(isnumber(1) && isnumber(2) && isnumber(3))
+                    double z = getarg(LDBL());
+                    double y = getarg(LDBL());
+                    double x = getarg(LDBL());
+                    getInstance(vector *, "vector")->setvalue(x,y,z);
+                ELSE
+                    luaL_error(L, "\n vector(set): invalid argument type; Three numbers expected.");
+                CHECKEND
+            break;
+
+            default:
+                luaL_error(L, "\n vector(set): invalid number of arguments; got %d, expected 1,2 or 3", getargc());
+            break;
+        };
 CEND(0)
+
 
 CBEGIN(unify_vector)
-    if(getargc() == 1)
-    {
-        vector *v = getInstance(vector *, "vector");
-        v->unify();
-    }
-    else
-    {
+    CHECK(getargc() == 1)
+        getInstance(vector *, "vector")->unify();
+    ELSE
         luaL_error(L, "\n vector(unify): invalid number of arguments; got %d, expected none", getargc());
-    }
+    CHECKEND
 CEND(0)
 
+
 NEWBEGIN(unifyc_vector)
-    if(getargc() == 1)
-    {
-        vector *v = getInstance(vector *, "vector");
-        vector vr = v->unifyc();
+    CHECK(getargc() == 1)
+        vector v = getInstance(vector *, "vector")->unifyc();
         CONSTRUCT();
-        LDAT(vector, vr);
-    }
-    else
-    {
+        RET(1,LDAT(vector, v));
+    ELSE
         luaL_error(L, "\n vector(unifyc): invalid number of arguments; got %d, expected none", getargc());
-    }
+    CHECKEND
 NEWEND(vector)
 
 
