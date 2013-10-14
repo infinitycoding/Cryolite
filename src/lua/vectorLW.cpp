@@ -22,7 +22,7 @@ NEWBEGIN(new_vector)
                 addInstance(vector, *getInstance(vector *, "vector"));
 
             ELSE
-                luaL_error(L, "\n vector(new): invalid arguments; expected vector, number, two numbers or three numbers");
+                lerror("\n vector(new): invalid arguments; expected vector, number, two numbers or three numbers");
             CHECKEND
         break;
 
@@ -34,7 +34,7 @@ NEWBEGIN(new_vector)
                 addInstance(vector, vector(x, y));
 
             ELSE
-                luaL_error(L, "\n vector(new): invalid arguments; expected vector, number, two numbers or three numbers");
+                lerror("\n vector(new): invalid arguments; expected vector, number, two numbers or three numbers");
             CHECKEND
         break;
 
@@ -46,12 +46,12 @@ NEWBEGIN(new_vector)
                 CONSTRUCT();
                 addInstance(vector, vector(x, y, z));
             ELSE
-                luaL_error(L, "\n vector(new): invalid arguments; expected vector, number, two numbers or three numbers");
+                lerror("\n vector(new): invalid arguments; expected vector, number, two numbers or three numbers");
             CHECKEND
         break;
 
         default:
-            luaL_error(L, "\n vector(new): invalid number of arguments; got %d, expected 1,2 or 3", getargc());
+            lerror("\n vector(new): invalid number of arguments; got %d, expected 1,2 or 3", getargc());
         break;
     };
 NEWEND(vector)
@@ -61,7 +61,7 @@ CBEGIN(null_vector)
     CHECK(getargc() == 1)
         getInstance(vector *, "vector")->null();
     ELSE
-        luaL_error(L, "\n vector(null): invalid number of arguments; got %d, expected none", getargc());
+        lerror("\n vector(null): invalid number of arguments; got %d, expected none", getargc());
     CHECKEND
 CEND(0)
 
@@ -70,7 +70,7 @@ CBEGIN(len_vector)
     CHECK(getargc() == 1)
         RET(1,LDBL(getInstance(vector *, "vector")->len()));
     ELSE
-        luaL_error(L, "\n vector(len): invalid number of arguments; got %d, expected none", getargc());
+        lerror("\n vector(len): invalid number of arguments; got %d, expected none", getargc());
     CHECKEND
 CEND(0)
 
@@ -79,7 +79,7 @@ CBEGIN(print_vector)
     CHECK(getargc() == 1)
         getInstance(vector *, "vector")->print();
     ELSE
-        luaL_error(L, "\n vector(print): invalid number of arguments; got %d, expected none", getargc());
+        lerror("\n vector(print): invalid number of arguments; got %d, expected none", getargc());
     CHECKEND
 CEND(0)
 
@@ -93,7 +93,7 @@ CBEGIN(set_vector)
                 ELSEIF(isobject(1))
                     getInstance(vector *, "vector")->setvalue(getarg(LDAT(vector *, "vector")));
                 ELSE
-                    luaL_error(L, "\n vector(set): invalid argument type; Number or vector expected.");
+                    lerror("\n vector(set): invalid argument type; Number or vector expected.");
                 CHECKEND
             break;
 
@@ -102,7 +102,7 @@ CBEGIN(set_vector)
                     getarg(double y = LDBL(); double x = LDBL());
                     getInstance(vector *, "vector")->setvalue(x,y);
                 ELSE
-                    luaL_error(L, "\n vector(set): invalid argument type; Two numbers expected.");
+                    lerror("\n vector(set): invalid argument type; Two numbers expected.");
                 CHECKEND
             break;
 
@@ -111,12 +111,12 @@ CBEGIN(set_vector)
                      getarg(double z = LDBL(); double y = LDBL(); double x = LDBL());
                     getInstance(vector *, "vector")->setvalue(x,y,z);
                 ELSE
-                    luaL_error(L, "\n vector(set): invalid argument type; Three numbers expected.");
+                    lerror("\n vector(set): invalid argument type; Three numbers expected.");
                 CHECKEND
             break;
 
             default:
-                luaL_error(L, "\n vector(set): invalid number of arguments; got %d, expected 1,2 or 3", getargc());
+                lerror("\n vector(set): invalid number of arguments; got %d, expected 1,2 or 3", getargc());
             break;
         };
 CEND(0)
@@ -126,7 +126,7 @@ CBEGIN(unify_vector)
     CHECK(getargc() == 1)
         getInstance(vector *, "vector")->unify();
     ELSE
-        luaL_error(L, "\n vector(unify): invalid number of arguments; got %d, expected none", getargc());
+        lerror("\n vector(unify): invalid number of arguments; got %d, expected none", getargc());
     CHECKEND
 CEND(0)
 
@@ -137,10 +137,118 @@ NEWBEGIN(unifyc_vector)
         CONSTRUCT();
         RET(1,LDAT(vector, v));
     ELSE
-        luaL_error(L, "\n vector(unifyc): invalid number of arguments; got %d, expected none", getargc());
+        lerror("\n vector(unifyc): invalid number of arguments; got %d, expected none", getargc());
     CHECKEND
 NEWEND(vector)
 
+
+CBEGIN(add_vector)
+    switch(getargc())
+    {
+        case 0:
+        case 1:
+            lerror("\n vector(add): invalid number of arguments; got %d, expected 2 or 3 ", getargc());
+        break;
+
+        case 2:
+            CHECK(isobject(1))
+                getInstance(vector *, "vector")->add(getarg(LDAT(vector *, "vector")));
+            ELSE
+                lerror("\n vector(add): invalid argument type; vector expected.");
+            CHECKEND
+        break;
+
+        case 3:
+            CHECK(isobject(1) && isobject(2))
+                getInstance(vector *, "vector")->add(getarg(LDAT(vector *, "vector")),getarg(LDAT(vector *, "vector")));
+            ELSE
+                lerror("\n vector(add): invalid argument type; two vectors expected.");
+            CHECKEND
+        break;
+
+        default:
+            for(int i = 1; i <= getargc(); i++)
+            {
+                if(!isobject(i))
+                    lerror("\n vector(add): invalid argument %d type; vector expected.", i);
+            }
+            vector temp = vector();
+            while(getargc() > 1)
+            {
+                temp += getarg(LDAT(vector *, "vector"));
+            }
+            getInstance(vector *, "vector")->add(temp);
+        break;
+    };
+CEND(0)
+
+
+CBEGIN(addc_vector)
+    switch(getargc())
+    {
+        case 0:
+        case 1:
+            lerror("\n vector(addc): invalid number of arguments; got %d, expected 2 or 3 ", getargc());
+        break;
+
+        case 2:
+            CHECK(isobject(1))
+                RET(1, LDAT(vector, *getarg(LDAT(vector *, "vector")) + getInstance(vector *, "vector")));
+            ELSE
+                lerror("\n vector(addc): invalid argument type; vector expected.");
+            CHECKEND
+        break;
+
+        case 3:
+            CHECK(isobject(1) && isobject(2))
+                RET(1, LDAT(vector, *getarg(LDAT(vector *, "vector")) + *getarg(LDAT(vector *, "vector")) + getInstance(vector *, "vector")));
+            ELSE
+                lerror("\n vector(addc): invalid argument type; two vectors expected.");
+            CHECKEND
+        break;
+
+        default:
+            for(int i = 1; i <= getargc(); i++)
+            {
+                if(!isobject(i))
+                    lerror("\n vector(addc): invalid argument %d type; vector expected.", i);
+            }
+            vector temp = vector();
+            while(getargc() > 1)
+            {
+                temp += getarg(LDAT(vector *, "vector"));
+            }
+            RET(1, getInstance(vector *, "vector")->addc(temp));
+        break;
+    };
+CEND(0)
+
+
+CBEGIN(sub_vector)
+    switch(getargc())
+    {
+        case 2:
+            CHECK(isobject(1))
+                getInstance(vector *, "vector")->sub(getarg(LDAT(vector *, "vector")));
+            ELSE
+                lerror("\n vector(add): invalid argument type; vector expected.");
+            CHECKEND
+        break;
+
+        case 3:
+            CHECK(isobject(1) && isobject(2))
+            vector v2 = *getarg(LDAT(vector *, "vector"));
+                getInstance(vector *, "vector")->sub(getarg(LDAT(vector *, "vector")), v2);
+            ELSE
+                lerror("\n vector(add): invalid argument type; two vectors expected.");
+            CHECKEND
+        break;
+
+        default:
+            lerror("\n vector(add): invalid number of arguments; got %d, expected 2 or 3 ", getargc());
+        break;
+    };
+CEND(0)
 
 
 
@@ -153,6 +261,9 @@ reg vectorReg[]
     {"set", set_vector},
     {"unify", unify_vector},
     {"unifyc", unifyc_vector},
+    {"add", add_vector},
+    {"addc", addc_vector},
+    {"sub", sub_vector},
     {NULL, NULL}
 };
 
