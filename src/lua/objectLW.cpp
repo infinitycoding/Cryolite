@@ -19,7 +19,7 @@ NEWBEGIN(newObject)
 
         case 3:
             CHECK(isstring(1) && isstring(2))
-                getarg(arg2=LSTR() arg1=LSTR());
+                getarg(arg2=LSTR(); arg1=LSTR());
             ELSE
                 lerror("\nnew(object): invalid types of arguments; expected two strings.\n");
             CHECKEND
@@ -31,7 +31,7 @@ NEWBEGIN(newObject)
 
         case 4:
             CHECK(isobject(1) && isstring(2) && isstring(3))
-                getarg(arg3=LDAT(vector *, "vector") arg2=LSTR() arg1=LSTR());
+                getarg(arg3=LDAT(vector *, "vector"); arg2=LSTR(); arg1=LSTR());
             ELSE
                 lerror("\nnew(object): invalid types of arguments; expected two strings and a vector.\n");
             CHECKEND

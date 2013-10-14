@@ -136,17 +136,19 @@ typedef luaL_Reg reg;
 
 #define LCALL(FUNCTION, ARGC, ...) lua_getglobal(L, #FUNCTION); __VA_ARGS__ lua_pcall(L,ARGC,1,0)
 
-#define LINT(...) LUA_INT(L,##__VA_ARGS__);
-#define LDAT(TYPE, TABLE_OR_VALUE) LUA_DATA<TYPE>(L, TABLE_OR_VALUE);
-#define LDBL(...) LUA_NUM(L,##__VA_ARGS__);
-#define LSTR(...) LUA_STR(L,##__VA_ARGS__);
-#define LBOOL(...) LUA_BOOL(L,##__VA_ARGS__);
+#define LINT(...) LUA_INT(L,##__VA_ARGS__)
+#define LDAT(TYPE, TABLE_OR_VALUE) LUA_DATA<TYPE>(L, TABLE_OR_VALUE)
+#define LDBL(...) LUA_NUM(L,##__VA_ARGS__)
+#define LSTR(...) LUA_STR(L,##__VA_ARGS__)
+#define LBOOL(...) LUA_BOOL(L,##__VA_ARGS__)
 
 #define getarg(...) __VA_ARGS__
 #define CHECK(...) if(__VA_ARGS__){
 #define ELSE } else {
+#define ELSEIF(...) } else if(__VA_ARGS__){
 #define CHECKEND }
 
+#define isbool(PARAM) lua_isboolean(L, PARAM * -1)
 #define isstring(PARAM) lua_isstring(L, PARAM * -1)
 #define isobject(PARAM) lua_istable(L, PARAM * -1)
 #define isnumber(PARAM) lua_isnumber(L, PARAM * -1)
@@ -156,9 +158,4 @@ typedef luaL_Reg reg;
 
 
 
-
-
-
-
 #endif
-
