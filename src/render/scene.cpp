@@ -246,6 +246,7 @@ int Scene::handleCams(ListIterator<Camera> *c)
     return false;
 }
 
+float shine[] { 0.75f, 0.75f, 0.75f, 1 };
 
 void Scene::renderPolygones(Object *currentObject)
 {
@@ -258,12 +259,11 @@ void Scene::renderPolygones(Object *currentObject)
         Polygon *currentPolygon = (Polygon *)p.GetCurrent();
         glBegin( GL_POLYGON );
 
-            glMaterialfv(GL_AMBIENT, GL_FRONT_AND_BACK,currentObject->objType->ObjectTypeMaterial->ambiantMatColor);
-            glMaterialfv(GL_DIFFUSE, GL_FRONT_AND_BACK,currentObject->objType->ObjectTypeMaterial->diffuseMatColor);
-            glMaterialfv(GL_SPECULAR, GL_FRONT_AND_BACK,currentObject->objType->ObjectTypeMaterial->specularMatColor);
-            glMaterialfv(GL_EMISSION, GL_FRONT_AND_BACK,currentObject->objType->ObjectTypeMaterial->emissiveMatColor);
-            glMaterialf(GL_SHININESS, GL_FRONT_AND_BACK,currentObject->objType->ObjectTypeMaterial->specularExponent);
-
+            glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, currentObject->objType->ObjectTypeMaterial->ambiantMatColor);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, currentObject->objType->ObjectTypeMaterial->diffuseMatColor);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, currentObject->objType->ObjectTypeMaterial->specularMatColor);
+            glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, currentObject->objType->ObjectTypeMaterial->emissiveMatColor);
+            glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, currentObject->objType->ObjectTypeMaterial->specularExponent);
 
             for(int i=0;i < currentPolygon->getVertexAmount();i++)
             {
