@@ -46,7 +46,7 @@ CBEGIN(addP)
     CHECKEND
 
     bool success = (*getInstance(Profiler **, "profiler"))->addProfilePlot();
-CEND(1, LDBL(success))
+CEND(1, LBOOL(success))
 
 
 CBEGIN(addFinalP)
@@ -55,7 +55,7 @@ CBEGIN(addFinalP)
     CHECKEND
 
     bool success = (*getInstance(Profiler **, "profiler"))->addFinalProfilePlot();
-CEND(1, LDBL(success))
+CEND(1, LBOOL(success))
 
 
 CBEGIN(saveProfiler)
@@ -72,7 +72,7 @@ CBEGIN(saveProfiler)
     CHECKEND
 
     bool success = (*getInstance(Profiler **, "profiler"))->saveProfile(filename);
-CEND(1, LDBL(success))
+CEND(1, LBOOL(success))
 
 
 reg profilerReg[]

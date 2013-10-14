@@ -1,5 +1,5 @@
-#ifndef SHADER_H_INCLUDED       // as a programmer you shout know what these two lines do
-#define SHADER_H_INCLUDED       // if you don't: they prevent a double including of this header file
+#ifndef SHADER_H_INCLUDED
+#define SHADER_H_INCLUDED
 
 
 
@@ -24,79 +24,100 @@
 
 
 
-#define GL_GLEXT_PROTOTYPES     // this define is needed to make the preprocessor beleaving me that i have the right opengl version (don't ask me why)
+#define GL_GLEXT_PROTOTYPES
 
 
-#include <GL/gl.h>              // gl.h is needed for the standart gl things (GLuint etc...)
-#include <SDL/SDL_opengl.h>     // SDL_opengl.h is needed for some extended shader functions
+#include <GL/gl.h>
+#include <SDL/SDL_opengl.h>
 
 
 
-
-enum ShaderType             // an enum of shader types (it brings the defines of opengl in one structure)
+enum ShaderType
 {
-    vertexShader = GL_VERTEX_SHADER,                            // vertex shader affect all drawn vertices
-    vertexShaderARB = GL_VERTEX_SHADER_ARB,                     // the same as the normal vertex shader, but opengl has two definitions so i have two too
-    fragmentShader = GL_FRAGMENT_SHADER,                        // fragment shaders affect fragments (a fragment is a pixel before it is on the screen)
-    fragmentShaderARB = GL_FRAGMENT_SHADER_ARB,                 // the same as the normal fragment shader, but opengl has two definitions so i have two too
-    geometryShader = GL_GEOMETRY_SHADER,                        // geometry shaders can add new geometry to the scene
-    tesselationControlShader = GL_TESS_CONTROL_SHADER,          // don't ask what this is
-    tesselationEvaluationShader = GL_TESS_EVALUATION_SHADER,    // don't ask what this is
-    undefined = 0,                                              // i wanted to have a value with which i can initialize it
-    other = 0                                                   // the value my program sets the shaderType automatically if it has a different value than the ones above
+    vertexShader = GL_VERTEX_SHADER,
+    vertexShaderARB = GL_VERTEX_SHADER_ARB,
+    fragmentShader = GL_FRAGMENT_SHADER,
+    fragmentShaderARB = GL_FRAGMENT_SHADER_ARB,
+    geometryShader = GL_GEOMETRY_SHADER,
+    tesselationControlShader = GL_TESS_CONTROL_SHADER,
+    tesselationEvaluationShader = GL_TESS_EVALUATION_SHADER,
+    undefined = 0,
+    other = 0
 };
 
 
-struct shaderObject         // a struct which stores all things one shader object (vertex or fragment shader) can have
+enum ShaderState
 {
-    char *fileBuffer;       // the uncompiled shader as an loaded ascii-file
-    int fileLen;            // the length of the file (opengl want's to know this=
-    GLuint object;          // the id of the shader object
-    ShaderType type;        // the type of the shader object
-    int compileStatus;      // the compile status (true is compiled, false if not)
+    notLoadedYet,
+    typeAccepted,
+    typeRejected,
+    fileLoadSuccess,
+    fileLoadFailed,
+    objectCreateSuccess,
+    objectCreateFailed,
+    compilationSuccess,
+    compilationFailed
 };
 
 
 
-class Shader                // a class which stores all things and functions one program object (vertex and fragment shader) has
+class ShaderObject
 {
     public:
-        Shader();                                               // the zero-constructor
-        Shader(const char *vsfile, const char *fsfile);      // the standart constructor (it needs the name of the two  shader files)
-        ~Shader();                                              // the destructor
+        ShaderObject();
+        ShaderObject(const char *filename, ShaderType kind);
+        ~ShaderObject();
 
-        bool loadShader(const char *filename, ShaderType kind);     // the load function you have to use if you created the shader with the zero
-                                                                      //constructor (loads a shader object, needs the filename and the type)
-                                                                      // in fact this is a surface to the other load function
+        bool loadShader(const char *filename, ShaderType kind);
 
-        bool make();                                            // this function links the two shader objects with the program object after both are loaded
+        ShaderState getStatus();
+        GLuint getObject();
 
-        bool activate();                                        // a function which activates the shader
-        void deactivate();                                      // a function which deactivates all shaders
+    private:
+        void initShaderObject();
+
+        int getFileLength(const char *filename);
+        char *loadASCIIFile(const char *filename, int &len);
+
+        bool setType(ShaderType &typevar, ShaderType newType);
+
+        bool unloadASCIIFileBuffer(char *&buffer);
+        bool unloadShaderObject(GLuint obj);
+
+
+        char *fileBuffer;
+        int fileLen;
+        GLuint object;
+        ShaderType type;
+        int compileStatus;
+        ShaderState status;
+};
+
+
+class Shader
+{
+    public:
+        Shader();
+        Shader(const char *vsfile, const char *fsfile);
+        ~Shader();
+
+        bool loadShader(const char *filename, ShaderType kind);
+
+        bool make();
+
+        bool activate();
+        void deactivate();
 
     protected:
-        void initShader();                                      // a init function which contains the things which are the same in all constructors
-
-        bool loadShader(const char *filename, shaderObject *shaderObj, ShaderType kind);    // the load function which is used by the other load function and the standart constructor
-                                                                                              // in addition to the parameters of other load function it needs a pointer to a shader object
-                                                                                              // (and really loads a shader instead of starting an other funtion to do this)
-
-        int getFileLength(const char *filename);                // a help function to loadASCIIFile, needs a filename and returns the length of the file
-        char *loadASCIIFile(const char *filename, int &len);   // a help function to loadShader, loads a ASCII-file, needs the filename and a referance to a int-variable to store the length. it returns a pointer to the file buffer
-
-        bool setType(ShaderType &typevar, ShaderType newType);      // a function which sets a shadertype-var to a shadertype and returns if the shadertype is supported or not
-
-        bool unloadASCIIFileBuffer(char *buffer);       // a function to unload the file buffer loaded with loadASCIIFile. needs a pointer to the buffer, returns if the operation was successfully or not.
-        bool unloadShaderObject(GLuint obj);             // a function to unload a shader object. needs the id of the object, returns if the operation was successfully or not.
+        void initShader();
 
 
+        GLuint program;
 
-        GLuint program;                 // the id of the program object
-
-        shaderObject *vertShader;       // the vertex shader
-        shaderObject *fragShader;       // the fragment shader
+        ShaderObject *vertShader;
+        ShaderObject *fragShader;
 };
 
 
 
-#endif      // this #endif closes the #ifndef SHADER_H_INCLUDED at the top of this file
+#endif

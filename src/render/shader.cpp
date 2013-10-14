@@ -1,284 +1,184 @@
-#include <shader.h>         // the header of this module
+#include <shader.h>
 
-#include <iostream>         // iostream is needed for debug outputs
-#include <fstream>          // fstream is needed for loading files.
-
-
-
-using namespace std;        // because i don't want to write std:: hundred times
+#include <iostream>
+#include <fstream>
 
 
 
-// the zero-constructor
+using namespace std;
 
-Shader::Shader()
+
+
+ShaderObject::ShaderObject()
 {
-    initShader();       // just the standart initializations
+    initShaderObject();
 }
 
 
-// the standart constructor (it needs the name of the two  shader files)
-
-Shader::Shader(const char *vsfile, const char *fsfile)
+ShaderObject::ShaderObject(const char *filename, ShaderType kind)
 {
-    bool fail = false;    // a flag which is set if something fails
+    initShaderObject();
 
-    initShader();           // do the standart initializations
+    if(!loadShader(filename, kind))
+        cerr << "error: unable to load shader " << filename << "." << endl;
+}
 
-    if(!loadShader(vsfile, vertShader, vertexShader))       // try to load the vertex shader
+
+ShaderObject::~ShaderObject()
+{
+    if(fileBuffer != NULL)
+        unloadASCIIFileBuffer(fileBuffer);
+
+    if(object != 0)
+        unloadShaderObject(object);
+}
+
+
+bool ShaderObject::loadShader(const char *filename, ShaderType kind)
+{
+    if(!setType(type, kind))
     {
-        cerr << "error: unable to load shader " << vsfile << "." << endl;  // if it fails, print an error message
-        fail = true;                                                        // and remember the failture
-    }
-
-    if(!loadShader(fsfile, fragShader, fragmentShader))
-    {
-        cerr << "error: unable to load shader " << fsfile << "." << endl;  // if it fails, print an error message
-        fail = true;                                                        // and remember the failture
-    }
-
-    if(!fail)   // if one of the shaders failed to load, it makes no sense to link them
-        make(); // if we succeded, we can link the shader objects with the program object
-}
-
-
-// the destructor
-
-Shader::~Shader()
-{
-    if(program != 0)       // check if there is a program object to delete
-        glDeleteProgram(program);   // i hope this is the correct function
-
-    if(vertShader != NULL)  // check if there is a vertex shader to delete (should always be, but i trust nobody)
-    {
-        if(vertShader->fileBuffer != NULL)                  // check if there is a file buffer to unload
-            unloadASCIIFileBuffer(vertShader->fileBuffer);  // if yes, unload file buffer
-
-        if(vertShader->object != 0)                         // check if there is a shader object to unload
-            unloadShaderObject(vertShader->object);         // if yes, unload shader object
-
-        delete vertShader;                                  // delete everything remaining of the vertex shader
-    }
-
-    if(fragShader != NULL)  // check if there is a fragment shader to delete (should always be, but i trust nobody)
-    {
-        if(fragShader->fileBuffer != NULL)                  // check if there is a file buffer to unload
-            unloadASCIIFileBuffer(fragShader->fileBuffer);  // if yes, unload file buffer
-
-        if(fragShader->object != 0)                         // check if there is a shader object to unload
-            unloadShaderObject(fragShader->object);         // if yes, unload shader object
-
-        delete fragShader;                                  // delete everything remaining of the vertex shader
-    }
-}
-
-
-// the load function you have to use if you created the shader with the zero
-//constructor (loads a shader object, needs the filename and the type)
-// in fact this is a surface to the other load function
-
-bool Shader::loadShader(const char *filename, ShaderType kind)
-{
-    if(kind == vertexShader || kind == vertexShaderARB)                // check if it's a vertex shader
-    {
-        if(!loadShader(filename, vertShader, kind))                                         // try to load the shader
-        {
-            cerr << "error: unable to load shader " << filename << " ." << endl;            // output a error message
-            return false;   // tell the calling function it's an idiot
-        }
-    }
-    else if(kind == fragmentShader || kind == fragmentShaderARB)         // check if it's a fragment shader
-    {
-        if(!loadShader(filename, fragShader, kind))                                         // try to load the shader
-        {
-            cerr << "error: unable to load shader " << filename << " ." << endl;            // output a error message
-            return false;   // tell the calling function it's an idiot
-        }
-    }
-    else                                    // if it is no vertex shader and no fragment shader, we can't load it
-    {
-        cerr << "error: tryed to load a shader of an unknown or unsupported type." << endl;   // output a error message
-        return false;       // tell the calling function it's an idiot
-    }
-
-    return true;            // tell the calling function everything went right
-}
-
-
-// this function links the two shader objects with the program object after both are loaded
-
-bool Shader::make()
-{
-    if(vertShader->object == 0 || vertShader->compileStatus == false || fragShader->object == 0 || fragShader->compileStatus == false)      // first we have to check if there are all needed shader objects and if they are ready to be linked
-        return false;                                           // if not, we can't link them to the program object
-
-    glAttachShader(program, vertShader->object);                // attach the vertex shader to the program object
-    glAttachShader(program, fragShader->object);                // attach the fragment shader to the program object
-
-    glLinkProgram(program);                                     // link the program object
-
-    return true;                                                // job done!
-}
-
-
-// a function which activates the shader
-
-bool Shader::activate()
-{
-    if(program == 0)            // check if there is a program object to activate
-        return false;           // because we can't activate something not existing
-
-    glUseProgram(program);      // activate the program object
-
-    return true;                // job done!
-}
-
-
-// a function which deactivates all shaders
-
-void deactivate()
-{
-    glUseProgram(0);            // if you use program 0, this means to deactivate all programs
-}
-
-
-// a init function which contains the things which are the same in all constructors
-
-void Shader::initShader()
-{
-    program = glCreateProgram();        // create the program object
-
-    cout << "shader " << program << " created. (program object)" << endl;   // tell the user the program object is created
-
-    vertShader = new shaderObject;      // create the vertex shader struct
-    vertShader->fileBuffer = NULL;      // set everything to zero
-    vertShader->fileLen = 0;
-    vertShader->object = 0;
-    vertShader->type = undefined;
-    vertShader->compileStatus = 0;
-
-    fragShader = new shaderObject;      // create the fragment shader struct
-    fragShader->fileBuffer = NULL;      // set erverthing to zero
-    fragShader->fileLen = 0;
-    fragShader->object = 0;
-    fragShader->type = undefined;
-    fragShader->compileStatus = 0;
-
-}
-
-
-// the load function which is used by the other load function and the standart constructor
-// in addition to the parameters of other load function it needs a pointer to a shader object
-// (and really loads a shader instead of starting an other funtion to do this)
-
-bool Shader::loadShader(const char *filename, shaderObject *shaderObj, ShaderType kind)
-{
-    if(!setType(shaderObj->type, kind))     // check if the shader type is supported
+        status = typeRejected;
         return false;
-
-    shaderObj->fileBuffer = loadASCIIFile(filename, shaderObj->fileLen);    // load the shader file
-
-    if(shaderObj->fileBuffer == NULL)               // check if the loading was successfully
-        return false;
-
-
-    shaderObj->object = glCreateShader(kind);       // create the opengl shader object
-
-    glShaderSourceARB(shaderObj->object, 1, (const char **)&shaderObj->fileBuffer, &shaderObj->fileLen);            // attach the shader sourcecode with the shader object
-
-    glCompileShaderARB(shaderObj->object);          // compile the shader
-
-    glGetObjectParameterivARB(shaderObj->object, GL_OBJECT_COMPILE_STATUS_ARB, &shaderObj->compileStatus);   // check if the shader is compiled successfully
-
-    if(shaderObj->compileStatus == true)        // if success
-    {
-        cout << "shader " << shaderObj->object << " " << filename << " loaded and compiled. (shader object)" << endl;   // output a debug message
-        return true;        // job done!
     }
-    else                                        // if failed
+
+    status = typeAccepted;
+
+    fileBuffer = loadASCIIFile(filename, fileLen);
+
+    if(fileBuffer == NULL)
     {
-        cerr << "error: failed to compile shader " << shaderObj->object << "." << endl;     // output a debug message
-        return false;       // exit function
+        status = fileLoadFailed;
+        return false;
+    }
+
+    status = fileLoadSuccess;
+
+    object = glCreateShader(kind);
+
+    if(object == 0)
+    {
+        status = objectCreateFailed;
+        return false;
+    }
+
+    status = objectCreateSuccess;
+
+    glShaderSourceARB(object, 1, (const char **)&fileBuffer, &fileLen);
+
+    glCompileShaderARB(object);
+
+    glGetObjectParameterivARB(object, GL_OBJECT_COMPILE_STATUS_ARB, &compileStatus);
+
+    if(compileStatus == true)
+    {
+        cout << "shader " << object << " " << filename << " loaded and compiled. (shader object)" << endl;
+        status = compilationSuccess;
+        return true;
+    }
+    else
+    {
+        cerr << "error: failed to compile shader " << object << "." << endl;
+        status = compilationFailed;
+        return false;
     }
 }
 
 
-// a help function to loadASCIIFile, needs a filename and returns the length of the file
-
-int Shader::getFileLength(const char *filename)
+ShaderState ShaderObject::getStatus()
 {
-    ifstream file;                  // the file stream
-    file.open(filename, ios::in);   // open the file stream
+    return status;
+}
 
-    if(!file)                       // check if it was a success
+
+GLuint ShaderObject::getObject()
+{
+    return object;
+}
+
+
+void ShaderObject::initShaderObject()
+{
+    fileBuffer = NULL;
+    fileLen = 0;
+    object = 0;
+    type = undefined;
+    compileStatus = 0;
+    status = notLoadedYet;
+}
+
+
+int ShaderObject::getFileLength(const char *filename)
+{
+    ifstream file;
+    file.open(filename, ios::in);
+
+    if(!file)
         return 0;
 
-    file.seekg(0, ios::end);        // go to the end of the file
-    int len = file.tellg();         // our position now is the lenght of the file
+    file.seekg(0, ios::end);
+    int len = file.tellg();
 
-    file.close();                    // close the file
+    file.close();
 
-    return len;                     // return the length
+    return len;
 }
 
 
-// a help function to loadShader, loads a ASCII-file, needs the filename and a referance to a int-variable to store the length. it returns a pointer to the file buffer
-
-char *Shader::loadASCIIFile(const char *filename, int &len)
+char *ShaderObject::loadASCIIFile(const char *filename, int &len)
 {
-    unsigned int i = 0;             // somewhere i must be defined
-    char *buffer = NULL;            // the file buffer
-    ifstream file;                  // the file stream
+    unsigned int i = 0;
+    char *buffer = NULL;
+    ifstream file;
 
-    file.open(filename, ios::in);   // open the stream
+    file.open(filename, ios::in);
 
-    if(!file)                       // look if the stream is open
-        return NULL;                // if not, return
+    if(!file)
+        return NULL;
 
-    len = getFileLength(filename);  // get the length of the file
+    len = getFileLength(filename);
 
-    if(len == 0)                    // look if something is in the file
-        return NULL;                // if not, return
+    if(len == 0)
+        return NULL;
 
-    buffer = new char[len+1];       // allocate the buffer (size = the num of characters + zero-termination)
+    buffer = new char[len+1];
 
-    if(buffer == NULL)              // look if the buffer is allocated
-        return NULL;                // if not, return
+    if(buffer == NULL)
+        return NULL;
 
-    buffer[len] = '\0';             // secure is secure
+    buffer[len] = '\0';
 
-    while(file.good())              // we read as long as we're not at the end of the file
+    while(file.good())
     {
-        buffer[i] = file.get();     // we always read one char to the buffer
-        if (!file.eof())            // this is to don't terminate false
-            i++;                    // increment the position counter
+        buffer[i] = file.get();
+
+        if (!file.eof())
+            i++;
     }
 
-    buffer[i] = '\0';               // terminate the string
+    buffer[i] = '\0';
 
     file.close();                   // close the file
 
-    return buffer;                  // return a pointer to the buffer
+    return buffer;
 }
 
 
-// a function which sets a shadertype-var to a shadertype and returns if the shadertype is supported or not
-
-bool Shader::setType(ShaderType &typevar, ShaderType newType)
+bool ShaderObject::setType(ShaderType &typevar, ShaderType newType)
 {
-    if(newType == vertexShader || newType == vertexShaderARB || newType == fragmentShader || newType == fragmentShaderARB)    // types i know and like
+    if(newType == vertexShader || newType == vertexShaderARB || newType == fragmentShader || newType == fragmentShaderARB)
     {
         typevar = newType;
         return true;
     }
-    else if(newType == geometryShader || newType == tesselationControlShader || newType == tesselationEvaluationShader)   // types i know and don't like
+    else if(newType == geometryShader || newType == tesselationControlShader || newType == tesselationEvaluationShader)
     {
         cerr << "warning: chosen shader-type is not supported by cryolite engine yet." << endl;
 
         typevar = newType;
         return false;
     }
-    else    // types i don't know
+    else
     {
         cerr << "warning: chosen shader-type is not known." << endl;
 
@@ -288,33 +188,143 @@ bool Shader::setType(ShaderType &typevar, ShaderType newType)
 }
 
 
-// a function to unload the file buffer loaded with loadASCIIFile. needs a pointer to the buffer, returns if the operation was successfully or not.
-
-bool Shader::unloadASCIIFileBuffer(char *buffer)
+bool ShaderObject::unloadASCIIFileBuffer(char *&buffer)
 {
-    if(buffer == NULL)      // if there is no buffer, i can't unload it
+    if(buffer == NULL)
     {
-        return false;       // tell the calling function it is an idiot
+        return false;
     }
     else
     {
-        delete[] buffer;    // delete the buffer
-        buffer = NULL;      // the prevent uninitialized pointers
-        return true;        // tell the calling function that i succeeded
+        delete[] buffer;
+        buffer = NULL;
+        return true;
     }
 }
 
 
-// a function to unload a shader object. needs the id of the object, returns if the operation was successfully or not.
-
-bool Shader::unloadShaderObject(GLuint obj)
+bool ShaderObject::unloadShaderObject(GLuint obj)
 {
-    if(obj == 0)            // check if the shader object is loaded
-        return false;      // if not, it cann't be unloaded
+    if(obj == 0)
+       return false;
 
-    glDeleteShader(obj);    // delete the shader object
+    glDeleteShader(obj);
 
-    return true;            // operation successfully ended
+    return true;
 }
 
+
+
+
+
+Shader::Shader()
+{
+    initShader();
+}
+
+
+Shader::Shader(const char *vsfile, const char *fsfile)
+{
+    bool fail = false;
+
+    initShader();
+
+    if(!vertShader->loadShader(vsfile, vertexShader))
+    {
+        cerr << "error: unable to load shader " << vsfile << "." << endl;
+        fail = true;
+    }
+
+    if(!fragShader->loadShader(fsfile, fragmentShader))
+    {
+        cerr << "error: unable to load shader " << fsfile << "." << endl;
+        fail = true;
+    }
+
+    if(!fail)
+        make();
+}
+
+
+Shader::~Shader()
+{
+   if(program != 0)
+        glDeleteProgram(program);
+
+    if(vertShader != NULL)
+        delete vertShader;
+
+    if(fragShader != NULL)
+        delete fragShader;
+}
+
+
+bool Shader::loadShader(const char *filename, ShaderType kind)
+{
+    if(kind == vertexShader || kind == vertexShaderARB)
+    {
+        if(!vertShader->loadShader(filename, kind))
+        {
+            cerr << "error: unable to load shader " << filename << " ." << endl;
+            return false;
+        }
+    }
+    else if(kind == fragmentShader || kind == fragmentShaderARB)
+    {
+        if(!fragShader->loadShader(filename, kind))
+        {
+            cerr << "error: unable to load shader " << filename << " ." << endl;
+            return false;
+        }
+    }
+    else
+    {
+        cerr << "error: tryed to load a shader of an unknown or unsupported type." << endl;
+        return false;
+    }
+
+    return true;
+}
+
+
+bool Shader::make()
+{
+    if(vertShader->getStatus() != compilationSuccess || fragShader->getStatus() != compilationSuccess || program == 0)
+        return false;
+
+    glAttachShader(program, vertShader->getObject());
+    glAttachShader(program, fragShader->getObject());
+
+    glLinkProgram(program);
+
+    return true;
+}
+
+
+bool Shader::activate()
+{
+    if(program == 0)
+        return false;
+
+    glUseProgram(program);
+
+    return true;
+}
+
+
+void Shader::deactivate()
+{
+    glUseProgram(0);
+}
+
+
+void Shader::initShader()
+{
+    program = glCreateProgram();
+
+    cout << "shader " << program << " created. (program object)" << endl;
+
+    vertShader = new ShaderObject();
+    fragShader = new ShaderObject();
+}
 
