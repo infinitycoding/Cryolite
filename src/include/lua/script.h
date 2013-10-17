@@ -22,8 +22,13 @@ class Script
         bool load(const char *Scriptname);
         bool run();
 
-        double insertGlobalVar(const char *varname, double value);
-        double getGlobalVar(const char *varname);
+        double insertGlobalNumber(const char *varname, double value);
+        double getGlobalNumber(const char *varname);
+        bool insertGlobalBool(const char *varname, bool value);
+        bool getGlobalBool(const char *varname);
+        char *insertGlobalString(const char *varname, char *value);
+        const char *getGlobalString(const char *varname);
+
         void addMetatable(const char * classname ,luaL_Reg *metatable);
         static void *getObject(lua_State *L, const char *luaClass);
 

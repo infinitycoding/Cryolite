@@ -109,7 +109,7 @@ void Script::addMetatable(const char * classname ,luaL_Reg *metatable)
 }
 
 
-double Script::insertGlobalVar(const char *varname, double value)
+double Script::insertGlobalNumber(const char *varname, double value)
 {
     lua_pushnumber(lState, value);
     lua_setglobal(lState, varname);
@@ -117,13 +117,47 @@ double Script::insertGlobalVar(const char *varname, double value)
 }
 
 
-double Script::getGlobalVar(const char *varname)
+double Script::getGlobalNumber(const char *varname)
 {
     lua_getglobal(lState, varname);
     double result = lua_tonumber(lState, -1);
     lua_pop(lState, 1);
     return result;
 }
+
+
+bool Script::insertGlobalBool(const char *varname, bool value)
+{
+    lua_pushboolean(lState, value);
+    lua_setglobal(lState, varname);
+    return value;
+}
+
+
+bool Script::getGlobalBool(const char *varname)
+{
+    lua_getglobal(lState, varname);
+    bool result = lua_toboolean(lState, -1);
+    lua_pop(lState, 1);
+    return result;
+}
+
+char *Script::insertGlobalString(const char *varname, char *value)
+{
+    lua_pushstring(lState, value);
+    lua_setglobal(lState, varname);
+    return value;
+}
+
+
+const char *Script::getGlobalString(const char *varname)
+{
+    lua_getglobal(lState, varname);
+    const char *result = lua_tostring(lState, -1);
+    lua_pop(lState, 1);
+    return result;
+}
+
 
 void *Script::getObject(lua_State *L, const char *luaClass)
 {
