@@ -29,7 +29,7 @@
 #undef main
 #endif
 
-EngineSettings *gameSettings;
+EngineSettings *engineSettings;
 Scene *mainScene;
 FPS *fps;
 
@@ -49,15 +49,15 @@ extern Object *gravelcube;
 
 
 int main(int argc, char *argv[]){
-    gameSettings = new EngineSettings("settings.ini");
+    engineSettings = new EngineSettings("settings.lua");
     //Create Window and Scene
-    SDL mainwindow = SDL(gameSettings->width,gameSettings->height,gameSettings->sdlFlags,"Cryolite Engine");
+    SDL mainwindow = SDL(engineSettings->width,engineSettings->height,engineSettings->sdlFlags,"Cryolite Engine");
     mainScene = new Scene();
 
     fps = new FPS();
 
     // Create camera, Global light and Input controler
-    Camera *Player = new Camera(NULL, vector(STARTING_X,STARTING_Y,STARTING_Z),vector(0,0,1),STANDART_NEARCLIP,STANDART_FARCLIP,gameSettings->fov,0,0,gameSettings->height,gameSettings->width);
+    Camera *Player = new Camera(NULL, vector(STARTING_X,STARTING_Y,STARTING_Z),vector(0,0,1),STANDART_NEARCLIP,STANDART_FARCLIP,engineSettings->fov,0,0,engineSettings->height,engineSettings->width);
     mainScene->addCam(Player);
 
     Lamp *Sun = new Lamp();
@@ -71,7 +71,7 @@ int main(int argc, char *argv[]){
     mainScene->addLamp(Sun);
 
 
-    Lamp *Spot = new Lamp();
+    /*Lamp *Spot = new Lamp();
     Spot->setDiffuseLight(10, 0, 0, 1.0);
     Spot->setPosition(vector(0,10,0));
     //Spot->setCutOf(90);
@@ -80,7 +80,7 @@ int main(int argc, char *argv[]){
     Spot->directed(true);
 
     Spot->activate();
-    mainScene->addLamp(Spot);
+    mainScene->addLamp(Spot);*/
 
     INIT_Models(mainScene);
 
@@ -114,7 +114,7 @@ int main(int argc, char *argv[]){
 
 
 
-    gameSettings->activateSettings();
+    engineSettings->activateSettings();
 
     // Skysphere
     GLUquadric *q =gluNewQuadric();
@@ -161,7 +161,7 @@ int main(int argc, char *argv[]){
         gluSphere(q,50,100,100);
         glPopMatrix();
 
-        if(gameSettings->hud)
+        if(engineSettings->hud)
             drawHUD();
 
         SDL_GL_SwapBuffers(); // Changes frontbuffer and backbuffer

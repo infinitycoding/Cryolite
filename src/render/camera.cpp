@@ -6,7 +6,7 @@
 #include <settings.h>
 
 
-extern EngineSettings *gameSettings;
+extern EngineSettings *engineSettings;
 
 
 Camera::Camera()
@@ -18,13 +18,13 @@ Camera::Camera()
 
     nearClip = STANDART_NEARCLIP;
     farClip = STANDART_FARCLIP;
-    fov = gameSettings->fov;
+    fov = engineSettings->fov;
 
     x = 0;
     y = 0;
 
-    height = gameSettings->height;
-    width = gameSettings->width;
+    height = engineSettings->height;
+    width = engineSettings->width;
     activ = false;
 }
 

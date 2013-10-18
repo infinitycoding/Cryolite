@@ -36,7 +36,7 @@ bool Controls::already_initialized;
 
 extern bool printFPS;
 extern bool render;
-extern EngineSettings *gameSettings;
+extern EngineSettings *engineSettings;
 extern Scene *mainScene;
 extern Object *iccube;
 extern FPS *fps;
@@ -69,10 +69,10 @@ void Controls::handleQuit()
 
 void Controls::screenshot(const char* filename)
 {
-    SDL_Surface *surface = SDL_CreateRGBSurface(0,gameSettings->width,gameSettings->height,24,0x000000FF, 0x0000FF00, 0x00FF0000,0);
+    SDL_Surface *surface = SDL_CreateRGBSurface(0,engineSettings->width,engineSettings->height,24,0x000000FF, 0x0000FF00, 0x00FF0000,0);
 
     glReadBuffer(GL_FRONT);
-    glReadPixels(0,0,gameSettings->width,gameSettings->height,GL_RGB,GL_UNSIGNED_BYTE,(void*)surface->pixels);
+    glReadPixels(0,0,engineSettings->width,engineSettings->height,GL_RGB,GL_UNSIGNED_BYTE,(void*)surface->pixels);
 
     SDL_SaveBMP(surface,filename);
 
@@ -114,7 +114,7 @@ void Controls::handleKeyDown(SDL_KeyboardEvent *e)
             ghost_mode = toggle(ghost_mode);
             break;
         case SDLK_h:
-            gameSettings->hud = toggle(gameSettings->hud);
+            engineSettings->hud = toggle(engineSettings->hud);
             break;
         case SDLK_e:
             move_cube();

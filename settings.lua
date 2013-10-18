@@ -1,9 +1,8 @@
-[EngineSettings]
 width = 640
 height = 480
 catchCourser = true
-drawHUD = enable
-fullscreen = deactivate
+drawHUD = true
+fullscreen = false
 multisamples = 2
 linewidth = 1
 pointsize = 1

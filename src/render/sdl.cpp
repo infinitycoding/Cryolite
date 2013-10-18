@@ -15,7 +15,7 @@
 #endif
 
 using namespace std;
-extern EngineSettings *gameSettings;
+extern EngineSettings *engineSettings;
 
 
 SDL::SDL(int width, int height, int flags, const char* caption)
@@ -49,7 +49,7 @@ SDL::SDL(int width, int height, int flags, const char* caption)
     SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
     SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, gameSettings->multisamples);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, engineSettings->multisamples);
 
 
     this->screen = SDL_SetVideoMode( width, height, bpp, flags);

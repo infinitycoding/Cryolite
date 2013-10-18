@@ -54,7 +54,7 @@
 		<Linker>
 			<Add option="`sdl-config --libs`" />
 		</Linker>
-		<Unit filename="settings.ini" />
+		<Unit filename="settings.lua" />
 		<Unit filename="src/game/controls.cpp" />
 		<Unit filename="src/game/main.cpp" />
 		<Unit filename="src/game/models.cpp" />

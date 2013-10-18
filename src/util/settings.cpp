@@ -49,77 +49,20 @@ EngineSettings::~EngineSettings()
 
 bool EngineSettings::loadSettingsFile(const char *filename)
 {
-    FILE *f;
-    char line[MAX_LINELENGTH];
-    char *line_ptr;
+    Script settingsscript = Script(filename);
 
-    memset(line, '\0', sizeof(line));
-
-    if((f = fopen(filename, "r")) == NULL)
+    if(!settingsscript.run())
         return false;
 
-    while(!feof(f) && strncmp(line, "[EngineSettings]", 15))
-        if(fgets(line, MAX_LINELENGTH, f) == NULL)
-            break;
-
-    if(feof(f))
-    {
-        cerr << "warning: could not find \"[EngineSettings]\" in file " << filename << "." << endl;
-        fclose(f);
-        return false;
-    }
-
-    do
-    {
-        fgets(line, MAX_LINELENGTH, f);
-
-        line_ptr = line;
-
-        skipUntilCharacters(&line_ptr, breakChars);
-        skipCharacters(&line_ptr, placeholders);
-
-        if(strncmp(line, "width", 5) == 0)
-        {
-            width = getInt(&line_ptr, breakChars);
-        }
-        else if(strncmp(line, "height", 6) == 0)
-        {
-            height = getInt(&line_ptr, breakChars);
-        }
-        else if(strncmp(line, "fullscreen", 10) == 0)
-        {
-            if(getBool(&line_ptr, breakChars) == true)
-                sdlFlags |= SDL_FULLSCREEN;
-        }
-        else if(strncmp(line, "catchCourser", 12) == 0)
-        {
-            captureMouse = getBool(&line_ptr, breakChars);
-        }
-        else if(strncmp(line, "drawHUD", 7) == 0)
-        {
-            hud = getBool(&line_ptr, breakChars);
-        }
-        else if(strncmp(line, "multisamples", 12) == 0)
-        {
-            multisamples = getInt(&line_ptr, breakChars);
-        }
-        else if(strncmp(line, "linewidth", 9) == 0)
-        {
-            lineWidth = getFloat(&line_ptr, breakChars);
-        }
-        else if(strncmp(line, "pointsize", 9) == 0)
-        {
-            pointSize = getFloat(&line_ptr, breakChars);
-        }
-        else if(strncmp(line, "fov", 3) == 0)
-        {
-            fov = getFloat(&line_ptr, breakChars);
-        }
-
-    }while(!feof(f) && strncmp(line, "[", 1));
-
-    if(fclose(f) == 0)
-        return false;
+    captureMouse = settingsscript.getGlobalBool("catchCourser");
+    hud = settingsscript.getGlobalBool("drawHUD");
+    if(settingsscript.getGlobalBool("fullscreen")) sdlFlags |= SDL_FULLSCREEN;
+    width = settingsscript.getGlobalNumber("width");
+    height = settingsscript.getGlobalNumber("height");
+    multisamples = settingsscript.getGlobalNumber("multisamples");
+    lineWidth = settingsscript.getGlobalNumber("linewidth");
+    pointSize = settingsscript.getGlobalNumber("pointsize");
+    fov = settingsscript.getGlobalNumber("fov");
 
     return true;
 }

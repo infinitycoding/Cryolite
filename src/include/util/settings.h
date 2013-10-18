@@ -7,12 +7,12 @@
 #include <SDL.h>
 
 
-#include <parser.h>
+#include <lua/script.h>
 #include <general_def.h>
 
 
 
-class Settings : public ExtParser
+class Settings
 {
     public:
         virtual bool loadSettingsFile(const char *filename);
