@@ -51,7 +51,7 @@ Controls::Controls(SDL* window) : EventHandle()
         types.KeyUp = true;
         types.MouseMotion = true;
         types.Quit = true;
-        window->addHandle(object);
+        window->addHandle(dynamic_cast<EventHandle *>(this));
     }
     SoundCache *SC = new SoundCache();
     shotSound = new Sound(SOUND(shot.wav),SC);

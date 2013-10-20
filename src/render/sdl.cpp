@@ -281,7 +281,6 @@ void SDL::SDLexit()
 
 EventHandle::EventHandle()
 {
-    object = this;
     types.KeyUp = false;
     types.KeyDown = false;
     types.MouseButtonDown = false;

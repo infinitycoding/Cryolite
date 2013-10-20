@@ -32,8 +32,6 @@ class EventHandle
     public:
 
         usedHandles types;
-        EventHandle *object;
-
 
         virtual void handleKeyDown(SDL_KeyboardEvent *e);
         virtual void handleKeyUp(SDL_KeyboardEvent *e);
