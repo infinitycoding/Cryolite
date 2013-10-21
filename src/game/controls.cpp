@@ -8,7 +8,6 @@
 #include <object.h>
 #include <vector.h>
 #include <scene.h>
-#include <settings.h>
 #include <sound.h>
 #include <physics/PhysicsEngine.h>
 
@@ -19,30 +18,14 @@
 #define MOVEMENT_WIDTH (MOVEMENT_SPEED/fps->get())
 
 
-float Controls::right_rotation;
-float Controls::down_rotation;
-
-bool Controls::move_right;
-bool Controls::move_left;
-bool Controls::move_foreward;
-bool Controls::move_backward;
-bool Controls::move_up;
-bool Controls::move_down;
-
-bool Controls::ghost_mode;
-
-bool Controls::already_initialized;
-
-
 extern bool printFPS;
 extern bool render;
-extern EngineSettings *engineSettings;
 extern Scene *mainScene;
 extern Object *iccube;
 extern FPS *fps;
 Sound *shotSound;
 
-Controls::Controls(SDL* window) : EventHandle()
+Controls::Controls(SDL* window, EngineSettings *settings) : EventHandle()
 {
     if(!already_initialized)
     {
@@ -60,6 +43,7 @@ Controls::Controls(SDL* window) : EventHandle()
     shotSound->refreshProperties();
     shotSound->play();
     iccube->sounds->PushFront(shotSound);
+    options = settings;
 }
 
 void Controls::handleQuit()
@@ -67,12 +51,12 @@ void Controls::handleQuit()
     render = false;
 }
 
-void Controls::screenshot(const char* filename)
+void Controls::screenshot(const char* filename, float width, float height)
 {
-    SDL_Surface *surface = SDL_CreateRGBSurface(0,engineSettings->width,engineSettings->height,24,0x000000FF, 0x0000FF00, 0x00FF0000,0);
+    SDL_Surface *surface = SDL_CreateRGBSurface(0,width,height,24,0x000000FF, 0x0000FF00, 0x00FF0000,0);
 
     glReadBuffer(GL_FRONT);
-    glReadPixels(0,0,engineSettings->width,engineSettings->height,GL_RGB,GL_UNSIGNED_BYTE,(void*)surface->pixels);
+    glReadPixels(0,0,width,height,GL_RGB,GL_UNSIGNED_BYTE,(void*)surface->pixels);
 
     SDL_SaveBMP(surface,filename);
 
@@ -114,13 +98,13 @@ void Controls::handleKeyDown(SDL_KeyboardEvent *e)
             ghost_mode = toggle(ghost_mode);
             break;
         case SDLK_h:
-            engineSettings->hud = toggle(engineSettings->hud);
+            options->hud = toggle(options->hud);
             break;
         case SDLK_e:
             move_cube();
             break;
         case SDLK_p:
-            Controls::screenshot("screenshot.bmp");
+            screenshot("screenshot.bmp", options->width, options->height);
             break;
         case SDLK_r:
             shotSound->toggleLoop();

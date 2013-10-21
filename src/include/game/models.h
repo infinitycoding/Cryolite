@@ -18,7 +18,7 @@
 
 
 
-    void drawHUD();
+    void drawHUD(float width, float height);
     void INIT_Models(Scene *sce);
 
 

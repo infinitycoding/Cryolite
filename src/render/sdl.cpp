@@ -2,7 +2,6 @@
 #include <iostream>
 
 #include <sdl.h>
-#include <settings.h>
 
 #ifdef _WIN32
 #include <GL/gl.h>
@@ -15,10 +14,9 @@
 #endif
 
 using namespace std;
-extern EngineSettings *engineSettings;
 
 
-SDL::SDL(int width, int height, int flags, const char* caption)
+SDL::SDL(int width, int height, int flags, int multisamples, const char* caption)
 {
     const SDL_VideoInfo *info = NULL;
     this->screen = NULL;
@@ -49,7 +47,7 @@ SDL::SDL(int width, int height, int flags, const char* caption)
     SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
     SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, engineSettings->multisamples);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, multisamples);
 
 
     this->screen = SDL_SetVideoMode( width, height, bpp, flags);

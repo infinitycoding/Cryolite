@@ -5,13 +5,14 @@
 
 #include <sdl.h>
 #include <camera.h>
+#include <settings.h>
 
 
 
 class Controls : EventHandle
 {
     public:
-        Controls(SDL* window);
+        Controls(SDL* window, EngineSettings *settings);
 
         void controls_handler(Camera *cam);
 
@@ -19,7 +20,7 @@ class Controls : EventHandle
         virtual void handleKeyDown(SDL_KeyboardEvent *e);
         virtual void handleKeyUp(SDL_KeyboardEvent *e);
         virtual void handleMouseMotion(SDL_MouseMotionEvent *e);
-        virtual void screenshot(const char* filename);
+        virtual void screenshot(const char* filename, float width, float height);
 
         virtual void move_cube();
 
@@ -30,19 +31,21 @@ class Controls : EventHandle
         void move_handler(Camera *cam);
 
 
-        static float right_rotation;
-        static float down_rotation;
+        float right_rotation;
+        float down_rotation;
 
-        static bool move_right;
-        static bool move_left;
-        static bool move_foreward;
-        static bool move_backward;
-        static bool move_up;
-        static bool move_down;
+        bool move_right;
+        bool move_left;
+        bool move_foreward;
+        bool move_backward;
+        bool move_up;
+        bool move_down;
 
-        static bool ghost_mode;
+        bool ghost_mode;
 
-        static bool already_initialized;
+        bool already_initialized;
+
+        EngineSettings *options;
 };
 
 

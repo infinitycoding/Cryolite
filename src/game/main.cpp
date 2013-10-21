@@ -29,7 +29,6 @@
 #undef main
 #endif
 
-EngineSettings *engineSettings;
 Scene *mainScene;
 FPS *fps;
 
@@ -49,15 +48,15 @@ extern Object *gravelcube;
 
 
 int main(int argc, char *argv[]){
-    engineSettings = new EngineSettings("settings.lua");
+    EngineSettings engineSettings = EngineSettings("settings.lua");
     //Create Window and Scene
-    SDL mainwindow = SDL(engineSettings->width,engineSettings->height,engineSettings->sdlFlags,"Cryolite Engine");
+    SDL mainwindow = SDL(engineSettings.width,engineSettings.height,engineSettings.sdlFlags,engineSettings.multisamples,"Cryolite Engine");
     mainScene = new Scene();
 
     fps = new FPS();
 
     // Create camera, Global light and Input controler
-    Camera *Player = new Camera(NULL, vector(STARTING_X,STARTING_Y,STARTING_Z),vector(0,0,1),STANDART_NEARCLIP,STANDART_FARCLIP,engineSettings->fov,0,0,engineSettings->height,engineSettings->width);
+    Camera *Player = new Camera(NULL, vector(STARTING_X,STARTING_Y,STARTING_Z),vector(0,0,1),STANDART_NEARCLIP,STANDART_FARCLIP,engineSettings.fov,0,0,engineSettings.height,engineSettings.width);
     mainScene->addCam(Player);
 
     Lamp *Sun = new Lamp();
@@ -84,7 +83,7 @@ int main(int argc, char *argv[]){
 
     INIT_Models(mainScene);
 
-    Controls playerControls = Controls(&mainwindow);
+    Controls playerControls = Controls(&mainwindow, &engineSettings);
     mainScene->GlobalAmbience = new GlobalLight(0.15,0.15,0.15,1);
 
 
@@ -114,7 +113,7 @@ int main(int argc, char *argv[]){
 
 
 
-    engineSettings->activateSettings();
+    engineSettings.activateSettings();
 
     // Skysphere
     GLUquadric *q =gluNewQuadric();
@@ -161,8 +160,8 @@ int main(int argc, char *argv[]){
         gluSphere(q,50,100,100);
         glPopMatrix();
 
-        if(engineSettings->hud)
-            drawHUD();
+        if(engineSettings.hud)
+            drawHUD(Player->width, Player->height);
 
         SDL_GL_SwapBuffers(); // Changes frontbuffer and backbuffer
     }

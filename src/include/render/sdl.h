@@ -50,7 +50,7 @@ class SDL
 {
     public:
 
-        SDL(int width, int height, int flags, const char* caption);
+        SDL(int width, int height, int flags, int multisamples, const char* caption);
         ~SDL();
         static GLuint loadTexture(const char *filename);
         static GLuint loadTexture(const char *filename,GLenum MinFilter,GLenum MagFilter);

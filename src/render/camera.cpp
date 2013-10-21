@@ -3,10 +3,7 @@
 
 #include <camera.h>
 #include <general_def.h>
-#include <settings.h>
 
-
-extern EngineSettings *engineSettings;
 
 
 Camera::Camera()
@@ -18,13 +15,13 @@ Camera::Camera()
 
     nearClip = STANDART_NEARCLIP;
     farClip = STANDART_FARCLIP;
-    fov = engineSettings->fov;
+    fov = STANDART_FOV;
 
     x = 0;
     y = 0;
 
-    height = engineSettings->height;
-    width = engineSettings->width;
+    height = STANDART_HEIGHT;
+    width = STANDART_WIDTH;
     activ = false;
 }
 
