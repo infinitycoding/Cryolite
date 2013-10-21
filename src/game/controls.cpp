@@ -36,6 +36,15 @@ Controls::Controls(SDL* window, EngineSettings *settings) : EventHandle()
         types.Quit = true;
         window->addHandle(dynamic_cast<EventHandle *>(this));
     }
+    right_rotation = 0;
+    down_rotation = 0;
+    move_right = false;
+    move_left = false;
+    move_backward = false;
+    move_up = false;
+    move_down = false;
+    ghost_mode = false;
+
     SoundCache *SC = new SoundCache();
     shotSound = new Sound(SOUND(shot.wav),SC);
     shotSound->loadSound(SOUND(shot.wav));
