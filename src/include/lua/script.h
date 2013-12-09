@@ -41,7 +41,7 @@ using namespace std;
 template <typename T>
 struct luaObject
 {
-    type_info id;
+    type_info *id;
     T cObject;
 };
 
@@ -60,7 +60,7 @@ static inline type_info* GET_CURRENT_LUA_OBJECT_TYPE(lua_State *L, const char *M
 {
   luaL_checktype(L, index, LUA_TTABLE);
   lua_getfield(L, index, "__self");
-  return (type_info*)luaL_checkudata(L, index, Metatable); //evil struckt hack... it would work in C!
+  return *((type_info**)luaL_checkudata(L, index, Metatable)); //evil struckt hack... it would work in C!
 }
 
 
@@ -131,7 +131,7 @@ template <typename T>
 static inline void LUA_DATA(lua_State *L, T value)
 {
     luaObject<T> newObject;
-    newObject.id = typeid(T);
+    newObject.id = (type_info*) &typeid(T);
     newObject.cObject = value;
     *((luaObject<T>*) lua_newuserdata(L, sizeof(newObject))) = newObject;
 }
