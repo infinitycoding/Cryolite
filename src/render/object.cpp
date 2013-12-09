@@ -545,8 +545,6 @@ void Object::initObject()
 
     sounds = new List<Sound>;
 
-    physObj = PhysicalObject();
-
     approximationSphere = 10.0;
 
     if(ObjTypeCache == NULL)
