@@ -169,8 +169,7 @@ void Scene::render()
                         glPushMatrix();
 
                             glEnable(GL_TEXTURE_2D);
-
-                            if(currentObject->objType->ObjectTypeMaterial)
+                            if(currentObject->objType != NULL && currentObject->objType->ObjectTypeMaterial != NULL && currentObject->objType->ObjectTypeMaterial->ambiantTexture != NULL)
                                 glBindTexture( GL_TEXTURE_2D, currentObject->objType->ObjectTypeMaterial->ambiantTexture->nr);
                             else
                                 glBindTexture( GL_TEXTURE_2D, 0);
@@ -250,7 +249,6 @@ float shine[] { 0.75f, 0.75f, 0.75f, 1 };
 
 void Scene::renderPolygones(Object *currentObject)
 {
-
     ListIterator<Polygon> p = ListIterator<Polygon>(currentObject->objType->polygones);
     p.SetFirst();
 
@@ -270,8 +268,8 @@ void Scene::renderPolygones(Object *currentObject)
                 if(currentPolygon->getNormVector(i) != NULL)
                     glNormal3f(currentPolygon->getNormVector(i)->x,currentPolygon->getNormVector(i)->y,currentPolygon->getNormVector(i)->z);
 
-                if(currentObject->objType->ObjectTypeMaterial && currentObject->objType->ObjectTypeMaterial->ambiantTexture && currentPolygon->getTexVertex(i) != NULL)
-                        glTexCoord2f( currentPolygon->getTexVertex(i)->getX(), currentPolygon->getTexVertex(i)->getY() );
+                if(currentObject->objType->ObjectTypeMaterial && currentObject->objType->ObjectTypeMaterial->ambiantTexture && currentPolygon->getTexVertex(i) != NULL && currentPolygon->getTexVertex(i) != NULL)
+                    glTexCoord2f( currentPolygon->getTexVertex(i)->getX(), currentPolygon->getTexVertex(i)->getY() );
 
                 if(currentPolygon->getObjVertex(i) != NULL)
                     glVertex3f( currentPolygon->getObjVertex(i)->getX(), currentPolygon->getObjVertex(i)->getY(), currentPolygon->getObjVertex(i)->getZ());

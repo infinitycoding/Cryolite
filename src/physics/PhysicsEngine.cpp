@@ -8,7 +8,7 @@ using namespace std;
 
 PhysicalObject::PhysicalObject()
 {
-    forces = new List<vector>;
+    forces = new List<vector>();
 
     impulse = vector();
 
@@ -47,5 +47,5 @@ void PhysicalObject::interpolatePhysics(vector *position, float fps)
         F.Next();
     }
 
-    *position += (impulse * (1.0 / fps));
+    *position += (impulse * (1.0 / mass) * (1.0 / fps));
 }
