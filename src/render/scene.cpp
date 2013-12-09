@@ -130,12 +130,12 @@ void Scene::render()
     // Interpolate Physics
     Object *currentObject = NULL;
     ListIterator<Object> O = *ListIterator<Object>(objectList).SetFirst();
-    /*while(!O.IsLast())
+    while(!O.IsLast())
     {
         currentObject = O.GetCurrent();
-        currentObject->physObj.interpolatePhysics(&currentObject->localPosition, fps->get());
+        currentObject->physObj.interpolatePhysics(&(currentObject->localPosition), fps->get());
         O.Next();
-    }*/
+    }
 
     ListIterator<Camera> c = *ListIterator<Camera>(Camlist).SetFirst();
     while(handleCams(&c))

@@ -18,7 +18,7 @@ class PhysicalObject
 
         void interpolatePhysics(vector *position, float fps);
 
-
+    private:
         List<vector> *forces;
         vector impulse;
 
