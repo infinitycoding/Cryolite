@@ -74,16 +74,33 @@ bool Script::load(const char *Scriptname)
     }
 
     //add metatables
-    addMetatable("fps", fpsReg);
+    addMetatable("FPS", fpsReg);
     addMetatable("vector", vectorReg);
-    addMetatable("object", objReg);
-    addMetatable("profiler", profilerReg);
-    addMetatable("shader", shaderReg);
+    addMetatable("Object", objReg);
+    addMetatable("Profiler", profilerReg);
+    addMetatable("Shader", shaderReg);
     //addMetatable("Camera",cameraTable);
 
     return true;
 }
 
+
+void PrintTable(lua_State *L)
+{
+    lua_pushnil(L);
+
+    while(lua_next(L, -2) != 0)
+    {
+        if(lua_isstring(L, -1))
+          printf("%s = %s\n", lua_tostring(L, -2), lua_tostring(L, -1));
+        else if(lua_isnumber(L, -1))
+          printf("%s = %g\n", lua_tostring(L, -2), lua_tonumber(L, -1));
+        else if(lua_istable(L, -1))
+          PrintTable(L);
+
+        lua_pop(L, 1);
+    }
+}
 
 bool Script::run()
 {
@@ -94,7 +111,6 @@ bool Script::run()
         lua_pop(lState,1);
         return false;
     }
-
     return true;
 }
 

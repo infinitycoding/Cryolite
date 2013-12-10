@@ -10,7 +10,7 @@ NEWBEGIN(newProfiler)
     {
         case 1:
             CONSTRUCT();
-            addInstance(Profiler *, new Profiler());
+            addInstance(Profiler, Profiler());
         break;
 
         case 2:
@@ -21,14 +21,14 @@ NEWBEGIN(newProfiler)
             CHECKEND
 
             CONSTRUCT();
-            addInstance(Profiler *, new Profiler(parameter));
+            addInstance(Profiler, Profiler(parameter));
         break;
 
         default:
             lerror("\nnew(profiler): invalid number of arguments; expected 1 or 2; got %d.\n", getargc());
         break;
     }
-NEWEND(profiler)
+NEWEND(Profiler)
 
 
 CBEGIN(resetProfiler)
@@ -36,7 +36,7 @@ CBEGIN(resetProfiler)
         lerror("\nreset(profiler): invalid number of arguments; expected 1; got %d.\n", getargc());
     CHECKEND
 
-    (*getInstance(Profiler **, "profiler"))->resetProfile();
+    getInstance(Profiler)->resetProfile();
 CEND(0)
 
 
@@ -45,7 +45,7 @@ CBEGIN(addP)
         lerror("\naddPlot(profiler): invalid number of arguments; expected 1; got %d.\n", getargc());
     CHECKEND
 
-    bool success = (*getInstance(Profiler **, "profiler"))->addProfilePlot();
+    bool success = getInstance(Profiler)->addProfilePlot();
 CEND(1, LBOOL(success))
 
 
@@ -54,7 +54,7 @@ CBEGIN(addFinalP)
         lerror("\naddFinalPlot(profiler): invalid number of arguments; expected 1; got %d.\n", getargc());
     CHECKEND
 
-    bool success = (*getInstance(Profiler **, "profiler"))->addFinalProfilePlot();
+    bool success = getInstance(Profiler)->addFinalProfilePlot();
 CEND(1, LBOOL(success))
 
 
@@ -71,7 +71,7 @@ CBEGIN(saveProfiler)
         lerror("\nsave(profiler): invalid type of argument; expected one string.\n");
     CHECKEND
 
-    bool success = (*getInstance(Profiler **, "profiler"))->saveProfile(filename);
+    bool success = getInstance(Profiler)->saveProfile(filename);
 CEND(1, LBOOL(success))
 
 

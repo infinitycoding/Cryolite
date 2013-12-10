@@ -7,7 +7,7 @@ NEWBEGIN(newCamera)
     {
         case 1:
             CONSTRUCT();
-            addInstance(Camera *, new Camera());
+            addInstance(Camera, Camera());
         break;
 
         case 2:

@@ -42,7 +42,7 @@ template <typename T>
 struct luaObject
 {
     type_info *id;
-    T cObject;
+    unsigned char cObject[sizeof(T)/sizeof(unsigned char)];
 };
 
 
@@ -53,7 +53,7 @@ static inline luaObject<T>* GETINSTANCEFROMLUA(lua_State *L, const char *Metatab
 {
   luaL_checktype(L, index, LUA_TTABLE);
   lua_getfield(L, index, "__self");
-  return (struct luaObject<T>*)luaL_checkudata(L, index, Metatable);
+  return (luaObject<T>*)luaL_checkudata(L, index, Metatable);
 }
 
 static inline type_info* GET_CURRENT_LUA_OBJECT_TYPE(lua_State *L, const char *Metatable, int index = -1)
@@ -132,14 +132,14 @@ static inline void LUA_DATA(lua_State *L, T value)
 {
     luaObject<T> newObject;
     newObject.id = (type_info*) &typeid(T);
-    newObject.cObject = value;
+    *((T*)newObject.cObject) = value;
     *((luaObject<T>*) lua_newuserdata(L, sizeof(newObject))) = newObject;
 }
 
 template <typename T>
-static inline bool is_object_type(lua_State *L,char *name,type_info *refID) // we donk know why it must be a type_ifo pointer... obey the compiler rules!
+static inline bool is_object_type(lua_State *L,char *name,type_info *refID, int index = -1) // we donk know why it must be a type_ifo pointer... obey the compiler rules!
 {
-    if(typeid(*refID) == *GET_CURRENT_LUA_OBJECT_TYPE(L,name))
+    if(typeid(*refID) == *GET_CURRENT_LUA_OBJECT_TYPE(L,name), index)
         return true;
     return false;
 }
@@ -161,7 +161,7 @@ typedef luaL_Reg reg;
 
 
 #define getargc(...) lua_gettop(L)
-#define getInstance(TYPE, METATABLE, ...) (&(GETINSTANCEFROMLUA<TYPE>(L, METATABLE, ##__VA_ARGS__)->cObject))
+#define getInstance(TYPE, ...) ((TYPE*)(GETINSTANCEFROMLUA<TYPE>(L, #TYPE, ##__VA_ARGS__)->cObject))
 
 
 #define LCALL(FUNCTION, ARGC, ...) lua_getglobal(L, #FUNCTION); __VA_ARGS__ lua_pcall(L,ARGC,1,0)
@@ -182,7 +182,7 @@ typedef luaL_Reg reg;
 #define isstring(PARAM) lua_isstring(L, PARAM * -1)
 #define isobject(PARAM) lua_istable(L, PARAM * -1)
 #define isnumber(PARAM) lua_isnumber(L, PARAM * -1)
-#define istype(TYPE) is_object_type(L,#TYPE,&type_id(TYPE))
+#define istype(TYPE, ...) is_object_type(L,#TYPE,&type_id(TYPE),##__VA_ARGS__)
 #define lerror(FORMAT, ...) luaL_error(L, FORMAT, ##__VA_ARGS__)
 
 #define RET(RETPARAM, ...) __VA_ARGS__; return RETPARAM

@@ -19,7 +19,7 @@ NEWBEGIN(new_vector)
                 addInstance(vector, vector(x));
 
             ELSEIF(isobject(1)) //Copy constructor
-                addInstance(vector, *getInstance(vector *, "vector"));
+                addInstance(vector, *getInstance(vector));
 
             ELSE
                 lerror("\n vector(new): invalid arguments; expected vector, number, two numbers or three numbers");
@@ -60,7 +60,7 @@ NEWEND(vector)
 CBEGIN(get_vector)
     vector v = vector();
     CHECK(getargc() == 1)
-        v = *getInstance(vector*,"vector");
+        v = *getInstance(vector);
     ELSE
         lerror("\n vector(get): invalid number of arguments; got %d, expected none", getargc());
     CHECKEND
@@ -70,7 +70,7 @@ CEND(3,LDBL(v.z); LDBL(v.y); LDBL(v.x))
 
 CBEGIN(null_vector)
     CHECK(getargc() == 1)
-        getInstance(vector *, "vector")->null();
+        getInstance(vector)->null();
     ELSE
         lerror("\n vector(null): invalid number of arguments; got %d, expected none", getargc());
     CHECKEND
@@ -79,7 +79,7 @@ CEND(0)
 
 CBEGIN(len_vector)
     CHECK(getargc() == 1)
-        RET(1,LDBL(getInstance(vector *, "vector")->len()));
+        RET(1,LDBL(getInstance(vector)->len()));
     ELSE
         lerror("\n vector(len): invalid number of arguments; got %d, expected none", getargc());
     CHECKEND
@@ -88,7 +88,7 @@ CEND(0)
 
 CBEGIN(print_vector)
     CHECK(getargc() == 1)
-        getInstance(vector *, "vector")->print();
+        getInstance(vector)->print();
     ELSE
         lerror("\n vector(print): invalid number of arguments; got %d, expected none", getargc());
     CHECKEND
@@ -100,9 +100,9 @@ CBEGIN(set_vector)
         {
             case 2: //instance + 1. arg
                 CHECK(isnumber(1))
-                    getInstance(vector *, "vector")->setvalue(getarg(LDBL()));
+                    getInstance(vector)->setvalue(getarg(LDBL()));
                 ELSEIF(isobject(1))
-                    getInstance(vector *, "vector")->setvalue(getarg(LDAT(vector *, "vector")));
+                    getInstance(vector)->setvalue(getarg(LDAT(vector, "vector")));
                 ELSE
                     lerror("\n vector(set): invalid argument type; Number or vector expected.");
                 CHECKEND
@@ -111,7 +111,7 @@ CBEGIN(set_vector)
             case 3:
                 CHECK(isnumber(1) && isnumber(2))
                     getarg(double y = LDBL(); double x = LDBL());
-                    getInstance(vector *, "vector")->setvalue(x,y);
+                    getInstance(vector)->setvalue(x,y);
                 ELSE
                     lerror("\n vector(set): invalid argument type; Two numbers expected.");
                 CHECKEND
@@ -120,7 +120,7 @@ CBEGIN(set_vector)
             case 4:
                 CHECK(isnumber(1) && isnumber(2) && isnumber(3))
                      getarg(double z = LDBL(); double y = LDBL(); double x = LDBL());
-                    getInstance(vector *, "vector")->setvalue(x,y,z);
+                    getInstance(vector)->setvalue(x,y,z);
                 ELSE
                     lerror("\n vector(set): invalid argument type; Three numbers expected.");
                 CHECKEND
@@ -135,7 +135,7 @@ CEND(0)
 
 CBEGIN(unify_vector)
     CHECK(getargc() == 1)
-        getInstance(vector *, "vector")->unify();
+        getInstance(vector)->unify();
     ELSE
         lerror("\n vector(unify): invalid number of arguments; got %d, expected none", getargc());
     CHECKEND
@@ -144,7 +144,7 @@ CEND(0)
 
 NEWBEGIN(unifyc_vector)
     CHECK(getargc() == 1)
-        vector v = getInstance(vector *, "vector")->unifyc();
+        vector v = getInstance(vector)->unifyc();
         CONSTRUCT();
         RET(1,LDAT(vector, v));
     ELSE
@@ -163,7 +163,7 @@ CBEGIN(add_vector)
 
         case 2:
             CHECK(isobject(1))
-                getInstance(vector *, "vector")->add(getarg(LDAT(vector *, "vector")));
+                getInstance(vector)->add(getarg(LDAT(vector, "vector")));
             ELSE
                 lerror("\n vector(add): invalid argument type; vector expected.");
             CHECKEND
@@ -171,7 +171,7 @@ CBEGIN(add_vector)
 
         case 3:
             CHECK(isobject(1) && isobject(2))
-                getInstance(vector *, "vector")->add(getarg(LDAT(vector *, "vector")),getarg(LDAT(vector *, "vector")));
+                getInstance(vector)->add(getarg(LDAT(vector, "vector")),getarg(LDAT(vector, "vector")));
             ELSE
                 lerror("\n vector(add): invalid argument type; two vectors expected.");
             CHECKEND
@@ -186,13 +186,12 @@ CBEGIN(add_vector)
             vector temp = vector();
             while(getargc() > 1)
             {
-                temp += getarg(LDAT(vector *, "vector"));
+                temp += getarg(LDAT(vector, "vector"));
             }
-            getInstance(vector *, "vector")->add(temp);
+            getInstance(vector)->add(temp);
         break;
     };
 CEND(0)
-
 
 NEWBEGIN(addc_vector)
     vector r = vector();
@@ -206,7 +205,7 @@ NEWBEGIN(addc_vector)
         case 2:
             CHECK(isobject(1))
 
-                r = getInstance(vector *, "vector") + *getarg(LDAT(vector *, "vector"));
+                r = getInstance(vector) + *getarg(LDAT(vector, "vector"));
             ELSE
                 lerror("\n vector(addc): invalid argument type; vector expected.");
             CHECKEND
@@ -214,7 +213,7 @@ NEWBEGIN(addc_vector)
 
         case 3:
             CHECK(isobject(1) && isobject(2))
-                r = *getarg(LDAT(vector *, "vector")) + *getarg(LDAT(vector *, "vector"));
+                r = getarg(LDAT(vector, "vector")) + *getarg(LDAT(vector, "vector"));
             ELSE
                 lerror("\n vector(addc): invalid argument type; two vectors expected.");
             CHECKEND
@@ -229,9 +228,9 @@ NEWBEGIN(addc_vector)
             vector temp = vector();
             while(getargc() > 1)
             {
-                temp += getarg(LDAT(vector *, "vector"));
+                temp += getarg(LDAT(vector, "vector"));
             }
-            r = getInstance(vector *, "vector")->addc(temp);
+            r = getInstance(vector)->addc(temp);
         break;
     };
 
@@ -245,7 +244,7 @@ CBEGIN(sub_vector)
     {
         case 2:
             CHECK(isobject(1))
-                getInstance(vector *, "vector")->sub(getarg(LDAT(vector *, "vector")));
+                getInstance(vector)->sub(getarg(LDAT(vector, "vector")));
             ELSE
                 lerror("\n vector(sub): invalid argument type; vector expected.");
             CHECKEND
@@ -253,8 +252,8 @@ CBEGIN(sub_vector)
 
         case 3:
             CHECK(isobject(1) && isobject(2))
-            vector v2 = *getarg(LDAT(vector *, "vector"));
-                getInstance(vector *, "vector")->sub(getarg(LDAT(vector *, "vector")), v2);
+            vector v2 = *getarg(LDAT(vector, "vector"));
+                getInstance(vector)->sub(getarg(LDAT(vector, "vector")), v2);
             ELSE
                 lerror("\n vector(sub): invalid argument type; two vectors expected.");
             CHECKEND
@@ -273,7 +272,7 @@ NEWBEGIN(subc_vector)
     {
         case 2:
             CHECK(isobject(1))
-                r =  getInstance(vector *, "vector")->subc(getarg(LDAT(vector *, "vector")));
+                r =  getInstance(vector)->subc(getarg(LDAT(vector, "vector")));
             ELSE
                 lerror("\n vector(subc): invalid argument type; vector expected.");
             CHECKEND
@@ -281,7 +280,7 @@ NEWBEGIN(subc_vector)
 
         case 3:
             CHECK(isobject(1) && isobject(2))
-                r = getarg(LDAT(vector *, "vector"))->subc(getarg(LDAT(vector *, "vector")));
+                r = getarg(LDAT(vector, "vector"))->subc(getarg(LDAT(vector, "vector")));
             ELSE
                 lerror("\n vector(subc): invalid argument type; two vectors expected.");
             CHECKEND
@@ -301,7 +300,7 @@ CBEGIN(scale_vector)
         case 2:
             CHECK(isnumber(1))
                 double s = getarg(LDBL());
-                getInstance(vector *, "vector")->scale(s);
+                getInstance(vector)->scale(s);
             ELSE
                 lerror("\n vector(scale): invalid argument type; number expected.");
             CHECKEND
@@ -319,7 +318,7 @@ NEWBEGIN(scalec_vector)
     {
         case 2:
             CHECK(isnumber(1))
-                vector r = getInstance(vector *, "vector")->scalec(getarg(LDBL()));
+                vector r = getInstance(vector)->scalec(getarg(LDBL()));
                 CONSTRUCT();
                 addInstance(vector, r);
             ELSE
@@ -339,7 +338,7 @@ CBEGIN(cross_vector)
     {
         case 2:
             CHECK(isobject(1))
-                getInstance(vector *, "vector")->cross(getarg(LDAT(vector *, "vector")));
+                getInstance(vector)->cross(getarg(LDAT(vector, "vector")));
             ELSE
                 lerror("\n vector(cross): invalid argument type; vector expected.");
             CHECKEND
@@ -347,8 +346,8 @@ CBEGIN(cross_vector)
 
         case 3:
             CHECK(isobject(1) && isobject(2))
-            vector v2 = *getarg(LDAT(vector *, "vector"));
-                getInstance(vector *, "vector")->cross(getarg(LDAT(vector *, "vector")), v2);
+            vector v2 = *getarg(LDAT(vector, "vector"));
+                getInstance(vector)->cross(getarg(LDAT(vector, "vector")), v2);
             ELSE
                 lerror("\n vector(cross): invalid argument type; two vectors expected.");
             CHECKEND
@@ -366,7 +365,7 @@ NEWBEGIN(crossc_vector)
     {
         case 2:
             CHECK(isobject(1))
-                r = getInstance(vector *, "vector")->crossc(getarg(LDAT(vector *, "vector")));
+                r = getInstance(vector)->crossc(getarg(LDAT(vector, "vector")));
             ELSE
                 lerror("\n vector(cross): invalid argument type; vector expected.");
             CHECKEND
@@ -374,8 +373,8 @@ NEWBEGIN(crossc_vector)
 
         case 3:
             CHECK(isobject(1) && isobject(2))
-            vector v2 = *getarg(LDAT(vector *, "vector"));
-                r = getInstance(vector *, "vector")->crossc(getarg(LDAT(vector *, "vector")), v2);
+            vector v2 = *getarg(LDAT(vector, "vector"));
+                r = getInstance(vector)->crossc(getarg(LDAT(vector, "vector")), v2);
             ELSE
                 lerror("\n vector(cross): invalid argument type; two vectors expected.");
             CHECKEND
@@ -393,8 +392,8 @@ NEWEND(vector)
 CBEGIN(equal_vector)
     bool r;
     CHECK(getargc() == 2 && isobject(1) && isobject(2))
-        vector a = *getarg(LDAT(vector *, "vector"));
-        vector b = *getarg(LDAT(vector *, "vector"));
+        vector a = *getarg(LDAT(vector, "vector"));
+        vector b = *getarg(LDAT(vector, "vector"));
         CHECK(a.x == b.x && a.y == b.y && a.z == b.z)
             r = true;
         ELSE

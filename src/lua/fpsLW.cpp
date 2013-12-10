@@ -3,7 +3,7 @@
 
 
 
-extern FPS *fps;
+extern FPS fps;
 
 
 
@@ -13,15 +13,15 @@ NEWBEGIN(newFPS)
     CHECKEND
 
     CONSTRUCT();
-    addInstance(FPS *, fps);
-NEWEND(fps)
+    addInstance(FPS, fps);
+NEWEND(FPS)
 
 
 CBEGIN(getFPS)
     CHECK(getargc() != 1)
         lerror("\nget(fps): invalid number of arguments; expected 1; got %d.\n", getargc());
     CHECKEND
-CEND(1, LDBL((*getInstance(FPS **, "fps"))->get()))
+CEND(1, LDBL(getInstance(FPS)->get()))
 
 
 reg fpsReg[]

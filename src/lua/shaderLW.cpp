@@ -14,7 +14,7 @@ NEWBEGIN(newShader)
         case 1:
             CONSTRUCT();
 
-            addInstance(Shader *, new Shader());
+            addInstance(Shader, Shader());
         break;
 
         case 3:
@@ -26,14 +26,14 @@ NEWBEGIN(newShader)
 
             CONSTRUCT();
 
-            addInstance(Shader *, new Shader(arg1, arg2));
+            addInstance(Shader, Shader(arg1, arg2));
         break;
 
         default:
             lerror("\nnew(shader): invalid number of arguments; expected 1 or 3; got %d.\n", getargc());
         break;
     }
-NEWEND(shader)
+NEWEND(Shader)
 
 
 CBEGIN(loadS)
@@ -58,21 +58,21 @@ CBEGIN(loadS)
     ELSE
         lerror("\nloadShader(shader): invalid argument number two; expected \"vertexShader\" or \"fragmentShader\".\n");
     CHECKEND
-CEND(1, LBOOL((*getInstance(Shader **, "shader"))->loadShader(file, cpptype)))
+CEND(1, LBOOL(getInstance(Shader)->loadShader(file, cpptype)))
 
 
 CBEGIN(makeS)
     CHECK(getargc() != 1)
         lerror("\nmake(shader): invalid number of arguments; expected 1; got %d.\n", getargc());
     CHECKEND
-CEND(1, LBOOL((*getInstance(Shader **, "shader"))->make()))
+CEND(1, LBOOL(getInstance(Shader)->make()))
 
 
 CBEGIN(activateS)
     CHECK(getargc() != 1)
         lerror("\nactivate(shader): invalid number of arguments; expected 1; got %d.\n", getargc());
     CHECKEND
-CEND(1, LBOOL((*getInstance(Shader **, "shader"))->activate()))
+CEND(1, LBOOL(getInstance(Shader)->activate()))
 
 
 CBEGIN(deactivateS)
@@ -80,7 +80,7 @@ CBEGIN(deactivateS)
         lerror("\ndeactivate(shader): invalid number of arguments; expected 1; got %d.\n", getargc());
     CHECKEND
 
-    (*getInstance(Shader **, "shader"))->deactivate();
+    getInstance(Shader)->deactivate();
 CEND(0)
 
 
