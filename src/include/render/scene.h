@@ -27,6 +27,8 @@ class Scene
         void render(void);
         int handleCams(ListIterator<Camera> *c);
 
+        FPS *fps;
+
         List<Object> *objectList;
         List<Camera> *Camlist;
         List<Lamp> *globalLamps;

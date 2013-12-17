@@ -74,7 +74,6 @@ bool Script::load(const char *Scriptname)
     }
 
     //add metatables
-    addMetatable("FPS", fpsReg);
     addMetatable("vector", vectorReg);
     addMetatable("Object", objReg);
     addMetatable("Profiler", profilerReg);

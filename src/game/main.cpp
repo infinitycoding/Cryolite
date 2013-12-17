@@ -30,7 +30,6 @@
 #endif
 
 Scene *mainScene;
-FPS *fps;
 
 bool printFPS = false;
 bool render = true;
@@ -52,8 +51,6 @@ int main(int argc, char *argv[]){
     //Create Window and Scene
     SDL mainwindow = SDL(engineSettings.width,engineSettings.height,engineSettings.sdlFlags,engineSettings.multisamples,"Cryolite Engine");
     mainScene = new Scene();
-
-    fps = new FPS();
 
     // Create camera, Global light and Input controler
     Camera *Player = new Camera(NULL, vector(STARTING_X,STARTING_Y,STARTING_Z),vector(0,0,1),STANDART_NEARCLIP,STANDART_FARCLIP,engineSettings.fov,0,0,engineSettings.height,engineSettings.width);
@@ -127,12 +124,12 @@ int main(int argc, char *argv[]){
     //Shader testShader = Shader(SHADER(basicvert.glsl), SHADER(basicfrag.glsl));
     //testShader.activate();
 
-    Script testScript = Script(SCRIPT(testscript.lua));
+    Script testScript(SCRIPT(testscript.lua));
     testScript.run();
 
     while(render){ //render
         if(printFPS)
-            fps->print();
+            mainScene->fps->print();
 
         testLevel.refreshBackgroundMusic(Player->getPosition());
 
@@ -150,7 +147,6 @@ int main(int argc, char *argv[]){
         mainScene->render();
 
 
-
         glPushMatrix();
         glTranslatef(Player->getPosition().x,Player->getPosition().y,Player->getPosition().z);
 
@@ -165,7 +161,6 @@ int main(int argc, char *argv[]){
 
         SDL_GL_SwapBuffers(); // Changes frontbuffer and backbuffer
     }
-
 
     return 0;
 }

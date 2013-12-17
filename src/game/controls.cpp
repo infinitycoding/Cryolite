@@ -14,8 +14,8 @@
 #define ROTATION_SPEED 0.5
 #define MOVEMENT_SPEED 10
 
-#define ROTATION_WIDTH (ROTATION_SPEED/fps->get())
-#define MOVEMENT_WIDTH (MOVEMENT_SPEED/fps->get())
+#define ROTATION_WIDTH (ROTATION_SPEED/mainScene->fps->get())
+#define MOVEMENT_WIDTH (MOVEMENT_SPEED/mainScene->fps->get())
 
 
 extern bool printFPS;

@@ -9,6 +9,7 @@
 
 Scene::Scene()
 {
+    fps = new FPS();
     objectList = new List<Object>;
     Camlist = new List<Camera>;
     globalLamps = new List<Lamp>;
@@ -96,8 +97,6 @@ int Scene::removeLamp(Lamp *L)
     return delLamps;
 
 }
-
-extern FPS *fps;
 
 void Scene::render()
 {
