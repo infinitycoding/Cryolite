@@ -543,7 +543,9 @@ void Object::initObject()
     relativeToObject = NULL;
     localPosition = vector();
 
-    sounds = new List<Sound>;
+    sounds = new List<Sound>();
+
+    physObj = new PhysicalObject();
 
     approximationSphere = 10.0;
 

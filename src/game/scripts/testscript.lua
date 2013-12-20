@@ -1,6 +1,6 @@
 print("** Message from LUA: Script testscript.lua loaded **")
 testobj = Object:new("resource/objects/iccube.obj", "iccube", vector:new(0, -5, 5))
---testobj:activate()
+testobj:activate()
 print("Old Sphere:")
 print(testobj:getApproximationSphere())
 print("New Sphere:")

@@ -18,7 +18,10 @@ class PhysicalObject
 
         void interpolatePhysics(vector *position, float fps);
 
+        vector *addForce(vector *newForce);
 
+
+    protected:
         List<vector> *forces;
         vector impulse;
 

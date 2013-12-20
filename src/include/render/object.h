@@ -157,7 +157,7 @@ class Object                // the main object
         List<Sound> *sounds;                    // the list of sounds connected to this object
 
 
-        PhysicalObject physObj;
+        PhysicalObject *physObj;
 
         float approximationSphere;
 

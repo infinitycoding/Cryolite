@@ -25,8 +25,8 @@
 					<Add option="-lSDL_mixer" />
 					<Add option="-lalut" />
 					<Add option="-lopenal" />
-					<Add option="-lluabind" />
 					<Add option="-llua" />
+					<Add option="-ldl" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -53,6 +53,13 @@
 		</Compiler>
 		<Linker>
 			<Add option="`sdl-config --libs`" />
+			<Add option="-lGL" />
+			<Add option="-lGLU" />
+			<Add option="-lSDL_image" />
+			<Add option="-lSDL_ttf" />
+			<Add option="-lSDL_mixer" />
+			<Add option="-lalut" />
+			<Add option="-lopenal" />
 		</Linker>
 		<Unit filename="settings.lua" />
 		<Unit filename="src/game/controls.cpp" />
@@ -90,7 +97,6 @@
 		<Unit filename="src/include/util/settings.h" />
 		<Unit filename="src/include/util/vector.h" />
 		<Unit filename="src/lua/cameraLW.cpp" />
-		<Unit filename="src/lua/fpsLW.cpp" />
 		<Unit filename="src/lua/levelLW.cpp" />
 		<Unit filename="src/lua/lightLW.cpp" />
 		<Unit filename="src/lua/materialLW.cpp" />

@@ -250,7 +250,7 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
 void Controls::move_cube()
 {
     vector *testForce = new vector(3.0, 0, 0);
-    iccube->physObj.forces->PushFront(testForce);
+    iccube->physObj->addForce(testForce);
 }
 
 

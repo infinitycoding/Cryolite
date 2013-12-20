@@ -132,7 +132,7 @@ void Scene::render()
     while(!O.IsLast())
     {
         currentObject = O.GetCurrent();
-        currentObject->physObj.interpolatePhysics(&(currentObject->localPosition), fps->get());
+        currentObject->physObj->interpolatePhysics(&(currentObject->localPosition), fps->get());
         O.Next();
     }
 
@@ -141,7 +141,8 @@ void Scene::render()
     {
         if(!globalLamps->IsEmpty())
         {
-            ListIterator<Lamp> L = *ListIterator<Lamp>(globalLamps).SetFirst();
+            ListIterator<Lamp> L(globalLamps);
+            L.SetFirst();
             while(!L.IsLast())
             {
                 Lamp *currentLamp = L.GetCurrent();
@@ -189,20 +190,25 @@ void Scene::render()
                     }
                 }
 
+                printf("sound begin\n");
+
                 if(!currentObject->sounds->IsEmpty())
                 {
-                    ListIterator<Sound> S = *ListIterator<Sound>(currentObject->sounds).SetFirst();
+                    ListIterator<Sound> S(currentObject->sounds);
+                    S.SetFirst();
                     while(!S.IsLast())
                     {
-                        S.GetCurrent()->refreshPosition(listenerPosition,currentObject->getPosition());
+                        printf("sound\n");
+                        S.GetCurrent()->refreshPosition(listenerPosition, currentObject->getPosition());
                         S.Next();
                     }
                 }
 
+                printf("sound end\n");
+
                 O.Next();
            }
         }
-
     }
 
     currentScene = true;

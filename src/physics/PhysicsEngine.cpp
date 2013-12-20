@@ -34,18 +34,27 @@ PhysicalObject::~PhysicalObject()
 
 void PhysicalObject::interpolatePhysics(vector *position, float fps)
 {
-    ListIterator<vector> F = *ListIterator<vector>(forces).SetFirst();
-    vector *actualForce = NULL;
+    ListIterator<vector> F(forces);
+    vector *currentForce = NULL;
 
-    if(forces->IsEmpty())
-        return;
+    F.SetFirst();
 
-    while(!F.IsLast())
+    if(!forces->IsEmpty())
     {
-        actualForce = F.GetCurrent();
-        impulse += (*actualForce * (1.0 / fps));
-        F.Next();
+        while(!F.IsLast())
+        {
+            currentForce = F.GetCurrent();
+            impulse += (*currentForce * (1.0 / fps));
+            F.Next();
+        }
     }
 
     *position += (impulse * (1.0 / mass) * (1.0 / fps));
+}
+
+
+vector *PhysicalObject::addForce(vector *newForce)
+{
+    forces->PushFront(newForce);
+    return newForce;
 }
