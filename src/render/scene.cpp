@@ -190,13 +190,13 @@ void Scene::render()
                     }
                 }
 
-                printf("sound begin\n");
+                /*printf("sound begin\n");
 
                 if(!currentObject->sounds->IsEmpty())
                 {
                     ListIterator<Sound> S(currentObject->sounds);
                     S.SetFirst();
-                    while(!S.IsLast())
+                    while(!S.IsLast() && !S.IsEmpty())
                     {
                         printf("sound\n");
                         S.GetCurrent()->refreshPosition(listenerPosition, currentObject->getPosition());
@@ -204,7 +204,7 @@ void Scene::render()
                     }
                 }
 
-                printf("sound end\n");
+                printf("sound end\n");*/
 
                 O.Next();
            }
