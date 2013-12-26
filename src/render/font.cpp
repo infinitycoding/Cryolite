@@ -124,7 +124,7 @@ GLuint Font::surftotex(SDL_Surface *surf)
 
     glBindTexture( GL_TEXTURE_2D, texture );
 
-    glTexImage2D( GL_TEXTURE_2D, 0, 2, surf->w, surf->h, 0,GL_RGB, GL_UNSIGNED_BYTE, surf->pixels );
+    glTexImage2D( GL_TEXTURE_2D, 0, GL_RGBA, surf->w, surf->h, 0,GL_BGRA, GL_UNSIGNED_BYTE, surf->pixels );
 
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
     glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
@@ -217,7 +217,7 @@ SDL_Surface *Font::atosurf(const char *text, const char *fontname, SDL_Color fon
 
 
 
-    return TTF_RenderText_Shaded(fontToUse->font, text, fontcolor, backgroundcolor);   // the main converting function is called
+    return TTF_RenderText_Blended(fontToUse->font, text, fontcolor);   // the main converting function is called
 }
 
 
