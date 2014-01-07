@@ -26,7 +26,7 @@ ObjectType::ObjectType(const char *filename, const char *objname)
 
 ObjectType::~ObjectType()
 {
-    delete vertices;    // delete everything
+    /*delete vertices;    // delete everything
     delete normvectors;
     delete texvertices;
 
@@ -34,9 +34,7 @@ ObjectType::~ObjectType()
 
     delete boundBoxes;
     delete boundSpheres;
-    delete boundPlanes;
-    delete boundCylinders;
-    delete boundTriangles;
+    delete boundPlanes;*/
 }
 
 
@@ -53,8 +51,6 @@ void ObjectType::initObjectType()
     boundBoxes = new List<boundBox>;
     boundSpheres = new List<boundSphere>;
     boundPlanes = new List<boundPlane>;
-    boundCylinders = new List<boundCylinder>;
-    boundTriangles = new List<boundTriangel>;
 
     isPhysicalActor = false;
 
@@ -529,7 +525,7 @@ Object::Object(const char *filename, const char *objname, vector pos)
 
 Object::~Object()
 {
-    delete sounds;
+    //delete sounds;
 }
 
 

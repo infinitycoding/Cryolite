@@ -38,9 +38,9 @@ struct vertexNumber     // a struct which shows the number of object vertices, t
 struct boundBox         // Bound Box
 {
     vector base;
-    float height;
-    float width;
-    float length;
+    vector height;
+    vector width;
+    vector length;
 };
 
 struct boundSphere      // Bound Sphere
@@ -51,23 +51,9 @@ struct boundSphere      // Bound Sphere
 
 struct boundPlane       // Bound Plane
 {
-    Vertex3D base;
+    vector base;
     vector widht;
     vector length;
-};
-
-struct boundTriangel    // Bound Triangel
-{
-    Vertex3D vert0;
-    Vertex3D vert1;
-    Vertex3D vert2;
-};
-
-struct boundCylinder    // Bound Cylinder
-{
-    Vertex3D center;
-    GLfloat radian;
-    GLfloat height;
 };
 
 
@@ -101,8 +87,6 @@ class ObjectType : public ExtParser   // The object type class
         List<boundBox> *boundBoxes;             // the list of bound boxes of the object type
         List<boundSphere> *boundSpheres;        // the list of bound spheres of the object type
         List<boundPlane> *boundPlanes;          // the list of bound planes of the object type
-        List<boundCylinder> *boundCylinders;    // the list of bound cylinders of the object type
-        List<boundTriangel> *boundTriangles;    // the list of bound triangles of the object type
 
         static MaterialCache *MatCache;         // the static material cache (you know what a cache is, don't you?)
         Material *ObjectTypeMaterial;            // the material of this object type
