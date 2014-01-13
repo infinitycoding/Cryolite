@@ -137,9 +137,9 @@ static inline void LUA_DATA(lua_State *L, T value)
 }
 
 template <typename T>
-static inline bool is_object_type(lua_State *L,char *name,type_info *refID, int index = -1) // we donk know why it must be a type_ifo pointer... obey the compiler rules!
+static inline bool is_object_type(lua_State *L,const char *name, int index = -1) // we don't know why it must be a type_ifo pointer... obey the compiler rules!
 {
-    if(typeid(*refID) == *GET_CURRENT_LUA_OBJECT_TYPE(L,name), index)
+    if(typeid(T) == *GET_CURRENT_LUA_OBJECT_TYPE(L,name), index)
         return true;
     return false;
 }
@@ -182,7 +182,7 @@ typedef luaL_Reg reg;
 #define isstring(PARAM) lua_isstring(L, PARAM * -1)
 #define isobject(PARAM) lua_istable(L, PARAM * -1)
 #define isnumber(PARAM) lua_isnumber(L, PARAM * -1)
-#define istype(TYPE, ...) is_object_type(L,#TYPE,&type_id(TYPE),##__VA_ARGS__)
+#define istype(TYPE, ...) (is_object_type<TYPE>(L,#TYPE,##__VA_ARGS__))
 #define lerror(FORMAT, ...) luaL_error(L, FORMAT, ##__VA_ARGS__)
 
 #define RET(RETPARAM, ...) __VA_ARGS__; return RETPARAM
