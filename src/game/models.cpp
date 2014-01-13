@@ -9,6 +9,9 @@ Object *gravelcube;
 
 void INIT_Models(Scene *sce)
 {
+    Font stdFonts = Font();
+    stdFonts.loadTTF(FONT(arial.ttf), "stdarial", 10);
+
     iccube = new Object(OBJECT(iccube.obj), "iccube", vector(0, 0, 0));
     boundSphere *bs = new boundSphere;
     bs->center = vector(0, 0, 0);
@@ -27,10 +30,11 @@ void INIT_Models(Scene *sce)
     sce->addObject(woodcube);
 
     gravelcube = new Object(OBJECT(cube.obj), "cube.001", vector(-5, 0, 0));
+    //gravelcube->objType->ObjectTypeMaterial->ambiantTexture->nr = stdFonts.atotex("Test!\n", "stdarial");
     sce->addObject(gravelcube);
 
-
     MAN = Material::TexCache->requestTexture(IMAGE(man.png));
+    //MAN->nr = stdFonts.atotex("Test!", "stdarial");
 }
 
 

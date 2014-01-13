@@ -31,9 +31,6 @@ Font:: ~Font()
 
     if(numOfFontObjects == 0)
         TTF_Quit();
-
-    delete TrueTypeFonts;
-    delete PatternFonts;
 }
 
 
@@ -58,6 +55,7 @@ bool Font::loadTTF(const char *font, const char *name, int ptsize)
     new_font->font = font_ptr;          // set the font handle of the new font
     new_font->ptsize = ptsize;          // set the pointsize of the new font
     strncpy(new_font->name, name, MAX_NAMELENGTH);  // set the name of the new font
+    printf("%s\n", font);
 
     TrueTypeFonts->PushFront(new_font);     // push the new font in the ttf-list
 
