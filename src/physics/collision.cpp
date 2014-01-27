@@ -2,204 +2,304 @@
 
 
 
-CollisionLocate::CollisionLocate()
+CollisionList::CollisionList()
 {
-    collisions = new List<collision>;
+    objList = NULL;
+    collList = new List<collision>();
 }
 
 
-CollisionLocate::CollisionLocate(List<Object> *objList)
+CollisionList::CollisionList(List<Object> *objects)
 {
-    collisions = new List<collision>;
-
-    objects = objList;
+    objList = objects;
+    collList = new List<collision>();
 }
 
 
-CollisionLocate::~CollisionLocate()
+CollisionList::~CollisionList()
 {
-    delete collisions;
+
 }
 
 
-void CollisionLocate::calculateCollisions(void)
+int CollisionList::checkCollisions()
 {
-    Object *obj1 = NULL;
-    Object *obj2 = NULL;
+    int counter = 0;
 
-    collision *newCollision = NULL;
+    ListIterator<Object> objIterator1 = *ListIterator<Object>(objList).SetFirst();
+    ListIterator<Object> objIterator2 = *ListIterator<Object>(objList).SetFirst();
 
-    ListIterator<Object> I1 = *ListIterator<Object>(objects).SetFirst();
-    ListIterator<Object> I2 = *ListIterator<Object>(objects).SetFirst();
+    clearCollisionList();
 
-    if(objects->IsEmpty())
-        return;
-
-    while(!I1.IsLast())
+    while(!objIterator1.IsLast())
     {
-        obj1 = I1.GetCurrent();
-
-        I1.Next();
-
-        I2.SetFirst();
-
-        while(!I2.IsLast())
+        while(!objIterator2.IsLast())
         {
-            obj2 = I2.GetCurrent();
-
-            I2.Next();
-
-            if(obj1 == obj2)
-                continue;
-
-            if(checkApproximation(obj1, obj2))
+            if(objIterator1.GetCurrent() == objIterator2.GetCurrent())
             {
-                newCollision = checkCollision(obj1, obj2);
-
-                if(newCollision != NULL)
-                    collisions->PushFront(newCollision);
+                objIterator2.Next();
+                continue;
             }
+
+            if(approximate(objIterator1.GetCurrent(), objIterator2.GetCurrent()))
+                if(collide(objIterator1.GetCurrent(), objIterator2.GetCurrent()))
+                    counter++;
+
+            objIterator2.Next();
         }
+
+        objIterator1.Next();
     }
+
+    return counter;
 }
 
 
-bool CollisionLocate::checkApproximation(Object *obj1, Object *obj2)
+List<collision> *CollisionList::getCollisions()
 {
-    float distance = fabs(len(obj1->getPosition() - obj2->getPosition()));
-    float allowedDistance = obj1->approximationSphere + obj2->approximationSphere;
-    return (distance < allowedDistance);
+    return collList;
 }
 
 
-collision *CollisionLocate::checkCollision(Object *obj1, Object *obj2)
+List<Object> *CollisionList::setObjectList(List<Object> *newObjList)
 {
-    if(!obj1->objType || !obj2->objType)
-        return NULL;
+    return (objList = newObjList);
+}
 
-    collision *foundCollision = new collision();
-    foundCollision->object1 = obj1;
-    foundCollision->object2 = obj2;
 
-    boundBox *actualBox1 = NULL;
-    boundBox *actualBox2 = NULL;
+void CollisionList::clearCollisionList()
+{
+    ListIterator<collision> cleaner = *ListIterator<collision>(collList).SetFirst();
 
-    boundSphere *actualSphere1 = NULL;
-    boundSphere *actualSphere2 = NULL;
-
-    ListIterator<boundBox> B1 = *ListIterator<boundBox>(obj1->objType->boundBoxes).SetFirst();
-    ListIterator<boundBox> B2 = *ListIterator<boundBox>(obj2->objType->boundBoxes).SetFirst();
-
-    ListIterator<boundSphere> S1 = *ListIterator<boundSphere>(obj1->objType->boundSpheres).SetFirst();
-    ListIterator<boundSphere> S2 = *ListIterator<boundSphere>(obj2->objType->boundSpheres).SetFirst();
-
-    while(!B1.IsLast())
+    while(!cleaner.IsEmpty())
     {
-        actualBox1 = B1.GetCurrent();
-
-        B1.Next();
-
-        B2.SetFirst();
-
-        while(!B2.IsLast())
-        {
-            actualBox2 = B2.GetCurrent();
-
-            B2.Next();
-
-            if(boxBoxCollisionQAD(actualBox1, obj1->getPosition(), actualBox2, obj2->getPosition(), &foundCollision->position))
-                return foundCollision;
-        }
+        cleaner.Remove();
     }
+}
 
-    while(!S1.IsLast())
+
+bool CollisionList::approximate(Object *obj1, Object *obj2)
+{
+    vector distance = obj1->getPosition() - obj2->getPosition();
+    return (fabs(distance.len()) < (obj1->approximationSphere + obj2->approximationSphere));
+}
+
+
+bool CollisionList::collide(Object *obj1, Object *obj2)
+{
+    vector *spot = NULL;
+
+    ListIterator<boundBox> boxIterator1 = *ListIterator<boundBox>(obj1->objType->boundBoxes).SetFirst();
+    ListIterator<boundBox> boxIterator2 = *ListIterator<boundBox>(obj2->objType->boundBoxes).SetFirst();
+    ListIterator<boundPlane> planeIterator1 = *ListIterator<boundPlane>(obj1->objType->boundPlanes).SetFirst();
+    ListIterator<boundPlane> planeIterator2 = *ListIterator<boundPlane>(obj1->objType->boundPlanes).SetFirst();
+    ListIterator<boundSphere> sphereIterator1 = *ListIterator<boundSphere>(obj1->objType->boundSpheres).SetFirst();
+    ListIterator<boundSphere> sphereIterator2 = *ListIterator<boundSphere>(obj1->objType->boundSpheres).SetFirst();
+
+    while(!boxIterator1.IsLast())
     {
-        actualSphere1 = S1.GetCurrent();
-
-        S1.Next();
-
-        S2.SetFirst();
-
-        while(!S2.IsLast())
+        while(!boxIterator2.IsLast())
         {
-            actualSphere2 = S2.GetCurrent();
+            spot = boxBoxCollision(obj1->getPosition(), *boxIterator1.GetCurrent(), obj2->getPosition(), *boxIterator2.GetCurrent());
 
-            S2.Next();
+            if(addCollision(obj1, obj2, spot))
+                return true;
 
-            if(sphereSphereCollision(actualSphere1, obj1->getPosition(), actualSphere2, obj2->getPosition(), &foundCollision->position))
-                return foundCollision;
+            boxIterator2.Next();
         }
+
+        while(!planeIterator2.IsLast())
+        {
+            spot = boxPlaneCollision(obj1->getPosition(), *boxIterator1.GetCurrent(), obj2->getPosition(), *planeIterator2.GetCurrent());
+
+            if(addCollision(obj1, obj2, spot))
+                return true;
+
+            planeIterator2.Next();
+        }
+
+        while(!sphereIterator2.IsLast())
+        {
+            spot = boxSphereCollision(obj1->getPosition(), *boxIterator1.GetCurrent(), obj2->getPosition(), *sphereIterator2.GetCurrent());
+
+            if(addCollision(obj1, obj2, spot))
+                return true;
+
+            sphereIterator2.Next();
+        }
+
+        boxIterator1.Next();
     }
 
-    delete foundCollision;
-    return NULL;
-}
+    boxIterator2.SetFirst();
+    planeIterator2.SetFirst();
+    sphereIterator2.SetFirst();
 
-
-vector *CollisionLocate::boxVertices(boundBox *box, vector *result)
-{
-    result[0] = box->base;
-    result[1] = box->base + vector(box->width, 0, 0);
-    result[2] = box->base + vector(0, box->height, 0);
-    result[3] = box->base + vector(0, 0, box->length);
-    result[4] = box->base + vector(box->width, box->height, 0);
-    result[5] = box->base + vector(box->width, 0, box->length);
-    result[6] = box->base + vector(0, box->height, box->length);
-    result[7] = box->base + vector(box->width, box->height, box->length);
-
-    return result;
-
-}
-
-
-bool CollisionLocate::vectorInCube(vector v, vector cstart, vector cend)
-{
-    return ((v.x >= cstart.x && v.x <= cend.x) && (v.y >= cstart.y && v.y <= cend.y) && (v.z >= cstart.z && v.z <= cend.z));
-}
-
-
-bool CollisionLocate::boxBoxCollisionQAD(boundBox *box1, vector bpos1, boundBox *box2, vector bpos2, vector *rpos)
-{
-    vector vertices1[8];
-    vector vertices2[8];
-
-    boxVertices(box1, vertices1);
-    boxVertices(box2, vertices2);
-
-    for(int i = 0; i < 8; i++)
-        if(vectorInCube(vertices1[i] + bpos1, box2->base + bpos2, box2->base + vector(box2->width, box2->height, box2->length) + bpos2))
+    while(!planeIterator1.IsLast())
+    {
+        while(!boxIterator2.IsLast())
         {
-            *rpos = vertices1[i] + bpos1;
-            cout << "collision!" << endl;
-            return true;
+            spot = boxPlaneCollision(obj2->getPosition(), *boxIterator2.GetCurrent(), obj1->getPosition(), *planeIterator2.GetCurrent());
+
+            if(addCollision(obj1, obj2, spot))
+                return true;
+
+            boxIterator2.Next();
         }
 
-    for(int i = 0; i < 8; i++)
-        if(vectorInCube(vertices2[i] + bpos2, box1->base + bpos1, box1->base + vector(box1->width, box1->height, box1->length) + bpos1))
+        while(!planeIterator2.IsLast())
         {
-            *rpos = vertices2[i] + bpos2;
-            cout << "collision!" << endl;
-            return true;
+            spot = planePlaneCollision(obj1->getPosition(), *planeIterator1.GetCurrent(), obj2->getPosition(), *planeIterator2.GetCurrent());
+
+            if(addCollision(obj1, obj2, spot))
+                return true;
+
+            planeIterator2.Next();
         }
+
+        while(!sphereIterator2.IsLast())
+        {
+            spot = planeSphereCollision(obj1->getPosition(), *planeIterator1.GetCurrent(), obj2->getPosition(), *sphereIterator2.GetCurrent());
+
+            if(addCollision(obj1, obj2, spot))
+                return true;
+
+            sphereIterator2.Next();
+        }
+
+        planeIterator1.Next();
+    }
+
+    boxIterator2.SetFirst();
+    planeIterator2.SetFirst();
+    sphereIterator2.SetFirst();
+
+    while(!sphereIterator1.IsLast())
+    {
+        while(!boxIterator2.IsLast())
+        {
+            spot = boxSphereCollision(obj2->getPosition(), *boxIterator2.GetCurrent(), obj1->getPosition(), *sphereIterator1.GetCurrent());
+
+            if(addCollision(obj1, obj2, spot))
+                return true;
+
+            boxIterator2.Next();
+        }
+
+        while(!planeIterator2.IsLast())
+        {
+            spot = planeSphereCollision(obj2->getPosition(), *planeIterator1.GetCurrent(), obj1->getPosition(), *sphereIterator2.GetCurrent());
+
+            if(addCollision(obj1, obj2, spot))
+                return true;
+
+            planeIterator2.Next();
+        }
+
+        while(!sphereIterator2.IsLast())
+        {
+            spot = sphereSphereCollision(obj1->getPosition(), *sphereIterator1.GetCurrent(), obj2->getPosition(), *sphereIterator2.GetCurrent());
+
+            if(addCollision(obj1, obj2, spot))
+                return true;
+
+            sphereIterator2.Next();
+        }
+
+        sphereIterator1.Next();
+    }
 
     return false;
 }
 
 
-bool CollisionLocate::sphereSphereCollision(boundSphere *sphere1, vector spos1, boundSphere *sphere2, vector spos2, vector *rpos)
+bool CollisionList::addCollision(Object *obj1, Object *obj2, vector *spot)
 {
-    float distance = fabs(len(((sphere1->center + spos1) - (sphere2->center + spos2))));
-    float allowedDistance = sphere1->radian + sphere2->radian;
+    collision *newCollision = NULL;
 
-    if(distance < allowedDistance)
+    if(spot != NULL)
     {
-        vector sp1tosp2 = vector(((sphere2->center + spos2) - (sphere1->center + spos1)));
-        sp1tosp2.unify();
-        sp1tosp2 *= allowedDistance - distance;
-        *rpos = sphere2->center + spos2 + sp1tosp2;
-        cout << "collision!" << endl;
+        newCollision = new collision;
+
+        newCollision->obj1 = obj1;
+        newCollision->obj2 = obj2;
+        newCollision->collisionSpot = spot;
+
+        collList->PushFront(newCollision);
+
         return true;
     }
 
     return false;
+}
+
+
+vector *CollisionList::boxBoxCollision(vector offset1, boundBox box1, vector offset2, boundBox box2)
+{
+    // TODO
+
+    return NULL;
+}
+
+
+vector *CollisionList::boxPlaneCollision(vector offset1, boundBox box, vector offset2, boundPlane plane)
+{
+    // TODO
+
+    return NULL;
+}
+
+
+vector *CollisionList::boxSphereCollision(vector offset1, boundBox box, vector offset2, boundSphere sphere)
+{
+    // TODO
+
+    return NULL;
+}
+
+
+vector *CollisionList::planePlaneCollision(vector offset1, boundPlane plane1, vector offset2, boundPlane plane2)
+{
+    // TODO
+
+    return NULL;
+}
+
+
+vector *CollisionList::planeSphereCollision(vector offset1, boundPlane plane, vector offset2, boundSphere sphere)
+{
+    // TODO
+
+    return NULL;
+}
+
+
+vector *CollisionList::sphereSphereCollision(vector offset1, boundSphere sphere1, vector offset2, boundSphere sphere2)
+{
+    vector distance;
+    vector helper1;
+    vector helper2;
+    vector *spot = NULL;
+
+    sphere1.center += offset1;
+    sphere2.center += offset2;
+
+    distance = sphere1.center - sphere2.center;
+
+    if(fabs(distance.len()) < (sphere1.radian + sphere2.radian))
+    {
+        spot = new vector();
+        helper1 = sphere1.center - sphere2.center;
+        helper1.unify();
+        helper1 *= sphere2.radian;
+        helper1 += sphere2.center;
+        helper2 = sphere2.center - sphere1.center;
+        helper2.unify();
+        helper2 *= sphere1.radian;
+        helper2 += sphere1.center;
+        spot->setvalue((helper1 + helper2) * 0.5);
+        return spot;
+    }
+
+    return NULL;
 }

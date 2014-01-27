@@ -3,43 +3,47 @@
 
 
 
-#include <cmath>
-
+#include <List.h>
 #include <object.h>
 
 
 
 struct collision
 {
-    Object *object1;
-    Object *object2;
-    vector position;
+    Object *obj1;
+    Object *obj2;
+    vector *collisionSpot;
 };
 
 
-class CollisionLocate
+class CollisionList
 {
     public:
-        CollisionLocate();
-        CollisionLocate(List<Object> *objList);
-        ~CollisionLocate();
+        CollisionList();
+        CollisionList(List<Object> *objects);
+        ~CollisionList();
 
-        void calculateCollisions();
-        bool checkApproximation(Object *obj1, Object *obj2);
-        collision *checkCollision(Object *obj1, Object *obj2);
-
-
-        List<Object> *objects;
-        List<collision> *collisions;
+        int checkCollisions();
+        List<collision> *getCollisions();
+        List<Object> *setObjectList(List<Object> *newObjList);
 
     protected:
-        vector *boxVertices(boundBox *box, vector *result);
-        bool vectorInCube(vector v, vector cstart, vector cend);
+        void clearCollisionList();
+        bool approximate(Object *obj1, Object *obj2);
+        bool collide(Object *obj1, Object *obj2);
+        bool addCollision(Object *obj1, Object *obj2, vector *spot);
 
-        bool boxBoxCollisionQAD(boundBox *box1, vector bpos1, boundBox *box2, vector bpos2, vector *rpos);
-        bool sphereSphereCollision(boundSphere *sphere1, vector spos1, boundSphere *sphere2, vector spos2, vector *rpos);
+        vector *boxBoxCollision(vector offset1, boundBox box1, vector offset2, boundBox box2);
+        vector *boxPlaneCollision(vector offset1, boundBox box, vector offset2, boundPlane plane);
+        vector *boxSphereCollision(vector offset1, boundBox box, vector offset2, boundSphere sphere);
+        vector *planePlaneCollision(vector offset1, boundPlane plane1, vector offset2, boundPlane plane2);
+        vector *planeSphereCollision(vector offset1, boundPlane plane, vector offset2, boundSphere sphere);
+        vector *sphereSphereCollision(vector offset1, boundSphere sphere1, vector offset2, boundSphere sphere2);
+
+        List<Object> *objList;
+        List<collision> *collList;
 };
 
 
 
-#endif
+#endif // COLLISION_H_INCLUDED

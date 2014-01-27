@@ -6,6 +6,7 @@
 #include <List.h>
 #include <light.h>
 #include <physics/PhysicsEngine.h>
+#include <physics/collision.h>
 #include <fps.h>
 
 
@@ -45,6 +46,7 @@ class Scene
         void resetLights(void);
 
         LightManager *LM;
+        CollisionList *collisions;
 };
 
 
