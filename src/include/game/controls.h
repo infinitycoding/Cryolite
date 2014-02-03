@@ -29,6 +29,7 @@ class Controls : EventHandle
     private:
         void rotation_handler(Camera *cam);
         void move_handler(Camera *cam);
+        void shoot_handler(Camera *cam);
 
 
         float right_rotation;
@@ -40,6 +41,8 @@ class Controls : EventHandle
         bool move_backward;
         bool move_up;
         bool move_down;
+
+        bool fire;
 
         bool ghost_mode;
 

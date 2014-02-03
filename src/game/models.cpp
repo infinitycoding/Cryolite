@@ -13,20 +13,12 @@ void INIT_Models(Scene *sce)
     stdFonts.loadTTF(FONT(arial.ttf), "stdarial", 10);
 
     iccube = new Object(OBJECT(iccube.obj), "iccube", vector(0, 0, 0));
-    boundSphere *bs = new boundSphere;
-    bs->center = vector(0, 0, 0);
-    bs->radian = 1.0;
-    iccube->objType->boundSpheres->PushFront(bs);
     sce->addObject(iccube);
 
     Object *ground = new Object(OBJECT(ground.obj), "ground", vector(0, -3, 0));
     sce->addObject(ground);
 
     Object *woodcube = new Object(OBJECT(bettercube.obj), "Cube", vector(5, 0, 0));
-    bs = new boundSphere;
-    bs->center = vector(0, 0, 0);
-    bs->radian = 1.0;
-    woodcube->objType->boundSpheres->PushFront(bs);
     sce->addObject(woodcube);
 
     gravelcube = new Object(OBJECT(cube.obj), "cube.001", vector(-5, 0, 0));

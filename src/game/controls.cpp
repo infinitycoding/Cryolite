@@ -43,6 +43,7 @@ Controls::Controls(SDL* window, EngineSettings *settings) : EventHandle()
     move_backward = false;
     move_up = false;
     move_down = false;
+    fire = false;
     ghost_mode = false;
 
     SoundCache *SC = new SoundCache();
@@ -118,6 +119,9 @@ void Controls::handleKeyDown(SDL_KeyboardEvent *e)
         case SDLK_r:
             shotSound->toggleLoop();
             break;
+        case SDLK_LCTRL:
+            fire = true;
+            break;
         default:
             break;
 
@@ -163,6 +167,7 @@ void Controls::controls_handler(Camera *cam)
 {
     rotation_handler(cam);
     move_handler(cam);
+    shoot_handler(cam);
 }
 
 
@@ -244,6 +249,32 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
             cam->localPosition += vector(0, -MOVEMENT_WIDTH, 0);
     }
 
+}
+
+
+void Controls::shoot_handler(Camera *cam)
+{
+    Object *newObject = NULL;
+    vector *newForce = NULL;
+    boundSphere *newSphere = NULL;
+
+    if(fire)
+    {
+        fire = false;
+        newObject = new Object(OBJECT(projectile.obj), "projectile", cam->getPosition());
+        newForce = new vector(cam->lookingDirection * 0.3);
+        newObject->physObj->addForce(newForce);
+
+        if(newObject->objType->boundSpheres->IsEmpty())
+        {
+            newSphere = new boundSphere;
+            newSphere->center = vector(0.0, 0.0, 0.0);
+            newSphere->radian = 0.25;
+            newObject->objType->boundSpheres->PushFront(newSphere);
+        }
+
+        mainScene->addObject(newObject);
+    }
 }
 
 

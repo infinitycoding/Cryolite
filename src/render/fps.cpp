@@ -55,7 +55,7 @@ void FPS::print()
     if(lastFPS<=averageFPS-0.05 || lastFPS>=averageFPS+0.05)
     {
 
-        printf ("%4.1f FPS",averageFPS);
+        printf ("%4.1f FPS\n",averageFPS);
         lastFPS = averageFPS;
     }
 }

@@ -139,6 +139,36 @@ void Scene::render()
 
     collisions->checkCollisions();
 
+    // Debug only
+
+    List<collision> *collList = collisions->getCollisions();
+    ListIterator<collision> collIterator = *ListIterator<collision>(collList).SetFirst();
+    collision *currentCollision = NULL;
+
+    while(!collIterator.IsLast())
+    {
+        currentCollision = collIterator.GetCurrent();
+
+        if(!strncmp(currentCollision->obj1->objType->objectTypeName, "projectile", strlen("projectile")) && !strncmp(currentCollision->obj2->objType->objectTypeName, "projectile", strlen("projectile")))
+        {
+            printf("Projectile %p collided with projectile %p!\n", currentCollision->obj1, currentCollision->obj2);
+            removeObject(currentCollision->obj1);
+            removeObject(currentCollision->obj2);
+            delete currentCollision->obj1;
+            delete currentCollision->obj2;
+        }
+        else if(!strncmp(currentCollision->obj1->objType->objectTypeName, "projectile", strlen("projectile")) && !strncmp(currentCollision->obj2->objType->objectTypeName, "ground", strlen("ground")))
+        {
+            printf("Projectile %p collided with ground!\n", currentCollision->obj1);
+            removeObject(currentCollision->obj1);
+            delete currentCollision->obj1;
+        }
+
+        collIterator.Next();
+    }
+
+    // Debug end
+
     ListIterator<Camera> c = *ListIterator<Camera>(Camlist).SetFirst();
     while(handleCams(&c))
     {

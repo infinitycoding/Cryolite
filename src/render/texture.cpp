@@ -52,7 +52,7 @@ TextureCache::TextureCache()
 
 TextureCache::~TextureCache()
 {
-    delete cachedTextures;
+
 }
 
 

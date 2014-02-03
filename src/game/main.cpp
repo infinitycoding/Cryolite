@@ -81,6 +81,7 @@ int main(int argc, char *argv[]){
     INIT_Models(mainScene);
 
     Controls playerControls = Controls(&mainwindow, &engineSettings);
+
     mainScene->GlobalAmbience = new GlobalLight(0.15,0.15,0.15,1);
 
 
