@@ -7,6 +7,8 @@
 #include <iostream>
 #include <typeinfo>
 
+using namespace std;
+
 
 
 class Script
@@ -41,7 +43,7 @@ using namespace std;
 template <typename T>
 struct luaObject
 {
-    type_info *id;
+    size_t id;
     unsigned char cObject[sizeof(T)/sizeof(unsigned char)];
 };
 
@@ -56,11 +58,12 @@ static inline luaObject<T>* GETINSTANCEFROMLUA(lua_State *L, const char *Metatab
   return (luaObject<T>*)luaL_checkudata(L, index, Metatable);
 }
 
-static inline type_info* GET_CURRENT_LUA_OBJECT_TYPE(lua_State *L, const char *Metatable, int index = -1)
+static inline size_t GET_CURRENT_LUA_OBJECT_TYPE(lua_State *L, const char *Metatable, int index = -1)
 {
   luaL_checktype(L, index, LUA_TTABLE);
   lua_getfield(L, index, "__self");
-  return *((type_info**)luaL_checkudata(L, index, Metatable)); //evil struckt hack... it would work in C!
+  size_t hash = ((size_t*)luaL_checkudata(L, index, Metatable))[0];
+  return hash;
 }
 
 
@@ -131,19 +134,32 @@ template <typename T>
 static inline void LUA_DATA(lua_State *L, T value)
 {
     luaObject<T> newObject;
-    newObject.id = (type_info*) &typeid(T);
+    newObject.id = typeid(T).hash_code();
     *((T*)newObject.cObject) = value;
     *((luaObject<T>*) lua_newuserdata(L, sizeof(newObject))) = newObject;
 }
 
 template <typename T>
-static inline bool is_object_type(lua_State *L,const char *name, int index = -1) // we don't know why it must be a type_ifo pointer... obey the compiler rules!
+static inline bool is_object_type(lua_State *L,const char *name, int index = -1)
 {
-    if(typeid(T) == *GET_CURRENT_LUA_OBJECT_TYPE(L,name), index)
+    if(typeid(T).hash_code() == (GET_CURRENT_LUA_OBJECT_TYPE(L,name, index)))
         return true;
     return false;
 }
 
+
+template <typename T>
+static inline bool is_type(lua_State *L, int index = -1)
+{
+    size_t hash = typeid(T).hash_code();
+    if(hash == typeid(int).hash_code() ||  hash == typeid(float).hash_code())
+        return lua_isnumber(L, index);
+    else if(hash == typeid(char *).hash_code())
+        return lua_isstring(L, index);
+    else if(hash == typeid(bool).hash_code())
+        return lua_isboolean(L, index);
+    return lua_istable(L, index);
+}
 
 typedef luaL_Reg reg;
 
@@ -154,9 +170,6 @@ typedef luaL_Reg reg;
 #define NEWEND(CLASS) luaL_getmetatable(L, #CLASS);lua_setmetatable(L, -2); lua_setfield(L, -2, "__self"); return 1;}
 
 #define CONSTRUCT(...) luaL_checktype(L, 1, LUA_TTABLE); lua_newtable(L); lua_pushvalue(L,1); lua_setmetatable(L, -2); lua_pushvalue(L,1); lua_setfield(L, 1, "__index")
-
-
-
 #define addInstance(TYPE, VALUE) LUA_DATA<TYPE>(L, VALUE);
 
 
@@ -182,10 +195,36 @@ typedef luaL_Reg reg;
 #define isstring(PARAM) lua_isstring(L, PARAM * -1)
 #define isobject(PARAM) lua_istable(L, PARAM * -1)
 #define isnumber(PARAM) lua_isnumber(L, PARAM * -1)
-#define istype(TYPE, ...) (is_object_type<TYPE>(L,#TYPE,##__VA_ARGS__))
+#define istype(TYPE,...) is_type<TYPE>(L,##__VA_ARGS__)
+#define istobjecttype(TYPE, ...) (is_object_type<TYPE>(L,#TYPE,##__VA_ARGS__))
 #define lerror(FORMAT, ...) luaL_error(L, FORMAT, ##__VA_ARGS__)
-
 #define RET(RETPARAM, ...) __VA_ARGS__; return RETPARAM
+
+
+
+#define CLASS
+#define ENDCLASS
+#define addClass(TYPE) addMetatable(#TYPE,_#TYPE);
+#define OVERLOAD(NAME,...) int NAME(lua_State *L) { int type = false; if(!L){return 0;}
+#define ENDOVERLOAD return false;}
+#define SELECT(FUNCTION,...) else if(__VA_ARGS__){ type = true; FUNCTION; return true;}
+
+//todo: argumet passing
+#define ARG1
+#define ARG2
+#define ARG3
+#define ARG4
+#define ARG5
+#define ARG6
+#define ARG7
+#define ARG8
+#define ARG9
+#define ARG10
+
+
+#define ASSOCIATION(CLASS) reg CLASS ##Reg[]{
+#define ENDASSOCIATION {NULL, NULL}};
+#define ALIAS(FUNCTION, NAME) {#NAME, FUNCTION},
 
 
 

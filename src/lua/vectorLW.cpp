@@ -1,6 +1,23 @@
 
 #include <lua/script.h>
 #include <vector.h>
+#include <iostream>
+using namespace std;
+
+/*CLASS
+    OVERLOAD(new_vector)
+        SELECT(LDAT(vector,vector()), (istype(float)))
+    ENDOVERLOAD
+
+    ASSOCIATION(vector)
+        ALIAS(new_vector,"new")
+    ENDASSOCIATION
+
+ENDCLASS*/
+
+
+
+
 
 
 NEWBEGIN(new_vector)
@@ -18,7 +35,8 @@ NEWBEGIN(new_vector)
                 CONSTRUCT();
                 addInstance(vector, vector(x));
 
-            ELSEIF(isobject(1)) //Copy constructor
+            ELSEIF(istobjecttype(vector)) //Copy constructor
+                cout<<"done untill here"<<endl;
                 addInstance(vector, *getInstance(vector));
 
             ELSE
