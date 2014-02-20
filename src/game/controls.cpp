@@ -269,7 +269,7 @@ void Controls::shoot_handler(Camera *cam)
         {
             newSphere = new boundSphere;
             newSphere->center = vector(0.0, 0.0, 0.0);
-            newSphere->radian = 0.25;
+            newSphere->radian = 0.5;
             newObject->objType->boundSpheres->PushFront(newSphere);
         }
 
@@ -287,8 +287,5 @@ void Controls::move_cube()
 
 bool Controls::toggle(bool parameter)
 {
-    if(parameter)
-        return false;
-    else
-        return true;
+    return parameter ? false : true;
 }

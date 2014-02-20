@@ -39,7 +39,6 @@ using namespace std;
 
 extern Sound *shotSound;
 extern Object *iccube;
-extern Object *gravelcube;
 
 //GLfloat fogcolor[4] = {0.5,0.5,0.5,1};
 
@@ -83,12 +82,6 @@ int main(int argc, char *argv[]){
     Controls playerControls = Controls(&mainwindow, &engineSettings);
 
     mainScene->GlobalAmbience = new GlobalLight(0.15,0.15,0.15,1);
-
-
-
-
-
-    gravelcube->relativeToObject = iccube;
 
     //GL Settigs
     glMatrixMode( GL_PROJECTION );

@@ -49,6 +49,7 @@ int CollisionList::checkCollisions()
         }
 
         objIterator1.Next();
+        objIterator2.SetFirst();
     }
 
     return counter;
@@ -92,9 +93,9 @@ bool CollisionList::collide(Object *obj1, Object *obj2)
     ListIterator<boundBox> boxIterator1 = *ListIterator<boundBox>(obj1->objType->boundBoxes).SetFirst();
     ListIterator<boundBox> boxIterator2 = *ListIterator<boundBox>(obj2->objType->boundBoxes).SetFirst();
     ListIterator<boundPlane> planeIterator1 = *ListIterator<boundPlane>(obj1->objType->boundPlanes).SetFirst();
-    ListIterator<boundPlane> planeIterator2 = *ListIterator<boundPlane>(obj1->objType->boundPlanes).SetFirst();
+    ListIterator<boundPlane> planeIterator2 = *ListIterator<boundPlane>(obj2->objType->boundPlanes).SetFirst();
     ListIterator<boundSphere> sphereIterator1 = *ListIterator<boundSphere>(obj1->objType->boundSpheres).SetFirst();
-    ListIterator<boundSphere> sphereIterator2 = *ListIterator<boundSphere>(obj1->objType->boundSpheres).SetFirst();
+    ListIterator<boundSphere> sphereIterator2 = *ListIterator<boundSphere>(obj2->objType->boundSpheres).SetFirst();
 
     while(!boxIterator1.IsLast())
     {
@@ -219,6 +220,13 @@ bool CollisionList::addCollision(Object *obj1, Object *obj2, vector *spot)
 
     if(spot != NULL)
     {
+        ListIterator<collision> i(collList);
+        i.SetFirst();
+
+        while(!i.IsLast())
+            if(i.GetCurrent()->obj1 == obj2 && i.GetCurrent()->obj2 == obj1)
+                return false;
+
         newCollision = new collision;
 
         newCollision->obj1 = obj1;

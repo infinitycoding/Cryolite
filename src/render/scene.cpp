@@ -144,6 +144,7 @@ void Scene::render()
     List<collision> *collList = collisions->getCollisions();
     ListIterator<collision> collIterator = *ListIterator<collision>(collList).SetFirst();
     collision *currentCollision = NULL;
+    vector temp;
 
     while(!collIterator.IsLast())
     {
@@ -162,6 +163,45 @@ void Scene::render()
             printf("Projectile %p collided with ground!\n", currentCollision->obj1);
             removeObject(currentCollision->obj1);
             delete currentCollision->obj1;
+        }
+        else if(!strncmp(currentCollision->obj1->objType->objectTypeName, "ground", strlen("ground")) && !strncmp(currentCollision->obj2->objType->objectTypeName, "projectile", strlen("projectile")))
+        {
+            printf("Projectile %p collided with ground!\n", currentCollision->obj2);
+            removeObject(currentCollision->obj2);
+            delete currentCollision->obj2;
+        }
+        else if(!strncmp(currentCollision->obj1->objType->objectTypeName, "ground", strlen("ground")))
+        {
+            printf("Object %p collided with ground!\n", currentCollision->obj2);
+            temp.setvalue(currentCollision->obj2->physObj->getImpulse().x, currentCollision->obj2->physObj->getImpulse().y, 0.0);
+            currentCollision->obj2->physObj->setImpulse(temp);
+        }
+        else if(!strncmp(currentCollision->obj2->objType->objectTypeName, "ground", strlen("ground")))
+        {
+            printf("Object %p collided with ground!\n", currentCollision->obj1);
+            temp.setvalue(currentCollision->obj1->physObj->getImpulse().x, currentCollision->obj1->physObj->getImpulse().y, 0.0);
+            currentCollision->obj1->physObj->setImpulse(temp);
+        }
+        else if(!strncmp(currentCollision->obj1->objType->objectTypeName, "projectile", strlen("projectile")))
+        {
+            printf("Projectile %p collided with object %p!\n", currentCollision->obj1, currentCollision->obj2);
+            currentCollision->obj2->physObj->setImpulse(currentCollision->obj1->physObj->getImpulse() + currentCollision->obj2->physObj->getImpulse());
+            removeObject(currentCollision->obj1);
+            delete currentCollision->obj1;
+        }
+        else if(!strncmp(currentCollision->obj2->objType->objectTypeName, "projectile", strlen("projectile")))
+        {
+            printf("Projectile %p collided with object %p!\n", currentCollision->obj2, currentCollision->obj1);
+            currentCollision->obj1->physObj->setImpulse(currentCollision->obj1->physObj->getImpulse() + currentCollision->obj2->physObj->getImpulse());
+            removeObject(currentCollision->obj2);
+            delete currentCollision->obj2;
+        }
+        else
+        {
+            printf("Object %p collided with object %p!\n", currentCollision->obj1, currentCollision->obj2);
+            temp = currentCollision->obj1->physObj->getImpulse();
+            currentCollision->obj1->physObj->setImpulse(currentCollision->obj2->physObj->getImpulse());
+            currentCollision->obj2->physObj->setImpulse(temp);
         }
 
         collIterator.Next();

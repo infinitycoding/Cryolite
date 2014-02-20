@@ -47,7 +47,7 @@ void PhysicalObject::interpolatePhysics(vector *position, float fps)
             impulse += (*currentForce * (1.0 / fps));
             F.Next();
         }
-    }
+     }
 
     *position += (impulse * (1.0 / mass) * (1.0 / fps));
 }
@@ -57,4 +57,16 @@ vector *PhysicalObject::addForce(vector *newForce)
 {
     forces->PushFront(newForce);
     return newForce;
+}
+
+
+vector PhysicalObject::getImpulse()
+{
+    return impulse;
+}
+
+
+vector PhysicalObject::setImpulse(vector newImpulse)
+{
+    return (impulse = newImpulse);
 }

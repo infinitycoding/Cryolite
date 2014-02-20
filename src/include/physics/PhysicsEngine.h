@@ -20,6 +20,8 @@ class PhysicalObject
 
         vector *addForce(vector *newForce);
 
+        vector getImpulse();
+        vector setImpulse(vector newImpulse);
 
     protected:
         List<vector> *forces;

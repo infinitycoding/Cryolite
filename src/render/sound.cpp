@@ -104,7 +104,7 @@ bool Music::selectMusic(const char *name, int mode)
         {
             currentMode = mode;
             currentMusic = M.GetCurrent();
-            Mix_PlayMusic( currentMusic->music, currentMode );
+            Mix_PlayMusic(currentMusic->music, currentMode);
             Mix_PauseMusic();
             activ = false;
             return true;
