@@ -130,6 +130,7 @@ void Scene::render()
     // Interpolate Physics
     Object *currentObject = NULL;
     ListIterator<Object> O = *ListIterator<Object>(objectList).SetFirst();
+
     while(!O.IsLast())
     {
         currentObject = O.GetCurrent();
@@ -173,13 +174,13 @@ void Scene::render()
         else if(!strncmp(currentCollision->obj1->objType->objectTypeName, "ground", strlen("ground")))
         {
             printf("Object %p collided with ground!\n", currentCollision->obj2);
-            temp.setvalue(currentCollision->obj2->physObj->getImpulse().x, currentCollision->obj2->physObj->getImpulse().y, 0.0);
+            temp.setvalue(currentCollision->obj2->physObj->getImpulse().x[0], currentCollision->obj2->physObj->getImpulse().x[1], 0.0);
             currentCollision->obj2->physObj->setImpulse(temp);
         }
         else if(!strncmp(currentCollision->obj2->objType->objectTypeName, "ground", strlen("ground")))
         {
             printf("Object %p collided with ground!\n", currentCollision->obj1);
-            temp.setvalue(currentCollision->obj1->physObj->getImpulse().x, currentCollision->obj1->physObj->getImpulse().y, 0.0);
+            temp.setvalue(currentCollision->obj1->physObj->getImpulse().x[0], currentCollision->obj1->physObj->getImpulse().x[1], 0.0);
             currentCollision->obj1->physObj->setImpulse(temp);
         }
         else if(!strncmp(currentCollision->obj1->objType->objectTypeName, "projectile", strlen("projectile")))
@@ -249,9 +250,9 @@ void Scene::render()
 
 
                             //Modify Model Matrix
-                            glRotatef(currentObject->Angle, currentObject->rotationAxis.x, currentObject->rotationAxis.y, currentObject->rotationAxis.z);
-                            glTranslatef(currentObject->getPosition().x,currentObject->getPosition().y,currentObject->getPosition().z);
-                            glScalef(currentObject->scale.x,currentObject->scale.y,currentObject->scale.z);
+                            glRotatef(currentObject->Angle, currentObject->rotationAxis.x[0], currentObject->rotationAxis.x[1], currentObject->rotationAxis.x[2]);
+                            glTranslatef(currentObject->getPosition().x[0],currentObject->getPosition().x[1],currentObject->getPosition().x [2]);
+                            glScalef(currentObject->scale.x[0],currentObject->scale.x[1],currentObject->scale.x[2]);
 
                             //Render Polyganes
                             if(!currentObject->objType->polygones->IsEmpty())
@@ -310,7 +311,7 @@ int Scene::handleCams(ListIterator<Camera> *c)
 
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-        gluLookAt(currentCam->getPosition().x,currentCam->getPosition().y,currentCam->getPosition().z,currentCam->lookingDirection.x+currentCam->getPosition().x,currentCam->lookingDirection.y+currentCam->getPosition().y,currentCam->lookingDirection.z+currentCam->getPosition().z,0.0,1.0,0.0);
+        gluLookAt(currentCam->getPosition().x[0],currentCam->getPosition().x[1],currentCam->getPosition().x[2],currentCam->lookingDirection.x[0]+currentCam->getPosition().x[0],currentCam->lookingDirection.x[1]+currentCam->getPosition().x[1],currentCam->lookingDirection.x[2]+currentCam->getPosition().x[2],0.0,1.0,0.0);
 
         return true;
     }
@@ -322,6 +323,8 @@ float shine[] { 0.75f, 0.75f, 0.75f, 1 };
 
 void Scene::renderPolygones(Object *currentObject)
 {
+    if(!currentObject->objType->polygones)
+        return;
     ListIterator<Polygon> p = ListIterator<Polygon>(currentObject->objType->polygones);
     p.SetFirst();
 
@@ -339,7 +342,7 @@ void Scene::renderPolygones(Object *currentObject)
             for(int i=0;i < currentPolygon->getVertexAmount();i++)
             {
                 if(currentPolygon->getNormVector(i) != NULL)
-                    glNormal3f(currentPolygon->getNormVector(i)->x,currentPolygon->getNormVector(i)->y,currentPolygon->getNormVector(i)->z);
+                    glNormal3f(currentPolygon->getNormVector(i)->x[0],currentPolygon->getNormVector(i)->x[1],currentPolygon->getNormVector(i)->x[2]);
 
                 if(currentObject->objType->ObjectTypeMaterial && currentObject->objType->ObjectTypeMaterial->ambiantTexture && currentPolygon->getTexVertex(i) != NULL && currentPolygon->getTexVertex(i) != NULL)
                     glTexCoord2f( currentPolygon->getTexVertex(i)->getX(), currentPolygon->getTexVertex(i)->getY() );

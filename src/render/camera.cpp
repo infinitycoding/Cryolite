@@ -53,20 +53,20 @@ Camera::~Camera()
 
 void Camera::rotateX(float rotate)
 {
-    lookingDirection.y = lookingDirection.y * cos(rotate) + lookingDirection.z * sin(rotate);
-    lookingDirection.z = lookingDirection.z * cos(rotate) - lookingDirection.y * sin(rotate);
+    lookingDirection.x[1] = lookingDirection.x[1] * cos(rotate) + lookingDirection.x[2] * sin(rotate);
+    lookingDirection.x[2] = lookingDirection.x[2] * cos(rotate) - lookingDirection.x[1] * sin(rotate);
 }
 
 void Camera::rotateY(float rotate)
 {
-    lookingDirection.x = lookingDirection.x * cos(rotate) - lookingDirection.z * sin(rotate);
-    lookingDirection.z = lookingDirection.x * sin(rotate) + lookingDirection.z * cos(rotate);
+    lookingDirection.x[0] = lookingDirection.x[0] * cos(rotate) - lookingDirection.x[2] * sin(rotate);
+    lookingDirection.x[2] = lookingDirection.x[0] * sin(rotate) + lookingDirection.x[2] * cos(rotate);
 }
 
 void Camera::rotateZ(float rotate)
 {
-    lookingDirection.x = lookingDirection.x * cos(rotate) - lookingDirection.y * sin(rotate);
-    lookingDirection.y = lookingDirection.x * sin(rotate) + lookingDirection.y * cos(rotate);
+    lookingDirection.x[0] = lookingDirection.x[0] * cos(rotate) - lookingDirection.x[1] * sin(rotate);
+    lookingDirection.x[1] = lookingDirection.x[0] * sin(rotate) + lookingDirection.x[1] * cos(rotate);
 }
 
 vector Camera::getPosition()

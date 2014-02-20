@@ -177,11 +177,11 @@ void Controls::rotation_handler(Camera *cam){    // Rotates the camera if a key 
 
     vector lookDirectSave = vector(&cam->lookingDirection);
 
-    vector temp = vector(cam->lookingDirection.x, 0, cam->lookingDirection.z);
+    vector temp = vector(cam->lookingDirection.x[0], 0, cam->lookingDirection.x[2]);
     temp.unify();
 
-    cam->rotateX(-ROTATION_WIDTH*temp.z*down_rotation);
-    cam->rotateZ(-ROTATION_WIDTH*temp.x*down_rotation);
+    cam->rotateX(-ROTATION_WIDTH*temp.x[2]*down_rotation);
+    cam->rotateZ(-ROTATION_WIDTH*temp.x[0]*down_rotation);
 
     if((lookDirectSave.x > 0 ? true : false) !=(cam->lookingDirection.x > 0 ? true : false))
         cam->lookingDirection = lookDirectSave;
@@ -195,7 +195,7 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
 
     if(move_right)
     {
-        moveDirection =  vector(-cam->lookingDirection.z, 0, cam->lookingDirection.x);
+        moveDirection =  vector(-cam->lookingDirection.x[2], 0, cam->lookingDirection.x[0]);
         moveDirection.unify();
         moveDirection *= MOVEMENT_WIDTH;
 
@@ -204,7 +204,7 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
 
     if(move_left)
     {
-        moveDirection =  vector(cam->lookingDirection.z, 0, -cam->lookingDirection.x);
+        moveDirection =  vector(cam->lookingDirection.x[2], 0, -cam->lookingDirection.x[0]);
         moveDirection.unify();
         moveDirection *= MOVEMENT_WIDTH;
 
@@ -214,9 +214,9 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
     if(move_foreward)
     {
         if(ghost_mode)
-            moveDirection =  vector(cam->lookingDirection.x, cam->lookingDirection.y, cam->lookingDirection.z);
+            moveDirection =  vector(cam->lookingDirection.x[0], cam->lookingDirection.x[1], cam->lookingDirection.x[2]);
         else
-            moveDirection =  vector(cam->lookingDirection.x, 0, cam->lookingDirection.z);
+            moveDirection =  vector(cam->lookingDirection.x[0], 0, cam->lookingDirection.x[2]);
 
         moveDirection.unify();
         moveDirection *= MOVEMENT_WIDTH;
@@ -227,9 +227,9 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
     if(move_backward)
     {
         if(ghost_mode)
-            moveDirection =  vector(-cam->lookingDirection.x, -cam->lookingDirection.y, -cam->lookingDirection.z);
+            moveDirection =  vector(-cam->lookingDirection.x[0], -cam->lookingDirection.x[1], -cam->lookingDirection.x[2]);
         else
-            moveDirection =  vector(-cam->lookingDirection.x, 0, -cam->lookingDirection.z);
+            moveDirection =  vector(-cam->lookingDirection.x[0], 0, -cam->lookingDirection.x[2]);
 
         moveDirection.unify();
         moveDirection *= MOVEMENT_WIDTH;
@@ -240,13 +240,13 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
     if(move_up)
     {
         if(!ghost_mode)
-            cam->localPosition += vector(0, MOVEMENT_WIDTH, 0);
+            cam->localPosition += vector(0.0, MOVEMENT_WIDTH, 0.0);
     }
 
     if(move_down)
     {
         if(!ghost_mode)
-            cam->localPosition += vector(0, -MOVEMENT_WIDTH, 0);
+            cam->localPosition += vector(0.0, -MOVEMENT_WIDTH, 0.0);
     }
 
 }
@@ -274,6 +274,8 @@ void Controls::shoot_handler(Camera *cam)
         }
 
         mainScene->addObject(newObject);
+
+        cout << "still alive" << endl;
     }
 }
 

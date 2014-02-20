@@ -45,7 +45,7 @@ bool Level::loadLevelFile(const char *filename)
 
 bool Level::vectorInCube(vector v, struct cube c)
 {
-    return ((v.x >= c.startPos.x && v.x <= c.endPos.x) && (v.y >= c.startPos.y && v.y <= c.endPos.y) && (v.z >= c.startPos.z && v.z <= c.endPos.z));
+    return ((v.x[0] >= c.startPos.x[0] && v.x[0] <= c.endPos.x[0]) && (v.x[1] >= c.startPos.x[1] && v.x[1] <= c.endPos.x[1]) && (v.x[2] >= c.startPos.x[2] && v.x[2] <= c.endPos.x[2]));
 }
 
 
@@ -123,14 +123,14 @@ void Level::testMusic()
     bgmusic->addMusic(SOUND(moon.mp3));
     struct locationMusic *moon = new struct locationMusic;
     strncpy(moon->musicname, SOUND(moon.mp3), 40);
-    moon->location.startPos = vector(-50, -10, -50);
-    moon->location.endPos = vector(0, 10, 50);
+    moon->location.startPos = vector(-50.0, -10.0, -50.0);
+    moon->location.endPos = vector(0.0, 10.0, 50.0);
     addBackgroundMusic(moon);
 
     bgmusic->addMusic(SOUND(majestic-theme.wav));
     struct locationMusic *majestic = new struct locationMusic;
     strncpy(majestic->musicname, SOUND(majestic-theme.wav), 40);
-    majestic->location.startPos = vector(0, -10, -50);
-    majestic->location.endPos = vector(50, 10, 50);
+    majestic->location.startPos = vector(0.0, -10.0, -50.0);
+    majestic->location.endPos = vector(50.0, 10.0, 50.0);
     addBackgroundMusic(majestic);
 }

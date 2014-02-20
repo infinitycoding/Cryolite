@@ -10,6 +10,9 @@
 
 
 #define STD_VECTOR_DIMENSIONS 3
+/*#define x 0
+#define y 1
+#define z 2*/
 
 
 
@@ -18,21 +21,17 @@ class vector
 {
     public:
 
-        float x;
-        float y;
-        float z;
-
+        float *x;
+        int n;
 
         vector();
-        vector(Vertex2D vx);
-        vector(Vertex3D vx);
-        vector(Vertex2D *vx);
-        vector(Vertex3D *vx);
-        vector(float x);
-        vector(float x, float y);
-        vector(float x, float y, float z);
-        vector(float *v, int args = 3);
-        vector(vector *v);
+        vector(Vertex2D vx, int dim = STD_VECTOR_DIMENSIONS);
+        vector(Vertex3D vx, int dim = STD_VECTOR_DIMENSIONS);
+        vector(Vertex2D *vx, int dim = STD_VECTOR_DIMENSIONS);
+        vector(Vertex3D *vx, int dim = STD_VECTOR_DIMENSIONS);
+        vector(float x0, float x1, float x2, int dim = STD_VECTOR_DIMENSIONS);
+        //vector(float *v, int args, int dim = STD_VECTOR_DIMENSIONS);
+        vector(vector *v, int dim = STD_VECTOR_DIMENSIONS);
 
 
 
@@ -45,9 +44,9 @@ class vector
         void setvalue(Vertex3D vx);
         void setvalue(Vertex2D *vx);
         void setvalue(Vertex3D *vx);
-        void setvalue(float x);
-        void setvalue(float x, float y);
-        void setvalue(float x, float y, float z);
+        void setvalue(float x0);
+        void setvalue(float x0, float x1);
+        void setvalue(float x0, float x2, float x3);
         void setvalue(float *v, int args = 3);
         void setvalue(vector v);
         void setvalue(vector *v);
@@ -172,7 +171,7 @@ class vector
         void  cross(vector  v0, vector *v1);
 
 
-        vector  cross(vector   v);
+        /*vector  cross(vector   v);
         vector *cross(vector  *v);
         vector  crossc(vector  v);
         vector *crossc(vector *v);
@@ -180,7 +179,7 @@ class vector
         vector  crossc(vector  v0, vector  v1);
         vector *crossc(vector *v0, vector *v1);
         vector *crossc(vector *v0, vector  v1);
-        vector *crossc(vector  v0, vector *v1);
+        vector *crossc(vector  v0, vector *v1);*/
 
 
         bool lenmod;
@@ -203,11 +202,11 @@ class vector
     const vector operator - (vector const v0, vector const v1);
     const vector operator - (vector const *v0, vector const v1);
     const vector operator - (vector const v1, vector const *v0);
-
+/*
     const vector operator ^ (vector const v0, vector const v1);
     const vector operator ^ (vector const *v0, vector const v1);
     const vector operator ^ (vector const v1, vector const *v0);
-
+*/
     const vector operator * (vector const v0, const float s);
     const vector operator * (const float s,vector const v0);
 

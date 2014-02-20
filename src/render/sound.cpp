@@ -393,7 +393,7 @@ void Sound::refreshPosition(vector listener, vector pos)
 {
     vector currenPosition;
     currenPosition = listener-pos;
-    alSource3f(source, AL_POSITION, currenPosition.x, currenPosition.y, currenPosition.z);
+    alSource3f(source, AL_POSITION, currenPosition.x[0], currenPosition.x[1], currenPosition.x[2]);
 }
 
 
@@ -416,8 +416,8 @@ void Sound::initSound()
 
 void Sound::refreshProperties()
 {
-    alSource3f(source, AL_DIRECTION, settings->direction.x, settings->direction.y, settings->direction.z);
-    alSource3f(source, AL_VELOCITY, settings->velocity.x, settings->velocity.y, settings->velocity.z);
+    alSource3f(source, AL_DIRECTION, settings->direction.x[0], settings->direction.x[1], settings->direction.x[2]);
+    alSource3f(source, AL_VELOCITY, settings->velocity.x[0], settings->velocity.x[1], settings->velocity.x[2]);
 
     alSourcef(source, AL_GAIN , settings->Gain);
     alSourcef(source, AL_MAX_GAIN, settings->MaxGain);

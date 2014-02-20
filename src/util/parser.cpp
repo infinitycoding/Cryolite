@@ -209,7 +209,7 @@ vector ExtParser::getVector(char **string)
         return result;
     }
 
-    result.x = getFloat(string, breakChars);
+    result.x[0] = getFloat(string, breakChars);
 
     skipCharacters(string, placeholders);
 
@@ -219,7 +219,7 @@ vector ExtParser::getVector(char **string)
         return result;
     }
 
-    result.y = getFloat(string, breakChars);
+    result.x[1] = getFloat(string, breakChars);
 
     skipCharacters(string, placeholders);
 
@@ -229,7 +229,7 @@ vector ExtParser::getVector(char **string)
         return result;
     }
 
-    result.z = getFloat(string, breakChars);
+    result.x[2] = getFloat(string, breakChars);
 
 
     return result;
@@ -265,5 +265,5 @@ Vertex2D ExtParser::getVertex2D(char **string)
 Vertex3D ExtParser::getVertex3D(char **string)
 {
     vector temp = getVector(string);
-    return Vertex3D(temp.x, temp.y, temp.z);
+    return Vertex3D(temp.x[0], temp.x[1], temp.x[2]);
 }

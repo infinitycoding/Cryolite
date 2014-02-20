@@ -171,9 +171,9 @@ Lamp::Lamp(Lamp *L, vector pos)
         position[i]  = L->position[i];
         direction[i] = L->direction[i];
     }
-    position[0] = pos.x;
-    position[1] = pos.y;
-    position[2] = pos.z;
+    position[0] = pos.x[0];
+    position[1] = pos.x[1];
+    position[2] = pos.x[2];
     localPosition = pos;
     exponent = L->exponent;
     cutof = L->cutof;
@@ -284,14 +284,14 @@ void Lamp::setSpecularLight(GLfloat *L)
 void Lamp::setDirection(vector d)
 {
 
-    if(d.x || d.y || d.z)
+    if(d.x[0] || d.x[1] || d.x[2])
         position[3] = 1;
     else
         position[3] = 0;
 
-    direction[0] = d.x;
-    direction[1] = d.y;
-    direction[2] = d.z;
+    direction[0] = d.x[0];
+    direction[1] = d.x[1];
+    direction[2] = d.x[2];
 
     if(reg)
     {
@@ -303,14 +303,14 @@ void Lamp::setDirection(vector d)
 
 void Lamp::setDirection(vector *d)
 {
-    if(d->x || d->y || d->z)
+    if(d->x[0] || d->x[1] || d->x[2])
         position[3] = 1;
     else
         position[3] = 0;
 
-    direction[0] = d->x;
-    direction[1] = d->y;
-    direction[2] = d->z;
+    direction[0] = d->x[0];
+    direction[1] = d->x[1];
+    direction[2] = d->x[2];
 
     if(reg)
     {
@@ -345,9 +345,9 @@ void Lamp::setPosition(vector p)
 {
     localPosition.setvalue(p);
 
-    position[0] = getPosition().x;
-    position[1] = getPosition().y;
-    position[2] = getPosition().z;
+    position[0] = getPosition().x[1];
+    position[1] = getPosition().x[2];
+    position[2] = getPosition().x[3];
 
     if(reg)
     {
@@ -503,9 +503,9 @@ void Lamp::setQuadAttenaution(GLfloat a)
 
 void Lamp::refreshPosition(void)
 {
-        position[0] = getPosition().x;
-        position[1] = getPosition().y;
-        position[2] = getPosition().z;
+        position[0] = getPosition().x[0];
+        position[1] = getPosition().x[1];
+        position[2] = getPosition().x[2];
 
     if(reg)
         glLightfv(Lightnum, GL_POSITION, position);

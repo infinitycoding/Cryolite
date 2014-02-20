@@ -110,17 +110,13 @@ int main(int argc, char *argv[]){
     GLUquadric *q =gluNewQuadric();
     gluQuadricTexture(q, true);
     Texture *sky = Material::TexCache->requestTexture(IMAGE(sky1.jpg));
-
     Level testLevel = Level();
-
     alDistanceModel( AL_LINEAR_DISTANCE );
 
     //Shader testShader = Shader(SHADER(basicvert.glsl), SHADER(basicfrag.glsl));
     //testShader.activate();
-
     Script testScript(SCRIPT(testscript.lua));
     testScript.run();
-
     while(render){ //render
         if(printFPS)
             mainScene->fps->print();
@@ -142,7 +138,7 @@ int main(int argc, char *argv[]){
 
 
         glPushMatrix();
-        glTranslatef(Player->getPosition().x,Player->getPosition().y,Player->getPosition().z);
+        glTranslatef(Player->getPosition().x[0],Player->getPosition().x[1],Player->getPosition().x[2]);
 
         glRotated(90,1,0,0);
         glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);

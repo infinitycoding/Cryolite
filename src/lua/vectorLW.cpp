@@ -33,7 +33,7 @@ NEWBEGIN(new_vector)
             CHECK(isnumber(1)) //x-coordinate
                 double x = getarg(LDBL());
                 CONSTRUCT();
-                addInstance(vector, vector(x));
+                addInstance(vector, vector(x,0.0,0.0));
 
             ELSEIF(istobjecttype(vector)) //Copy constructor
                 cout<<"done untill here"<<endl;
@@ -49,7 +49,7 @@ NEWBEGIN(new_vector)
                 double y = getarg(LDBL());
                 double x = getarg(LDBL());
                 CONSTRUCT();
-                addInstance(vector, vector(x, y));
+                addInstance(vector, vector(x, y,0.0));
 
             ELSE
                 lerror("\n vector(new): invalid arguments; expected vector, number, two numbers or three numbers");
@@ -82,7 +82,7 @@ CBEGIN(get_vector)
     ELSE
         lerror("\n vector(get): invalid number of arguments; got %d, expected none", getargc());
     CHECKEND
-CEND(3,LDBL(v.z); LDBL(v.y); LDBL(v.x))
+CEND(3,LDBL(v.x[2]); LDBL(v.x[1]); LDBL(v.x[0]))
 
 
 
@@ -351,7 +351,7 @@ NEWBEGIN(scalec_vector)
 NEWEND(vector)
 
 
-CBEGIN(cross_vector)
+/*CBEGIN(cross_vector)
     switch(getargc())
     {
         case 2:
@@ -404,7 +404,7 @@ NEWBEGIN(crossc_vector)
     };
     CONSTRUCT();
     addInstance(vector, r);
-NEWEND(vector)
+NEWEND(vector)*/
 
 
 CBEGIN(equal_vector)
@@ -412,7 +412,7 @@ CBEGIN(equal_vector)
     CHECK(getargc() == 2 && isobject(1) && isobject(2))
         vector a = *getarg(LDAT(vector, "vector"));
         vector b = *getarg(LDAT(vector, "vector"));
-        CHECK(a.x == b.x && a.y == b.y && a.z == b.z)
+        CHECK(a.x[0] == b.x[0] && a.x[1] == b.x[1] && a.x[2] == b.x[2])
             r = true;
         ELSE
             r = false;
@@ -444,12 +444,12 @@ reg vectorReg[]
     {"subc", subc_vector},
     {"scale", scale_vector},
     {"scalec", scalec_vector},
-    {"cross", cross_vector},
-    {"crossc", crossc_vector},
+    /*{"cross", cross_vector},
+    {"crossc", crossc_vector},*/
     {"__add", addc_vector},
     {"__sub", subc_vector},
     {"__mul", scalec_vector},
-    {"__pow", crossc_vector},
+    /*{"__pow", crossc_vector},*/
     {"__eq", equal_vector},
     {NULL, NULL}
 };

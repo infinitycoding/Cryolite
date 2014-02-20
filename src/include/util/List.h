@@ -92,6 +92,9 @@ List<T>::List()
     lock = false;
 }
 
+
+
+
 template <typename T>
 List<T>::List(List<T> *l)
 {
