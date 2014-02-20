@@ -9,7 +9,8 @@ vector::vector()
     lenmod = false;
     n = STD_VECTOR_DIMENSIONS;
     x = new float[STD_VECTOR_DIMENSIONS];
-
+    for(int i = 0; i < STD_VECTOR_DIMENSIONS; i++)
+        x[i] = 0.0;
 }
 
 vector::vector(Vertex2D vx, int dim)
@@ -157,7 +158,7 @@ float vector::len()
     {
         float temp = 0;
         for (int i = 0; i < n; i++)
-            temp += pow(x[i],2);
+            temp += x[i]*x[i];
         cachlen = sqrt(temp);
         lenmod = false;
     }
