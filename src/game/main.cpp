@@ -20,6 +20,7 @@
 #include <sound.h>
 #include <lua/script.h>
 #include <shader.h>
+#include <vector.h>
 
 #ifdef DEBUG
 #include <optimize/profiler.h>
@@ -41,9 +42,6 @@ extern Sound *shotSound;
 extern Object *iccube;
 
 //GLfloat fogcolor[4] = {0.5,0.5,0.5,1};
-
-
-
 
 
 
@@ -119,6 +117,10 @@ int main(int argc, char *argv[]){
     //testShader.activate();
     Script testScript(SCRIPT(testscript.lua));
     testScript.run();
+
+
+
+    cout<<vector(1,20,0).len()<<endl;
     while(render){ //render
         if(printFPS)
             mainScene->fps->print();

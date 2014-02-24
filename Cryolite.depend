@@ -12,7 +12,7 @@
 	<sound.h>
 	<physics/PhysicsEngine.h>
 
-1392916732 source:/home/simon/coding/Cryolite/src/game/main.cpp
+1393257898 source:/home/simon/coding/Cryolite/src/game/main.cpp
 	<SDL.h>
 	<GL/gl.h>
 	<AL/al.h>
@@ -32,6 +32,7 @@
 	<sound.h>
 	<lua/script.h>
 	<shader.h>
+	<vector.h>
 	<optimize/profiler.h>
 
 1383224630 /usr/include/SDL/SDL.h
@@ -321,7 +322,7 @@
 1392907034 source:/home/simon/coding/Cryolite/src/render/polygon.cpp
 	<polygon.h>
 
-1392913385 source:/home/simon/coding/Cryolite/src/render/scene.cpp
+1393256908 source:/home/simon/coding/Cryolite/src/render/scene.cpp
 	<GL/gl.h>
 	<GL/glu.h>
 	<math.h>
@@ -375,7 +376,7 @@
 1392907034 source:/home/simon/coding/Cryolite/src/util/settings.cpp
 	<settings.h>
 
-1392916321 source:/home/simon/coding/Cryolite/src/util/vector.cpp
+1393258053 source:/home/simon/coding/Cryolite/src/util/vector.cpp
 	<math.h>
 	<vector.h>
 	<cstdarg>

@@ -40,6 +40,7 @@ Controls::Controls(SDL* window, EngineSettings *settings) : EventHandle()
     down_rotation = 0;
     move_right = false;
     move_left = false;
+    move_foreward = false;
     move_backward = false;
     move_up = false;
     move_down = false;

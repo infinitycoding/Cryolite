@@ -131,14 +131,14 @@ void Scene::render()
     Object *currentObject = NULL;
     ListIterator<Object> O = *ListIterator<Object>(objectList).SetFirst();
 
-    while(!O.IsLast())
+    /*while(!O.IsLast())
     {
         currentObject = O.GetCurrent();
         currentObject->physObj->interpolatePhysics(&(currentObject->localPosition), fps->get());
         O.Next();
-    }
+    }*/
 
-    collisions->checkCollisions();
+    //collisions->checkCollisions();
 
     // Debug only
 

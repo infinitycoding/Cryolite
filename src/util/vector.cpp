@@ -6,7 +6,7 @@
 vector::vector()
 {
     cachlen = 0;
-    lenmod = false;
+    lenmod = true;
     n = STD_VECTOR_DIMENSIONS;
     x = new float[STD_VECTOR_DIMENSIONS];
     for(int i = 0; i < STD_VECTOR_DIMENSIONS; i++)
@@ -16,7 +16,7 @@ vector::vector()
 vector::vector(Vertex2D vx, int dim)
 {
     cachlen = 0;
-    lenmod = false;
+    lenmod = true;
     n = dim;
     dim = dim < STD_VECTOR_DIMENSIONS ? STD_VECTOR_DIMENSIONS : dim;
     x = new float[dim];
@@ -34,7 +34,7 @@ vector::vector(Vertex2D vx, int dim)
 vector::vector(Vertex2D *vx, int dim)
 {
     cachlen = 0;
-    lenmod = false;
+    lenmod = true;
     n = dim;
     dim = dim < STD_VECTOR_DIMENSIONS ? STD_VECTOR_DIMENSIONS : dim;
     x = new float[dim];
@@ -52,7 +52,7 @@ vector::vector(Vertex2D *vx, int dim)
 vector::vector(Vertex3D vx, int dim)
 {
     cachlen = 0;
-    lenmod = false;
+    lenmod = true;
     n = dim;
     dim = dim < STD_VECTOR_DIMENSIONS ? STD_VECTOR_DIMENSIONS : dim;
     x = new float[dim];
@@ -71,7 +71,7 @@ vector::vector(Vertex3D vx, int dim)
 vector::vector(Vertex3D *vx, int dim)
 {
     cachlen = 0;
-    lenmod = false;
+    lenmod = true;
     n = dim;
     dim = dim < STD_VECTOR_DIMENSIONS ? STD_VECTOR_DIMENSIONS : dim;
     x = new float[dim];
@@ -91,7 +91,7 @@ vector::vector(Vertex3D *vx, int dim)
 vector::vector(float x0, float x1, float x2, int dim)
 {
     cachlen = 0;
-    lenmod = false;
+    lenmod = true;
     n = dim;
     dim = dim < STD_VECTOR_DIMENSIONS ? STD_VECTOR_DIMENSIONS : dim;
     x = new float[dim];
@@ -129,7 +129,7 @@ vector::vector(float x0, float x1, float x2, int dim)
 vector::vector(vector *v, int dim)
 {
     cachlen = 0;
-    lenmod = false;
+    lenmod = true;
     n = dim;
     dim = dim < STD_VECTOR_DIMENSIONS ? STD_VECTOR_DIMENSIONS : dim;
     x = new float[dim];
@@ -146,10 +146,13 @@ vector::vector(vector *v, int dim)
 
 void vector::null()
 {
+    cachlen = 0;
+    lenmod = false;
     for(int i = 0; i < n; i++)
     {
         x[i] = 0;
     }
+
 }
 
 float vector::len()
