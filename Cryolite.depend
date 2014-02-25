@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1392912686 source:/home/simon/coding/Cryolite/src/game/controls.cpp
+1393258157 source:/home/simon/coding/Cryolite/src/game/controls.cpp
 	<GL/gl.h>
 	<GL/glu.h>
 	<math.h>
