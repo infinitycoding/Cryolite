@@ -88,9 +88,10 @@ static inline double LUA_NUM(lua_State *L)
 }
 
 
-static inline void LUA_NUM(lua_State *L, double value)
+static inline int LUA_NUM(lua_State *L, double value)
 {
     lua_pushnumber(L, value);
+    return 1;
 }
 
 static inline char *LUA_STR(lua_State *L)
@@ -131,12 +132,13 @@ static inline T* LUA_DATA(lua_State *L, const char *Metatable)
 
 
 template <typename T>
-static inline void LUA_DATA(lua_State *L, T value)
+static inline int LUA_DATA(lua_State *L, T value)
 {
     luaObject<T> newObject;
     newObject.id = typeid(T).hash_code();
     *((T*)newObject.cObject) = value;
     *((luaObject<T>*) lua_newuserdata(L, sizeof(newObject))) = newObject;
+    luaL_getmetatable(L, "vector");lua_setmetatable(L, -2); lua_setfield(L, -2, "__self"); return 1;
 }
 
 template <typename T>
@@ -205,26 +207,28 @@ typedef luaL_Reg reg;
 #define CLASS
 #define ENDCLASS
 #define addClass(TYPE) addMetatable(#TYPE,_#TYPE);
-#define OVERLOAD(NAME,...) int NAME(lua_State *L) { int type = false; if(!L){return 0;}
+#define OVERLOAD(NAME,...) int NAME(lua_State *L) {if(!L){return 0;}
 #define ENDOVERLOAD return false;}
-#define SELECT(FUNCTION,...) else if(__VA_ARGS__){ type = true; FUNCTION; return true;}
-
+#define SELECT(FUNCTION,ARG,...) else if((lua_gettop(L)==ARG+1) && (__VA_ARGS__)){return FUNCTION;}
+#define FUNCTION(NAME,FUNCTION,ARG,...) int NAME(lua_State *L) { if((lua_gettop(L)==ARG+1) && (__VA_ARGS__)){return FUNCTION;} return false;}
+#define VOIDFUNCTION(NAME,FUNCTION,ARG,...) int NAME(lua_State *L) { if((lua_gettop(L)==ARG+1) && (__VA_ARGS__)){FUNCTION; return 0;} return false;}
 //todo: argumet passing
-#define ARG1
-#define ARG2
-#define ARG3
-#define ARG4
-#define ARG5
-#define ARG6
-#define ARG7
-#define ARG8
-#define ARG9
-#define ARG10
+#define ARG0 -1
+#define ARG1 -2
+#define ARG2 -3
+#define ARG3 -4
+#define ARG4 -5
+#define ARG5 -6
+#define ARG6 -7
+#define ARG7 -8
+#define ARG8 -9
+#define ARG9 -10
+#define ARG10 -11
 
 
 #define ASSOCIATION(CLASS) reg CLASS ##Reg[]{
 #define ENDASSOCIATION {NULL, NULL}};
-#define ALIAS(FUNCTION, NAME) {#NAME, FUNCTION},
+#define ALIAS(FUNCTION, NAME) {NAME, FUNCTION},
 
 
 

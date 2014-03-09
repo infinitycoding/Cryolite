@@ -4,113 +4,7 @@
 #include <iostream>
 using namespace std;
 
-/*CLASS
-    OVERLOAD(new_vector)
-        SELECT(LDAT(vector,vector()), (istype(float)))
-    ENDOVERLOAD
 
-    ASSOCIATION(vector)
-        ALIAS(new_vector,"new")
-    ENDASSOCIATION
-
-ENDCLASS*/
-
-
-
-
-
-
-NEWBEGIN(new_vector)
-    vector v1;
-    switch(getargc())
-    {
-        case 1: //null constructor
-            CONSTRUCT();
-            addInstance(vector, vector());
-        break;
-
-        case 2:
-            CHECK(isnumber(1)) //x-coordinate
-                double x = getarg(LDBL());
-                CONSTRUCT();
-                addInstance(vector, vector(x,0.0,0.0));
-
-            ELSEIF(istobjecttype(vector)) //Copy constructor
-                cout<<"done untill here"<<endl;
-                addInstance(vector, *getInstance(vector));
-
-            ELSE
-                lerror("\n vector(new): invalid arguments; expected vector, number, two numbers or three numbers");
-            CHECKEND
-        break;
-
-        case 3:
-            CHECK(isnumber(1) && isnumber(2)) // x and y coordinate
-                double y = getarg(LDBL());
-                double x = getarg(LDBL());
-                CONSTRUCT();
-                addInstance(vector, vector(x, y,0.0));
-
-            ELSE
-                lerror("\n vector(new): invalid arguments; expected vector, number, two numbers or three numbers");
-            CHECKEND
-        break;
-
-        case 4:
-            CHECK(isnumber(1) && isnumber(2) && isnumber(3)) // x, y and z coordinate
-                double z = getarg(LDBL());
-                double y = getarg(LDBL());
-                double x = getarg(LDBL());
-                CONSTRUCT();
-                addInstance(vector, vector(x, y, z));
-            ELSE
-                lerror("\n vector(new): invalid arguments; expected vector, number, two numbers or three numbers");
-            CHECKEND
-        break;
-
-        default:
-            lerror("\n vector(new): invalid number of arguments; got %d, expected 1,2 or 3", getargc());
-        break;
-    };
-NEWEND(vector)
-
-
-CBEGIN(get_vector)
-    vector v = vector();
-    CHECK(getargc() == 1)
-        v = *getInstance(vector);
-    ELSE
-        lerror("\n vector(get): invalid number of arguments; got %d, expected none", getargc());
-    CHECKEND
-CEND(3,LDBL(v.x[2]); LDBL(v.x[1]); LDBL(v.x[0]))
-
-
-
-CBEGIN(null_vector)
-    CHECK(getargc() == 1)
-        getInstance(vector)->null();
-    ELSE
-        lerror("\n vector(null): invalid number of arguments; got %d, expected none", getargc());
-    CHECKEND
-CEND(0)
-
-
-CBEGIN(len_vector)
-    CHECK(getargc() == 1)
-        RET(1,LDBL(getInstance(vector)->len()));
-    ELSE
-        lerror("\n vector(len): invalid number of arguments; got %d, expected none", getargc());
-    CHECKEND
-CEND(0)
-
-
-CBEGIN(print_vector)
-    CHECK(getargc() == 1)
-        getInstance(vector)->print();
-    ELSE
-        lerror("\n vector(print): invalid number of arguments; got %d, expected none", getargc());
-    CHECKEND
-CEND(0)
 
 
 CBEGIN(set_vector)
@@ -427,30 +321,48 @@ CBEGIN(equal_vector)
 CEND(1,LBOOL(r))
 
 
+CLASS
+    OVERLOAD(new_vector)
+        SELECT(addInstance(vector,vector(LDBL(),LDBL(),LDBL())), 3, (istype(float,ARG0) && istype(float,ARG1) && istype(float,ARG2)))
+        SELECT(addInstance(vector,vector(LDBL(),LDBL(),0)), 2, (istype(float,ARG0) && istype(float,ARG1)))
+        SELECT(addInstance(vector,vector(LDBL(),0,0)), 1, istype(float,ARG0))
+        SELECT(addInstance(vector,vector(*getInstance(vector))), 1, (istobjecttype(vector)))
+    ENDOVERLOAD
 
-reg vectorReg[]
-{
-    {"new", new_vector},
-    {"get", get_vector},
-    {"null", null_vector},
-    {"len", len_vector},
-    {"print", print_vector},
-    {"set", set_vector},
-    {"unify", unify_vector},
-    {"unifyc", unifyc_vector},
-    {"add", add_vector},
-    {"addc", addc_vector},
-    {"sub", sub_vector},
-    {"subc", subc_vector},
-    {"scale", scale_vector},
-    {"scalec", scalec_vector},
-    /*{"cross", cross_vector},
-    {"crossc", crossc_vector},*/
-    {"__add", addc_vector},
-    {"__sub", subc_vector},
-    {"__mul", scalec_vector},
-    /*{"__pow", crossc_vector},*/
-    {"__eq", equal_vector},
-    {NULL, NULL}
-};
+    CBEGIN(get_vector)
+        vector v = vector();
+        CHECK(getargc() == 1)
+            v = *getInstance(vector);
+        ELSE
+            lerror("\n vector(get): invalid number of arguments; got %d, expected none", getargc());
+        CHECKEND
+    CEND(3,LDBL(v.x[2]); LDBL(v.x[1]); LDBL(v.x[0]))
+
+
+    VOIDFUNCTION(null_vector,getInstance(vector)->null(),1,true)
+    FUNCTION(len_vector,LDBL(getInstance(vector)->len()),1,true)
+    VOIDFUNCTION(print_vector,getInstance(vector)->print(),1,true)
+
+    ASSOCIATION(vector)
+        ALIAS(new_vector,"new")
+        ALIAS(get_vector,"get")
+        ALIAS(null_vector,"null")
+        ALIAS(len_vector,"len")
+        ALIAS(print_vector,"print")
+        ALIAS(set_vector,"set")
+        ALIAS(unify_vector,"unify")
+        ALIAS(unifyc_vector,"unifyc")
+        ALIAS(add_vector,"add")
+        ALIAS(addc_vector,"addc")
+        ALIAS(sub_vector,"sub")
+        ALIAS(subc_vector,"subc")
+        ALIAS(scale_vector,"scale")
+        ALIAS(scalec_vector,"scalec")
+        ALIAS(addc_vector,"__add")
+        ALIAS(subc_vector,"__sub")
+        ALIAS(scalec_vector,"__mul")
+        ALIAS(equal_vector,"__eq")
+    ENDASSOCIATION
+
+ENDCLASS
 
