@@ -168,7 +168,7 @@ float vector::len()
     return cachlen;
 }
 
-int vector::print()
+int vector::print() const
 {
     int num = 0;
     for(int i = 0; i < n; i++)
@@ -267,6 +267,12 @@ void vector::setvalue(vector *v)
 void vector::unify()
 {
     float len = this->len();
+    if(!len)
+    {
+        cachlen = 0;
+        lenmod = false;
+        return;
+    }
     for(int i = 0; i < n; i++)
         x[i] /= len;
     lenmod = false;
@@ -276,6 +282,12 @@ void vector::unify()
 vector vector::unifyc()
 {
     float len = this->len();
+    if(!len)
+    {
+        cachlen = 0;
+        lenmod = false;
+        return vector(this);
+    }
     for(int i = 0; i < n; i++)
         x[i] /= len;
     lenmod = false;
@@ -286,6 +298,12 @@ vector vector::unifyc()
 vector *vector::unifycp()
 {
     float len = this->len();
+    if(!len)
+    {
+        cachlen = 0;
+        lenmod = false;
+        return new vector(this);
+    }
     for(int i = 0; i < n; i++)
         x[i] /= len;
     lenmod = false;

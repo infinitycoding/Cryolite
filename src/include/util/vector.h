@@ -37,7 +37,7 @@ class vector
 
         void null();
         float len();
-        int print();
+        int print() const;
 
 
         void setvalue(Vertex2D vx);
