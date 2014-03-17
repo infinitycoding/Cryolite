@@ -6,45 +6,6 @@ using namespace std;
 
 
 
-
-CBEGIN(set_vector)
-        switch(getargc())
-        {
-            case 2: //instance + 1. arg
-                CHECK(isnumber(1))
-                    getInstance(vector)->setvalue(getarg(LDBL()));
-                ELSEIF(isobject(1))
-                    getInstance(vector)->setvalue(getarg(LDAT(vector, "vector")));
-                ELSE
-                    lerror("\n vector(set): invalid argument type; Number or vector expected.");
-                CHECKEND
-            break;
-
-            case 3:
-                CHECK(isnumber(1) && isnumber(2))
-                    getarg(double y = LDBL(); double x = LDBL());
-                    getInstance(vector)->setvalue(x,y);
-                ELSE
-                    lerror("\n vector(set): invalid argument type; Two numbers expected.");
-                CHECKEND
-            break;
-
-            case 4:
-                CHECK(isnumber(1) && isnumber(2) && isnumber(3))
-                     getarg(double z = LDBL(); double y = LDBL(); double x = LDBL());
-                    getInstance(vector)->setvalue(x,y,z);
-                ELSE
-                    lerror("\n vector(set): invalid argument type; Three numbers expected.");
-                CHECKEND
-            break;
-
-            default:
-                lerror("\n vector(set): invalid number of arguments; got %d, expected 1,2 or 3", getargc());
-            break;
-        };
-CEND(0)
-
-
 CBEGIN(unify_vector)
     CHECK(getargc() == 1)
         getInstance(vector)->unify();
@@ -206,7 +167,7 @@ NEWBEGIN(subc_vector)
     addInstance(vector, r);
 NEWEND(vector)
 
-CBEGIN(scale_vector)
+/*CBEGIN(scale_vector)
     switch(getargc())
     {
         case 2:
@@ -222,7 +183,7 @@ CBEGIN(scale_vector)
             lerror("\n vector(scale): invalid number of arguments; got %d, expected 1 ", getargc());
         break;
     };
-CEND(0)
+CEND(0)*/
 
 
 NEWBEGIN(scalec_vector)
@@ -326,7 +287,14 @@ CLASS
         SELECT(addInstance(vector,vector(LDBL(),LDBL(),LDBL())), 3, (istype(float,ARG0) && istype(float,ARG1) && istype(float,ARG2)))
         SELECT(addInstance(vector,vector(LDBL(),LDBL(),0)), 2, (istype(float,ARG0) && istype(float,ARG1)))
         SELECT(addInstance(vector,vector(LDBL(),0,0)), 1, istype(float,ARG0))
-        SELECT(addInstance(vector,vector(*getInstance(vector))), 1, (istobjecttype(vector)))
+        SELECT(addInstance(vector,vector(getInstance(vector))), 1, (istobjecttype(vector)))
+    ENDOVERLOAD
+
+    OVERLOAD(set_vector)
+        SELECT(VOID getInstance(vector)->setvalue(LDBL(),LDBL(),LDBL()),3,(istype(float,ARG0) && istype(float,ARG1) && istype(float,ARG2)))
+        SELECT(VOID getInstance(vector)->setvalue(LDBL(),LDBL(),0),2,(istype(float,ARG0) && istype(float,ARG1)))
+        SELECT(VOID getInstance(vector)->setvalue(LDBL(),0,0),1,istype(float,ARG0))
+        SELECT(VOID getInstance(vector)->setvalue(LDAT(vector, "vector")), 1, (istobjecttype(vector)))
     ENDOVERLOAD
 
     CBEGIN(get_vector)
@@ -339,9 +307,10 @@ CLASS
     CEND(3,LDBL(v.x[2]); LDBL(v.x[1]); LDBL(v.x[0]))
 
 
-    VOIDFUNCTION(null_vector,getInstance(vector)->null(),1,true)
+    FUNCTION(null_vector,VOID getInstance(vector)->null(),1,true)
     FUNCTION(len_vector,LDBL(getInstance(vector)->len()),1,true)
-    VOIDFUNCTION(print_vector,getInstance(vector)->print(),1,true)
+    FUNCTION(print_vector,VOID getInstance(vector)->print(),1,true)
+    FUNCTION(scale_vector,VOID getInstance(vector)->scale(2),1,istype(float,ARG0));
 
     ASSOCIATION(vector)
         ALIAS(new_vector,"new")

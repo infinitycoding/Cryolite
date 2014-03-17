@@ -207,11 +207,11 @@ typedef luaL_Reg reg;
 #define CLASS
 #define ENDCLASS
 #define addClass(TYPE) addMetatable(#TYPE,_#TYPE);
-#define OVERLOAD(NAME,...) int NAME(lua_State *L) {if(!L){return 0;}
-#define ENDOVERLOAD return false;}
+#define OVERLOAD(NAME,...) int NAME(lua_State *L) {if(false);
+#define ENDOVERLOAD else {printf("can't find matching overloaded function\n");} return false;}
 #define SELECT(FUNCTION,ARG,...) else if((lua_gettop(L)==ARG+1) && (__VA_ARGS__)){return FUNCTION;}
-#define FUNCTION(NAME,FUNCTION,ARG,...) int NAME(lua_State *L) { if((lua_gettop(L)==ARG+1) && (__VA_ARGS__)){return FUNCTION;} return false;}
-#define VOIDFUNCTION(NAME,FUNCTION,ARG,...) int NAME(lua_State *L) { if((lua_gettop(L)==ARG+1) && (__VA_ARGS__)){FUNCTION; return 0;} return false;}
+#define FUNCTION(NAME,FUNCTION,ARG,CHECK,...) int NAME(lua_State *L) { if((lua_gettop(L)==ARG) && (CHECK)){int ret =  FUNCTION; return ret;} return false;}
+#define VOID 0;
 //todo: argumet passing
 #define ARG0 -1
 #define ARG1 -2
