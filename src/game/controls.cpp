@@ -275,8 +275,6 @@ void Controls::shoot_handler(Camera *cam)
         }
 
         mainScene->addObject(newObject);
-
-        cout << "still alive" << endl;
     }
 }
 

@@ -81,7 +81,7 @@ int main(int argc, char *argv[]){
 
     Controls playerControls = Controls(&mainwindow, &engineSettings);
 
-    mainScene->GlobalAmbience = new GlobalLight(0.15,0.15,0.15,1);
+    mainScene->GlobalAmbience = new GlobalLight(0.3,0.3,0.3,1);
 
     //GL Settigs
     glMatrixMode( GL_PROJECTION );
@@ -118,9 +118,6 @@ int main(int argc, char *argv[]){
     Script testScript(SCRIPT(testscript.lua));
     testScript.run();
 
-
-
-    cout<<vector(1,20,0).len()<<endl;
     while(render){ //render
         if(printFPS)
             mainScene->fps->print();

@@ -109,6 +109,8 @@ bool CollisionList::collide(Object *obj1, Object *obj2)
             boxIterator2.Next();
         }
 
+        boxIterator2.SetFirst();
+
         while(!planeIterator2.IsLast())
         {
             spot = boxPlaneCollision(obj1->getPosition(), *boxIterator1.GetCurrent(), obj2->getPosition(), *planeIterator2.GetCurrent());
@@ -119,6 +121,8 @@ bool CollisionList::collide(Object *obj1, Object *obj2)
             planeIterator2.Next();
         }
 
+        planeIterator2.SetFirst();
+
         while(!sphereIterator2.IsLast())
         {
             spot = boxSphereCollision(obj1->getPosition(), *boxIterator1.GetCurrent(), obj2->getPosition(), *sphereIterator2.GetCurrent());
@@ -128,6 +132,8 @@ bool CollisionList::collide(Object *obj1, Object *obj2)
 
             sphereIterator2.Next();
         }
+
+        sphereIterator2.SetFirst();
 
         boxIterator1.Next();
     }
@@ -148,6 +154,8 @@ bool CollisionList::collide(Object *obj1, Object *obj2)
             boxIterator2.Next();
         }
 
+        boxIterator2.SetFirst();
+
         while(!planeIterator2.IsLast())
         {
             spot = planePlaneCollision(obj1->getPosition(), *planeIterator1.GetCurrent(), obj2->getPosition(), *planeIterator2.GetCurrent());
@@ -158,6 +166,8 @@ bool CollisionList::collide(Object *obj1, Object *obj2)
             planeIterator2.Next();
         }
 
+        planeIterator2.SetFirst();
+
         while(!sphereIterator2.IsLast())
         {
             spot = planeSphereCollision(obj1->getPosition(), *planeIterator1.GetCurrent(), obj2->getPosition(), *sphereIterator2.GetCurrent());
@@ -167,6 +177,8 @@ bool CollisionList::collide(Object *obj1, Object *obj2)
 
             sphereIterator2.Next();
         }
+
+        sphereIterator2.SetFirst();
 
         planeIterator1.Next();
     }
@@ -187,6 +199,8 @@ bool CollisionList::collide(Object *obj1, Object *obj2)
             boxIterator2.Next();
         }
 
+        boxIterator2.SetFirst();
+
         while(!planeIterator2.IsLast())
         {
             spot = planeSphereCollision(obj2->getPosition(), *planeIterator1.GetCurrent(), obj1->getPosition(), *sphereIterator2.GetCurrent());
@@ -197,6 +211,8 @@ bool CollisionList::collide(Object *obj1, Object *obj2)
             planeIterator2.Next();
         }
 
+        planeIterator2.SetFirst();
+
         while(!sphereIterator2.IsLast())
         {
             spot = sphereSphereCollision(obj1->getPosition(), *sphereIterator1.GetCurrent(), obj2->getPosition(), *sphereIterator2.GetCurrent());
@@ -206,6 +222,8 @@ bool CollisionList::collide(Object *obj1, Object *obj2)
 
             sphereIterator2.Next();
         }
+
+        sphereIterator2.SetFirst();
 
         sphereIterator1.Next();
     }
@@ -289,22 +307,19 @@ vector *CollisionList::sphereSphereCollision(vector offset1, boundSphere sphere1
     vector helper2;
     vector *spot = NULL;
 
-    sphere1.center += offset1;
-    sphere2.center += offset2;
-
-    distance = sphere1.center - sphere2.center;
+    distance = (sphere1.center + offset1) - (sphere2.center + offset2);
 
     if(fabs(distance.len()) < (sphere1.radian + sphere2.radian))
     {
         spot = new vector();
-        helper1 = sphere1.center - sphere2.center;
+        helper1 = (sphere1.center + offset1) - (sphere2.center + offset2);
         helper1.unify();
         helper1 *= sphere2.radian;
-        helper1 += sphere2.center;
-        helper2 = sphere2.center - sphere1.center;
+        helper1 += (sphere2.center + offset2);
+        helper2 = (sphere2.center + offset2) - (sphere1.center + offset1);
         helper2.unify();
         helper2 *= sphere1.radian;
-        helper2 += sphere1.center;
+        helper2 += (sphere1.center + offset1);
         spot->setvalue((helper1 + helper2) * 0.5);
         return spot;
     }
