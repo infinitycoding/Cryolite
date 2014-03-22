@@ -76,6 +76,7 @@
 		<Unit filename="src/include/physics/PhysicsEngine.h" />
 		<Unit filename="src/include/physics/PhysicsHandler.h" />
 		<Unit filename="src/include/physics/PhysicsProperty.h" />
+		<Unit filename="src/include/physics/boundobjects.h" />
 		<Unit filename="src/include/physics/collision.h" />
 		<Unit filename="src/include/render/camera.h" />
 		<Unit filename="src/include/render/font.h" />
