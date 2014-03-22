@@ -3,6 +3,10 @@
 
 
 
+#include <vector.h>
+
+
+
 struct boundBox         // Bound Box
 {
     vector base;

@@ -117,6 +117,7 @@
 		</Unit>
 		<Unit filename="src/physics/ExtMaths.cpp" />
 		<Unit filename="src/physics/PhysicsEngine.cpp" />
+		<Unit filename="src/physics/boundobjects.cpp" />
 		<Unit filename="src/physics/collision.cpp" />
 		<Unit filename="src/render/camera.cpp" />
 		<Unit filename="src/render/font.cpp" />
