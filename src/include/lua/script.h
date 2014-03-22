@@ -116,9 +116,10 @@ static inline bool LUA_BOOL(lua_State *L)
 }
 
 
-static inline void LUA_BOOL(lua_State *L, bool value)
+static inline int LUA_BOOL(lua_State *L, bool value)
 {
     lua_pushboolean(L, value);
+    return 1;
 }
 
 
@@ -134,6 +135,7 @@ static inline T* LUA_DATA(lua_State *L, const char *Metatable)
 template <typename T>
 static inline int LUA_DATA(lua_State *L, T value)
 {
+    luaL_checktype(L, 1, LUA_TTABLE); lua_newtable(L); lua_pushvalue(L,1); lua_setmetatable(L, -2); lua_pushvalue(L,1); lua_setfield(L, 1, "__index");
     luaObject<T> newObject;
     newObject.id = typeid(T).hash_code();
     *((T*)newObject.cObject) = value;
@@ -172,7 +174,7 @@ typedef luaL_Reg reg;
 #define NEWEND(CLASS) luaL_getmetatable(L, #CLASS);lua_setmetatable(L, -2); lua_setfield(L, -2, "__self"); return 1;}
 
 #define CONSTRUCT(...) luaL_checktype(L, 1, LUA_TTABLE); lua_newtable(L); lua_pushvalue(L,1); lua_setmetatable(L, -2); lua_pushvalue(L,1); lua_setfield(L, 1, "__index")
-#define addInstance(TYPE, VALUE) LUA_DATA<TYPE>(L, VALUE);
+#define addInstance(TYPE, VALUE) LUA_DATA<TYPE>(L, VALUE)
 
 
 #define getargc(...) lua_gettop(L)
@@ -207,9 +209,9 @@ typedef luaL_Reg reg;
 #define CLASS
 #define ENDCLASS
 #define addClass(TYPE) addMetatable(#TYPE,_#TYPE);
-#define OVERLOAD(NAME,...) int NAME(lua_State *L) {if(false);
-#define ENDOVERLOAD else {printf("can't find matching overloaded function\n");} return false;}
-#define SELECT(FUNCTION,ARG,...) else if((lua_gettop(L)==ARG+1) && (__VA_ARGS__)){return FUNCTION;}
+#define OVERLOAD(NAME,...) int NAME(lua_State *L) {char name[] = #NAME; if(false);
+#define ENDOVERLOAD else {printf("%s: can't find matching overloaded function\n",name);} return false;}
+#define SELECT(FUNCTION,ARG,...) else if((lua_gettop(L)==ARG+1) && (__VA_ARGS__)){int ret =  FUNCTION; return ret;}
 #define FUNCTION(NAME,FUNCTION,ARG,CHECK,...) int NAME(lua_State *L) { if((lua_gettop(L)==ARG) && (CHECK)){int ret =  FUNCTION; return ret;} return false;}
 #define VOID 0;
 //todo: argumet passing
