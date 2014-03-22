@@ -533,8 +533,8 @@ void Object::initObject()
 {
     scale = vector(1, 1, 1);
 
-    Angle = 0;
-    rotationAxis = vector();
+    rot.Angle = 0;
+    rot.rotationAxis = vector();
 
     relativeToObject = NULL;
     localPosition = vector();

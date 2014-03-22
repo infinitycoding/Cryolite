@@ -250,7 +250,7 @@ void Scene::render()
 
 
                             //Modify Model Matrix
-                            glRotatef(currentObject->Angle, currentObject->rotationAxis.x[0], currentObject->rotationAxis.x[1], currentObject->rotationAxis.x[2]);
+                            glRotatef(currentObject->rot.Angle, currentObject->rot.rotationAxis.x[0], currentObject->rot.rotationAxis.x[1], currentObject->rot.rotationAxis.x[2]);
                             glTranslatef(currentObject->getPosition().x[0],currentObject->getPosition().x[1],currentObject->getPosition().x [2]);
                             glScalef(currentObject->scale.x[0],currentObject->scale.x[1],currentObject->scale.x[2]);
 

@@ -17,6 +17,7 @@
 #include <material.h>       // objects have materials, don't they?
 #include <polygon.h>        // objects have polygone, don't they?
 #include <sound.h>          // objects have sound, don't they?
+#include <physics/boundobjects.h>   // objects have bound objects, don't they?
 #include <physics/PhysicsEngine.h>  // objects have physics, don't  they?
 
 
@@ -34,26 +35,11 @@ struct vertexNumber     // a struct which shows the number of object vertices, t
     int normalVectors;
 };
 
-// many structs are following here, all defining bound objects
-struct boundBox         // Bound Box
-{
-    vector base;
-    vector height;
-    vector width;
-    vector length;
-};
 
-struct boundSphere      // Bound Sphere
+struct rotation
 {
-    vector center;
-    GLfloat radian;
-};
-
-struct boundPlane       // Bound Plane
-{
-    vector base;
-    vector widht;
-    vector length;
+    GLfloat Angle;
+    vector rotationAxis;
 };
 
 
@@ -125,15 +111,12 @@ class Object                // the main object
         vector getPosition();
 
 
-
-
         ObjectType *objType;                         // the object type
         static ObjectTypeCache *ObjTypeCache;       // the static object type cache (you know what a cache is, don't you?)
 
         vector scale;                               // the scale of the object (if you need an overdimensional cup of tea)
 
-        GLfloat Angle;
-        vector rotationAxis;
+        rotation rot;
 
         Object *relativeToObject;
         vector localPosition;                    // the position
