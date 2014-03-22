@@ -184,7 +184,7 @@ void Controls::rotation_handler(Camera *cam){    // Rotates the camera if a key 
     cam->rotateX(-ROTATION_WIDTH*temp.x[2]*down_rotation);
     cam->rotateZ(-ROTATION_WIDTH*temp.x[0]*down_rotation);
 
-    if(lookDirectSave.x[0] > 0 != cam->lookingDirection.x[0] > 0)
+    if((lookDirectSave.x[0] > 0) != (cam->lookingDirection.x[0] > 0))
         cam->lookingDirection = lookDirectSave;
 
     down_rotation = 0;
