@@ -90,18 +90,18 @@ bool CollisionList::collide(Object *obj1, Object *obj2)
 {
     vector *spot = NULL;
 
-    ListIterator<boundBox> boxIterator1 = *ListIterator<boundBox>(obj1->objType->boundBoxes).SetFirst();
-    ListIterator<boundBox> boxIterator2 = *ListIterator<boundBox>(obj2->objType->boundBoxes).SetFirst();
-    ListIterator<boundPlane> planeIterator1 = *ListIterator<boundPlane>(obj1->objType->boundPlanes).SetFirst();
-    ListIterator<boundPlane> planeIterator2 = *ListIterator<boundPlane>(obj2->objType->boundPlanes).SetFirst();
-    ListIterator<boundSphere> sphereIterator1 = *ListIterator<boundSphere>(obj1->objType->boundSpheres).SetFirst();
-    ListIterator<boundSphere> sphereIterator2 = *ListIterator<boundSphere>(obj2->objType->boundSpheres).SetFirst();
+    ListIterator<BoundBox> boxIterator1 = *ListIterator<BoundBox>(obj1->objType->boundBoxes).SetFirst();
+    ListIterator<BoundBox> boxIterator2 = *ListIterator<BoundBox>(obj2->objType->boundBoxes).SetFirst();
+    ListIterator<BoundPlane> planeIterator1 = *ListIterator<BoundPlane>(obj1->objType->boundPlanes).SetFirst();
+    ListIterator<BoundPlane> planeIterator2 = *ListIterator<BoundPlane>(obj2->objType->boundPlanes).SetFirst();
+    ListIterator<BoundSphere> sphereIterator1 = *ListIterator<BoundSphere>(obj1->objType->boundSpheres).SetFirst();
+    ListIterator<BoundSphere> sphereIterator2 = *ListIterator<BoundSphere>(obj2->objType->boundSpheres).SetFirst();
 
     while(!boxIterator1.IsLast())
     {
         while(!boxIterator2.IsLast())
         {
-            spot = boxBoxCollision(preprocessBoundBox(boxIterator1.GetCurrent(), obj1->getPosition(), obj1->scale, obj1->rot), preprocessBoundBox(boxIterator2.GetCurrent(), obj2->getPosition(), obj2->scale, obj2->rot));
+            spot = boxBoxCollision(boxIterator1.GetCurrent()->preprocess(obj1->getPosition(), obj1->scale, obj1->rot), boxIterator2.GetCurrent()->preprocess(obj2->getPosition(), obj2->scale, obj2->rot));
 
             if(addCollision(obj1, obj2, spot))
                 return true;
@@ -113,7 +113,7 @@ bool CollisionList::collide(Object *obj1, Object *obj2)
 
         while(!planeIterator2.IsLast())
         {
-            spot = boxPlaneCollision(preprocessBoundBox(boxIterator1.GetCurrent(), obj1->getPosition(), obj1->scale, obj1->rot), preprocessBoundPlane(planeIterator2.GetCurrent(), obj2->getPosition(), obj2->scale, obj2->rot));
+            spot = boxPlaneCollision(boxIterator1.GetCurrent()->preprocess(obj1->getPosition(), obj1->scale, obj1->rot), planeIterator2.GetCurrent()->preprocess(obj2->getPosition(), obj2->scale, obj2->rot));
 
             if(addCollision(obj1, obj2, spot))
                 return true;
@@ -125,7 +125,7 @@ bool CollisionList::collide(Object *obj1, Object *obj2)
 
         while(!sphereIterator2.IsLast())
         {
-            spot = boxSphereCollision(preprocessBoundBox(boxIterator1.GetCurrent(), obj1->getPosition(), obj1->scale, obj1->rot), preprocessBoundSphere(sphereIterator2.GetCurrent(), obj2->getPosition(), obj2->scale, obj2->rot));
+            spot = boxSphereCollision(boxIterator1.GetCurrent()->preprocess(obj1->getPosition(), obj1->scale, obj1->rot), sphereIterator2.GetCurrent()->preprocess(obj2->getPosition(), obj2->scale, obj2->rot));
 
             if(addCollision(obj1, obj2, spot))
                 return true;
@@ -146,7 +146,7 @@ bool CollisionList::collide(Object *obj1, Object *obj2)
     {
         while(!boxIterator2.IsLast())
         {
-            spot = boxPlaneCollision(preprocessBoundBox(boxIterator2.GetCurrent(), obj2->getPosition(), obj2->scale, obj2->rot), preprocessBoundPlane(planeIterator1.GetCurrent(), obj1->getPosition(), obj1->scale, obj1->rot));
+            spot = boxPlaneCollision(boxIterator2.GetCurrent()->preprocess(obj2->getPosition(), obj2->scale, obj2->rot), planeIterator1.GetCurrent()->preprocess(obj1->getPosition(), obj1->scale, obj1->rot));
 
             if(addCollision(obj1, obj2, spot))
                 return true;
@@ -158,7 +158,7 @@ bool CollisionList::collide(Object *obj1, Object *obj2)
 
         while(!planeIterator2.IsLast())
         {
-            spot = planePlaneCollision(preprocessBoundPlane(planeIterator1.GetCurrent(), obj1->getPosition(), obj1->scale, obj1->rot), preprocessBoundPlane(planeIterator2.GetCurrent(), obj2->getPosition(), obj2->scale, obj2->rot));
+            spot = planePlaneCollision(planeIterator1.GetCurrent()->preprocess(obj1->getPosition(), obj1->scale, obj1->rot), planeIterator2.GetCurrent()->preprocess(obj2->getPosition(), obj2->scale, obj2->rot));
 
             if(addCollision(obj1, obj2, spot))
                 return true;
@@ -170,7 +170,7 @@ bool CollisionList::collide(Object *obj1, Object *obj2)
 
         while(!sphereIterator2.IsLast())
         {
-            spot = planeSphereCollision(preprocessBoundPlane(planeIterator1.GetCurrent(), obj1->getPosition(), obj1->scale, obj1->rot), preprocessBoundSphere(sphereIterator2.GetCurrent(), obj2->getPosition(), obj2->scale, obj2->rot));
+            spot = planeSphereCollision(planeIterator1.GetCurrent()->preprocess(obj1->getPosition(), obj1->scale, obj1->rot), sphereIterator2.GetCurrent()->preprocess(obj2->getPosition(), obj2->scale, obj2->rot));
 
             if(addCollision(obj1, obj2, spot))
                 return true;
@@ -191,7 +191,7 @@ bool CollisionList::collide(Object *obj1, Object *obj2)
     {
         while(!boxIterator2.IsLast())
         {
-            spot = boxSphereCollision(preprocessBoundBox(boxIterator2.GetCurrent(), obj2->getPosition(), obj2->scale, obj2->rot), preprocessBoundSphere(sphereIterator1.GetCurrent(), obj1->getPosition(), obj1->scale, obj1->rot));
+            spot = boxSphereCollision(boxIterator2.GetCurrent()->preprocess(obj2->getPosition(), obj2->scale, obj2->rot), sphereIterator1.GetCurrent()->preprocess(obj1->getPosition(), obj1->scale, obj1->rot));
 
             if(addCollision(obj1, obj2, spot))
                 return true;
@@ -203,7 +203,7 @@ bool CollisionList::collide(Object *obj1, Object *obj2)
 
         while(!planeIterator2.IsLast())
         {
-            spot = planeSphereCollision(preprocessBoundPlane(planeIterator2.GetCurrent(), obj2->getPosition(), obj2->scale, obj2->rot), preprocessBoundSphere(sphereIterator1.GetCurrent(), obj1->getPosition(), obj1->scale, obj1->rot));
+            spot = planeSphereCollision(planeIterator2.GetCurrent()->preprocess(obj2->getPosition(), obj2->scale, obj2->rot), sphereIterator1.GetCurrent()->preprocess(obj1->getPosition(), obj1->scale, obj1->rot));
 
             if(addCollision(obj1, obj2, spot))
                 return true;
@@ -215,7 +215,7 @@ bool CollisionList::collide(Object *obj1, Object *obj2)
 
         while(!sphereIterator2.IsLast())
         {
-            spot = sphereSphereCollision(preprocessBoundSphere(sphereIterator1.GetCurrent(), obj1->getPosition(), obj1->scale, obj1->rot), preprocessBoundSphere(sphereIterator2.GetCurrent(), obj2->getPosition(), obj2->scale, obj2->rot));
+            spot = sphereSphereCollision(sphereIterator1.GetCurrent()->preprocess(obj1->getPosition(), obj1->scale, obj1->rot), sphereIterator2.GetCurrent()->preprocess(obj2->getPosition(), obj2->scale, obj2->rot));
 
             if(addCollision(obj1, obj2, spot))
                 return true;
@@ -260,7 +260,7 @@ bool CollisionList::addCollision(Object *obj1, Object *obj2, vector *spot)
 }
 
 
-vector *CollisionList::boxBoxCollision(boundBox box1, boundBox box2)
+vector *CollisionList::boxBoxCollision(BoundBox box1, BoundBox box2)
 {
     // TODO
 
@@ -268,7 +268,7 @@ vector *CollisionList::boxBoxCollision(boundBox box1, boundBox box2)
 }
 
 
-vector *CollisionList::boxPlaneCollision(boundBox box, boundPlane plane)
+vector *CollisionList::boxPlaneCollision(BoundBox box, BoundPlane plane)
 {
     // TODO
 
@@ -276,7 +276,7 @@ vector *CollisionList::boxPlaneCollision(boundBox box, boundPlane plane)
 }
 
 
-vector *CollisionList::boxSphereCollision(boundBox box, boundSphere sphere)
+vector *CollisionList::boxSphereCollision(BoundBox box, BoundSphere sphere)
 {
     // TODO
 
@@ -284,7 +284,7 @@ vector *CollisionList::boxSphereCollision(boundBox box, boundSphere sphere)
 }
 
 
-vector *CollisionList::planePlaneCollision(boundPlane plane1, boundPlane plane2)
+vector *CollisionList::planePlaneCollision(BoundPlane plane1, BoundPlane plane2)
 {
     // TODO
 
@@ -292,7 +292,7 @@ vector *CollisionList::planePlaneCollision(boundPlane plane1, boundPlane plane2)
 }
 
 
-vector *CollisionList::planeSphereCollision(boundPlane plane, boundSphere sphere)
+vector *CollisionList::planeSphereCollision(BoundPlane plane, BoundSphere sphere)
 {
     // TODO
 
@@ -300,7 +300,7 @@ vector *CollisionList::planeSphereCollision(boundPlane plane, boundSphere sphere
 }
 
 
-vector *CollisionList::sphereSphereCollision(boundSphere sphere1, boundSphere sphere2)
+vector *CollisionList::sphereSphereCollision(BoundSphere sphere1, BoundSphere sphere2)
 {
     vector distance;
     vector helper1;
@@ -325,73 +325,5 @@ vector *CollisionList::sphereSphereCollision(boundSphere sphere1, boundSphere sp
     }
 
     return NULL;
-}
-
-
-boundBox CollisionList::cloneBoundBox(boundBox *boxtemplate)
-{
-    boundBox clone;
-
-    clone.base = vector(&boxtemplate->base);
-    clone.height = vector(&boxtemplate->height);
-    clone.length = vector(&boxtemplate->length);
-    clone.width = vector(&boxtemplate->width);
-
-    return clone;
-}
-
-
-boundPlane CollisionList::cloneBoundPlane(boundPlane *planetemplate)
-{
-    boundPlane clone;
-
-    clone.base = vector(&planetemplate->base);
-    clone.widht = vector(&planetemplate->widht);
-    clone.length = vector(&planetemplate->length);
-
-    return clone;
-}
-
-
-boundSphere CollisionList::cloneBoundSphere(boundSphere *spheretemplate)
-{
-    boundSphere clone;
-
-    clone.center = vector(&spheretemplate->center);
-    clone.radian = spheretemplate->radian;
-
-    return clone;
-}
-
-
-boundBox CollisionList::preprocessBoundBox(boundBox *boxBefore, vector pos, vector scale, rotation rot)
-{
-    boundBox boxAfter;
-
-    boxAfter = cloneBoundBox(boxBefore);
-
-    return boxAfter;
-}
-
-
-boundPlane CollisionList::preprocessBoundPlane(boundPlane *planeBefore, vector pos, vector scale, rotation rot)
-{
-    boundPlane planeAfter;
-
-    planeAfter = cloneBoundPlane(planeBefore);
-
-    return planeAfter;
-}
-
-
-boundSphere CollisionList::preprocessBoundSphere(boundSphere *sphereBefore, vector pos, vector scale, rotation rot)
-{
-    boundSphere sphereAfter;
-
-    sphereAfter = cloneBoundSphere(sphereBefore);
-
-    sphereAfter.center += pos;
-
-    return sphereAfter;
 }
 

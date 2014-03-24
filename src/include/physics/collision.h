@@ -33,20 +33,12 @@ class CollisionList
         bool collide(Object *obj1, Object *obj2);
         bool addCollision(Object *obj1, Object *obj2, vector *spot);
 
-        vector *boxBoxCollision(boundBox box1, boundBox box2);
-        vector *boxPlaneCollision(boundBox box, boundPlane plane);
-        vector *boxSphereCollision(boundBox box, boundSphere sphere);
-        vector *planePlaneCollision(boundPlane plane1, boundPlane plane2);
-        vector *planeSphereCollision(boundPlane plane, boundSphere sphere);
-        vector *sphereSphereCollision(boundSphere sphere1, boundSphere sphere2);
-
-        boundBox cloneBoundBox(boundBox *boxtemplate);
-        boundPlane cloneBoundPlane(boundPlane *planetemplate);
-        boundSphere cloneBoundSphere(boundSphere *spheretemplate);
-
-        boundBox preprocessBoundBox(boundBox *boxBefore, vector pos, vector scale, rotation rot);
-        boundPlane preprocessBoundPlane(boundPlane *planeBefore, vector pos, vector scale, rotation rot);
-        boundSphere preprocessBoundSphere(boundSphere *sphereBefore, vector pos, vector scale, rotation rot);
+        vector *boxBoxCollision(BoundBox box1, BoundBox box2);
+        vector *boxPlaneCollision(BoundBox box, BoundPlane plane);
+        vector *boxSphereCollision(BoundBox box, BoundSphere sphere);
+        vector *planePlaneCollision(BoundPlane plane1, BoundPlane plane2);
+        vector *planeSphereCollision(BoundPlane plane, BoundSphere sphere);
+        vector *sphereSphereCollision(BoundSphere sphere1, BoundSphere sphere2);
 
         List<Object> *objList;
         List<collision> *collList;

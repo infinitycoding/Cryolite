@@ -4,56 +4,55 @@
 
 
 #include <vector.h>
+#include <general_structs.h>
 
 
 
-struct boundBox         // Bound Box
+class BoundBox         // Bound Box
 {
-    vector base;
-    vector height;
-    vector width;
-    vector length;
+    public:
+        BoundBox();
+        BoundBox(BoundBox *original);
+        BoundBox(vector b, vector h, vector w, vector l);
+        ~BoundBox();
+
+        BoundBox preprocess(vector pos, vector scale, struct rotation rot);
+
+        vector base;
+        vector height;
+        vector width;
+        vector length;
 };
 
-struct boundSphere      // Bound Sphere
+class BoundSphere      // Bound Sphere
 {
-    vector center;
-    GLfloat radian;
+    public:
+        BoundSphere();
+        BoundSphere(BoundSphere *original);
+        BoundSphere(vector c, GLfloat r);
+        ~BoundSphere();
+
+        BoundSphere preprocess(vector pos, vector scale, rotation rot);
+
+        vector center;
+        GLfloat radian;
 };
 
-struct boundPlane       // Bound Plane
+class BoundPlane       // Bound Plane
 {
-    vector base;
-    vector widht;
-    vector length;
+    public:
+        BoundPlane();
+        BoundPlane(BoundPlane *original);
+        BoundPlane(vector b, vector w, vector l);
+        ~BoundPlane();
+
+        BoundPlane preprocess(vector pos, vector scale, rotation rot);
+
+        vector base;
+        vector widht;
+        vector length;
 };
 
-
-// from here on unused, don't know why i did this
-enum boundObjectType
-{
-    uninitialized = 0,
-    unknown = 0,
-    unsupported = 0,
-    box,
-    sphere,
-    plane
-};
-
-
-union boundObjectUnion
-{
-    boundBox b;
-    boundSphere s;
-    boundPlane p;
-};
-
-
-struct boundObject
-{
-    boundObjectType type;
-    boundObjectUnion data;
-};
 
 
 #endif

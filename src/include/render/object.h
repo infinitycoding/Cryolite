@@ -36,14 +36,6 @@ struct vertexNumber     // a struct which shows the number of object vertices, t
 };
 
 
-struct rotation
-{
-    GLfloat Angle;
-    vector rotationAxis;
-};
-
-
-
 class ObjectType : public ExtParser   // The object type class
 {
     public:
@@ -70,9 +62,9 @@ class ObjectType : public ExtParser   // The object type class
         List<Polygon> *polygones;               // the list of polygones of the object type
 
         // Bounds object lists
-        List<boundBox> *boundBoxes;             // the list of bound boxes of the object type
-        List<boundSphere> *boundSpheres;        // the list of bound spheres of the object type
-        List<boundPlane> *boundPlanes;          // the list of bound planes of the object type
+        List<BoundBox> *boundBoxes;             // the list of bound boxes of the object type
+        List<BoundSphere> *boundSpheres;        // the list of bound spheres of the object type
+        List<BoundPlane> *boundPlanes;          // the list of bound planes of the object type
 
         static MaterialCache *MatCache;         // the static material cache (you know what a cache is, don't you?)
         Material *ObjectTypeMaterial;            // the material of this object type

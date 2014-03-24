@@ -95,6 +95,7 @@
 		<Unit filename="src/include/render/vertex.h" />
 		<Unit filename="src/include/util/List.h" />
 		<Unit filename="src/include/util/general_def.h" />
+		<Unit filename="src/include/util/general_structs.h" />
 		<Unit filename="src/include/util/parser.h" />
 		<Unit filename="src/include/util/settings.h" />
 		<Unit filename="src/include/util/vector.h" />

@@ -48,9 +48,9 @@ void ObjectType::initObjectType()
 
     polygones = new List<Polygon>;
 
-    boundBoxes = new List<boundBox>;
-    boundSpheres = new List<boundSphere>;
-    boundPlanes = new List<boundPlane>;
+    boundBoxes = new List<BoundBox>;
+    boundSpheres = new List<BoundSphere>;
+    boundPlanes = new List<BoundPlane>;
 
     isPhysicalActor = false;
 

@@ -257,7 +257,7 @@ void Controls::shoot_handler(Camera *cam)
 {
     Object *newObject = NULL;
     vector *newForce = NULL;
-    boundSphere *newSphere = NULL;
+    BoundSphere *newSphere = NULL;
 
     if(fire)
     {
@@ -268,7 +268,7 @@ void Controls::shoot_handler(Camera *cam)
 
         if(newObject->objType->boundSpheres->IsEmpty())
         {
-            newSphere = new boundSphere;
+            newSphere = new BoundSphere;
             newSphere->center = vector(0.0, 0.0, 0.0);
             newSphere->radian = 0.5;
             newObject->objType->boundSpheres->PushFront(newSphere);
