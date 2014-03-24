@@ -75,9 +75,10 @@ static inline int LUA_INT(lua_State *L)
 }
 
 
-static inline void LUA_INT(lua_State *L, int value)
+static inline int LUA_INT(lua_State *L, int value)
 {
     lua_pushinteger(L, value);
+    return 1;
 }
 
 static inline double LUA_NUM(lua_State *L)
@@ -102,9 +103,10 @@ static inline char *LUA_STR(lua_State *L)
 }
 
 
-static inline void LUA_STR(lua_State *L, char *str)
+static inline int LUA_STR(lua_State *L, char *str)
 {
     lua_pushstring(L, str);
+    return 1;
 }
 
 
@@ -124,7 +126,7 @@ static inline int LUA_BOOL(lua_State *L, bool value)
 
 
 template <typename T>
-static inline T* LUA_DATA(lua_State *L, const char *Metatable)
+static inline T* LUA_DATA(lua_State *L, const char *Metatable,const char *notused)
 {
     luaObject<T>* currentObject = GETINSTANCEFROMLUA<T>(L, Metatable);
     lua_pop(L, 2);
@@ -133,14 +135,14 @@ static inline T* LUA_DATA(lua_State *L, const char *Metatable)
 
 
 template <typename T>
-static inline int LUA_DATA(lua_State *L, T value)
+static inline int LUA_DATA(lua_State *L, T value, const char *Metatable)
 {
     luaL_checktype(L, 1, LUA_TTABLE); lua_newtable(L); lua_pushvalue(L,1); lua_setmetatable(L, -2); lua_pushvalue(L,1); lua_setfield(L, 1, "__index");
     luaObject<T> newObject;
     newObject.id = typeid(T).hash_code();
     *((T*)newObject.cObject) = value;
     *((luaObject<T>*) lua_newuserdata(L, sizeof(newObject))) = newObject;
-    luaL_getmetatable(L, "vector");lua_setmetatable(L, -2); lua_setfield(L, -2, "__self"); return 1;
+    luaL_getmetatable(L, Metatable);lua_setmetatable(L, -2); lua_setfield(L, -2, "__self"); return 1;
 }
 
 template <typename T>
@@ -156,7 +158,7 @@ template <typename T>
 static inline bool is_type(lua_State *L, int index = -1)
 {
     size_t hash = typeid(T).hash_code();
-    if(hash == typeid(int).hash_code() ||  hash == typeid(float).hash_code())
+    if(hash == typeid(int).hash_code() || hash == typeid(float).hash_code())
         return lua_isnumber(L, index);
     else if(hash == typeid(char *).hash_code())
         return lua_isstring(L, index);
@@ -174,7 +176,7 @@ typedef luaL_Reg reg;
 #define NEWEND(CLASS) luaL_getmetatable(L, #CLASS);lua_setmetatable(L, -2); lua_setfield(L, -2, "__self"); return 1;}
 
 #define CONSTRUCT(...) luaL_checktype(L, 1, LUA_TTABLE); lua_newtable(L); lua_pushvalue(L,1); lua_setmetatable(L, -2); lua_pushvalue(L,1); lua_setfield(L, 1, "__index")
-#define addInstance(TYPE, VALUE) LUA_DATA<TYPE>(L, VALUE)
+#define addInstance(TYPE, VALUE) LUA_DATA<TYPE>(L, VALUE, #TYPE)
 
 
 #define getargc(...) lua_gettop(L)
@@ -184,7 +186,7 @@ typedef luaL_Reg reg;
 #define LCALL(FUNCTION, ARGC, ...) lua_getglobal(L, #FUNCTION); __VA_ARGS__ lua_pcall(L,ARGC,1,0)
 
 #define LINT(...) LUA_INT(L,##__VA_ARGS__)
-#define LDAT(TYPE, TABLE_OR_VALUE) LUA_DATA<TYPE>(L, TABLE_OR_VALUE)
+#define LDAT(TYPE, TABLE_OR_VALUE) LUA_DATA<TYPE>(L, TABLE_OR_VALUE,#TYPE)
 #define LDBL(...) LUA_NUM(L,##__VA_ARGS__)
 #define LSTR(...) LUA_STR(L,##__VA_ARGS__)
 #define LBOOL(...) LUA_BOOL(L,##__VA_ARGS__)
@@ -203,16 +205,16 @@ typedef luaL_Reg reg;
 #define istobjecttype(TYPE, ...) (is_object_type<TYPE>(L,#TYPE,##__VA_ARGS__))
 #define lerror(FORMAT, ...) luaL_error(L, FORMAT, ##__VA_ARGS__)
 #define RET(RETPARAM, ...) __VA_ARGS__; return RETPARAM
-
+#define LRET(RETC,...) RETC; __VA_ARGS__;
 
 
 #define CLASS
 #define ENDCLASS
 #define addClass(TYPE) addMetatable(#TYPE,_#TYPE);
-#define OVERLOAD(NAME,...) int NAME(lua_State *L) {char name[] = #NAME; if(false);
+#define OVERLOAD(NAME,...) int NAME(lua_State *L) {int argc = lua_gettop(L)+1; char name[] = #NAME; if(false);
 #define ENDOVERLOAD else {printf("%s: can't find matching overloaded function\n",name);} return false;}
-#define SELECT(FUNCTION,ARG,...) else if((lua_gettop(L)==ARG+1) && (__VA_ARGS__)){int ret =  FUNCTION; return ret;}
-#define FUNCTION(NAME,FUNCTION,ARG,CHECK,...) int NAME(lua_State *L) { if((lua_gettop(L)==ARG) && (CHECK)){int ret =  FUNCTION; return ret;} return false;}
+#define SELECT(FUNCTION,ARG,...) else if((argc==ARG) && (__VA_ARGS__)){int ret = FUNCTION; return ret;}
+#define FUNCTION(NAME,FUNCTION,ARG,CHECK,...) int NAME(lua_State *L) {int argc = lua_gettop(L); if((argc==ARG) && (CHECK)){int ret = FUNCTION; return ret;} lerror("\n%s: expected %d arguments got %d\n",NAME,ARG,argc); return false;}
 #define VOID 0;
 //todo: argumet passing
 #define ARG0 -1
@@ -226,6 +228,7 @@ typedef luaL_Reg reg;
 #define ARG8 -9
 #define ARG9 -10
 #define ARG10 -11
+
 
 
 #define ASSOCIATION(CLASS) reg CLASS ##Reg[]{
