@@ -21,6 +21,9 @@ class Camera
         void rotateY(float rotate);
         void rotateZ(float rotate);
 
+        void setViewportPos(int newX, int newY);
+        void setViewportDim(int newHeight, int newWidth);
+
         vector getPosition();
 
 

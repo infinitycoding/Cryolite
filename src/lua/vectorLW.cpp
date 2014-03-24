@@ -3,6 +3,7 @@
 
 CLASS
     OVERLOAD(new_vector)
+        SELECT(addInstance(vector,vector(0, 0, 0)), 0, true)
         SELECT(addInstance(vector,vector(LDBL(),LDBL(),LDBL())), 3, (istype(float,ARG0) && istype(float,ARG1) && istype(float,ARG2)))
         SELECT(addInstance(vector,vector(LDBL(),LDBL(),0)), 2, (istype(float,ARG0) && istype(float,ARG1)))
         SELECT(addInstance(vector,vector(LDBL(),0,0)), 1, istype(float,ARG0))
@@ -49,8 +50,8 @@ CLASS
     FUNCTION(null_vector,VOID getInstance(vector)->null(),1,true)
     FUNCTION(len_vector,LDBL(getInstance(vector)->len()),1,true)
     FUNCTION(print_vector,VOID getInstance(vector)->print(),1,true)
-    FUNCTION(scale_vector,VOID getInstance(vector)->scale(LDBL()),1,istype(float,ARG0));
-    FUNCTION(scalec_vector,addInstance(vector,getInstance(vector)->scalec(LDBL())),1,istype(float,ARG0));
+    FUNCTION(scale_vector,VOID getInstance(vector)->scale(LDBL()),2,istype(float,ARG0));
+    FUNCTION(scalec_vector,addInstance(vector,getInstance(vector)->scalec(LDBL())),2,istype(float,ARG0));
     FUNCTION(unify_vector,VOID getInstance(vector)->unify(),1,true);
     FUNCTION(unifyc_vector,addInstance(vector,getInstance(vector)->unifyc()),1,true);
     FUNCTION(equal_vector,LBOOL((*getInstance(vector)) == (*LDAT(vector, "vector"))),2,true)

@@ -69,6 +69,21 @@ void Camera::rotateZ(float rotate)
     lookingDirection.x[1] = lookingDirection.x[0] * sin(rotate) + lookingDirection.x[1] * cos(rotate);
 }
 
+
+void Camera::setViewportPos(int newX, int newY)
+{
+    x = newX;
+    y = newY;
+}
+
+
+void Camera::setViewportDim(int newHeight, int newWidth)
+{
+    height = newHeight;
+    width = newWidth;
+}
+
+
 vector Camera::getPosition()
 {
     if(relativeToObject == NULL)
