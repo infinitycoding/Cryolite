@@ -57,11 +57,8 @@ void Script::initLUA()
     luaL_openlibs(lState);
 }
 
-extern reg fpsReg[];
 extern reg vectorReg[];
-extern reg objReg[];
-extern reg profilerReg[];
-extern reg shaderReg[];
+extern reg CameraReg[];
 
 bool Script::load(const char *Scriptname)
 {
@@ -75,10 +72,7 @@ bool Script::load(const char *Scriptname)
 
     //add metatables
     addMetatable("vector", vectorReg);
-    addMetatable("Object", objReg);
-    addMetatable("Profiler", profilerReg);
-    addMetatable("Shader", shaderReg);
-    //addMetatable("Camera",cameraTable);
+    addMetatable("Camera", CameraReg);
 
     return true;
 }
