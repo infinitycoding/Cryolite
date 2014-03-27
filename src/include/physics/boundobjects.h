@@ -24,6 +24,7 @@ class BoundBox         // Bound Box
         vector length;
 };
 
+
 class BoundSphere      // Bound Sphere
 {
     public:
@@ -37,6 +38,7 @@ class BoundSphere      // Bound Sphere
         vector center;
         GLfloat radian;
 };
+
 
 class BoundPlane       // Bound Plane
 {

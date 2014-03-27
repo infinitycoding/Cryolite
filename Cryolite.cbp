@@ -74,10 +74,9 @@
 		</Unit>
 		<Unit filename="src/include/physics/ExtMaths.h" />
 		<Unit filename="src/include/physics/PhysicsEngine.h" />
-		<Unit filename="src/include/physics/PhysicsHandler.h" />
-		<Unit filename="src/include/physics/PhysicsProperty.h" />
 		<Unit filename="src/include/physics/boundobjects.h" />
 		<Unit filename="src/include/physics/collision.h" />
+		<Unit filename="src/include/physics/forces.h" />
 		<Unit filename="src/include/render/camera.h" />
 		<Unit filename="src/include/render/font.h" />
 		<Unit filename="src/include/render/fps.h" />
@@ -116,10 +115,10 @@
 		<Unit filename="src/optimize/profiler.cpp">
 			<Option target="Debug" />
 		</Unit>
-		<Unit filename="src/physics/ExtMaths.cpp" />
 		<Unit filename="src/physics/PhysicsEngine.cpp" />
 		<Unit filename="src/physics/boundobjects.cpp" />
 		<Unit filename="src/physics/collision.cpp" />
+		<Unit filename="src/physics/forces.cpp" />
 		<Unit filename="src/render/camera.cpp" />
 		<Unit filename="src/render/font.cpp" />
 		<Unit filename="src/render/fps.cpp" />

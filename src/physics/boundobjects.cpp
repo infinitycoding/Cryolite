@@ -39,7 +39,14 @@ BoundBox BoundBox::preprocess(vector pos, vector scale, rotation rot)
 {
     BoundBox boxAfter(this);
 
+    /*boxAfter.base *= scale;
+    boxAfter.height *= scale;
+    boxAfter.width *= scale;
+    boxAfter.length *= scale;*/
+
     // TODO
+
+    boxAfter.base += pos;
 
     return boxAfter;
 }
@@ -76,9 +83,12 @@ BoundSphere BoundSphere::preprocess(vector pos, vector scale, rotation rot)
 {
     BoundSphere sphereAfter(this);
 
-    sphereAfter.center += pos;
+    //sphereAfter.center *= scale;
+    //sphereAfter.radian *= scale.largest();
 
     // TODO
+
+    sphereAfter.center += pos;
 
     return sphereAfter;
 }
@@ -118,7 +128,13 @@ BoundPlane BoundPlane::preprocess(vector pos, vector scale, rotation rot)
 {
     BoundPlane planeAfter(this);
 
+    /*planeAfter.base *= scale;
+    planeAfter.widht *= scale;
+    planeAfter.length *= scale;*/
+
     // TODO
+
+    planeAfter.base += pos;
 
     return planeAfter;
 }

@@ -74,6 +74,7 @@ void CollisionList::clearCollisionList()
 
     while(!cleaner.IsEmpty())
     {
+        delete cleaner.GetCurrent()->collisionSpot;
         cleaner.Remove();
     }
 }
@@ -242,8 +243,13 @@ bool CollisionList::addCollision(Object *obj1, Object *obj2, vector *spot)
         i.SetFirst();
 
         while(!i.IsLast())
+        {
             if(i.GetCurrent()->obj1 == obj2 && i.GetCurrent()->obj2 == obj1)
                 return false;
+
+            i.Next();
+        }
+
 
         newCollision = new collision;
 
