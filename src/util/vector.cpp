@@ -766,6 +766,42 @@ vector *vector::scalecp(float s)
     return new vector(this);
 }
 
+void vector::mul(vector v)
+{
+    for(int i = 0; i < n && i < v.n; i++)
+        x[i] *= v.x[i];
+    lenmod = true;
+}
+
+void vector::mul(vector *v)
+{
+    for(int i = 0; i < n && i < v->n; i++)
+        x[i] *= v->x[i];
+    lenmod = true;
+}
+
+float vector::largest()
+{
+    float l = 0;
+    for(int i = 0; i < n; i++)
+    {
+        if(x[i]>l)
+            l = x[i];
+    }
+    return l;
+}
+
+float vector::smalest()
+{
+    float l = ~0;
+    for(int i = 0; i < n; i++)
+    {
+        if(x[i]<l)
+            l = x[i];
+    }
+    return l;
+}
+
 /*
 void vector::cross(vector v0, vector v1)
 {
@@ -979,6 +1015,7 @@ vector vector::operator *= (const float s)
     this->scale(s);
     return vector(this);
 }
+
 
 //TODO: clean the  quick and dirty implementation
 std::ostream& operator << (std::ostream& stream, vector const v)

@@ -165,6 +165,11 @@ class vector
         vector *scalec(float s, vector *v);
         vector *scalecp(float s);
 
+        void mul(vector v);
+        void mul(vector *v);
+        float largest();
+        float smalest();
+
         void  cross(vector  v0, vector  v1);
         void  cross(vector *v0, vector *v1);
         void  cross(vector *v0, vector  v1);
