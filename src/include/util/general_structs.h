@@ -3,6 +3,10 @@
 
 
 
+#include <vector.h>
+
+
+
 struct rotation
 {
     GLfloat Angle;

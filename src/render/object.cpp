@@ -42,9 +42,9 @@ void ObjectType::initObjectType()
 {
     memset(objectTypeName, '\0', sizeof(objectTypeName));
 
-    vertices = new List<Vertex3D>;
+    vertices = new List<vertex3D>;
     normvectors = new List<vector>;
-    texvertices = new List<Vertex2D>;
+    texvertices = new List<vertex2D>;
 
     polygones = new List<Polygon>;
 
@@ -177,13 +177,13 @@ void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectNa
     vertexNumber myVertices = {0, 0, 0};
     vertexNumber allObjectVertices = countVertices(objectFile, objectName);
 
-    Vertex2D *texvertex_ptr = NULL;
-    Vertex2D *autotexvertex_ptrs[4];
-    Vertex3D *objvertex_ptr = NULL;
+    vertex2D *texvertex_ptr = NULL;
+    vertex2D *autotexvertex_ptrs[4];
+    vertex3D *objvertex_ptr = NULL;
     vector *normvector_ptr = NULL;
 
-    Vertex2D *texvertex_ptrs[allObjectVertices.textureVertices];
-    Vertex3D *objvertex_ptrs[allObjectVertices.objectVertices];
+    vertex2D *texvertex_ptrs[allObjectVertices.textureVertices];
+    vertex3D *objvertex_ptrs[allObjectVertices.objectVertices];
     vector *normvector_ptrs[allObjectVertices.normalVectors];
 
     Polygon *polygon_ptr = NULL;
@@ -248,8 +248,8 @@ void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectNa
                 otherVertices.textureVertices++;
             else
             {
-                Vertex2D tempv2d = getVertex2D(&line_ptr);
-                texvertex_ptr = new Vertex2D(&tempv2d);
+                vertex2D tempv2d = getVertex2D(&line_ptr);
+                texvertex_ptr = new vertex2D(tempv2d);
 
                 texvertices->PushFront(texvertex_ptr);
 
@@ -266,8 +266,8 @@ void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectNa
             else
             {
 
-                Vertex3D tempv3d = getVertex3D(&line_ptr);
-                objvertex_ptr = new Vertex3D(&tempv3d);
+                vertex3D tempv3d = getVertex3D(&line_ptr);
+                objvertex_ptr = new vertex3D(tempv3d);
 
                 vertices->PushFront(objvertex_ptr);
 
@@ -393,12 +393,12 @@ void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectNa
                             auto_texv_loaded = true;
 
                             for(j = 0; j < 4; j++)
-                                autotexvertex_ptrs[j] = new Vertex2D;
+                                autotexvertex_ptrs[j] = new vertex2D;
 
-                            autotexvertex_ptrs[0]->set(0, 1);
-                            autotexvertex_ptrs[1]->set(0, 0);
-                            autotexvertex_ptrs[2]->set(1, 0);
-                            autotexvertex_ptrs[3]->set(1, 1);
+                            autotexvertex_ptrs[0]->x = 0; autotexvertex_ptrs[0]->y = 1;
+                            autotexvertex_ptrs[1]->x = 0; autotexvertex_ptrs[1]->y = 0;
+                            autotexvertex_ptrs[2]->x = 1; autotexvertex_ptrs[2]->y = 0;
+                            autotexvertex_ptrs[3]->x = 1; autotexvertex_ptrs[3]->y = 1;
                         }
 
                         polygon_ptr->setTexVertex(i, autotexvertex_ptrs[i%5]);

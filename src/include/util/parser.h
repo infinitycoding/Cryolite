@@ -9,7 +9,6 @@
 #include <cstring>
 
 #include <vector.h>
-#include <vertex.h>
 
 
 #define MAX_LINELENGTH 40
@@ -57,8 +56,8 @@ class ExtParser : public BasicParser
 
         float *getGLColor(char **string, float *target);
         vector getVector(char **string);
-        Vertex2D getVertex2D(char **string);
-        Vertex3D getVertex3D(char **string);
+        vertex2D getVertex2D(char **string);
+        vertex3D getVertex3D(char **string);
 
     protected:
         charList placeholders;

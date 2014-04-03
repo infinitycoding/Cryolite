@@ -22,10 +22,6 @@
 #include <shader.h>
 #include <vector.h>
 
-#ifdef DEBUG
-#include <optimize/profiler.h>
-#endif
-
 #ifdef _WIN32
 #undef main
 #endif

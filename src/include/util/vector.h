@@ -25,10 +25,10 @@ class vector
         int n;
 
         vector();
-        vector(Vertex2D vx, int dim = STD_VECTOR_DIMENSIONS);
-        vector(Vertex3D vx, int dim = STD_VECTOR_DIMENSIONS);
-        vector(Vertex2D *vx, int dim = STD_VECTOR_DIMENSIONS);
-        vector(Vertex3D *vx, int dim = STD_VECTOR_DIMENSIONS);
+        vector(vertex2D vx, int dim = STD_VECTOR_DIMENSIONS);
+        vector(vertex3D vx, int dim = STD_VECTOR_DIMENSIONS);
+        vector(vertex2D *vx, int dim = STD_VECTOR_DIMENSIONS);
+        vector(vertex3D *vx, int dim = STD_VECTOR_DIMENSIONS);
         vector(float x0, float x1, float x2, int dim = STD_VECTOR_DIMENSIONS);
         //vector(float *v, int args, int dim = STD_VECTOR_DIMENSIONS);
         vector(vector *v, int dim = STD_VECTOR_DIMENSIONS);
@@ -40,10 +40,10 @@ class vector
         int print() const;
 
 
-        void setvalue(Vertex2D vx);
-        void setvalue(Vertex3D vx);
-        void setvalue(Vertex2D *vx);
-        void setvalue(Vertex3D *vx);
+        void setvalue(vertex2D vx);
+        void setvalue(vertex3D vx);
+        void setvalue(vertex2D *vx);
+        void setvalue(vertex3D *vx);
         void setvalue(float x0);
         void setvalue(float x0, float x1);
         void setvalue(float x0, float x2, float x3);
@@ -57,10 +57,10 @@ class vector
         vector *unifycp();
 
 
-        void add(Vertex2D vx);
-        void add(Vertex2D *vx);
-        void add(Vertex3D vx);
-        void add(Vertex3D *vx);
+        void add(vertex2D vx);
+        void add(vertex2D *vx);
+        void add(vertex3D vx);
+        void add(vertex3D *vx);
 
         void add(vector  v);
         void add(vector *v);
@@ -69,34 +69,34 @@ class vector
         void add(vector *v0, vector *v1);
 
 
-        void add(Vertex2D vx,  vector  v0);
-        void add(Vertex2D *vx, vector  v0);
-        void add(Vertex3D vx,  vector  v0);
-        void add(Vertex3D *vx, vector  v0);
+        void add(vertex2D vx,  vector  v0);
+        void add(vertex2D *vx, vector  v0);
+        void add(vertex3D vx,  vector  v0);
+        void add(vertex3D *vx, vector  v0);
 
-        void add(Vertex2D vx,  vector  *v0);
-        void add(Vertex2D *vx, vector  *v0);
-        void add(Vertex3D vx,  vector  *v0);
-        void add(Vertex3D *vx, vector  *v0);
-
-
-        void add(vector  v0, Vertex2D vx );
-        void add(vector  v0, Vertex2D *vx);
-        void add(vector  v0, Vertex3D vx );
-        void add(vector  v0, Vertex3D *vx);
-
-        void add(vector  *v0, Vertex2D vx );
-        void add(vector  *v0, Vertex2D *vx);
-        void add(vector  *v0, Vertex3D vx );
-        void add(vector  *v0, Vertex3D *vx);
+        void add(vertex2D vx,  vector  *v0);
+        void add(vertex2D *vx, vector  *v0);
+        void add(vertex3D vx,  vector  *v0);
+        void add(vertex3D *vx, vector  *v0);
 
 
+        void add(vector  v0, vertex2D vx );
+        void add(vector  v0, vertex2D *vx);
+        void add(vector  v0, vertex3D vx );
+        void add(vector  v0, vertex3D *vx);
+
+        void add(vector  *v0, vertex2D vx );
+        void add(vector  *v0, vertex2D *vx);
+        void add(vector  *v0, vertex3D vx );
+        void add(vector  *v0, vertex3D *vx);
 
 
-        void add(Vertex3D   *v, int args);
-        void add(Vertex3D  **v, int args);
-        void add(Vertex2D   *v, int args);
-        void add(Vertex2D  **v, int args);
+
+
+        void add(vertex3D   *v, int args);
+        void add(vertex3D  **v, int args);
+        void add(vertex2D   *v, int args);
+        void add(vertex2D  **v, int args);
         void add(vector   *v, int args);
         void add(vector  **v, int args);
 
@@ -114,21 +114,21 @@ class vector
         vector  addc(vector  v);
         vector *addc(vector *v);
 
-        vector  addc(Vertex3D  v);
-        vector *addc(Vertex3D *v);
+        vector  addc(vertex3D  v);
+        vector *addc(vertex3D *v);
 
-        vector  addc(Vertex2D  v);
-        vector *addc(Vertex2D *v);
+        vector  addc(vertex2D  v);
+        vector *addc(vertex2D *v);
 
         vector  addc(vector  v0, vector  v1);
 
-        vector  addc(Vertex3D  v0, vector  v1);
-        vector  addc(vector  v1, Vertex3D  v0);
+        vector  addc(vertex3D  v0, vector  v1);
+        vector  addc(vector  v1, vertex3D  v0);
 
         vector *addc(vector   *v0, vector  *v1);
-        vector *addc(Vertex3D  *v0, vector  *v1);
+        vector *addc(vertex3D  *v0, vector  *v1);
 
-        vector *addc(vector   *v1, Vertex3D *v0);
+        vector *addc(vector   *v1, vertex3D *v0);
 
         vector *addc(vector  *v, int args);
         vector *addc(vector **v, int args);
@@ -141,11 +141,11 @@ class vector
         void sub(vector  v);
         void sub(vector *v);
 
-        void sub(Vertex2D  v);
-        void sub(Vertex2D *v);
+        void sub(vertex2D  v);
+        void sub(vertex2D *v);
 
-        void sub(Vertex3D  v);
-        void sub(Vertex3D *v);
+        void sub(vertex3D  v);
+        void sub(vertex3D *v);
 
         void sub(vector  v0, vector  v1);
         void sub(vector *v0, vector *v1);

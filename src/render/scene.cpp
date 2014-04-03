@@ -345,10 +345,10 @@ void Scene::renderPolygones(Object *currentObject)
                     glNormal3f(currentPolygon->getNormVector(i)->x[0],currentPolygon->getNormVector(i)->x[1],currentPolygon->getNormVector(i)->x[2]);
 
                 if(currentObject->objType->ObjectTypeMaterial && currentObject->objType->ObjectTypeMaterial->ambiantTexture && currentPolygon->getTexVertex(i) != NULL && currentPolygon->getTexVertex(i) != NULL)
-                    glTexCoord2f( currentPolygon->getTexVertex(i)->getX(), currentPolygon->getTexVertex(i)->getY() );
+                    glTexCoord2f( currentPolygon->getTexVertex(i)->x, currentPolygon->getTexVertex(i)->y );
 
                 if(currentPolygon->getObjVertex(i) != NULL)
-                    glVertex3f( currentPolygon->getObjVertex(i)->getX(), currentPolygon->getObjVertex(i)->getY(), currentPolygon->getObjVertex(i)->getZ());
+                    glVertex3f( currentPolygon->getObjVertex(i)->x, currentPolygon->getObjVertex(i)->y, currentPolygon->getObjVertex(i)->z);
             }
 
         glEnd();
