@@ -59,6 +59,7 @@ void Script::initLUA()
 
 extern reg vectorReg[];
 extern reg CameraReg[];
+extern reg SceneReg[];
 
 bool Script::load(const char *Scriptname)
 {
@@ -73,6 +74,7 @@ bool Script::load(const char *Scriptname)
     //add metatables
     addMetatable("vector", vectorReg);
     addMetatable("Camera", CameraReg);
+    addMetatable("Scene",SceneReg);
 
     return true;
 }

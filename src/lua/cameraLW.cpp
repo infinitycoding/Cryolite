@@ -8,14 +8,14 @@ CLASS
 
     FUNCTION(set_viewport_pos, VOID getInstance(Camera)->setViewportPos(LINT(), LINT()), 3, istype(int, ARG0) && istype(int, ARG1))
     FUNCTION(set_viewport_dim, VOID getInstance(Camera)->setViewportDim(LINT(), LINT()), 3, istype(int, ARG0) && istype(int, ARG1))
-    FUNCTION(set_local_position, VOID getInstance(Camera)->localPosition.setvalue(LDBL(),LDBL(),LDBL()), 4, true);
+    FUNCTION(set_local_position, VOID getInstance(Camera)->localPosition.setvalue(LDBL(),LDBL(),LDBL()), 4, istype(int, ARG0) && istype(int, ARG1) && istype(int, ARG2) && istobjecttype(Camera));
     FUNCTION(set_fov, VOID getInstance(Camera)->fov=LDBL(), 2, istype(float, ARG0));
 
-    FUNCTION(get_viewport_pos, LRET(2, Camera *c = getInstance(Camera); LINT(c->x); LINT(c->y)) , 1, true)
-    FUNCTION(get_viewport_dim, LRET(2, Camera *c = getInstance(Camera); LINT(c->height); LINT(c->width)), 1, true)
-    FUNCTION(get_local_position, LDAT(vector, getInstance(Camera)->localPosition), 1, true)
-    FUNCTION(get_position, LDAT(vector, getInstance(Camera)->getPosition()), 1, true)
-    FUNCTION(get_fov, LDBL(getInstance(Camera)->fov), 1, true);
+    FUNCTION(get_viewport_pos, LRET(2, Camera *c = getInstance(Camera); LINT(c->x); LINT(c->y)) , 1, istobjecttype(Camera))
+    FUNCTION(get_viewport_dim, LRET(2, Camera *c = getInstance(Camera); LINT(c->height); LINT(c->width)), 1, istobjecttype(Camera))
+    FUNCTION(get_local_position, LDAT(vector, getInstance(Camera)->localPosition), 1, istobjecttype(Camera))
+    FUNCTION(get_position, LDAT(vector, getInstance(Camera)->getPosition()), 1, istobjecttype(Camera))
+    FUNCTION(get_fov, LDBL(getInstance(Camera)->fov), 1, istobjecttype(Camera));
 
 
     ASSOCIATION(Camera)
@@ -31,5 +31,4 @@ CLASS
         ALIAS(get_fov, "getFOV")
     ENDASSOCIATION
 ENDCLASS
-
 

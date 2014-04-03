@@ -63,6 +63,7 @@ static inline size_t GET_CURRENT_LUA_OBJECT_TYPE(lua_State *L, const char *Metat
   luaL_checktype(L, index, LUA_TTABLE);
   lua_getfield(L, index, "__self");
   size_t hash = ((size_t*)luaL_checkudata(L, index, Metatable))[0];
+  lua_pop(L,1);
   return hash;
 }
 

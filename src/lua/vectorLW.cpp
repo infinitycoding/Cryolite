@@ -7,34 +7,34 @@ CLASS
         SELECT(addInstance(vector,vector(LDBL(),LDBL(),LDBL())), 3, (istype(float,ARG0) && istype(float,ARG1) && istype(float,ARG2)))
         SELECT(addInstance(vector,vector(LDBL(),LDBL(),0)), 2, (istype(float,ARG0) && istype(float,ARG1)))
         SELECT(addInstance(vector,vector(LDBL(),0,0)), 1, istype(float,ARG0))
-        SELECT(addInstance(vector,vector(getInstance(vector))), 1, (istobjecttype(vector)))
+        SELECT(addInstance(vector,vector(getInstance(vector))), 1, istobjecttype(vector))
     ENDOVERLOAD
 
     OVERLOAD(set_vector)
         SELECT(VOID getInstance(vector)->setvalue(LDBL(),LDBL(),LDBL()),3,(istype(float,ARG0) && istype(float,ARG1) && istype(float,ARG2)))
         SELECT(VOID getInstance(vector)->setvalue(LDBL(),LDBL(),0),2,(istype(float,ARG0) && istype(float,ARG1)))
         SELECT(VOID getInstance(vector)->setvalue(LDBL(),0,0),1,istype(float,ARG0))
-        SELECT(VOID getInstance(vector)->setvalue(LDAT(vector, "vector")), 1, (istobjecttype(vector)))
+        SELECT(VOID getInstance(vector)->setvalue(LDAT(vector, "vector")), 1, istobjecttype(vector))
     ENDOVERLOAD
 
     OVERLOAD(add_vector)
-        SELECT(VOID getInstance(vector)->add(LDAT(vector, "vector")),1,true)
-        SELECT(VOID getInstance(vector)->add(LDAT(vector, "vector"),LDAT(vector, "vector")),2,true)
+        SELECT(VOID getInstance(vector)->add(LDAT(vector, "vector")),1,istobjecttype(vector))
+        SELECT(VOID getInstance(vector)->add(LDAT(vector, "vector"),LDAT(vector, "vector")),2,istobjecttype(vector))
     ENDOVERLOAD
 
     OVERLOAD(addc_vector)
-        SELECT(addInstance(vector,getInstance(vector)->addc(LDAT(vector, "vector"))),1,true)
-        SELECT(addInstance(vector,getInstance(vector)->addc(LDAT(vector, "vector"),LDAT(vector, "vector"))),2,true)
+        SELECT(addInstance(vector,getInstance(vector)->addc(LDAT(vector, "vector"))),1,istobjecttype(vector))
+        SELECT(addInstance(vector,getInstance(vector)->addc(LDAT(vector, "vector"),LDAT(vector, "vector"))),2,istobjecttype(vector))
     ENDOVERLOAD
 
     OVERLOAD(sub_vector)
-        SELECT(VOID getInstance(vector)->sub(LDAT(vector, "vector")),1,true)
-        SELECT(VOID getInstance(vector)->sub(LDAT(vector, "vector"),LDAT(vector, "vector")),2,true)
+        SELECT(VOID getInstance(vector)->sub(LDAT(vector, "vector")),1,istobjecttype(vector))
+        SELECT(VOID getInstance(vector)->sub(LDAT(vector, "vector"),LDAT(vector, "vector")),2,istobjecttype(vector))
     ENDOVERLOAD
 
     OVERLOAD(subc_vector)
-        SELECT(addInstance(vector,getInstance(vector)->subc(LDAT(vector, "vector"))),1,true)
-        SELECT(addInstance(vector,getInstance(vector)->subc(LDAT(vector, "vector"),LDAT(vector, "vector"))),2,true)
+        SELECT(addInstance(vector,getInstance(vector)->subc(LDAT(vector, "vector"))),1,istobjecttype(vector))
+        SELECT(addInstance(vector,getInstance(vector)->subc(LDAT(vector, "vector"),LDAT(vector, "vector"))),2,istobjecttype(vector))
     ENDOVERLOAD
 
     CBEGIN(get_vector)
@@ -47,14 +47,14 @@ CLASS
     CEND(3,LDBL(v.x[2]); LDBL(v.x[1]); LDBL(v.x[0]))
 
 
-    FUNCTION(null_vector,VOID getInstance(vector)->null(),1,true)
-    FUNCTION(len_vector,LDBL(getInstance(vector)->len()),1,true)
-    FUNCTION(print_vector,VOID getInstance(vector)->print(),1,true)
+    FUNCTION(null_vector,VOID getInstance(vector)->null(),1,istobjecttype(vector))
+    FUNCTION(len_vector,LDBL(getInstance(vector)->len()),1,istobjecttype(vector))
+    FUNCTION(print_vector,VOID getInstance(vector)->print(),1,istobjecttype(vector))
     FUNCTION(scale_vector,VOID getInstance(vector)->scale(LDBL()),2,istype(float,ARG0));
     FUNCTION(scalec_vector,addInstance(vector,getInstance(vector)->scalec(LDBL())),2,istype(float,ARG0));
-    FUNCTION(unify_vector,VOID getInstance(vector)->unify(),1,true);
-    FUNCTION(unifyc_vector,addInstance(vector,getInstance(vector)->unifyc()),1,true);
-    FUNCTION(equal_vector,LBOOL((*getInstance(vector)) == (*LDAT(vector, "vector"))),2,true)
+    FUNCTION(unify_vector,VOID getInstance(vector)->unify(),1,istobjecttype(vector));
+    FUNCTION(unifyc_vector,addInstance(vector,getInstance(vector)->unifyc()),1,istobjecttype(vector));
+    FUNCTION(equal_vector,LBOOL((*getInstance(vector)) == (*LDAT(vector, "vector"))),2,istobjecttype(vector))
 
     ASSOCIATION(vector)
         ALIAS(new_vector,"new")
