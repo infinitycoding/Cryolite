@@ -69,10 +69,6 @@
 		<Unit filename="src/include/game/controls.h" />
 		<Unit filename="src/include/game/models.h" />
 		<Unit filename="src/include/lua/script.h" />
-		<Unit filename="src/include/optimize/profiler.h">
-			<Option target="Debug" />
-		</Unit>
-		<Unit filename="src/include/physics/ExtMaths.h" />
 		<Unit filename="src/include/physics/PhysicsEngine.h" />
 		<Unit filename="src/include/physics/boundobjects.h" />
 		<Unit filename="src/include/physics/collision.h" />
@@ -103,7 +99,6 @@
 		<Unit filename="src/lua/lightLW.cpp" />
 		<Unit filename="src/lua/materialLW.cpp" />
 		<Unit filename="src/lua/objectLW.cpp" />
-		<Unit filename="src/lua/profilerLW.cpp" />
 		<Unit filename="src/lua/sceneLW.cpp" />
 		<Unit filename="src/lua/script.cpp" />
 		<Unit filename="src/lua/sdlLW.cpp" />
@@ -112,9 +107,6 @@
 		<Unit filename="src/lua/soundLW.cpp" />
 		<Unit filename="src/lua/uiLW.cpp" />
 		<Unit filename="src/lua/vectorLW.cpp" />
-		<Unit filename="src/optimize/profiler.cpp">
-			<Option target="Debug" />
-		</Unit>
 		<Unit filename="src/physics/PhysicsEngine.cpp" />
 		<Unit filename="src/physics/boundobjects.cpp" />
 		<Unit filename="src/physics/collision.cpp" />
@@ -133,7 +125,6 @@
 		<Unit filename="src/render/sound.cpp" />
 		<Unit filename="src/render/texture.cpp" />
 		<Unit filename="src/render/ui.cpp" />
-		<Unit filename="src/render/vertex.cpp" />
 		<Unit filename="src/shaders/basicfrag.glsl" />
 		<Unit filename="src/shaders/basicvert.glsl" />
 		<Unit filename="src/util/parser.cpp" />
