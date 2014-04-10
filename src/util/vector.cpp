@@ -5,173 +5,84 @@
 
 vector::vector()
 {
-    cachlen = 0;
-    lenmod = true;
-    n = STD_VECTOR_DIMENSIONS;
-    x = new float[STD_VECTOR_DIMENSIONS];
-    for(int i = 0; i < STD_VECTOR_DIMENSIONS; i++)
-        x[i] = 0.0;
+    for(int i = 0; i < 3; i++)
+        x[i] = 0;
 }
 
-vector::vector(vertex2D vx, int dim)
+vector::vector(vertex2D vx)
 {
-    cachlen = 0;
-    lenmod = true;
-    n = dim;
-    dim = dim < STD_VECTOR_DIMENSIONS ? STD_VECTOR_DIMENSIONS : dim;
-    x = new float[dim];
-
     x[0] = vx.x;
     x[1] = vx.y;
-
-    if(dim > 2)
-    {
-        for(int i = 2; i < dim; i++)
-            x[i] = 0;
-    }
+    x[2] = 0;
 }
 
-vector::vector(vertex2D *vx, int dim)
+vector::vector(const vertex2D *vx)
 {
-    cachlen = 0;
-    lenmod = true;
-    n = dim;
-    dim = dim < STD_VECTOR_DIMENSIONS ? STD_VECTOR_DIMENSIONS : dim;
-    x = new float[dim];
-
     x[0] = vx->x;
     x[1] = vx->y;
-
-    if(dim > 2)
-    {
-        for(int i = 2; i < dim; i++)
-            x[i] = 0;
-    }
+    x[2] = 0;
 }
 
-vector::vector(vertex3D vx, int dim)
+vector::vector(vertex3D vx)
 {
-    cachlen = 0;
-    lenmod = true;
-    n = dim;
-    dim = dim < STD_VECTOR_DIMENSIONS ? STD_VECTOR_DIMENSIONS : dim;
-    x = new float[dim];
-
     x[0] = vx.x;
     x[1] = vx.y;
     x[2] = vx.z;
-
-    if(dim > 3)
-    {
-        for(int i = 3; i < dim; i++)
-            x[i] = 0;
-    }
 }
 
-vector::vector(vertex3D *vx, int dim)
+vector::vector(const vertex3D *vx)
 {
-    cachlen = 0;
-    lenmod = true;
-    n = dim;
-    dim = dim < STD_VECTOR_DIMENSIONS ? STD_VECTOR_DIMENSIONS : dim;
-    x = new float[dim];
-
     x[0] = vx->x;
     x[1] = vx->y;
     x[2] = vx->z;
-
-    if(dim > 3)
-    {
-        for(int i = 3; i < dim; i++)
-            x[i] = 0;
-    }
 }
 
 
-vector::vector(float x0, float x1, float x2, int dim)
+vector::vector(float x0,float x1,float x2)
 {
-    cachlen = 0;
-    lenmod = true;
-    n = dim;
-    dim = dim < STD_VECTOR_DIMENSIONS ? STD_VECTOR_DIMENSIONS : dim;
-    x = new float[dim];
-
     x[0] = x0;
     x[1] = x1;
     x[2] = x2;
+}
 
-    if(dim > 3)
+vector::vector(const float *v,int args = 3)
+{
+    int i;
+    for(i = 0; i < args && i < 3; i++)
+        x[i] = v[i];
+
+    if(args > 3)
     {
-        for(int i = 3; i < dim; i++)
+        for(; i < 3; i++)
             x[i] = 0;
     }
 }
 
-/*vector::vector(float *v,int args = 3, int dim)
+
+vector::vector(vector *v)
 {
-    cachlen = 0;
-    lenmod = false;
-    n = dim;
-    dim = dim < STD_VECTOR_DIMENSIONS ? STD_VECTOR_DIMENSIONS : dim;
-    x = new float[dim];
-    int i;
-    for(i = 0; i < args; i++)
-        x[i] = v[i];
-
-    if(dim > args)
-    {
-        for(; i < dim; i++)
-            x[i] = 0;
-    }
-}*/
-
-
-vector::vector(vector *v, int dim)
-{
-    cachlen = 0;
-    lenmod = true;
-    n = dim;
-    dim = dim < STD_VECTOR_DIMENSIONS ? STD_VECTOR_DIMENSIONS : dim;
-    x = new float[dim];
-    int i;
-    for(i = 0; i < dim && i < v->n; i++)
+    for(int i = 0; i < 3; i++)
         x[i] = v->x[i];
-
-    if(dim > v->n)
-    {
-        for(; i < dim; i++)
-            x[i] = 0;
-    }
 }
 
 void vector::null()
 {
-    cachlen = 0;
-    lenmod = false;
-    for(int i = 0; i < n; i++)
-    {
+    for(int i = 0; i < 3; i++)
         x[i] = 0;
-    }
-
 }
 
-float vector::len()
+float vector::len() const
 {
-    if(lenmod)
-    {
-        float temp = 0;
-        for (int i = 0; i < n; i++)
-            temp += x[i]*x[i];
-        cachlen = sqrt(temp);
-        lenmod = false;
-    }
-    return cachlen;
+    float temp = 0;
+    for (int i = 0; i < 3; i++)
+        temp += x[i]*x[i];
+    return sqrt(temp);
 }
 
 int vector::print() const
 {
     int num = 0;
-    for(int i = 0; i < n; i++)
+    for(int i = 0; i < 3; i++)
         num += printf("X%d:%f ",i,x[i]);
     printf("\n");
     return num;
@@ -181,14 +92,12 @@ void vector::setvalue(vertex2D vx)
 {
     x[0] = vx.x;
     x[1] = vx.y;
-    lenmod = true;
 }
 
-void vector::setvalue(vertex2D *vx)
+void vector::setvalue(const vertex2D *vx)
 {
     x[0] = vx->x;
     x[1] = vx->y;
-    lenmod = true;
 }
 
 void vector::setvalue(vertex3D vx)
@@ -196,28 +105,24 @@ void vector::setvalue(vertex3D vx)
     x[0] = vx.x;
     x[1] = vx.y;
     x[2] = vx.z;
-    lenmod = true;
 }
 
-void vector::setvalue(vertex3D *vx)
+void vector::setvalue(const vertex3D *vx)
 {
     x[0] = vx->x;
     x[1] = vx->y;
     x[2] = vx->z;
-    lenmod = true;
 }
 
 void vector::setvalue(float x0)
 {
     x[0] = x0;
-    lenmod = true;
 }
 
 void vector::setvalue(float x0, float x1)
 {
     x[0] = x0;
     x[1] = x1;
-    lenmod = true;
 }
 
 void vector::setvalue(float x0, float x1, float x2)
@@ -225,89 +130,49 @@ void vector::setvalue(float x0, float x1, float x2)
     x[0] = x0;
     x[1] = x1;
     x[2] = x2;
-    lenmod = true;
 }
 
 void vector::setvalue(float *v, int args)
 {
     int i;
-    for(i = 0; i < n && i < args; i++)
+    for(i = 0; i < 3 && i < args; i++)
         x[i] = v[i];
 
-    if(n > args)
+    if(args < 3)
     {
-        for(; i < n; i++)
+        for(; i < 3; i++)
             x[i] = 0;
     }
-    lenmod = true;
 }
 
 void vector::setvalue(vector v)
 {
-    delete x;
-    cachlen = v.cachlen;
-    lenmod = v.lenmod;
-    n = v.n;
-    x = new float[n];
-    for(int i = 0; i < n; i++)
+    for(int i = 0; i < 3; i++)
         x[i] = v.x[i];
 }
 
 void vector::setvalue(vector *v)
 {
-    delete x;
-    cachlen = v->cachlen;
-    lenmod = v->lenmod;
-    n = v->n;
-    x = new float[n];
-    for(int i = 0; i < n; i++)
+    for(int i = 0; i < 3; i++)
         x[i] = v->x[i];
 }
 
 void vector::unify()
 {
     float len = this->len();
-    if(!len)
-    {
-        cachlen = 0;
-        lenmod = false;
-        return;
-    }
-    for(int i = 0; i < n; i++)
+    for(int i = 0; i < 3; i++)
         x[i] /= len;
-    lenmod = false;
-    cachlen = 1;
 }
 
 vector vector::unifyc()
 {
-    float len = this->len();
-    if(!len)
-    {
-        cachlen = 0;
-        lenmod = false;
-        return vector(this);
-    }
-    for(int i = 0; i < n; i++)
-        x[i] /= len;
-    lenmod = false;
-    cachlen = 1;
+    this->unify();
     return vector(this);
 }
 
 vector *vector::unifycp()
 {
-    float len = this->len();
-    if(!len)
-    {
-        cachlen = 0;
-        lenmod = false;
-        return new vector(this);
-    }
-    for(int i = 0; i < n; i++)
-        x[i] /= len;
-    lenmod = false;
-    cachlen = 1;
+    this->unify();
     return new vector(this);
 }
 
@@ -315,55 +180,47 @@ void vector::add(vertex2D vx)
 {
     x[0] += vx.x;
     x[1] += vx.y;
-    lenmod = true;
 }
 void vector::add(vertex2D *vx)
 {
     x[0] += vx->x;
     x[1] += vx->y;
-    lenmod = true;
 }
 void vector::add(vertex3D vx)
 {
     x[0] += vx.x;
     x[1] += vx.y;
     x[2] += vx.z;
-    lenmod = true;
 }
 void vector::add(vertex3D *vx)
 {
     x[0] += vx->x;
     x[1] += vx->y;
     x[2] += vx->z;
-    lenmod = true;
 }
 
 void vector::add(vector v)
 {
-    for(int i = 0; i < n && i < v.n; i++)
+    for(int i = 0; i < 3; i++)
         x[i] += v.x[i];
-    lenmod = true;
 }
 
 void vector::add(vector *v)
 {
-    for(int i = 0; i < n && i < v->n; i++)
+    for(int i = 0; i < 3; i++)
         x[i] += v->x[i];
-    lenmod = true;
 }
 
 void vector::add(vector v0, vector v1)
 {
-    for(int i = 0; i < n && i < v0.n && i < v1.n; i++)
+    for(int i = 0; i < 3; i++)
         x[i] = v0.x[i] + v1.x[i];
-    lenmod = true;
 }
 
 void vector::add(vector *v0, vector *v1)
 {
-    for(int i = 0; i < n && i < v0->n && i < v1->n; i++)
+    for(int i = 0; i < 3; i++)
         x[i] = v0->x[i] + v1->x[i];
-    lenmod = true;
 }
 
 void vector::add(vector  v0, vertex2D vx){ this->add(vx,v0); }
@@ -372,9 +229,7 @@ void vector::add(vertex2D vx,  vector  v0)
 {
     x[0] = vx.x + v0.x[0];
     x[1] = vx.y + v0.x[1];
-    for (int i = 2; i < n && i < v0.n; i++)
-        x[i] = v0.x[i];
-    lenmod = true;
+    x[2] = v0.x[2];
 }
 
 void vector::add(vector  v0, vertex2D *vx){ this->add(vx,v0); }
@@ -383,9 +238,7 @@ void vector::add(vertex2D *vx,  vector  v0)
 {
     x[0] = vx->x + v0.x[0];
     x[1] = vx->y + v0.x[1];
-    for (int i = 2; i < n && i < v0.n; i++)
-        x[i] = v0.x[i];
-    lenmod = true;
+    x[2] = v0.x[2];
 }
 
 void vector::add(vector  v0, vertex3D vx){ this->add(vx,v0); }
@@ -395,9 +248,6 @@ void vector::add(vertex3D vx,  vector  v0)
     x[0] = vx.x + v0.x[0];
     x[1] = vx.y + v0.x[1];
     x[2] = vx.z + v0.x[2];
-    for (int i = 3; i < n && i < v0.n; i++)
-        x[i] = v0.x[i];
-    lenmod = true;
 }
 
 void vector::add(vector  v0, vertex3D *vx){ this->add(vx,v0); }
@@ -407,9 +257,6 @@ void vector::add(vertex3D *vx,  vector  v0)
     x[0] = vx->x + v0.x[0];
     x[1] = vx->y + v0.x[1];
     x[2] = vx->z + v0.x[2];
-    for (int i = 3; i < n && i < v0.n; i++)
-        x[i] = v0.x[i];
-    lenmod = true;
 }
 
 void vector::add(vector  *v0, vertex2D vx){ this->add(vx,v0); }
@@ -418,9 +265,7 @@ void vector::add(vertex2D vx,  vector  *v0)
 {
     x[0] = vx.x + v0->x[0];
     x[1] = vx.y + v0->x[1];
-    for (int i = 2; i < n && i < v0->n; i++)
-        x[i] = v0->x[i];
-    lenmod = true;
+    x[2] = v0->x[2];
 }
 
 void vector::add(vector  *v0, vertex2D *vx){ this->add(vx,v0); }
@@ -429,9 +274,7 @@ void vector::add(vertex2D *vx,  vector  *v0)
 {
     x[0] = vx->x + v0->x[0];
     x[1] = vx->y + v0->x[1];
-    for (int i = 2; i < n && i < v0->n; i++)
-        x[i] = v0->x[i];
-    lenmod = true;
+    x[2] = v0->x[2];
 }
 
 void vector::add(vector  *v0, vertex3D vx){ this->add(vx,v0); }
@@ -441,9 +284,6 @@ void vector::add(vertex3D vx,  vector  *v0)
     x[0] = vx.x + v0->x[0];
     x[1] = vx.y + v0->x[1];
     x[2] = vx.z + v0->x[2];
-    for (int i = 3; i < n && i < v0->n; i++)
-        x[i] = v0->x[i];
-    lenmod = true;
 }
 
 void vector::add(vector  *v0, vertex3D *vx){ this->add(vx,v0); }
@@ -453,9 +293,6 @@ void vector::add(vertex3D *vx,  vector  *v0)
     x[0] = vx->x + v0->x[0];
     x[1] = vx->y + v0->x[1];
     x[2] = vx->z + v0->x[2];
-    for (int i = 3; i < n && i < v0->n; i++)
-        x[i] = v0->x[i];
-    lenmod = true;
 }
 
 
@@ -468,7 +305,6 @@ void vector::add(vertex3D *vx, int args)
         x[1] += vx[i].y;
         x[2] += vx[i].z;
     }
-    lenmod = true;
 }
 
 void vector::add(vertex3D **vx, int args)
@@ -479,7 +315,6 @@ void vector::add(vertex3D **vx, int args)
         x[1] += vx[i]->y;
         x[2] += vx[i]->z;
     }
-    lenmod = true;
 }
 
 void vector::add(vertex2D *vx, int args)
@@ -489,7 +324,6 @@ void vector::add(vertex2D *vx, int args)
         x[0] += vx[i].x;
         x[1] += vx[i].y;
     }
-    lenmod = true;
 }
 
 void vector::add(vertex2D **vx, int args)
@@ -499,17 +333,15 @@ void vector::add(vertex2D **vx, int args)
         x[0] += vx[i]->x;
         x[1] += vx[i]->y;
     }
-    lenmod = true;
 }
 
 void vector::add(vector *v, int args)
 {
     for(int i = 0; i < args; i++)
     {
-        for(int j = 0; j < n && j < v[i].n; j++)
+        for(int j = 0; j < 3; j++)
             x[j] += v[i].x[j];
     }
-    lenmod = true;
 }
 
 
@@ -517,10 +349,9 @@ void vector::add(vector **v, int args)
 {
     for(int i = 0; i < args; i++)
     {
-        for(int j = 0; j < n && j < v[i]->n; j++)
+        for(int j = 0; j < 3; j++)
             x[j] += v[i]->x[j];
     }
-    lenmod = true;
 }
 
 void vector::addvc(int args, ...)
@@ -528,13 +359,8 @@ void vector::addvc(int args, ...)
     va_list arguments;
     va_start ( arguments, args );
         for(int i = 0; i < args; i++)
-        {
-            vector *temp = va_arg ( arguments, vector *);
-            for(int j = 0; j < n && j < temp->n; j++)
-                x[j] += temp->x[j];
-        }
+            this->add(va_arg ( arguments, vector *));
     va_end ( arguments );
-    this->lenmod = true;
 }
 
 void vector::addvx2(int args, ...)
@@ -542,13 +368,8 @@ void vector::addvx2(int args, ...)
     va_list arguments;
     va_start ( arguments, args );
         for(int i = 0; i < args; i++)
-        {
-            vertex2D *temp = va_arg ( arguments, vertex2D *);
-            x[0] += temp->x;
-            x[1] += temp->y;
-        }
+            this->add(va_arg( arguments, vertex2D *));
     va_end ( arguments );
-    this->lenmod = true;
 }
 
 void vector::addvx3(int args, ...)
@@ -556,14 +377,8 @@ void vector::addvx3(int args, ...)
     va_list arguments;
     va_start ( arguments, args );
         for(int i = 0; i < args; i++)
-        {
-            vertex3D *temp = va_arg ( arguments, vertex3D *);
-            x[0] += temp->x;
-            x[1] += temp->y;
-            x[2] += temp->z;
-        }
+            this->add(va_arg( arguments, vertex3D *));
     va_end ( arguments );
-    this->lenmod = true;
 }
 
 vector vector::addc(vector v)
@@ -663,37 +478,32 @@ vector *vector::addc(int args, ...)
 
         }
     va_end ( arguments );
-    lenmod = true;
     return new vector(this);
 }
 
 
 void vector::sub(vector v)
 {
-    for(int i = 0; i < n && i < v.n; i++)
+    for(int i = 0; i < 3; i++)
         x[i] -= v.x[i];
-    lenmod = true;
 }
 
 void vector::sub(vector *v)
 {
-    for(int i = 0; i < n && i < v->n; i++)
+    for(int i = 0; i < 3; i++)
         x[i] -= v->x[i];
-    lenmod = true;
 }
 
 void vector::sub(vector v0, vector v1)
 {
-    for(int i = 0; i < n && i < v0.n && i < v1.n; i++)
+    for(int i = 0; i < 3; i++)
         x[i] = v0.x[i] - v1.x[i];
-    lenmod = true;
 }
 
 void vector::sub(vector *v0, vector *v1)
 {
-    for(int i = 0; i < n && i < v0->n && i < v1->n; i++)
+    for(int i = 0; i < 3; i++)
         x[i] = v0->x[i] - v1->x[i];
-    lenmod = true;
 }
 
 vector vector::subc(vector v)
@@ -722,9 +532,8 @@ vector *vector::subc(vector *v0, vector *v1)
 
 void vector::scale(float s)
 {
-    for(int i = 0; i < n; i++)
+    for(int i = 0; i < 3; i++)
         x[i] *= s;
-    lenmod = true;
 }
 
 
@@ -732,14 +541,12 @@ void vector::scale(float s, vector v)
 {
     v.scale(s);
     this->setvalue(v);
-    lenmod = true;
 }
 
 void vector::scale(float s, vector *v)
 {
     v->scale(s);
     this->setvalue(v);
-    lenmod = true;
 }
 
 vector vector::scalec(float s)
@@ -768,22 +575,20 @@ vector *vector::scalecp(float s)
 
 void vector::mul(vector v)
 {
-    for(int i = 0; i < n && i < v.n; i++)
+    for(int i = 0; i < 3; i++)
         x[i] *= v.x[i];
-    lenmod = true;
 }
 
 void vector::mul(vector *v)
 {
-    for(int i = 0; i < n && i < v->n; i++)
+    for(int i = 0; i < 3; i++)
         x[i] *= v->x[i];
-    lenmod = true;
 }
 
 float vector::largest()
 {
     float l = 0;
-    for(int i = 0; i < n; i++)
+    for(int i = 0; i < 3; i++)
     {
         if(x[i]>l)
             l = x[i];
@@ -794,7 +599,7 @@ float vector::largest()
 float vector::smalest()
 {
     float l = ~0;
-    for(int i = 0; i < n; i++)
+    for(int i = 0; i < 3; i++)
     {
         if(x[i]<l)
             l = x[i];
@@ -802,43 +607,47 @@ float vector::smalest()
     return l;
 }
 
-/*
+
 void vector::cross(vector v0, vector v1)
 {
-     x = (v0.y*v1.z)-(v0.z*v1.y);
-     y = (v0.z*v1.x)-(v0.x*v1.z);
-     z = (v0.x*v1.y)-(v0.y*v1.x);
+     x[0] = (v0.x[1]*v1.x[2])-(v0.x[2]*v1.x[1]);
+     x[1] = (v0.x[2]*v1.x[0])-(v0.x[0]*v1.x[2]);
+     x[2] = (v0.x[0]*v1.x[1])-(v0.x[1]*v1.x[0]);
 }
 
 void vector::cross(vector *v0, vector *v1)
 {
-     x = (v0->y*v1->z)-(v0->z*v1->y);
-     y = (v0->z*v1->x)-(v0->x*v1->z);
-     z = (v0->x*v1->y)-(v0->y*v1->x);
+     x[0] = (v0->x[1]*v1->x[2])-(v0->x[2]*v1->x[1]);
+     x[1] = (v0->x[2]*v1->x[0])-(v0->x[0]*v1->x[2]);
+     x[2] = (v0->x[0]*v1->x[1])-(v0->x[1]*v1->x[0]);
 }
 
 void vector::cross(vector *v0, vector v1)
 {
-     x = (v0->y*v1.z)-(v0->z*v1.y);
-     y = (v0->z*v1.x)-(v0->x*v1.z);
-     z = (v0->x*v1.y)-(v0->y*v1.x);
+     x[0] = (v0->x[1]*v1.x[2])-(v0->x[2]*v1.x[1]);
+     x[1] = (v0->x[2]*v1.x[0])-(v0->x[0]*v1.x[2]);
+     x[2] = (v0->x[0]*v1.x[1])-(v0->x[1]*v1.x[0]);
 }
 
 void vector::cross(vector v0, vector *v1)
 {
-     x = (v0.y*v1->z)-(v0.z*v1->y);
-     y = (v0.z*v1->x)-(v0.x*v1->z);
-     z = (v0.x*v1->y)-(v0.y*v1->x);
+     x[0] = (v0.x[1]*v1->x[2])-(v0.x[2]*v1->x[1]);
+     x[1] = (v0.x[2]*v1->x[0])-(v0.x[0]*v1->x[2]);
+     x[2] = (v0.x[0]*v1->x[1])-(v0.x[1]*v1->x[0]);
 }
 
 vector vector::cross(vector v)
 {
-    return vector(this).cross(v);
+    vector r;
+    r.x[0] = (x[1]*v.x[2])-(x[2]*v.x[1]);
+    r.x[1] = (x[2]*v.x[0])-(x[0]*v.x[2]);
+    r.x[2] = (x[0]*v.x[1])-(x[1]*v.x[0]);
+    return r;
 }
 
 vector *vector::cross(vector *v)
 {
-    return (new vector(this))->cross(v);
+    return new vector(this->cross(v));
 }
 
 vector vector::crossc(vector v)
@@ -877,7 +686,7 @@ vector *vector::crossc(vector v0, vector *v1)
     return new vector(this);
 }
 
-*/
+
 float len(vector v)
 {
     return v.len();
@@ -949,7 +758,6 @@ const vector operator - (vector const v1, vector const *v0)
 }
 
 
-/*
 const vector operator ^ (vector const v0, vector const v1)
 {
     return ((vector)v0).cross(((vector)v1));
@@ -964,7 +772,7 @@ const vector operator ^ (vector const v1,vector const *v0)
 {
     return ((vector *)v0)->cross(((vector)v1));
 }
-*/
+
 
 
 const vector operator * (vector const v0, const float s)
@@ -1032,7 +840,7 @@ std::ostream& operator << (std::ostream& stream, vector const *v)
 
 bool operator == (vector const v0,vector const v1)
 {
-    for(int i = 0; i < v0.n && v1.n ; i++)
+    for(int i = 0; i < 3; i++)
     {
         if(v0.x[i] != v1.x[i])
             return false;
@@ -1042,7 +850,7 @@ bool operator == (vector const v0,vector const v1)
 
 bool operator != (vector const v0,vector const v1)
 {
-    for(int i = 0; i < v0.n && v1.n ; i++)
+    for(int i = 0; i < 3; i++)
     {
         if(v0.x[i] != v1.x[i])
             return true;

@@ -9,11 +9,6 @@
 #include <List.h>
 
 
-#define STD_VECTOR_DIMENSIONS 3
-/*#define x 0
-#define y 1
-#define z 2*/
-
 
 
 
@@ -21,29 +16,28 @@ class vector
 {
     public:
 
-        float *x;
-        int n;
+        float x[3];
 
         vector();
-        vector(vertex2D vx, int dim = STD_VECTOR_DIMENSIONS);
-        vector(vertex3D vx, int dim = STD_VECTOR_DIMENSIONS);
-        vector(vertex2D *vx, int dim = STD_VECTOR_DIMENSIONS);
-        vector(vertex3D *vx, int dim = STD_VECTOR_DIMENSIONS);
-        vector(float x0, float x1, float x2, int dim = STD_VECTOR_DIMENSIONS);
-        //vector(float *v, int args, int dim = STD_VECTOR_DIMENSIONS);
-        vector(vector *v, int dim = STD_VECTOR_DIMENSIONS);
+        vector(vertex2D vx);
+        vector(vertex3D vx);
+        vector(const vertex2D *vx);
+        vector(const vertex3D *vx);
+        vector(float x0, float x1, float x2);
+        vector(const float *v, int args);
+        vector(vector *v);
 
 
 
         void null();
-        float len();
+        float len() const;
         int print() const;
 
 
         void setvalue(vertex2D vx);
         void setvalue(vertex3D vx);
-        void setvalue(vertex2D *vx);
-        void setvalue(vertex3D *vx);
+        void setvalue(const vertex2D *vx);
+        void setvalue(const vertex3D *vx);
         void setvalue(float x0);
         void setvalue(float x0, float x1);
         void setvalue(float x0, float x2, float x3);
@@ -176,7 +170,7 @@ class vector
         void  cross(vector  v0, vector *v1);
 
 
-        /*vector  cross(vector   v);
+        vector  cross(vector   v);
         vector *cross(vector  *v);
         vector  crossc(vector  v);
         vector *crossc(vector *v);
@@ -184,11 +178,7 @@ class vector
         vector  crossc(vector  v0, vector  v1);
         vector *crossc(vector *v0, vector *v1);
         vector *crossc(vector *v0, vector  v1);
-        vector *crossc(vector  v0, vector *v1);*/
-
-
-        bool lenmod;
-        float cachlen;
+        vector *crossc(vector  v0, vector *v1);
 
         vector operator += (vector const v0);
         vector operator += (vector const *v0);
