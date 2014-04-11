@@ -34,11 +34,11 @@ class Polygon
         int getVertexAmount();  // The get-method of vertex amount
 
         vector   *getNormVector(int number);     // the get-method of normal vector
-        vertex3D *getObjVertex(int number);      // the get-method of object vertex
+        vector *getObjVertex(int number);      // the get-method of object vertex
         vertex2D *getTexVertex(int number);      // the get-method of texture vertex
 
         void setNormVector(int number, vector *value); // the set-method of normal vector
-        void setObjVertex(int number, vertex3D *value);  // the set-method of object vertex
+        void setObjVertex(int number, vector *value);  // the set-method of object vertex
         void setTexVertex(int number, vertex2D *value);  // the set-method of texture vertex
 
 
@@ -46,7 +46,7 @@ class Polygon
         int vertexAmount;           // of how many vertices the polygon consists
                                     // a polygon has...
         vector   **normVector;      // ... normal vectors (to simulate light reflection)
-        vertex3D **objVertex;       // ... object vertices (makes sense, doesn't it?)
+        vector **objVertex;       // ... object vertices (makes sense, doesn't it?)
         vertex2D **texVertex;       // ... texture vertices (to know which part of the texture should be put where)
 };
 

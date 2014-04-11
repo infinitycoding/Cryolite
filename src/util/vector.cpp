@@ -23,21 +23,6 @@ vector::vector(const vertex2D *vx)
     x[2] = 0;
 }
 
-vector::vector(vertex3D vx)
-{
-    x[0] = vx.x;
-    x[1] = vx.y;
-    x[2] = vx.z;
-}
-
-vector::vector(const vertex3D *vx)
-{
-    x[0] = vx->x;
-    x[1] = vx->y;
-    x[2] = vx->z;
-}
-
-
 vector::vector(float x0,float x1,float x2)
 {
     x[0] = x0;
@@ -98,20 +83,6 @@ void vector::setvalue(const vertex2D *vx)
 {
     x[0] = vx->x;
     x[1] = vx->y;
-}
-
-void vector::setvalue(vertex3D vx)
-{
-    x[0] = vx.x;
-    x[1] = vx.y;
-    x[2] = vx.z;
-}
-
-void vector::setvalue(const vertex3D *vx)
-{
-    x[0] = vx->x;
-    x[1] = vx->y;
-    x[2] = vx->z;
 }
 
 void vector::setvalue(float x0)
@@ -186,18 +157,6 @@ void vector::add(vertex2D *vx)
     x[0] += vx->x;
     x[1] += vx->y;
 }
-void vector::add(vertex3D vx)
-{
-    x[0] += vx.x;
-    x[1] += vx.y;
-    x[2] += vx.z;
-}
-void vector::add(vertex3D *vx)
-{
-    x[0] += vx->x;
-    x[1] += vx->y;
-    x[2] += vx->z;
-}
 
 void vector::add(vector v)
 {
@@ -241,24 +200,6 @@ void vector::add(vertex2D *vx,  vector  v0)
     x[2] = v0.x[2];
 }
 
-void vector::add(vector  v0, vertex3D vx){ this->add(vx,v0); }
-
-void vector::add(vertex3D vx,  vector  v0)
-{
-    x[0] = vx.x + v0.x[0];
-    x[1] = vx.y + v0.x[1];
-    x[2] = vx.z + v0.x[2];
-}
-
-void vector::add(vector  v0, vertex3D *vx){ this->add(vx,v0); }
-
-void vector::add(vertex3D *vx,  vector  v0)
-{
-    x[0] = vx->x + v0.x[0];
-    x[1] = vx->y + v0.x[1];
-    x[2] = vx->z + v0.x[2];
-}
-
 void vector::add(vector  *v0, vertex2D vx){ this->add(vx,v0); }
 
 void vector::add(vertex2D vx,  vector  *v0)
@@ -277,45 +218,8 @@ void vector::add(vertex2D *vx,  vector  *v0)
     x[2] = v0->x[2];
 }
 
-void vector::add(vector  *v0, vertex3D vx){ this->add(vx,v0); }
-
-void vector::add(vertex3D vx,  vector  *v0)
-{
-    x[0] = vx.x + v0->x[0];
-    x[1] = vx.y + v0->x[1];
-    x[2] = vx.z + v0->x[2];
-}
-
-void vector::add(vector  *v0, vertex3D *vx){ this->add(vx,v0); }
-
-void vector::add(vertex3D *vx,  vector  *v0)
-{
-    x[0] = vx->x + v0->x[0];
-    x[1] = vx->y + v0->x[1];
-    x[2] = vx->z + v0->x[2];
-}
 
 
-
-void vector::add(vertex3D *vx, int args)
-{
-    for(int i = 0; i < args; i++)
-    {
-        x[0] += vx[i].x;
-        x[1] += vx[i].y;
-        x[2] += vx[i].z;
-    }
-}
-
-void vector::add(vertex3D **vx, int args)
-{
-    for(int i = 0; i < args; i++)
-    {
-        x[0] += vx[i]->x;
-        x[1] += vx[i]->y;
-        x[2] += vx[i]->z;
-    }
-}
 
 void vector::add(vertex2D *vx, int args)
 {
@@ -372,15 +276,6 @@ void vector::addvx2(int args, ...)
     va_end ( arguments );
 }
 
-void vector::addvx3(int args, ...)
-{
-    va_list arguments;
-    va_start ( arguments, args );
-        for(int i = 0; i < args; i++)
-            this->add(va_arg( arguments, vertex3D *));
-    va_end ( arguments );
-}
-
 vector vector::addc(vector v)
 {
     this->add(v);
@@ -388,18 +283,6 @@ vector vector::addc(vector v)
 }
 
 vector *vector::addc(vector *v)
-{
-    this->add(v);
-    return new vector(this);
-}
-
-vector vector::addc(vertex3D v)
-{
-    this->add(v);
-    return vector(this);
-}
-
-vector *vector::addc(vertex3D *v)
 {
     this->add(v);
     return new vector(this);
@@ -425,31 +308,7 @@ vector vector::addc(vector v0, vector v1)
     return vector(this);
 }
 
-vector vector::addc(vertex3D v0, vector v1)
-{
-    this->add(v0,v1);
-    return vector(this);
-}
-
-vector vector::addc(vector v1, vertex3D v0)
-{
-    this->add(v0,v1);
-    return vector(this);
-}
-
 vector *vector::addc(vector *v0, vector *v1)
-{
-    this->add(v0,v1);
-    return new vector(this);
-}
-
-vector *vector::addc(vertex3D *v0, vector *v1)
-{
-    this->add(v0,v1);
-    return new vector(this);
-}
-
-vector *vector::addc(vector *v1, vertex3D *v0)
 {
     this->add(v0,v1);
     return new vector(this);

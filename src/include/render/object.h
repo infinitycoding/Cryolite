@@ -55,7 +55,7 @@ class ObjectType : public ExtParser   // The object type class
 
         char objectTypeName[20];                // the name of the object type
 
-        List<vertex3D> *vertices;               // the list of vertices of the object type
+        List<vector> *vertices;               // the list of vertices of the object type
         List<vector> *normvectors;              // the list of normvectors of the object type
         List<vertex2D> *texvertices;            // the list of texture vertices of the object type
 

@@ -42,7 +42,7 @@ void ObjectType::initObjectType()
 {
     memset(objectTypeName, '\0', sizeof(objectTypeName));
 
-    vertices = new List<vertex3D>;
+    vertices = new List<vector>;
     normvectors = new List<vector>;
     texvertices = new List<vertex2D>;
 
@@ -179,11 +179,11 @@ void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectNa
 
     vertex2D *texvertex_ptr = NULL;
     vertex2D *autotexvertex_ptrs[4];
-    vertex3D *objvertex_ptr = NULL;
+    vector *objvertex_ptr = NULL;
     vector *normvector_ptr = NULL;
 
     vertex2D *texvertex_ptrs[allObjectVertices.textureVertices];
-    vertex3D *objvertex_ptrs[allObjectVertices.objectVertices];
+    vector *objvertex_ptrs[allObjectVertices.objectVertices];
     vector *normvector_ptrs[allObjectVertices.normalVectors];
 
     Polygon *polygon_ptr = NULL;
@@ -266,8 +266,8 @@ void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectNa
             else
             {
 
-                vertex3D tempv3d = getVertex3D(&line_ptr);
-                objvertex_ptr = new vertex3D(tempv3d);
+                vector tempv3d = getVector(&line_ptr);
+                objvertex_ptr = new vector(tempv3d);
 
                 vertices->PushFront(objvertex_ptr);
 

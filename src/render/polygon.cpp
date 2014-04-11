@@ -12,7 +12,7 @@ Polygon::Polygon(int numOfVertices)
         vertexAmount = numOfVertices;   // i want to know the vertex amout late
 
         normVector = new vector*[numOfVertices];    // create the normal vector pointers
-        objVertex = new vertex3D*[numOfVertices];   // create the object vertex pointers
+        objVertex = new vector*[numOfVertices];   // create the object vertex pointers
         texVertex = new vertex2D*[numOfVertices];   // create the texture vertex pointers
 
         for(int i = 0; i < numOfVertices; i++)      // initialize the pointers (so you can see if it it valid or not)
@@ -59,7 +59,7 @@ void Polygon::setNormVector(int number, vector *value)
 
 // the set-method of object vertex.
 
-void Polygon::setObjVertex(int number, vertex3D *value)
+void Polygon::setObjVertex(int number, vector *value)
 {
     objVertex[number] = value;
 }
@@ -83,7 +83,7 @@ vector *Polygon::getNormVector(int number)
 
 // the get-method of object vertex.
 
-vertex3D *Polygon::getObjVertex(int number)
+vector *Polygon::getObjVertex(int number)
 {
     return objVertex[number];
 }

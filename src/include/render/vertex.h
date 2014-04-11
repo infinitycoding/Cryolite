@@ -11,13 +11,4 @@ struct vertex2D
 
 
 
-struct vertex3D
-{
-    GLfloat x;
-    GLfloat y;
-    GLfloat z;
-};
-
-
-
 #endif // VERTEX_H_INCLUDED

@@ -348,7 +348,7 @@ void Scene::renderPolygones(Object *currentObject)
                     glTexCoord2f( currentPolygon->getTexVertex(i)->x, currentPolygon->getTexVertex(i)->y );
 
                 if(currentPolygon->getObjVertex(i) != NULL)
-                    glVertex3f( currentPolygon->getObjVertex(i)->x, currentPolygon->getObjVertex(i)->y, currentPolygon->getObjVertex(i)->z);
+                    glVertex3f( currentPolygon->getObjVertex(i)->x[0], currentPolygon->getObjVertex(i)->x[1], currentPolygon->getObjVertex(i)->x[2]);
             }
 
         glEnd();

@@ -260,11 +260,3 @@ vertex2D ExtParser::getVertex2D(char **string)
 
     return result;
 }
-
-
-vertex3D ExtParser::getVertex3D(char **string)
-{
-    vector temp = getVector(string);
-    vertex3D result = {temp.x[0], temp.x[1], temp.x[2]};
-    return result;
-}
