@@ -7,7 +7,7 @@
 #include <texture.h>
 
 
-#define MAX_STRING_LENGTH 40
+#define MAX_STRING_LENGTH 100
 
 #define STD_AMBIANT_MAT_COLOR {0.2, 0.2, 0.2, 1.0}
 #define STD_DIFFUSE_MAT_COLOR {0.8, 0.8, 0.8, 1.0}
