@@ -1,4 +1,4 @@
-mtllib resource/objects/ic.mtl
+mtllib game/resource/objects/ic.mtl
 o iccube
 v 1.0 -1.0 -1.0
 v 1.0 -1.0 1.0

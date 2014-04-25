@@ -1,6 +1,6 @@
 # Blender v2.66 (sub 1) OBJ File: ''
 # www.blender.org
-mtllib resource/objects/monkey.mtl
+mtllib game/resource/objects/monkey.mtl
 o Suzanne
 v 0.810418 0.136138 1.336504
 v -0.681508 0.136138 1.336504

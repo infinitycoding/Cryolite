@@ -1,6 +1,6 @@
 # Blender v2.66 (sub 1) OBJ File: ''
 # www.blender.org
-mtllib resource/objects/projectile.mtl
+mtllib game/resource/objects/projectile.mtl
 o projectile
 v 0.152474 -0.147100 -0.157718
 v 0.152474 -0.147100 0.235323

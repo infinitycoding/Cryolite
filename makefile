@@ -28,3 +28,6 @@ Release:
 clean:
 	@$(MAKE) -C engine clean
 	@$(MAKE) -C game clean
+
+launch:
+	./game/game

@@ -17,13 +17,13 @@
 
 #define STANDARD_SIZED_CACHE 100
 
-#define OBJECT_PATH  "resource/objects/"
-#define IMAGE_PATH  "resource/images/"
-#define FONT_PATH "resource/fonts/"
-#define SOUND_PATH "resource/sounds/"
-#define RESOURCE_PATH "resource/"
-#define SCRIPT_PATH "scripts/"
-#define SHADER_PATH "shaders/"
+#define OBJECT_PATH  "game/resource/objects/"
+#define IMAGE_PATH  "game/resource/images/"
+#define FONT_PATH "game/resource/fonts/"
+#define SOUND_PATH "game/resource/sounds/"
+#define RESOURCE_PATH "game/resource/"
+#define SCRIPT_PATH "game/scripts/"
+#define SHADER_PATH "game/shaders/"
 
 #define OBJECT(FILE) OBJECT_PATH #FILE
 #define RESOURCE(FILE) RESOURCE_PATH #FILE

@@ -1,5 +1,5 @@
 #handcreated by Peter Hösch
-mtllib resource/objects/ground.mtl
+mtllib game/resource/objects/ground.mtl
 o ground
 v -50.0 0.0 50.0
 v -50.0 0.0 -50.0

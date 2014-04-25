@@ -1,2 +1,5 @@
 newmtl ground
-map_Ka resource/images/blacktile.jpg
+map_Ka game/resource/images/blacktile.jpg
+
+
+

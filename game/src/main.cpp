@@ -42,7 +42,7 @@ extern Object *iccube;
 
 
 int main(int argc, char *argv[]){
-    EngineSettings engineSettings = EngineSettings("settings.lua");
+    EngineSettings engineSettings = EngineSettings("game/scripts/settings.lua");
     //Create Window and Scene
     SDL mainwindow = SDL(engineSettings.width,engineSettings.height,engineSettings.sdlFlags,engineSettings.multisamples,"Cryolite Engine");
     mainScene = new Scene();

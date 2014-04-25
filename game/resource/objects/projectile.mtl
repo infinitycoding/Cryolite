@@ -2,7 +2,7 @@
 # Material Count: 1
 
 newmtl projectileMtl
-map_Ka resource/images/strange.jpg
+map_Ka game/resource/images/strange.jpg
 Ns 96.078431
 Ka 0.000000 0.000000 0.000000
 Kd 0.640000 0.640000 0.640000

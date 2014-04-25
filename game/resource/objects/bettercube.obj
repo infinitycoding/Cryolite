@@ -1,6 +1,6 @@
 # Blender v2.62 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib resource/objects/wood.mtl
+mtllib game/resource/objects/wood.mtl
 o Cube
 v 1.000000 -1.000000 -1.000000
 v 1.000000 -1.000000 1.000000
