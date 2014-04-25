@@ -21,6 +21,7 @@
 #include <lua/script.h>
 #include <shader.h>
 #include <vector.h>
+#include <hud.h>
 
 #ifdef _WIN32
 #undef main
