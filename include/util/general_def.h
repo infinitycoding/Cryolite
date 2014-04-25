@@ -22,8 +22,8 @@
 #define FONT_PATH "resource/fonts/"
 #define SOUND_PATH "resource/sounds/"
 #define RESOURCE_PATH "resource/"
-#define SCRIPT_PATH "src/game/scripts/"
-#define SHADER_PATH "src/shaders/"
+#define SCRIPT_PATH "scripts/"
+#define SHADER_PATH "shaders/"
 
 #define OBJECT(FILE) OBJECT_PATH #FILE
 #define RESOURCE(FILE) RESOURCE_PATH #FILE
