@@ -100,7 +100,7 @@ List<T>::List(List<T> *l)
 {
     lock = true;
         structCleaner = l->structCleaner;
-        ListIterator<T> *lit = ListIterator<T>(l);
+        ListIterator<T> *lit = new ListIterator<T>(l);
         dummy = new Node;
         dummy->element = NULL;
         dummy->next = dummy;

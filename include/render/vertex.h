@@ -5,8 +5,8 @@
 
 struct vertex2D
 {
-    GLfloat x;
-    GLfloat y;
+    float x;
+    float y;
 };
 
 

@@ -3,7 +3,7 @@ bin/
 lib/
 *.depend
 *.layout
-*.*~
+*~
 *.o
 *.a
 game/game
