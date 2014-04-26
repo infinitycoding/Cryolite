@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Cryolite" />
+		<Option makefile="makefile" />
+		<Option makefile_is_custom="1" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="game/game" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/Cryolite" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="engine/physics/PhysicsEngine.cpp" />
+		<Unit filename="engine/physics/boundobjects.cpp" />
+		<Unit filename="engine/physics/collision.cpp" />
+		<Unit filename="engine/physics/forces.cpp" />
+		<Unit filename="engine/render/camera.cpp" />
+		<Unit filename="engine/render/font.cpp" />
+		<Unit filename="engine/render/fps.cpp" />
+		<Unit filename="engine/render/hud.cpp" />
+		<Unit filename="engine/render/level.cpp" />
+		<Unit filename="engine/render/light.cpp" />
+		<Unit filename="engine/render/material.cpp" />
+		<Unit filename="engine/render/object.cpp" />
+		<Unit filename="engine/render/polygon.cpp" />
+		<Unit filename="engine/render/scene.cpp" />
+		<Unit filename="engine/render/sdl.cpp" />
+		<Unit filename="engine/render/shader.cpp" />
+		<Unit filename="engine/render/sound.cpp" />
+		<Unit filename="engine/render/texture.cpp" />
+		<Unit filename="engine/render/ui.cpp" />
+		<Unit filename="engine/util/parser.cpp" />
+		<Unit filename="engine/util/script.cpp" />
+		<Unit filename="engine/util/settings.cpp" />
+		<Unit filename="engine/util/vector.cpp" />
+		<Unit filename="engine/wrapper/cameraLW.cpp" />
+		<Unit filename="engine/wrapper/levelLW.cpp" />
+		<Unit filename="engine/wrapper/lightLW.cpp" />
+		<Unit filename="engine/wrapper/materialLW.cpp" />
+		<Unit filename="engine/wrapper/objectLW.cpp" />
+		<Unit filename="engine/wrapper/sceneLW.cpp" />
+		<Unit filename="engine/wrapper/sdlLW.cpp" />
+		<Unit filename="engine/wrapper/settingsLW.cpp" />
+		<Unit filename="engine/wrapper/shaderLW.cpp" />
+		<Unit filename="engine/wrapper/soundLW.cpp" />
+		<Unit filename="engine/wrapper/uiLW.cpp" />
+		<Unit filename="engine/wrapper/vectorLW.cpp" />
+		<Unit filename="game/src/controls.cpp" />
+		<Unit filename="game/src/main.cpp" />
+		<Unit filename="game/src/models.cpp" />
+		<Unit filename="include/game/controls.h" />
+		<Unit filename="include/game/models.h" />
+		<Unit filename="include/lua/script.h" />
+		<Unit filename="include/physics/PhysicsEngine.h" />
+		<Unit filename="include/physics/boundobjects.h" />
+		<Unit filename="include/physics/collision.h" />
+		<Unit filename="include/physics/forces.h" />
+		<Unit filename="include/render/camera.h" />
+		<Unit filename="include/render/font.h" />
+		<Unit filename="include/render/fps.h" />
+		<Unit filename="include/render/hud.h" />
+		<Unit filename="include/render/level.h" />
+		<Unit filename="include/render/light.h" />
+		<Unit filename="include/render/material.h" />
+		<Unit filename="include/render/object.h" />
+		<Unit filename="include/render/polygon.h" />
+		<Unit filename="include/render/scene.h" />
+		<Unit filename="include/render/sdl.h" />
+		<Unit filename="include/render/shader.h" />
+		<Unit filename="include/render/sound.h" />
+		<Unit filename="include/render/texture.h" />
+		<Unit filename="include/render/ui.h" />
+		<Unit filename="include/render/vertex.h" />
+		<Unit filename="include/util/List.h" />
+		<Unit filename="include/util/general_def.h" />
+		<Unit filename="include/util/general_structs.h" />
+		<Unit filename="include/util/parser.h" />
+		<Unit filename="include/util/settings.h" />
+		<Unit filename="include/util/vector.h" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

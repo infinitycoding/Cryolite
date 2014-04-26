@@ -114,6 +114,7 @@ void SDL::pollEvents()
         SDL_Event event;
 
     while( SDL_PollEvent( &event ) ) {
+
         if(events)
         {
             ListIterator<EventHandle> E = ListIterator<EventHandle>(events);
