@@ -127,7 +127,7 @@ int main(int argc, char *argv[]){
     Script testScript(SCRIPT(testscript.lua));
     testScript.run();
 
-    Net *server = new Net("archx", 9999, "bob");
+    Net *server = new Net("archx", 9999, "BlitzBasicGuineaPig");
 
     while(render){ //render
         if(printFPS)
@@ -139,12 +139,13 @@ int main(int argc, char *argv[]){
 
         glMatrixMode(GL_MODELVIEW);
 
-        playerControls.controls_handler(Player);
+        playerControls.controls_handler(Player, server);
 
 
 
         glBindTexture( GL_TEXTURE_2D, 0);
 
+        server->updateScene(mainScene);
         mainScene->listenerPosition = Player->getPosition();
         mainScene->render();
 

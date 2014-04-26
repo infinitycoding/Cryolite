@@ -110,6 +110,8 @@ class Object                // the main object
         ObjectType *objType;                         // the object type
         static ObjectTypeCache *ObjTypeCache;       // the static object type cache (you know what a cache is, don't you?)
 
+        unsigned int ID;
+
         vector scale;                               // the scale of the object (if you need an overdimensional cup of tea)
 
         rotation rot;

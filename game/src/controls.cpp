@@ -164,11 +164,11 @@ void Controls::handleMouseMotion(SDL_MouseMotionEvent *e)
 }
 
 
-void Controls::controls_handler(Camera *cam)
+void Controls::controls_handler(Camera *cam, Net *server)
 {
     rotation_handler(cam);
     move_handler(cam);
-    shoot_handler(cam);
+    shoot_handler(cam, server);
 }
 
 
@@ -253,7 +253,7 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
 }
 
 
-void Controls::shoot_handler(Camera *cam)
+void Controls::shoot_handler(Camera *cam, Net *server)
 {
     Object *newObject = NULL;
     vector *newForce = NULL;
@@ -273,6 +273,8 @@ void Controls::shoot_handler(Camera *cam)
             newSphere->radian = 0.5;
             newObject->objType->boundSpheres->PushFront(newSphere);
         }
+
+        server->addObject(newObject);
 
         mainScene->addObject(newObject);
     }

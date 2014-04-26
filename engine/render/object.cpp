@@ -10,6 +10,7 @@ MaterialCache *ObjectType::MatCache;        // this have to be like this to init
 ObjectTypeCache *Object::ObjTypeCache;
 
 
+
 ObjectType::ObjectType()
 {
     initObjectType();
