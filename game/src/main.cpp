@@ -127,7 +127,7 @@ int main(int argc, char *argv[]){
     Script testScript(SCRIPT(testscript.lua));
     testScript.run();
 
-    Net *server = new Net("archx", 9999, "R2D2");
+    Net *server = new Net("archx", 9999, "BassBox");
 
     server->addObject(iccube);
 
