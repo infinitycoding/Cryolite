@@ -127,7 +127,9 @@ int main(int argc, char *argv[]){
     Script testScript(SCRIPT(testscript.lua));
     testScript.run();
 
-    Net *server = new Net("archx", 9999, "BlitzBasicGuineaPig");
+    Net *server = new Net("archx", 9999, "R2D2");
+
+    server->addObject(iccube);
 
     while(render){ //render
         if(printFPS)
@@ -139,9 +141,12 @@ int main(int argc, char *argv[]){
 
         glMatrixMode(GL_MODELVIEW);
 
+        vector last = iccube->localPosition;
+
         playerControls.controls_handler(Player, server);
 
-
+        if(iccube->localPosition != last)
+            server->updateObject(iccube);
 
         glBindTexture( GL_TEXTURE_2D, 0);
 

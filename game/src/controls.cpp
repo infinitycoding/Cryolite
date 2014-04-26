@@ -192,6 +192,8 @@ void Controls::rotation_handler(Camera *cam){    // Rotates the camera if a key 
 }
 
 void Controls::move_handler(Camera *cam){        // Moves the camera if a key is pressed
+    cam->relativeToObject = iccube;
+
     vector moveDirection;
 
     if(move_right)
@@ -200,7 +202,8 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
         moveDirection.unify();
         moveDirection *= MOVEMENT_WIDTH;
 
-        cam->localPosition += moveDirection;
+        //cam->localPosition += moveDirection;
+        iccube->localPosition += moveDirection;
     }
 
     if(move_left)
@@ -209,7 +212,8 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
         moveDirection.unify();
         moveDirection *= MOVEMENT_WIDTH;
 
-        cam->localPosition += moveDirection;
+        //cam->localPosition += moveDirection;
+        iccube->localPosition += moveDirection;
     }
 
     if(move_foreward)
@@ -222,7 +226,8 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
         moveDirection.unify();
         moveDirection *= MOVEMENT_WIDTH;
 
-        cam->localPosition += moveDirection;
+        //cam->localPosition += moveDirection;
+        iccube->localPosition += moveDirection;
     }
 
     if(move_backward)
@@ -235,19 +240,26 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
         moveDirection.unify();
         moveDirection *= MOVEMENT_WIDTH;
 
-        cam->localPosition += moveDirection;
+        //cam->localPosition += moveDirection;
+        iccube->localPosition += moveDirection;
     }
 
     if(move_up)
     {
         if(!ghost_mode)
-            cam->localPosition += vector(0.0, MOVEMENT_WIDTH, 0.0);
+        {
+            //cam->localPosition += vector(0.0, MOVEMENT_WIDTH, 0.0);
+            iccube->localPosition += vector(0.0, MOVEMENT_WIDTH, 0.0);
+        }
     }
 
     if(move_down)
     {
         if(!ghost_mode)
-            cam->localPosition += vector(0.0, -MOVEMENT_WIDTH, 0.0);
+        {
+            //cam->localPosition += vector(0.0, -MOVEMENT_WIDTH, 0.0);
+            iccube->localPosition += vector(0.0, -MOVEMENT_WIDTH, 0.0);
+        }
     }
 
 }

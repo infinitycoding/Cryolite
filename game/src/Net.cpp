@@ -94,7 +94,8 @@ void Net::updateScene(Scene *s)
                 currentObject = new Object(add.filename, add.objtype);
                 currentObject->localPosition = add.position;
                 currentObject->physObj->setImpulse(add.impulse);
-                currentObject->ID = highestID++;
+                currentObject->ID = add.id;
+                highestID = add.id + 1;
 
                 s->addObject(currentObject);
             break;
@@ -182,5 +183,13 @@ int Net::deleteObject(Object *object)
 
 int Net::updateObject(Object *object)
 {
+    connSignal s = UPDATEOBJECT;
+    struct updateObjectPackage updobj;
 
+    updobj.id = object->ID;
+    updobj.position = object->localPosition;
+    updobj.impulse = object->physObj->getImpulse();
+
+    SDLNet_TCP_Send(socket, &s, sizeof(connSignal));
+    return SDLNet_TCP_Send(socket, &updobj, sizeof(struct updateObjectPackage));
 }
