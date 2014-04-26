@@ -26,7 +26,7 @@ struct loginPackage
 class Net
 {
     public:
-        Net(unsigned char ip0, unsigned char ip1, unsigned char ip2, unsigned char ip3, unsigned short serverPort, const char *username);
+        Net(const char *servername, unsigned short serverPort, const char *username);
         void processData(Scene *s);
         int addObject(const char *name, Object *object);
         int deleteObject(const char *name, Object *object);

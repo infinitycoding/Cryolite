@@ -2,10 +2,9 @@
 #include <Net.h>
 
 
-Net::Net(unsigned char ip0, unsigned char ip1, unsigned char ip2, unsigned char ip3, unsigned short serverPort, const char *username)
+Net::Net(const char *servername, unsigned short serverPort, const char *username)
 {
-    serverIP.host = (ip3<<24) | (ip2<<16) | (ip1<<8) | ip0;
-    serverIP.port = serverPort;
+    SDLNet_ResolveHost(&serverIP,servername,serverPort);
     socket = SDLNet_TCP_Open(&serverIP);
     if(!socket)
     {

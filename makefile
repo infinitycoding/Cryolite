@@ -14,7 +14,10 @@ export LD
 Cryolite:
 	@$(MAKE) -C engine
 
-all: Cryolite
+Server:
+	@$(MAKE) -C server
+
+all: Cryolite Server
 	@$(MAKE) -C game
 
 
@@ -24,6 +27,7 @@ Release:
 	@export CFLAGS+="-O3"
 	@$(MAKE) -C engine
 	@$(MAKE) -C game
+	@$(MAKE) -C server
 	
 clean:
 	@$(MAKE) -C engine clean
