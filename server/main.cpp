@@ -95,20 +95,19 @@ void handleData(SDLNet_SocketSet *set, List<Client> *clist, List<ServerObject> *
               }
 
               ListIterator<ServerObject> o = ListIterator<ServerObject>(objects);
+              o.SetFirst();
               while(!o.IsLast() && !o.IsEmpty())
               {
                 if(o.GetCurrent()->obj.id == pck.id)
-                  break;
+                  {
+                    Job *newJob = new Job;
+                    newJob->type = REMOVEOBJECT;
+                    newJob->player = currentClient;
+                    newJob->obj = o.GetCurrent();
+                    joblist->PushFront(newJob);
+                    break;
+                }
                 o.Next();
-              }
-
-              if(o.GetCurrent()->obj.id == pck.id)
-              {
-                  Job *newJob = new Job;
-                  newJob->type = REMOVEOBJECT;
-                  newJob->player = currentClient;
-                  newJob->obj = o.GetCurrent();
-                  joblist->PushFront(newJob);
               }
 
             printf("delete object client:%s id:%d\n",currentClient->name,pck.id);
@@ -124,26 +123,24 @@ void handleData(SDLNet_SocketSet *set, List<Client> *clist, List<ServerObject> *
               }
 
               ListIterator<ServerObject> o = ListIterator<ServerObject>(objects);
+              o.SetFirst();
               while(!o.IsLast() && !o.IsEmpty())
               {
                 if(o.GetCurrent()->obj.id == pck.id)
-                  break;
+                {
+                    Job *newJob = new Job;
+                    newJob->type = UPDATEOBJECT;
+                    newJob->player = currentClient;
+                    newJob->obj = o.GetCurrent();
+                    newJob->obj->obj.position = pck.position;
+                    newJob->obj->obj.impulse = pck.impulse;
+                    joblist->PushFront(newJob);
+                    break;
+                }
+                  
                 o.Next();
               }
 
-              if(!o.IsLast() && !o.IsEmpty())
-              {
-                if(o.GetCurrent()->obj.id == pck.id)
-                {
-                  Job *newJob = new Job;
-                  newJob->type = UPDATEOBJECT;
-                  newJob->player = currentClient;
-                  newJob->obj = o.GetCurrent();
-                  newJob->obj->obj.position = pck.position;
-                  newJob->obj->obj.impulse = pck.impulse;
-                  joblist->PushFront(newJob);
-                }
-              }
 
 
             printf("update object client:%s id:%d\n",currentClient->name,pck.id);
@@ -212,6 +209,20 @@ void doJobs(SDLNet_SocketSet *set, List<Client> *clist, List<ServerObject> *obje
               c.Next();
           }
 
+          ListIterator<ServerObject> o = ListIterator<ServerObject>(objects);
+          o.SetFirst();
+          while(!o.IsLast() && !o.IsEmpty())
+          {
+            if(o.GetCurrent() == currentJob->obj)
+            {
+              o.Remove();
+              delete currentJob->obj;
+              break;
+            }
+            o.Next();
+          }
+
+
       }
 
       if(currentJob->type == UPDATEOBJECT)
@@ -243,7 +254,7 @@ void doJobs(SDLNet_SocketSet *set, List<Client> *clist, List<ServerObject> *obje
           }
       }
 
-
+      delete currentJob;
     }
 
 
