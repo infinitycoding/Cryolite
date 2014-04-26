@@ -6,13 +6,26 @@
 #include <SDL_net.h>
 
 
-class Client
+
+struct Client
 {
-	public:
 		char name[20];
 		TCPsocket connection;
 };
 
+
+struct ServerObject
+{
+		addObjectPackage obj;
+    	Client *player;
+};
+
+struct Job
+{
+	connSignal type;
+	Client *player;
+	ServerObject *obj;
+};
 
 
 
