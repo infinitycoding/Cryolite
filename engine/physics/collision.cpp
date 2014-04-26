@@ -266,9 +266,56 @@ bool CollisionList::addCollision(Object *obj1, Object *obj2, vector *spot)
 }
 
 
+bool CollisionList::vectorInBox(vector v, BoundBox box)
+{
+    if(v.x[0] > box.base.x[0] && v.x[1] > box.base.x[1] && v.x[2] > box.base.x[2] && v.x[0] < (box.base.x[0] + box.width.x[0]) && v.x[1] < (box.base.x[1] + box.height.x[1]) && v.x[2] < (box.base.x[2] + box.length.x[2]))
+        return true;
+
+    return false;
+}
+
+
+bool CollisionList::vectorInSphere(vector v, BoundSphere sphere)
+{
+    float distance = fabs((v - sphere.center).len());
+
+    if(distance < sphere.radian)
+        return true;
+
+    return false;
+}
+
+
 vector *CollisionList::boxBoxCollision(BoundBox box1, BoundBox box2)
 {
-    // TODO
+    vector vertex1[8];
+    vector vertex2[8];
+
+    vertex1[0] = box1.base;
+    vertex1[1] = box1.base + box1.height;
+    vertex1[2] = box1.base + box1.length;
+    vertex1[3] = box1.base + box1.width;
+    vertex1[4] = box1.base + box1.height + box1.length;
+    vertex1[5] = box1.base + box1.height + box1.width;
+    vertex1[6] = box1.base + box1.length + box1.width;
+    vertex1[7] = box1.base + box1.height + box1.length + box1.width;
+
+    vertex2[0] = box2.base;
+    vertex2[1] = box2.base + box2.height;
+    vertex2[2] = box2.base + box2.length;
+    vertex2[3] = box2.base + box2.width;
+    vertex2[4] = box2.base + box2.height + box2.length;
+    vertex2[5] = box2.base + box2.height + box2.width;
+    vertex2[6] = box2.base + box2.length + box2.width;
+    vertex2[7] = box2.base + box2.height + box2.length + box2.width;
+
+    for(int i = 0; i < 8; i++)
+        if(vectorInBox(vertex1[i], box2) == true)
+            return new vector(vertex1[i]);
+
+    for(int i = 0; i < 8; i++)
+        if(vectorInBox(vertex2[i], box1) == true)
+            return new vector(vertex2[i]);
 
     return NULL;
 }
@@ -284,7 +331,20 @@ vector *CollisionList::boxPlaneCollision(BoundBox box, BoundPlane plane)
 
 vector *CollisionList::boxSphereCollision(BoundBox box, BoundSphere sphere)
 {
-    // TODO
+    vector vertex[8];
+
+    vertex[0] = box.base;
+    vertex[1] = box.base + box.height;
+    vertex[2] = box.base + box.length;
+    vertex[3] = box.base + box.width;
+    vertex[4] = box.base + box.height + box.length;
+    vertex[5] = box.base + box.height + box.width;
+    vertex[6] = box.base + box.length + box.width;
+    vertex[7] = box.base + box.height + box.length + box.width;
+
+    for(int i = 0; i < 8; i++)
+        if(vectorInSphere(vertex[i], sphere) == true)
+            return new vector(vertex[i]);
 
     return NULL;
 }

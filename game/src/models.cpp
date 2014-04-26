@@ -11,13 +11,16 @@ void INIT_Models(Scene *sce)
 {
     Font stdFonts = Font();
     stdFonts.loadTTF(FONT(arial.ttf), "stdarial", 10);
+    BoundBox *bb = NULL;
     BoundSphere *bs = NULL;
 
-    bs = new BoundSphere;
-    bs->center.setvalue(0, 0, 0);
-    bs->radian = 1.73205;
+    bb = new BoundBox;
+    bb->base.setvalue(-1, -1, -1);
+    bb->width.setvalue(2, 0, 0);
+    bb->height.setvalue(0, 2, 0);
+    bb->length.setvalue(0, 0, 2);
     iccube = new Object(OBJECT(iccube.obj), "iccube", vector(0, 0, 0));
-    iccube->objType->boundSpheres->PushFront(bs);
+    iccube->objType->boundBoxes->PushFront(bb);
     sce->addObject(iccube);
 
     Object *ground = new Object(OBJECT(ground.obj), "ground", vector(0, -3, 0));

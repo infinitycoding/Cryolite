@@ -33,6 +33,9 @@ class CollisionList
         bool collide(Object *obj1, Object *obj2);
         bool addCollision(Object *obj1, Object *obj2, vector *spot);
 
+        bool vectorInBox(vector v, BoundBox box);
+        bool vectorInSphere(vector v, BoundSphere sphere);
+
         vector *boxBoxCollision(BoundBox box1, BoundBox box2);
         vector *boxPlaneCollision(BoundBox box, BoundPlane plane);
         vector *boxSphereCollision(BoundBox box, BoundSphere sphere);
