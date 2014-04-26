@@ -210,6 +210,8 @@ void Scene::render()
 
     // Debug end
 
+    collisions->checkCollisions();
+
     ListIterator<Camera> c = *ListIterator<Camera>(Camlist).SetFirst();
     while(handleCams(&c))
     {

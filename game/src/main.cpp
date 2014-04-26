@@ -149,6 +149,24 @@ int main(int argc, char *argv[]){
         mainScene->listenerPosition = Player->getPosition();
         mainScene->render();
 
+        Object *currentObject = NULL;
+        ListIterator<Object> O = *ListIterator<Object>(mainScene->objectList).SetFirst();
+
+        while(!O.IsLast())
+        {
+            currentObject = O.GetCurrent();
+
+            if(currentObject->getPosition().len() > 100)
+            {
+                server->deleteObject(currentObject);
+                mainScene->removeObject(currentObject);
+                delete currentObject;
+                break;
+            }
+
+            O.Next();
+        }
+
 
         glPushMatrix();
         glTranslatef(Player->getPosition().x[0],Player->getPosition().x[1],Player->getPosition().x[2]);

@@ -70,9 +70,11 @@ void Net::updateScene(Scene *s)
     if(SDLNet_CheckSockets(sset, 10) == 0)
         return;
 
-    if(SDLNet_SocketReady(socket))
+    if(SDLNet_SocketReady(socket) == 1)
     {
-        printf("active socket detected\n");
+        printf("connection to server lost\n");
+
+        exit(-1);
     }
 }
 
