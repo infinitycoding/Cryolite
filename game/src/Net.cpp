@@ -70,12 +70,83 @@ void Net::updateScene(Scene *s)
     if(SDLNet_CheckSockets(sset, 10) == 0)
         return;
 
-    if(SDLNet_SocketReady(socket) == 1)
+    if(SDLNet_SocketReady(socket))
     {
-        printf("connection to server lost\n");
+        connSignal sig;
 
-        exit(-1);
+        struct deleteObjectPackage del;
+        struct addObjectPackage add;
+        struct updateObjectPackage upd;
+
+        Object *currentObject;
+        ListIterator<Object> O;
+
+        SDLNet_TCP_Recv(socket, &sig, sizeof(connSignal));
+
+        switch(sig)
+        {
+            case NOSIGNAL:
+            break;
+
+            case ADDOBJECT:
+                SDLNet_TCP_Recv(socket, &add, sizeof(addObjectPackage));
+
+                currentObject = new Object(add.filename, add.objtype);
+                currentObject->localPosition = add.position;
+                currentObject->physObj->setImpulse(add.impulse);
+                currentObject->ID = highestID++;
+
+                s->addObject(currentObject);
+            break;
+
+            case REMOVEOBJECT:
+                SDLNet_TCP_Recv(socket, &del, sizeof(deleteObjectPackage));
+
+                currentObject = NULL;
+                O = *ListIterator<Object>(s->objectList).SetFirst();
+
+                while(!O.IsLast())
+                {
+                    currentObject = O.GetCurrent();
+
+                    if(currentObject->ID == del.id)
+                    {
+                        s->removeObject(currentObject);
+                        delete currentObject;
+                        break;
+                    }
+
+                    O.Next();
+                }
+            break;
+
+            case UPDATEOBJECT:
+                SDLNet_TCP_Recv(socket, &upd, sizeof(updateObjectPackage));
+
+                currentObject = NULL;
+                O = *ListIterator<Object>(s->objectList).SetFirst();
+
+                while(!O.IsLast())
+                {
+                    currentObject = O.GetCurrent();
+
+                    if(currentObject->ID == upd.id)
+                    {
+                        currentObject->localPosition = upd.position;
+                        currentObject->physObj->setImpulse(upd.impulse);
+                        break;
+                    }
+
+                    O.Next();
+                }
+            break;
+
+            default:
+                printf("unknown signal recieved from server.\n");
+            break;
+        }
     }
+
 }
 
 
@@ -90,6 +161,7 @@ int Net::addObject(Object *object)
     newobj.position = object->localPosition;
     newobj.impulse = object->physObj->getImpulse();
     strncpy(newobj.objtype, object->objType->objectTypeName, 20);
+    strncpy(newobj.filename, object->objType->objectTypeFilename, 100);
 
     SDLNet_TCP_Send(socket, &s, sizeof(connSignal));
     return SDLNet_TCP_Send(socket, &newobj, sizeof(struct addObjectPackage));

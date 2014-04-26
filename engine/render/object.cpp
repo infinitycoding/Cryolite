@@ -42,6 +42,7 @@ ObjectType::~ObjectType()
 void ObjectType::initObjectType()
 {
     memset(objectTypeName, '\0', sizeof(objectTypeName));
+    memset(objectTypeFilename, '\0', sizeof(objectTypeFilename));
 
     vertices = new List<vector>;
     normvectors = new List<vector>;
@@ -190,6 +191,7 @@ void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectNa
     Polygon *polygon_ptr = NULL;
 
     strncpy(objectTypeName, objectName, 20);
+    strncpy(objectTypeFilename, objectFile, 100);
 
     if(allObjectVertices.objectVertices == 0)
     {

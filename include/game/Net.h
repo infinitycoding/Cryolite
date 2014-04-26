@@ -29,13 +29,14 @@ struct addObjectPackage
     vector position;
     vector impulse;
     char objtype[20];
+    char filename[100];
 };
 
 struct updateObjectPackage
 {
     int id;
     vector position;
-    char objtype[20];
+    vector impulse;
 };
 
 struct deleteObjectPackage
