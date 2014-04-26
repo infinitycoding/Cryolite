@@ -274,8 +274,8 @@ void Controls::shoot_handler(Camera *cam, Net *server)
     if(fire)
     {
         fire = false;
-        newObject = new Object(OBJECT(projectile.obj), "projectile", cam->getPosition());
-        newObject->physObj->setImpulse(cam->lookingDirection * 10);
+        newObject = new Object(OBJECT(projectile.obj), "projectile", cam->getPosition() + (cam->lookingDirection * 3));
+        newObject->physObj->setImpulse(cam->lookingDirection * 20);
 
         if(newObject->objType->boundSpheres->IsEmpty())
         {

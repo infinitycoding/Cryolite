@@ -13,7 +13,7 @@
 
 #define STARTING_X 0
 #define STARTING_Y 0
-#define STARTING_Z 1
+#define STARTING_Z 0
 
 #define STANDARD_SIZED_CACHE 100
 
