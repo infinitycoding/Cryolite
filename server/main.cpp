@@ -1,37 +1,15 @@
 #include <cstring>
 #include <stdio.h>
-#include <Net.h>
+#include <List.h>
+#include <server.h>
 
-int main(void)
+
+
+void establishConnection(TCPsocket server, List<Client> *clist)
 {
-	SDLNet_Init();
-
-  IPaddress adress;
-	TCPsocket server;
-
-	if (SDLNet_ResolveHost (&adress, NULL, 9999) == -1)
-  {
-      printf ("SDLNet_ResolveHost: %s\n", SDLNet_GetError ());
-      SDLNet_Quit ();
-      exit (1);
-  }
-
-  server = SDLNet_TCP_Open (&adress);
-  if (server == NULL)
-  {
-      printf ("ERR TCP_Open: %s\n", SDLNet_GetError ());
-      SDLNet_Quit ();
-      exit (-1);
-  }
-
-
-	TCPsocket client = SDLNet_TCP_Accept(server);
-   while (client == NULL)
-   {
-       /* eine Sekunde warten */
-       SDL_Delay (100);
-       client = SDLNet_TCP_Accept (server);
-   }
+  TCPsocket client = SDLNet_TCP_Accept(server);
+   if (client == NULL)
+    return;
    printf("got a connection\n");
 
 
@@ -60,11 +38,42 @@ int main(void)
     }
 
     printf("connection established!\n");
+    Client *newClient = new Client();
+    strncpy(newClient->name,login.name,20);
+    newClient->connection = client;
+    clist->PushFront(newClient);
+}
 
-    
-    while(1);
-       
 
+int main(void)
+{
+	SDLNet_Init();
 
+  IPaddress adress;
+	TCPsocket server;
+
+	if (SDLNet_ResolveHost (&adress, NULL, 9999) == -1)
+  {
+      printf ("SDLNet_ResolveHost: %s\n", SDLNet_GetError ());
+      SDLNet_Quit ();
+      exit (1);
+  }
+
+  server = SDLNet_TCP_Open (&adress);
+  if (server == NULL)
+  {
+      printf ("ERR TCP_Open: %s\n", SDLNet_GetError ());
+      SDLNet_Quit ();
+      exit (-1);
+  }
+
+  List<Client> *clients = new List<Client>();
+
+  while(1)
+  {
+    establishConnection(server,clients);
+    SDL_Delay(100);
+  }
+  
    return 0;
 }

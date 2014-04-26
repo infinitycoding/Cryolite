@@ -5,7 +5,7 @@ all: $(OBJS)
 	$(CC) $^ ../engine/engine.a $(LDFLAGS) -o server
 
 %.o: %.cpp
-	$(CC) $(CFLAGS) $(INC) -c -o $@ $<
+	$(CC) $(CFLAGS) $(INC) -Iinclude -c -o $@ $<
 
 clean:
 	@rm `find -name '*.o'` server

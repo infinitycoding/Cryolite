@@ -4,6 +4,7 @@
 
 #include <scene.h>
 #include <SDL_net.h>
+#include <object.h>
 
 typedef enum
 {
@@ -22,15 +23,31 @@ struct loginPackage
     char name[20];
 };
 
+struct addObjectPackage
+{
+    connSignal s;
+    int id;
+    vector position;
+    char *objtype;
+};
+
+struct deleteObjectPackage
+{
+    connSignal s;
+    int id;
+};
+
+
+
 
 class Net
 {
     public:
         Net(const char *servername, unsigned short serverPort, const char *username);
-        void processData(Scene *s);
-        int addObject(const char *name, Object *object);
-        int deleteObject(const char *name, Object *object);
-        int updateObject(const char *name, Object *object);
+        void updateScene(Scene *s);
+        int addObject(Object *object);
+        int deleteObject(Object *object);
+        int updateObject(Object *object);
 
     private:
         IPaddress serverIP;
