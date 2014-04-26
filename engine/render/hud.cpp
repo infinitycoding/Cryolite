@@ -8,18 +8,18 @@ HUD_Element::HUD_Element()
     position.y = 0;
     width = 0;
     height = 0;
-    content = NULL;
+    sdlcontent = NULL;
     source = renderNOT;
 }
 
 
-HUD_Element::HUD_Element(vertex2D pos, float w, float h, GLuint tex, SDL_Surface *c, renderSource s)
+HUD_Element::HUD_Element(vertex2D pos, float w, float h, Texture *tex, SDL_Surface *c, renderSource s)
 {
     position = pos;
     width = w;
     height = h;
-    gltex = tex;
-    content = c;
+    glcontent = tex;
+    sdlcontent = c;
     source = s;
 }
 
@@ -29,8 +29,8 @@ HUD_Element::HUD_Element(HUD_Element *templateElement)
     this->position = templateElement->position;
     this->width = templateElement->width;
     this->height = templateElement->height;
-    this->gltex = templateElement->gltex;
-    this->content = templateElement->content;
+    this->glcontent = templateElement->glcontent;
+    this->sdlcontent = templateElement->sdlcontent;
     this->source = templateElement->source;
 }
 
@@ -46,18 +46,20 @@ void HUD_Element::renderElement(renderSource type)
     if(type == renderNOT)
         return;
 
-    GLuint tex = type == renderGL ? gltex : SDL::surfToTexture(content);
+    GLuint tex = type == renderGL ? glcontent->nr : SDL::surfToTexture(sdlcontent);
+
+    glBindTexture( GL_TEXTURE_2D, tex);
 
     glBegin(GL_QUADS);
 
-    glTexCoord2i( 1,  0);
-    glVertex2f(position.x, position.y);
-    glTexCoord2i( 1,  1);
-    glVertex2f(position.x, position.y + height);
-    glTexCoord2i( 0,  1);
-    glVertex2f(position.x + width, position.y + height);
-    glTexCoord2i( 0,  0);
-    glVertex2f(position.x + width, position.y);
+        glTexCoord2i( 1,  0);
+        glVertex2f(position.x, position.y);
+        glTexCoord2i( 1,  1);
+        glVertex2f(position.x, position.y + height);
+        glTexCoord2i( 0,  1);
+        glVertex2f(position.x + width, position.y + height);
+        glTexCoord2i( 0,  0);
+        glVertex2f(position.x + width, position.y);
 
     glEnd();
 }
@@ -94,7 +96,11 @@ void HUD::render(int swidth, int sheight)
     glLoadIdentity();
     glOrtho(0, swidth, sheight, 0, 0, 1);
     glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
     glLoadIdentity();
+
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture( GL_TEXTURE_2D, 0);
 
     if(elements != NULL)
     {
@@ -108,6 +114,9 @@ void HUD::render(int swidth, int sheight)
         }
     }
 
+    glBindTexture( GL_TEXTURE_2D, 0);
+
+    glPopMatrix();
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
 }

@@ -110,6 +110,15 @@ int main(int argc, char *argv[]){
     Level testLevel = Level();
     alDistanceModel( AL_LINEAR_DISTANCE );
 
+    HUD testHUD;
+    Texture *aim = Material::TexCache->requestTexture(IMAGE(aim.png));
+    vertex2D p;
+    p.x = (engineSettings.width / 2) - 50;
+    p.y = (engineSettings.height / 2) - 50;
+    HUD_Element *testHUDElement = new HUD_Element(p, 100, 100, aim, NULL, renderGL);
+    testHUD.addElement(testHUDElement);
+
+
     //Shader testShader = Shader(SHADER(basicvert.glsl), SHADER(basicfrag.glsl));
     //testShader.activate();
     Script testScript(SCRIPT(testscript.lua));
@@ -145,7 +154,10 @@ int main(int argc, char *argv[]){
         glPopMatrix();
 
         if(engineSettings.hud)
+        {
+            testHUD.render(Player->width, Player->height);
             drawHUD(Player->width, Player->height);
+        }
 
         SDL_GL_SwapBuffers(); // Changes frontbuffer and backbuffer
     }

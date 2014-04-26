@@ -6,6 +6,7 @@
 #include <vertex.h>
 #include <List.h>
 #include <sdl.h>
+#include <texture.h>
 
 #include <SDL.h>
 #include <GL/gl.h>
@@ -23,7 +24,7 @@ class HUD_Element
 {
     public:
         HUD_Element();  // zero constructor
-        HUD_Element(vertex2D pos, float w, float h, GLuint tex, SDL_Surface *c, renderSource s);
+        HUD_Element(vertex2D pos, float w, float h, Texture *tex, SDL_Surface *c, renderSource s);
         HUD_Element(HUD_Element *templateElement);
 
         void renderElement();
@@ -33,8 +34,8 @@ class HUD_Element
         vertex2D position;
         float width;
         float height;
-        GLuint gltex;
-        SDL_Surface *content;
+        Texture *glcontent;
+        SDL_Surface *sdlcontent;
         renderSource source;
 };
 

@@ -22,6 +22,10 @@
 
 
 
+#define MAX_STRING_LENGTH 100
+
+
+
 enum usedVertices       // enumberation which says if a vertex has a texture coordinate and/or a normal vector too
 {
     nothingUsed, textureUsed, normalsUsed, allUsed

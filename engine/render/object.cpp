@@ -101,8 +101,8 @@ vertexNumber ObjectType::countVertices(const char *filename, const char *objectn
 {
     FILE *f;
     int i, j;
-    char line[50];
-    char string[50];
+    char line[MAX_STRING_LENGTH];
+    char string[MAX_STRING_LENGTH];
     bool correctObject = false;
     vertexNumber vertexCounter = {0, 0, 0};
 
@@ -114,7 +114,7 @@ vertexNumber ObjectType::countVertices(const char *filename, const char *objectn
         exit(-1);
     }
 
-    while(fgets(line, 50, f))
+    while(fgets(line, MAX_STRING_LENGTH, f))
     {
         if(line[0] == 'o')
         {
@@ -157,9 +157,9 @@ void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectNa
 {
     FILE *f;
 
-    char line[50];
-    char string[50];
-    char matfile[50];
+    char line[MAX_STRING_LENGTH];
+    char string[MAX_STRING_LENGTH];
+    char matfile[MAX_STRING_LENGTH];
 
     char *line_ptr;
 
@@ -206,7 +206,7 @@ void ObjectType::loadObjectTypeFile(const char *objectFile, const char *objectNa
 
     do
     {
-        fgets(line, 40, f);
+        fgets(line, MAX_STRING_LENGTH, f);
 
         line_ptr = line;
 
