@@ -48,37 +48,60 @@ Net::Net(const char *servername, unsigned short serverPort, const char *username
         printf("the server does not accept your login data\n");
         exit(-1);
     }
+
+    sset = SDLNet_AllocSocketSet(1);
+
+    if(SDLNet_TCP_AddSocket(sset, socket) == -1)
+    {
+        printf("Unable to add socket to sockset\n");
+        exit(-1);
+    }
+}
+
+
+Net::~Net()
+{
+    SDLNet_FreeSocketSet(sset);
 }
 
 
 void Net::updateScene(Scene *s)
 {
+    if(SDLNet_CheckSockets(sset, 10) == 0)
+        return;
 
+    if(SDLNet_SocketReady(socket))
+    {
+        printf("active socket detected\n");
+    }
 }
 
 
 int Net::addObject(Object *object)
 {
+    connSignal s = ADDOBJECT;
     struct addObjectPackage newobj;
 
     object->ID = highestID++;
 
-    newobj.s = ADDOBJECT;
     newobj.id = object->ID;
     newobj.position = object->localPosition;
+    newobj.impulse = object->physObj->getImpulse();
     strncpy(newobj.objtype, object->objType->objectTypeName, 20);
 
+    SDLNet_TCP_Send(socket, &s, sizeof(connSignal));
     return SDLNet_TCP_Send(socket, &newobj, sizeof(struct addObjectPackage));
 }
 
 
 int Net::deleteObject(Object *object)
 {
+    connSignal s = REMOVEOBJECT;
     struct deleteObjectPackage delobj;
 
-    delobj.s = REMOVEOBJECT;
     delobj.id = object->ID;
 
+    SDLNet_TCP_Send(socket, &s, sizeof(connSignal));
     return SDLNet_TCP_Send(socket, &delobj, sizeof(struct deleteObjectPackage));
 }
 

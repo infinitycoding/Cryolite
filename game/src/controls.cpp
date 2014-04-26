@@ -263,8 +263,7 @@ void Controls::shoot_handler(Camera *cam, Net *server)
     {
         fire = false;
         newObject = new Object(OBJECT(projectile.obj), "projectile", cam->getPosition());
-        newForce = new vector(cam->lookingDirection * 0.3);
-        newObject->physObj->addForce(newForce);
+        newObject->physObj->setImpulse(cam->lookingDirection * 10);
 
         if(newObject->objType->boundSpheres->IsEmpty())
         {

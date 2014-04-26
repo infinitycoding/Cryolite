@@ -25,15 +25,14 @@ struct loginPackage
 
 struct addObjectPackage
 {
-    connSignal s;
     int id;
     vector position;
+    vector impulse;
     char objtype[20];
 };
 
 struct updateObjectPackage
 {
-    connSignal s;
     int id;
     vector position;
     char objtype[20];
@@ -41,7 +40,6 @@ struct updateObjectPackage
 
 struct deleteObjectPackage
 {
-    connSignal s;
     int id;
 };
 
@@ -52,6 +50,7 @@ class Net
 {
     public:
         Net(const char *servername, unsigned short serverPort, const char *username);
+        ~Net();
         void updateScene(Scene *s);
 
         int addObject(Object *object);
@@ -62,6 +61,7 @@ class Net
         unsigned int highestID;
         IPaddress serverIP;
         TCPsocket socket;
+        SDLNet_SocketSet sset;
 
 };
 
