@@ -28,7 +28,15 @@ struct addObjectPackage
     connSignal s;
     int id;
     vector position;
-    char *objtype;
+    char objtype[20];
+};
+
+struct updateObjectPackage
+{
+    connSignal s;
+    int id;
+    vector position;
+    char objtype[20];
 };
 
 struct deleteObjectPackage
@@ -45,11 +53,13 @@ class Net
     public:
         Net(const char *servername, unsigned short serverPort, const char *username);
         void updateScene(Scene *s);
+
         int addObject(Object *object);
         int deleteObject(Object *object);
         int updateObject(Object *object);
 
     private:
+        unsigned int highestID;
         IPaddress serverIP;
         TCPsocket socket;
 
