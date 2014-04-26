@@ -22,6 +22,8 @@
 #include <shader.h>
 #include <vector.h>
 #include <hud.h>
+#include <SDL_net.h>
+#include <Net.h>
 
 #ifdef _WIN32
 #undef main
@@ -44,6 +46,7 @@ extern Object *iccube;
 
 int main(int argc, char *argv[]){
     EngineSettings engineSettings = EngineSettings("game/scripts/settings.lua");
+    SDLNet_Init();
     //Create Window and Scene
     SDL mainwindow = SDL(engineSettings.width,engineSettings.height,engineSettings.sdlFlags,engineSettings.multisamples,"Cryolite Engine");
     mainScene = new Scene();
@@ -123,6 +126,8 @@ int main(int argc, char *argv[]){
     //testShader.activate();
     Script testScript(SCRIPT(testscript.lua));
     testScript.run();
+
+    Net *server = new Net(192,168,178,20, 999, "bob");
 
     while(render){ //render
         if(printFPS)
