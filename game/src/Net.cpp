@@ -77,6 +77,7 @@ void Net::updateScene(Scene *s)
         struct deleteObjectPackage del;
         struct addObjectPackage add;
         struct updateObjectPackage upd;
+        struct updateIDPackage nid;
 
         Object *currentObject;
         ListIterator<Object> O;
@@ -140,6 +141,12 @@ void Net::updateScene(Scene *s)
 
                     O.Next();
                 }
+            break;
+
+            case UPDATEID:
+                SDLNet_TCP_Recv(socket, &nid, sizeof(updateIDPackage));
+
+                highestID = nid.newID;
             break;
 
             default:

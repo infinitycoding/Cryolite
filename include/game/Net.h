@@ -13,6 +13,7 @@ typedef enum
     REMOVEOBJECT = 2,
     UPDATEOBJECT = 3,
     OK = 4,
+    UPDATEID = 5,
     SERVER = 0xc0ffee,
     USER = 0xb0b,
 }connSignal;
@@ -42,6 +43,11 @@ struct updateObjectPackage
 struct deleteObjectPackage
 {
     int id;
+};
+
+struct updateIDPackage
+{
+    unsigned int newID;
 };
 
 

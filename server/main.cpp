@@ -6,6 +6,10 @@
 
 
 
+unsigned int highestID = 0;
+
+
+
 void establishConnection(SDLNet_SocketSet *set, TCPsocket server, List<Client> *clist)
 {
   TCPsocket client = SDLNet_TCP_Accept(server);
@@ -44,6 +48,22 @@ void establishConnection(SDLNet_SocketSet *set, TCPsocket server, List<Client> *
     newClient->connection = client;
     clist->PushFront(newClient);
     SDLNet_TCP_AddSocket (*set, client);
+    connSignal type = UPDATEID;
+    updateIDPackage init;
+    init.newID = highestID;
+    if(SDLNet_TCP_Send(newClient->connection, &type, sizeof(connSignal)) != sizeof(connSignal))
+    {
+        printf("could not send data to client %s\n",newClient->name);
+    }
+    else if(SDLNet_TCP_Send(newClient->connection, &init, sizeof(updateIDPackage)) != sizeof(updateIDPackage))
+    {
+        printf("could not send data to client %s\n",newClient->name);
+    }
+    else
+    {
+        printf("initiated connection with %s\n", newClient->name);
+    }
+
 }
 
 void handleData(SDLNet_SocketSet *set, List<Client> *clist, List<ServerObject> *objects, List<Job> *joblist)
@@ -82,6 +102,7 @@ void handleData(SDLNet_SocketSet *set, List<Client> *clist, List<ServerObject> *
               newJob->player = currentClient;
               newJob->obj = newObj;
               joblist->PushFront(newJob);
+              highestID++;
               printf("new Object recieved client:%s id:%d type:%s\n",currentClient->name,pck.id,pck.objtype);
           }
 

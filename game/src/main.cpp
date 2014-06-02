@@ -122,6 +122,7 @@ int main(int argc, char *argv[]){
     testScript.run();
 
     Net *server = new Net("archx", 9999, "Gandalf");
+    //Net *server = new Net("peter-Lenovo-G580", 9999, "Gandalf");
 
     server->addObject(iccube);
 
