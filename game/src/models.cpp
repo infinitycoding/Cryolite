@@ -26,7 +26,7 @@ void INIT_Models(Scene *sce)
     Object *ground = new Object(OBJECT(ground.obj), "ground", vector(0, -3, 0));
     sce->addObject(ground);
 
-    bs = new BoundSphere;
+    /*bs = new BoundSphere;
     bs->center.setvalue(0, 0, 0);
     bs->radian = 1.73205;
     Object *woodcube = new Object(OBJECT(bettercube.obj), "Cube", vector(5, 0, 0));
@@ -39,7 +39,7 @@ void INIT_Models(Scene *sce)
     gravelcube = new Object(OBJECT(cube.obj), "cube.001", vector(-5, 0, 0));
     gravelcube->objType->boundSpheres->PushFront(bs);
     //gravelcube->objType->ObjectTypeMaterial->ambiantTexture->nr = stdFonts.atotex("Test!\n", "stdarial");
-    sce->addObject(gravelcube);
+    sce->addObject(gravelcube);*/
 
     MAN = Material::TexCache->requestTexture(IMAGE(man.png));
     //MAN->nr = stdFonts.atotex("Test!", "stdarial");

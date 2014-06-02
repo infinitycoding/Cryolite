@@ -7,6 +7,12 @@
 
 
 
+enum success
+{
+    successful, failture
+};
+
+
 struct rotation
 {
     GLfloat Angle;

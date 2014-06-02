@@ -6,17 +6,11 @@
 #include <vertex.h>
 #include <List.h>
 #include <sdl.h>
-#include <texture.h>
+#include <material.h>
+#include <general_structs.h>
 
 #include <SDL.h>
 #include <GL/gl.h>
-
-
-
-enum renderSource
-{
-    renderSDL, renderGL, renderNOT
-};
 
 
 
@@ -24,19 +18,30 @@ class HUD_Element
 {
     public:
         HUD_Element();  // zero constructor
-        HUD_Element(vertex2D pos, float w, float h, Texture *tex, SDL_Surface *c, renderSource s);
+        HUD_Element(vertex2D pos, float w, float h, Texture *tex);
+        HUD_Element(vertex2D pos, float w, float h, const char *texname);
+        HUD_Element(float x, float y, float w, float h, Texture *tex);
+        HUD_Element(float x, float y, float w, float h, const char *texname);
+        HUD_Element(vertex2D pos, vertex2D s, Texture *tex);
+        HUD_Element(vertex2D pos, vertex2D s, const char *texname);
+        HUD_Element(float x, float y, vertex2D s, Texture *tex);
+        HUD_Element(float x, float y, vertex2D s, const char *texname);
         HUD_Element(HUD_Element *templateElement);
+        ~HUD_Element();
 
-        void renderElement();
-        void renderElement(renderSource type);
+        success renderElement();
+        vertex2D moveTo(vertex2D newPosition);
+        vertex2D getPosition();
+        vertex2D changeSize(vertex2D newSize);
+        vertex2D getSize();
+        Texture *changeContent(Texture *tex);
+        Texture *changeContent(const char *texname);
+        Texture *getContent();
 
-
+    protected:
         vertex2D position;
-        float width;
-        float height;
+        vertex2D size;
         Texture *glcontent;
-        SDL_Surface *sdlcontent;
-        renderSource source;
 };
 
 
@@ -46,12 +51,20 @@ class HUD
         HUD();                      // zero constructor
         HUD(const char *script);    // standart constructor, loads hud elements out of a lua script
         HUD(HUD *templateHUD);      // copy constructor, no idea why
+        ~HUD();
 
-        void addElement(HUD_Element *newElement);
-        void renderElement(HUD_Element *element);
-        void render(int swidth, int sheight);
+        HUD_Element *addElement(HUD_Element *newElement);
+        HUD_Element *addElement(vertex2D pos, float w, float h, Texture *tex);
+        HUD_Element *addElement(vertex2D pos, float w, float h, const char *texname);
+        HUD_Element *addElement(float x, float y, float w, float h, Texture *tex);
+        HUD_Element *addElement(float x, float y, float w, float h, const char *texname);
+        HUD_Element *addElement(vertex2D pos, vertex2D s, Texture *tex);
+        HUD_Element *addElement(vertex2D pos, vertex2D s, const char *texname);
+        HUD_Element *addElement(float x, float y, vertex2D s, Texture *tex);
+        HUD_Element *addElement(float x, float y, vertex2D s, const char *texname);
+        success render(int swidth, int sheight);
 
-
+    protected:
         List<HUD_Element> *elements;
 };
 

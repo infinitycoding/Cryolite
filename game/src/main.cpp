@@ -114,20 +114,14 @@ int main(int argc, char *argv[]){
     alDistanceModel( AL_LINEAR_DISTANCE );
 
     HUD testHUD;
-    Texture *aim = Material::TexCache->requestTexture(IMAGE(aim.png));
-    vertex2D p;
-    p.x = (engineSettings.width / 2) - 50;
-    p.y = (engineSettings.height / 2) - 50;
-    HUD_Element *testHUDElement = new HUD_Element(p, 100, 100, aim, NULL, renderGL);
-    testHUD.addElement(testHUDElement);
-
+    testHUD.addElement((engineSettings.width / 2) - 50, (engineSettings.height / 2) - 50, 100, 100, IMAGE(aim.png));
 
     //Shader testShader = Shader(SHADER(basicvert.glsl), SHADER(basicfrag.glsl));
     //testShader.activate();
     Script testScript(SCRIPT(testscript.lua));
     testScript.run();
 
-    Net *server = new Net("archx", 9999, "BassBox");
+    Net *server = new Net("archx", 9999, "Gandalf");
 
     server->addObject(iccube);
 
@@ -161,7 +155,7 @@ int main(int argc, char *argv[]){
         {
             currentObject = O.GetCurrent();
 
-            if(currentObject->getPosition().len() > 100)
+            if(currentObject->getPosition().len() > 100 && currentObject != iccube)
             {
                 server->deleteObject(currentObject);
                 mainScene->removeObject(currentObject);
