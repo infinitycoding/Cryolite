@@ -88,7 +88,8 @@ usedVertices ObjectType::verticesInPolygon(char *line)
             }
             else        // if there are two slashes, texture vertices and normal vectors are used
             {
-                used = allUsed;
+                used =
+allUsed;
 
                 resultFound = true;
             }
@@ -552,6 +553,8 @@ void Object::initObject()
         ObjTypeCache = new ObjectTypeCache();
 
     objType = NULL;
+
+    ID = 0;
 }
 
 
