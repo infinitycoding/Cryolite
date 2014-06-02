@@ -47,8 +47,6 @@ class Controls : EventHandle
 
         bool ghost_mode;
 
-        bool already_initialized;
-
         EngineSettings *options;
 };
 

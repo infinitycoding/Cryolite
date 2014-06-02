@@ -27,15 +27,12 @@ Sound *shotSound;
 
 Controls::Controls(SDL* window, EngineSettings *settings) : EventHandle()
 {
-    if(!already_initialized)
-    {
-        already_initialized = true;
-        types.KeyDown = true;
-        types.KeyUp = true;
-        types.MouseMotion = true;
-        types.Quit = true;
-        window->addHandle(dynamic_cast<EventHandle *>(this));
-    }
+    already_initialized = true;
+    types.KeyDown = true;
+    types.KeyUp = true;
+    types.MouseMotion = true;
+    types.Quit = true;
+    window->addHandle(dynamic_cast<EventHandle *>(this));
     right_rotation = 0;
     down_rotation = 0;
     move_right = false;
