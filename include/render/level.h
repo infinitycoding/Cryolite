@@ -1,68 +1,49 @@
-#ifndef LEVEL_H_INCLUDED
-#define LEVEL_H_INCLUDED
+#ifndef LEVEL_H
+#define LEVEL_H
 
 
-
-#include <vector.h>
-#include <sound.h>
+#include <screen.h>
+#include <object.h>
+#include <camera.h>
 #include <List.h>
-#include <general_def.h>
-
-
-
-struct cube
-{
-    vector startPos;
-    vector endPos;
-};
-
-struct locationMusic
-{
-    struct cube location;
-    char musicname[40];
-};
-
+#include <light.h>
+#include <physics/PhysicsEngine.h>
+#include <physics/collision.h>
+#include <fps.h>
 
 class Level
 {
     public:
-        Level();
-        Level(const char *filename);
-        ~Level();
 
-        void initLevel();
-        bool loadLevelFile(const char *filename);
+        Level(void);
+        ~Level(void);
 
+        void addObject(Object *obj);
+        int removeObject(Object *obj);
+        void addCam(Camera *cam);
+        int removeCam(Camera *cam);
+        void addLamp(Lamp *L);
+        int removeLamp(Lamp *L);
 
-        // Background Music
-        bool vectorInCube(vector v, struct cube c);
+        void render(void);
+        int handleCams(ListIterator<Camera> *c);
 
-        struct locationMusic *addBackgroundMusic(struct locationMusic *newBackgroundMusic);
-        bool refreshBackgroundMusic(vector playerPos);
-        void activateBackgroundMusic();
-        void deactivateBackgroundMusic();
-        void toggleBackgroundMusic();
+        FPS *fps;
 
-        void testMusic(); //only to debug
+        List<Object> *objectList;
+        List<Camera> *Camlist;
+        List<Lamp> *globalLamps;
 
-
-        // TODO: write script integration
-
-
-        // TODO: write object integration
+        bool currentScene;
+        GlobalLight *GlobalAmbience;
 
 
-        // TODO: write chunk system
+    private:
+        void renderPolygones(Object *currentObject);
+        void resetLights(void);
 
-
-        // TODO: write groundmap system
-
-
-    protected:
-        Music *bgmusic;
-        bool bgmusicActivated;
-        struct locationMusic *actualBackgroundMusic;
-        List<struct locationMusic> *backgroundMusics;
+        LightManager *LM;
+        CollisionList *collisions;
 };
 
 

@@ -46,12 +46,12 @@ class EventHandle
 };
 
 
-class SDL
+class MediaLayer
 {
     public:
 
-        SDL(int width, int height, int flags, int multisamples, const char* caption);
-        ~SDL();
+        MediaLayer(int width, int height, int flags, const char* caption, int multisamples);
+        ~MediaLayer();
         static GLuint loadTexture(const char *filename);
         static GLuint loadTexture(const char *filename,GLenum MinFilter,GLenum MagFilter);
         static GLuint surfToTexture(SDL_Surface *surf);
@@ -61,15 +61,19 @@ class SDL
         void addHandle(EventHandle *Instance);
         int  removeHandle(EventHandle *Instance);
         void pollEvents();
-        static void SDLexit();
+        static void MediaExit();
 
+        int getWidth();
+        int getHeight();
+
+
+    protected:
+        int width;
+        int height;
         ALCdevice* device;
         ALCcontext* context;
-
-    private:
         List<EventHandle> *events;
         SDL_Surface *screen;
-        bool lock;
 };
 
 

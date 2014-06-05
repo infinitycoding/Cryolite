@@ -14,8 +14,7 @@
 
 class vector
 {
-    public:
-
+    public: 
         float x[3];
 
         vector();

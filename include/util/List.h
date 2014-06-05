@@ -2,12 +2,6 @@
 #ifndef _list_h_
 #define _list_h_
 
-
-
-#include <cstdlib>
-
-
-
 struct Node
 {
     struct Node *next;
@@ -37,11 +31,14 @@ class List
         size_t Size();
         int NumOfElements();
 
+        bool Remove(T *element);
         T *Remove(Node *n);
         void Destroy(Node *n);
 
         void (*structCleaner)(T *element);
         bool lock;
+
+        bool alreadyAdded(T *element);
 
         Node *dummy;
 };
@@ -51,7 +48,6 @@ template <typename T>
 class ListIterator
 {
     public:
-        ListIterator();
         ListIterator(List<T> *L);
 
         void PushFront(T *element);
@@ -67,6 +63,7 @@ class ListIterator
         void Destroy();
         T *GetCurrent();
         bool IsEmpty();
+        T *GetAndNext();
 
         ListIterator<T> *Next();
         ListIterator<T> *Previous();
@@ -80,6 +77,9 @@ class ListIterator
         List<T> *Instance;
 };
 
+#define foreach(LIST,NAME,TYPE)ListIterator<TYPE> TYPE_LIST_NAME = ListIterator<TYPE>(LIST);for(TYPE *NAME=TYPE_LIST_NAME.GetCurrent();!TYPE_LIST_NAME.IsLast(); NAME = TYPE_LIST_NAME.GetAndNext())
+
+
 template <typename T>
 List<T>::List()
 {
@@ -91,9 +91,6 @@ List<T>::List()
         structCleaner = NULL;
     lock = false;
 }
-
-
-
 
 template <typename T>
 List<T>::List(List<T> *l)
@@ -276,6 +273,22 @@ T *List<T>::Remove(Node *n)
 }
 
 template <typename T>
+bool List<T>::Remove(T *element)
+{
+    ListIterator<T> i = *ListIterator<T>(this).SetFirst();
+    while(!i.IsLast())
+    {
+        if(i.GetCurrent() == element)
+        {
+            i.Remove();
+            return true;
+        }
+        i.Next();
+    }
+    return false;
+}
+
+template <typename T>
 void List<T>::Destroy(Node *n)
 {
     lock = true;
@@ -294,12 +307,19 @@ void List<T>::Destroy(Node *n)
 }
 
 template <typename T>
-ListIterator<T>::ListIterator()
+bool List<T>::alreadyAdded(T *element)
 {
-    List<T> *L = new List<T>();
-    Instance = L;
-    currentNode = L->dummy;
+    ListIterator<T> i = *ListIterator<T>(this).SetFirst();
+    while(!i.IsLast())
+    {
+        if(i.GetCurrent() == element)
+            return false;
+
+        i.Next();
+    }
+    return true;
 }
+
 
 template <typename T>
 ListIterator<T>::ListIterator(List<T> *L)
@@ -405,6 +425,14 @@ template <typename T>
 T* ListIterator<T>::GetCurrent()
 {
     return (T*)currentNode->element;
+}
+
+template <typename T>
+T* ListIterator<T>::GetAndNext()
+{
+    T *element = (T*)currentNode->element;
+    Next();
+    return element;
 }
 
 
