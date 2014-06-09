@@ -3,6 +3,7 @@
 #include <SDL/SDL_mixer.h>
 #include <string.h>
 #include <iostream>
+#include <mediaLayer.h>
 
 #include <sound.h>
 
@@ -12,7 +13,6 @@ using namespace std;
 Music::Music()
 {
     musiclist = List<MusicEntry>();
-    M = ListIterator<MusicEntry>(&musiclist);
     currentMusic = NULL;
     currentMode = -1;
     activ = false;
@@ -21,7 +21,6 @@ Music::Music()
 Music::Music(const char *musicfile)
 {
     musiclist = List<MusicEntry>();
-    M = ListIterator<MusicEntry>(&musiclist);
     currentMode = -1;
     activ = false;
 
@@ -43,7 +42,7 @@ Music::Music(const char *musicfile)
 
 bool Music::addMusic(const char *musicfile)
 {
-    M.SetFirst();
+    ListIterator<MusicEntry> M = ListIterator<MusicEntry>(&musiclist);
     while(!M.IsLast())
     {
         if(!strncmp(musicfile,M.GetCurrent()->name,strlen(M.GetCurrent()->name)))
@@ -72,7 +71,7 @@ bool Music::addMusic(const char *musicfile)
 
 bool Music::removeMusic(const char* musicfile)
 {
-    M.SetFirst();
+    ListIterator<MusicEntry> M = ListIterator<MusicEntry>(&musiclist);
     while(!M.IsLast())
     {
         if(!strncmp(musicfile,M.GetCurrent()->name,strlen(M.GetCurrent()->name)))
@@ -97,7 +96,7 @@ bool Music::removeMusic(const char* musicfile)
 
 bool Music::selectMusic(const char *name, int mode)
 {
-    M.SetFirst();
+    ListIterator<MusicEntry> M = ListIterator<MusicEntry>(&musiclist);
     while(!M.IsLast())
     {
         if(!strncmp(name,M.GetCurrent()->name,strlen(M.GetCurrent()->name)))
@@ -180,7 +179,7 @@ bool SoundCache::addSound(const char * file)
 
     SoundEntry *newEntry = new SoundEntry;
     newEntry->chunk = sound;
-    newEntry->buffer = SDL::chunkToBuffer(sound);
+    newEntry->buffer = MediaLayer::chunkToBuffer(sound);
     newEntry->name = new char[strlen(file)+1];
     strcpy(newEntry->name,file);
     SoundList.PushFront(newEntry);

@@ -100,7 +100,7 @@ class Lamp
 
         vector localPosition;
 
-        friend class Scene;
+        friend class Level;
 
         private:
         LightManager *LM;

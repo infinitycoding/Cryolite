@@ -1,15 +1,12 @@
-#ifndef HUD_H_INCLUDED
-#define HUD_H_INCLUDED
+#ifndef _HUD_H_
+#define _HUD_H_
 
 
-
-#include <vertex.h>
 #include <List.h>
+#include <vertex.h>
 #include <mediaLayer.h>
 #include <material.h>
 #include <general_structs.h>
-
-#include <SDL.h>
 #include <GL/gl.h>
 
 

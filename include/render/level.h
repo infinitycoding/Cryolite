@@ -1,8 +1,6 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 
-
-#include <screen.h>
 #include <object.h>
 #include <camera.h>
 #include <List.h>

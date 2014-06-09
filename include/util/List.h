@@ -1,6 +1,7 @@
+#ifndef _LIST_H_
+#define _LIST_H_
 
-#ifndef _list_h_
-#define _list_h_
+#include <iostream>
 
 struct Node
 {

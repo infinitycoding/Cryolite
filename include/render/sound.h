@@ -6,7 +6,6 @@
 #include <AL/alut.h>
 #include <SDL_mixer.h>
 
-#include <List.h>
 #include <vector.h>
 #include <mediaLayer.h>
 
@@ -26,7 +25,6 @@ class Music
             Mix_Music *music;
         };
         List<MusicEntry> musiclist;
-        ListIterator<MusicEntry> M;
         int currentMode;
         MusicEntry *currentMusic;
 

@@ -1,6 +1,6 @@
 #include <screen.h>
 
-Screen::Screen(unsigned int width, unsigned int height, unsigned int flags, char *caption, int multisamples) 
+Screen::Screen(unsigned int width, unsigned int height, unsigned int flags,const char *caption, int multisamples) 
     : MediaLayer(width, height, flags, caption, multisamples)
 {
     levels = new List<Level>;
@@ -9,7 +9,7 @@ Screen::Screen(unsigned int width, unsigned int height, unsigned int flags, char
     HUDs = new List<HUD>;
 }
 
-//has the MediaLayer destructor to be called?
+
 Screen::~Screen()
 {
     delete levels;
@@ -31,7 +31,7 @@ bool Screen::removeLevel(Level *level)
     return levels->Remove(level);
 }
 
-void Screen::renderLevels()
+void Screen::render()
 {
     ListIterator<Level> i = *ListIterator<Level>(levels).SetFirst();
     while(!i.IsLast())

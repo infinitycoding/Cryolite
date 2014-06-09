@@ -7,7 +7,7 @@ Object *iccube;
 Object *gravelcube;
 
 
-void INIT_Models(Scene *sce)
+void INIT_Models(Level *lvl)
 {
     Font stdFonts = Font();
     stdFonts.loadTTF(FONT(arial.ttf), "stdarial", 10);
@@ -21,17 +21,17 @@ void INIT_Models(Scene *sce)
     bb->length.setvalue(0, 0, 2);
     iccube = new Object(OBJECT(iccube.obj), "iccube", vector(0, 0, 0));
     iccube->objType->boundBoxes->PushFront(bb);
-    sce->addObject(iccube);
+    lvl->addObject(iccube);
 
     Object *ground = new Object(OBJECT(ground.obj), "ground", vector(0, -3, 0));
-    sce->addObject(ground);
+    lvl->addObject(ground);
 
     /*bs = new BoundSphere;
     bs->center.setvalue(0, 0, 0);
     bs->radian = 1.73205;
     Object *woodcube = new Object(OBJECT(bettercube.obj), "Cube", vector(5, 0, 0));
     woodcube->objType->boundSpheres->PushFront(bs);
-    sce->addObject(woodcube);
+    lvl->addObject(woodcube);
 
     bs = new BoundSphere;
     bs->center.setvalue(0, 0, 0);
@@ -39,7 +39,7 @@ void INIT_Models(Scene *sce)
     gravelcube = new Object(OBJECT(cube.obj), "cube.001", vector(-5, 0, 0));
     gravelcube->objType->boundSpheres->PushFront(bs);
     //gravelcube->objType->ObjectTypeMaterial->ambiantTexture->nr = stdFonts.atotex("Test!\n", "stdarial");
-    sce->addObject(gravelcube);*/
+    lvl->addObject(gravelcube);*/
 
     MAN = Material::TexCache->requestTexture(IMAGE(man.png));
     //MAN->nr = stdFonts.atotex("Test!", "stdarial");

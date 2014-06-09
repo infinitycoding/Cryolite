@@ -1,21 +1,19 @@
 #ifndef CONTROLS_H
 #define CONTROLS_H
 
-#include <SDL.h>
 
-#include <sdl.h>
+#include <screen.h>
 #include <camera.h>
 #include <settings.h>
-#include <Net.h>
 
 
 
 class Controls : EventHandle
 {
     public:
-        Controls(SDL* window, EngineSettings *settings);
+        Controls(Screen *window, EngineSettings *settings);
 
-        void controls_handler(Camera *cam, Net *server);
+        void controls_handler(Camera *cam);
 
         virtual void handleQuit();
         virtual void handleKeyDown(SDL_KeyboardEvent *e);
@@ -30,7 +28,7 @@ class Controls : EventHandle
     private:
         void rotation_handler(Camera *cam);
         void move_handler(Camera *cam);
-        void shoot_handler(Camera *cam, Net *server);
+        void shoot_handler(Camera *cam);
 
 
         float right_rotation;

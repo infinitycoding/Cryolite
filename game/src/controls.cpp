@@ -2,32 +2,30 @@
 #include <GL/glu.h>
 #include <math.h>
 
-#include <sdl.h>
 #include <controls.h>
 #include <general_def.h>
 #include <object.h>
 #include <vector.h>
-#include <scene.h>
 #include <sound.h>
 #include <physics/PhysicsEngine.h>
+#include <screen.h>
 
 #define ROTATION_SPEED 0.5
 #define MOVEMENT_SPEED 10
 
-#define ROTATION_WIDTH (ROTATION_SPEED/mainScene->fps->get())
-#define MOVEMENT_WIDTH (MOVEMENT_SPEED/mainScene->fps->get())
+#define ROTATION_WIDTH (ROTATION_SPEED/mainLevel->fps->get())
+#define MOVEMENT_WIDTH (MOVEMENT_SPEED/mainLevel->fps->get())
 
 
 extern bool printFPS;
 extern bool render;
-extern Scene *mainScene;
+extern Level *mainLevel;
 extern Object *iccube;
 extern FPS *fps;
 Sound *shotSound;
 
-Controls::Controls(SDL* window, EngineSettings *settings) : EventHandle()
+Controls::Controls(Screen* window, EngineSettings *settings) : EventHandle()
 {
-    already_initialized = true;
     types.KeyDown = true;
     types.KeyUp = true;
     types.MouseMotion = true;
@@ -161,11 +159,10 @@ void Controls::handleMouseMotion(SDL_MouseMotionEvent *e)
 }
 
 
-void Controls::controls_handler(Camera *cam, Net *server)
+void Controls::controls_handler(Camera *cam)
 {
     rotation_handler(cam);
     move_handler(cam);
-    shoot_handler(cam, server);
 }
 
 
@@ -262,7 +259,7 @@ void Controls::move_handler(Camera *cam){        // Moves the camera if a key is
 }
 
 
-void Controls::shoot_handler(Camera *cam, Net *server)
+void Controls::shoot_handler(Camera *cam)
 {
     Object *newObject = NULL;
     vector *newForce = NULL;
@@ -282,9 +279,8 @@ void Controls::shoot_handler(Camera *cam, Net *server)
             newObject->objType->boundSpheres->PushFront(newSphere);
         }
 
-        server->addObject(newObject);
 
-        mainScene->addObject(newObject);
+        mainLevel->addObject(newObject);
     }
 }
 

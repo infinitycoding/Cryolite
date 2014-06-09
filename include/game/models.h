@@ -8,7 +8,7 @@
 
     #include <general_def.h>
     #include <object.h>
-    #include <scene.h>
+    #include <level.h>
 
 
 
@@ -19,7 +19,7 @@
 
 
     void drawHUD(float width, float height);
-    void INIT_Models(Scene *sce);
+    void INIT_Models(Level *lvl);
 
 
 

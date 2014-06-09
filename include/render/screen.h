@@ -17,10 +17,10 @@ class Viewport
 };
 
 
-class Screen : MediaLayer
+class Screen : public MediaLayer
 {
     public:
-        Screen(unsigned int width, unsigned int height, unsigned int flags, char *caption, int multisamples);
+        Screen(unsigned int width, unsigned int height, unsigned int flags,const char *caption, int multisamples);
         ~Screen();
 
         bool addLevel(Level *level);

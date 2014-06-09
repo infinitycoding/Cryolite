@@ -7,29 +7,24 @@
 #include <SDL_thread.h>
 #include <SDL_mixer.h>
 
-
-#include <sdl.h>
+#include <mediaLayer.h>
 #include <controls.h>
 #include <models.h>
 #include <general_def.h>
-#include <scene.h>
 #include <font.h>
 #include <level.h>
 #include <light.h>
 #include <settings.h>
-#include <sound.h>
 #include <lua/script.h>
-#include <shader.h>
 #include <vector.h>
 #include <hud.h>
-#include <SDL_net.h>
-#include <Net.h>
+#include <screen.h>
 
 #ifdef _WIN32
 #undef main
 #endif
 
-Scene *mainScene;
+Level *mainLevel;
 
 bool printFPS = false;
 bool render = true;
@@ -37,7 +32,6 @@ bool render = true;
 
 using namespace std;
 
-extern Sound *shotSound;
 extern Object *iccube;
 
 //GLfloat fogcolor[4] = {0.5,0.5,0.5,1};
@@ -46,14 +40,15 @@ extern Object *iccube;
 
 int main(int argc, char *argv[]){
     EngineSettings engineSettings = EngineSettings("game/scripts/settings.lua");
-    SDLNet_Init();
     //Create Window and Scene
-    SDL mainwindow = SDL(engineSettings.width,engineSettings.height,engineSettings.sdlFlags,engineSettings.multisamples,"Cryolite Engine");
-    mainScene = new Scene();
+    Screen *mainwindow = new Screen(engineSettings.width,engineSettings.height,engineSettings.sdlFlags,"Cryolite Engine",engineSettings.multisamples);
+    mainLevel = new Level();
+    mainwindow->addLevel(mainLevel);
+    
 
     // Create camera, Global light and Input controler
     Camera *Player = new Camera(NULL, vector(STARTING_X,STARTING_Y,STARTING_Z),vector(0,0,1),STANDART_NEARCLIP,STANDART_FARCLIP,engineSettings.fov,0,0,engineSettings.height,engineSettings.width);
-    mainScene->addCam(Player);
+    mainLevel->addCam(Player);
 
     Lamp *Sun = new Lamp();
     Sun->setDiffuseLight(10, 1, 0, 1.0);
@@ -63,7 +58,7 @@ int main(int argc, char *argv[]){
     Sun->directed(true);
 
     Sun->activate();
-    mainScene->addLamp(Sun);
+    mainLevel->addLamp(Sun);
 
 
     /*Lamp *Spot = new Lamp();
@@ -77,11 +72,11 @@ int main(int argc, char *argv[]){
     Spot->activate();
     mainScene->addLamp(Spot);*/
 
-    INIT_Models(mainScene);
+    INIT_Models(mainLevel);
 
-    Controls playerControls = Controls(&mainwindow, &engineSettings);
+    Controls playerControls = Controls(mainwindow, &engineSettings);
 
-    mainScene->GlobalAmbience = new GlobalLight(0.3,0.3,0.3,1);
+    mainLevel->GlobalAmbience = new GlobalLight(0.3,0.3,0.3,1);
 
     //GL Settigs
     glMatrixMode( GL_PROJECTION );
@@ -110,7 +105,6 @@ int main(int argc, char *argv[]){
     GLUquadric *q =gluNewQuadric();
     gluQuadricTexture(q, true);
     Texture *sky = Material::TexCache->requestTexture(IMAGE(sky1.jpg));
-    Level testLevel = Level();
     alDistanceModel( AL_LINEAR_DISTANCE );
 
     HUD testHUD;
@@ -121,51 +115,22 @@ int main(int argc, char *argv[]){
     Script testScript(SCRIPT(testscript.lua));
     testScript.run();
 
-    Net *server = new Net("archx", 9999, "Gandalf");
-    //Net *server = new Net("peter-Lenovo-G580", 9999, "Gandalf");
-
-    server->addObject(iccube);
 
     while(render){ //render
         if(printFPS)
-            mainScene->fps->print();
+            mainLevel->fps->print();
 
-        testLevel.refreshBackgroundMusic(Player->getPosition());
-
-        mainwindow.pollEvents(); // Eventhandler
+        mainwindow->handleEvents(); // Eventhandler
 
         glMatrixMode(GL_MODELVIEW);
 
-        vector last = iccube->localPosition;
 
-        playerControls.controls_handler(Player, server);
+        playerControls.controls_handler(Player);
 
-        if(iccube->localPosition != last)
-            server->updateObject(iccube);
 
         glBindTexture( GL_TEXTURE_2D, 0);
 
-        server->updateScene(mainScene);
-        mainScene->listenerPosition = Player->getPosition();
-        mainScene->render();
-
-        Object *currentObject = NULL;
-        ListIterator<Object> O = *ListIterator<Object>(mainScene->objectList).SetFirst();
-
-        while(!O.IsLast())
-        {
-            currentObject = O.GetCurrent();
-
-            if(currentObject->getPosition().len() > 100 && currentObject != iccube)
-            {
-                server->deleteObject(currentObject);
-                mainScene->removeObject(currentObject);
-                delete currentObject;
-                break;
-            }
-
-            O.Next();
-        }
+        mainwindow->render();
 
 
         glPushMatrix();
@@ -185,8 +150,6 @@ int main(int argc, char *argv[]){
 
         SDL_GL_SwapBuffers(); // Changes frontbuffer and backbuffer
     }
-
-    delete server;
 
     return 0;
 }

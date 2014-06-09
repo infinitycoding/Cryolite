@@ -17,7 +17,7 @@ Cryolite:
 Server:
 	@$(MAKE) -C server
 
-all: Cryolite Server
+all: Cryolite
 	@$(MAKE) -C game
 
 

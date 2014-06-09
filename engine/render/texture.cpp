@@ -1,5 +1,5 @@
 #include <texture.h>
-#include <sdl.h>
+#include <mediaLayer.h>
 
 using namespace std;
 
@@ -26,7 +26,7 @@ Texture::Texture(const char *filename)
 
     strncpy(file, filename, MAX_IMAGE_FILENAME_LENGTH);
 
-    nr = SDL::loadTexture(filename);
+    nr = MediaLayer::loadTexture(filename);
 }
 
 

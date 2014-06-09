@@ -5,30 +5,6 @@
 
 using namespace std;
 
-/*example LUA function
-
-CBEGIN(peter)
-    double *x = (double *)lua_newuserdata(L, sizeof(double));
-    *x = 10.0;
-CEND(Peter)
-*/
-
-/* example lua Call
-
-ALLOW_LCALL(); //call only once in a function! and please do not use the varriable LUAPARANUM
-
-LCALL(peter, INT(5) DBL(3));
-LRET(L);
-
-example 2:
-
-LCALL(simon, STR("XD"));
-int retunrvalue = LRET<char *>(L);
-
-*/
-
-
-
 
 
 Script::Script()
@@ -57,9 +33,9 @@ void Script::initLUA()
     luaL_openlibs(lState);
 }
 
-/*extern reg vectorReg[];
+extern reg vectorReg[];
 extern reg CameraReg[];
-extern reg SceneReg[];*/
+extern reg LevelReg[];
 
 bool Script::load(const char *Scriptname)
 {
@@ -72,9 +48,9 @@ bool Script::load(const char *Scriptname)
     }
 
     //add metatables
-    /*addMetatable("vector", vectorReg);
+    addMetatable("vector", vectorReg);
     addMetatable("Camera", CameraReg);
-    addMetatable("Scene",SceneReg);*/
+    addMetatable("Level",LevelReg);
 
     return true;
 }
