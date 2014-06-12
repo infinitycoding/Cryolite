@@ -163,6 +163,7 @@ void Controls::controls_handler(Camera *cam)
 {
     rotation_handler(cam);
     move_handler(cam);
+    shoot_handler(cam);
 }
 
 

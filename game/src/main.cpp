@@ -109,6 +109,7 @@ int main(int argc, char *argv[]){
 
     HUD testHUD;
     testHUD.addElement((engineSettings.width / 2) - 50, (engineSettings.height / 2) - 50, 100, 100, IMAGE(aim.png));
+    testHUD.addElement(engineSettings.width-((engineSettings.width/100)*HOR)-10, engineSettings.height-((engineSettings.height/100)*VERT)-10, ((engineSettings.width/100)*HOR), ((engineSettings.height/100)*VERT), IMAGE(man.png));
 
     //Shader testShader = Shader(SHADER(basicvert.glsl), SHADER(basicfrag.glsl));
     //testShader.activate();
