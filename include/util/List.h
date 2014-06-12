@@ -78,8 +78,7 @@ class ListIterator
         List<T> *Instance;
 };
 
-#define foreach(LIST,NAME,TYPE)ListIterator<TYPE> TYPE_LIST_NAME = ListIterator<TYPE>(LIST);for(TYPE *NAME=TYPE_LIST_NAME.GetCurrent();!TYPE_LIST_NAME.IsLast(); NAME = TYPE_LIST_NAME.GetAndNext())
-
+#define foreach(LIST,NAME,TYPE)for(ListIterator<TYPE> TYPE_LIST_NAME = ListIterator<TYPE>(LIST), TYPE *NAME=TYPE_LIST_NAME.GetCurrent();!TYPE_LIST_NAME.IsLast(); NAME = TYPE_LIST_NAME.GetAndNext())
 
 template <typename T>
 List<T>::List()
@@ -314,11 +313,11 @@ bool List<T>::alreadyAdded(T *element)
     while(!i.IsLast())
     {
         if(i.GetCurrent() == element)
-            return false;
+            return true;
 
         i.Next();
     }
-    return true;
+    return false;
 }
 
 

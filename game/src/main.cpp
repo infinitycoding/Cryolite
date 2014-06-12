@@ -115,6 +115,11 @@ int main(int argc, char *argv[]){
     Script testScript(SCRIPT(testscript.lua));
     testScript.run();
 
+    if(engineSettings.hud)
+    {
+        mainwindow->addHUD(&testHUD);
+    }
+
 
     while(render){ //render
         if(printFPS)
@@ -130,23 +135,8 @@ int main(int argc, char *argv[]){
 
         glBindTexture( GL_TEXTURE_2D, 0);
 
+
         mainwindow->render();
-
-
-        glPushMatrix();
-        glTranslatef(Player->getPosition().x[0],Player->getPosition().x[1],Player->getPosition().x[2]);
-
-        glRotated(90,1,0,0);
-        glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
-        glBindTexture( GL_TEXTURE_2D, sky->nr);
-        gluSphere(q,50,100,100);
-        glPopMatrix();
-
-        if(engineSettings.hud)
-        {
-            testHUD.render(Player->width, Player->height);
-            drawHUD(Player->width, Player->height);
-        }
 
         SDL_GL_SwapBuffers(); // Changes frontbuffer and backbuffer
     }

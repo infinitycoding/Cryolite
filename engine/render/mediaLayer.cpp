@@ -30,7 +30,8 @@ MediaLayer::MediaLayer(int width, int height, int flags, const char* caption, in
 {
     const SDL_VideoInfo *info = NULL;
     this->screen = NULL;
-
+    this->width = width;
+    this->height = height;
     // initiate SDL
     if(!sdlInitiaed)
     {

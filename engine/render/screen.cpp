@@ -39,6 +39,7 @@ void Screen::render()
         i.GetCurrent()->render();
         i.Next();
     }
+    this->renderHUDs();
 }
 
 
