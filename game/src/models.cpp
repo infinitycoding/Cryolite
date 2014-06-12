@@ -25,6 +25,11 @@ void INIT_Models(Level *lvl)
     Object *ground = new Object(OBJECT(ground.obj), "ground", vector(0, -3, 0));
     lvl->addObject(ground);
 
+    Object *sphere = new Object(OBJECT(sphere.obj), "Sphere", vector(0, 0, 0));
+    sphere->scale.setvalue(5, 5, 5);
+    sphere->relativeToObject = iccube;
+    lvl->addObject(sphere);
+
     /*bs = new BoundSphere;
     bs->center.setvalue(0, 0, 0);
     bs->radian = 1.73205;
