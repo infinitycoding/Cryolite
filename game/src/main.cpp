@@ -52,7 +52,7 @@ int main(int argc, char *argv[]){
 
     Lamp *Sun = new Lamp();
     Sun->setDiffuseLight(10, 1, 0, 1.0);
-    Sun->setPosition(vector(0,0,60));
+    Sun->setPosition(vector(0,0,80));
     Sun->setQuadAttenaution(0.001);
 
     Sun->directed(true);
@@ -73,6 +73,8 @@ int main(int argc, char *argv[]){
     mainScene->addLamp(Spot);*/
 
     INIT_Models(mainLevel);
+
+    Sun->setRelation(iccube);
 
     Controls playerControls = Controls(mainwindow, &engineSettings);
 
@@ -117,9 +119,7 @@ int main(int argc, char *argv[]){
     testScript.run();
 
     if(engineSettings.hud)
-    {
         mainwindow->addHUD(&testHUD);
-    }
 
 
     while(render){ //render

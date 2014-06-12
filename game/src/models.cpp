@@ -26,7 +26,6 @@ void INIT_Models(Level *lvl)
     lvl->addObject(ground);
 
     Object *sphere = new Object(OBJECT(sphere.obj), "Sphere", vector(0, 0, 0));
-    sphere->scale.setvalue(5, 5, 5);
     sphere->relativeToObject = iccube;
     lvl->addObject(sphere);
 

@@ -17,9 +17,10 @@ Cryolite:
 Server:
 	@$(MAKE) -C server
 
-all: Cryolite
+Game:
 	@$(MAKE) -C game
 
+all: Cryolite Game
 
 Debug: all
 
@@ -33,5 +34,5 @@ clean:
 	@$(MAKE) -C engine clean
 	@$(MAKE) -C game clean
 
-launch:
+launch: all
 	./game/game
