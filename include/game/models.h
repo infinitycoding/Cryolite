@@ -10,12 +10,8 @@
     #include <object.h>
     #include <level.h>
 
-
-
     #define HOR 6
     #define VERT 16
-    #define SCOPE 1
-
 
 
     void INIT_Models(Level *lvl);

@@ -1,3 +1,5 @@
+#include <glew.h>
+
 #include <SDL.h>
 #include <GL/gl.h>
 #include <AL/al.h>
@@ -36,15 +38,25 @@ extern Object *iccube;
 
 //GLfloat fogcolor[4] = {0.5,0.5,0.5,1};
 
-
-
 int main(int argc, char *argv[]){
     EngineSettings engineSettings = EngineSettings("game/scripts/settings.lua");
     //Create Window and Scene
     Screen *mainwindow = new Screen(engineSettings.width,engineSettings.height,engineSettings.sdlFlags,"Cryolite Engine",engineSettings.multisamples);
     mainLevel = new Level();
     mainwindow->addLevel(mainLevel);
-    
+
+    GLEW ew;
+
+    if(ew.loadingSuccess() == GLEW_OK)
+    {
+        printf("Using GLEW %s\n", ew.getVersion());
+
+        if(ew.checkExtention("GL_ARB_texture_compression")) printf("ARB_texture_compression: supported\n"); else printf("ARB_texture_compression: unsupported\n");
+    }
+    else
+    {
+        printf("Loading GLEW failed.\n");
+    }
 
     // Create camera, Global light and Input controler
     Camera *Player = new Camera(NULL, vector(STARTING_X,STARTING_Y,STARTING_Z),vector(0,0,1),STANDART_NEARCLIP,STANDART_FARCLIP,engineSettings.fov,0,0,engineSettings.height,engineSettings.width);
@@ -112,6 +124,8 @@ int main(int argc, char *argv[]){
     HUD testHUD;
     testHUD.addElement((engineSettings.width / 2) - 50, (engineSettings.height / 2) - 50, 100, 100, IMAGE(aim.png));
     testHUD.addElement(engineSettings.width-((engineSettings.width/100)*HOR)-10, engineSettings.height-((engineSettings.height/100)*VERT)-10, ((engineSettings.width/100)*HOR), ((engineSettings.height/100)*VERT), IMAGE(man.png));
+
+    //HUD testHUD("game/scripts/hud.lua", engineSettings.width, engineSettings.height);
 
     //Shader testShader = Shader(SHADER(basicvert.glsl), SHADER(basicfrag.glsl));
     //testShader.activate();
