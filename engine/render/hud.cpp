@@ -168,13 +168,30 @@ Texture *HUD_Element::getContent()
 
 HUD::HUD()
 {
+    genScript = NULL;
     elements = new List<HUD_Element>;
 }
 
 
-HUD::HUD(const char *script)
+HUD::HUD(const char *script, float w, float h)
 {
+    genScript = NULL;
+    elements = new List<HUD_Element>;
 
+    vertex2D res;
+    res.x = w;
+    res.y = h;
+
+    loadHUD(script, res);
+}
+
+
+HUD::HUD(const char *script, vertex2D res)
+{
+    genScript = NULL;
+    elements = new List<HUD_Element>;
+
+    loadHUD(script, res);
 }
 
 
@@ -186,8 +203,10 @@ HUD::HUD(HUD *templateHUD)
 
 HUD::~HUD()
 {
+    delete genScript;
     delete elements;
 }
+
 
 
 HUD_Element *HUD::addElement(HUD_Element *newElement)
@@ -295,4 +314,40 @@ success HUD::render(int swidth, int sheight)
     glPopMatrix();
 
     return successful;
+}
+
+
+void HUD::loadHUD(const char *script, vertex2D res)
+{
+    genScript = new Script(script);
+
+    genScript->insertGlobalNumber("width", res.x);
+    genScript->insertGlobalNumber("height", res.y);
+
+    genScript->run();
+
+    lua_State *L = genScript->getTable("overlay");
+
+    if(!istable(CURRENT_ELEMENT))
+        return;
+
+    foreach_element
+    {
+        if(!istable(CURRENT_ELEMENT))
+        {
+            lua_pop(L, 1);
+            continue;
+        }
+            
+        foreach_element
+        {
+            if(isnumber(CURRENT_ELEMENT))
+                printf("number value: %d\n", LINT());
+            else if(isstring(CURRENT_ELEMENT))
+                printf("string value: %s\n", LSTR());
+        }
+
+        if(isobject(CURRENT_ELEMENT))
+            lua_pop(L, 1);
+    }
 }

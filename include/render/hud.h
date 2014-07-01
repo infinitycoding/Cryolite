@@ -7,6 +7,7 @@
 #include <mediaLayer.h>
 #include <material.h>
 #include <general_structs.h>
+#include <lua/script.h>
 #include <GL/gl.h>
 
 
@@ -46,7 +47,8 @@ class HUD
 {
     public:
         HUD();                      // zero constructor
-        HUD(const char *script);    // standart constructor, loads hud elements out of a lua script
+        HUD(const char *script, float w, float h);    // standart constructor, loads hud elements out of a lua script
+        HUD(const char *script, vertex2D res);    // standart constructor, with other parameters
         HUD(HUD *templateHUD);      // copy constructor, no idea why
         ~HUD();
 
@@ -62,6 +64,9 @@ class HUD
         success render(int swidth, int sheight);
 
     protected:
+        void loadHUD(const char *script, vertex2D res);
+
+        Script *genScript;
         List<HUD_Element> *elements;
 };
 

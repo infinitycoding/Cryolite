@@ -34,7 +34,7 @@ class Script
 
         void addMetatable(const char * classname ,luaL_Reg *metatable);
         void *getObject(const char *luaClass);
-        lua_State *getState();
+        lua_State *getTable(const char *varname);
 
     protected:
         lua_State *lState;
@@ -209,6 +209,8 @@ typedef luaL_Reg reg;
 #define isstring(PARAM) lua_isstring(L, PARAM * -1)
 #define isobject(PARAM) lua_istable(L, PARAM * -1)
 #define isnumber(PARAM) lua_isnumber(L, PARAM * -1)
+#define istable(PARAM) lua_istable(L, PARAM * -1)
+#define isnil(PARAM) lua_isnil(L, PARAM * -1)
 #define istype(TYPE,...) is_type<TYPE>(L,##__VA_ARGS__)
 #define istobjecttype(TYPE, ...) (is_object_type<TYPE>(L,#TYPE,##__VA_ARGS__))
 #define lerror(FORMAT, ...) luaL_error(L, FORMAT, ##__VA_ARGS__)
@@ -237,6 +239,8 @@ typedef luaL_Reg reg;
 #define ARG9 -10
 #define ARG10 -11
 
+#define CURRENT_ELEMENT 1
+
 inline bool lua_check_key(lua_State *L, const char *key)
 {
     const char *table_key = lua_tostring(L, -2);
@@ -252,6 +256,13 @@ inline bool lua_check_key(lua_State *L, const char *key)
 #define ENDASSOCIATION {NULL, NULL}};
 #define ALIAS(FUNCTION, NAME) {NAME, FUNCTION},
 #define checkkey(KEY) lua_check_key(L, KEY)
-#define foreach_element(TABLE) for(lua_getglobal(L, TABLE), bool _IS_TABLE = lua_istable(L, -1), lua_pushnil(L); (lua_next(L, -2) != 0) && _IS_TABLE; lua_pop(L, 1))
+
+inline int LUA_SKIP(lua_State *L, int stacktop)
+{
+    if(stacktop == lua_gettop(L)+2)
+        lua_pop(L,1);
+    return lua_gettop(L);
+}
+#define foreach_element lua_pushnil(L); for(; (lua_next(L, -2) != 0);)
 
 #endif

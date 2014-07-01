@@ -138,7 +138,9 @@ void *Script::getObject(const char *luaClass)
     return ud;
 }
 
-lua_State *Script::getState()
+lua_State *Script::getTable(const char *varname)
 {
+    lua_getglobal(lState, varname);
     return lState;
 }
+
