@@ -33,7 +33,7 @@ class Script
         const char *getGlobalString(const char *varname);
 
         void addMetatable(const char * classname ,luaL_Reg *metatable);
-        static void *getObject(lua_State *L, const char *luaClass);
+        void *getObject(const char *luaClass);
         lua_State *getState();
 
     protected:
@@ -167,7 +167,7 @@ static inline bool is_type(lua_State *L, int index = -1)
         return lua_isstring(L, index);
     else if(hash == typeid(bool).hash_code())
         return lua_isboolean(L, index);
-    return false
+    return false;
 }
 
 static inline bool is_table(lua_State *L, int index = -1)
@@ -239,7 +239,7 @@ typedef luaL_Reg reg;
 
 inline bool lua_check_key(lua_State *L, const char *key)
 {
-    char *table_key = lua_tostring(L, -2);
+    const char *table_key = lua_tostring(L, -2);
     if(!table_key)
         return false;
 

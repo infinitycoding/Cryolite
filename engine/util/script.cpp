@@ -133,7 +133,7 @@ void *Script::getObject(const char *luaClass)
     void* ud = 0;
     luaL_checktype(lState, 0, LUA_TTABLE);
     lua_getfield(lState, 0, "__self");
-    ud = luaL_checkudata(L, 0, luaClass);
+    ud = luaL_checkudata(lState, 0, luaClass);
     luaL_argcheck(lState, ud != 0, 0,"NULL object pointer returned");
     return ud;
 }
