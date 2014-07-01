@@ -55,24 +55,6 @@ bool Script::load(const char *Scriptname)
     return true;
 }
 
-
-void PrintTable(lua_State *L)
-{
-    lua_pushnil(L);
-
-    while(lua_next(L, -2) != 0)
-    {
-        if(lua_isstring(L, -1))
-          printf("%s = %s\n", lua_tostring(L, -2), lua_tostring(L, -1));
-        else if(lua_isnumber(L, -1))
-          printf("%s = %g\n", lua_tostring(L, -2), lua_tonumber(L, -1));
-        else if(lua_istable(L, -1))
-          PrintTable(L);
-
-        lua_pop(L, 1);
-    }
-}
-
 bool Script::run()
 {
     if (lua_pcall(lState,0, LUA_MULTRET, 0))
@@ -146,14 +128,17 @@ const char *Script::getGlobalString(const char *varname)
 }
 
 
-void *Script::getObject(lua_State *L, const char *luaClass)
+void *Script::getObject(const char *luaClass)
 {
     void* ud = 0;
-    luaL_checktype(L, 0, LUA_TTABLE);
-    lua_getfield(L, 0, "__self");
+    luaL_checktype(lState, 0, LUA_TTABLE);
+    lua_getfield(lState, 0, "__self");
     ud = luaL_checkudata(L, 0, luaClass);
-    luaL_argcheck(L, ud != 0, 0,"NULL object pointer returned");
+    luaL_argcheck(lState, ud != 0, 0,"NULL object pointer returned");
     return ud;
 }
 
-
+lua_State *Script::getState()
+{
+    return lState;
+}

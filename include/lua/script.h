@@ -6,6 +6,7 @@
 #include <lua.hpp>
 #include <iostream>
 #include <typeinfo>
+#include <cstring>
 
 using namespace std;
 
@@ -33,6 +34,7 @@ class Script
 
         void addMetatable(const char * classname ,luaL_Reg *metatable);
         static void *getObject(lua_State *L, const char *luaClass);
+        lua_State *getState();
 
     protected:
         lua_State *lState;
@@ -165,7 +167,12 @@ static inline bool is_type(lua_State *L, int index = -1)
         return lua_isstring(L, index);
     else if(hash == typeid(bool).hash_code())
         return lua_isboolean(L, index);
-    return lua_istable(L, index);
+    return false
+}
+
+static inline bool is_table(lua_State *L, int index = -1)
+{
+    return lua_istable(L, -1);
 }
 
 typedef luaL_Reg reg;
@@ -230,12 +237,21 @@ typedef luaL_Reg reg;
 #define ARG9 -10
 #define ARG10 -11
 
+inline bool lua_check_key(lua_State *L, const char *key)
+{
+    char *table_key = lua_tostring(L, -2);
+    if(!table_key)
+        return false;
 
+    if(strcmp(table_key, key) == 0)
+        return true;
+    return false;
+}
 
 #define ASSOCIATION(CLASS) reg CLASS ##Reg[]{
 #define ENDASSOCIATION {NULL, NULL}};
 #define ALIAS(FUNCTION, NAME) {NAME, FUNCTION},
-
-
+#define checkkey(KEY) lua_check_key(L, KEY)
+#define foreach_element(TABLE) for(lua_getglobal(L, TABLE), bool _IS_TABLE = lua_istable(L, -1), lua_pushnil(L); (lua_next(L, -2) != 0) && _IS_TABLE; lua_pop(L, 1))
 
 #endif
