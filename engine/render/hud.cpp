@@ -319,6 +319,9 @@ success HUD::render(int swidth, int sheight)
 
 void HUD::loadHUD(const char *script, vertex2D res)
 {
+    int x = 0, y = 0, width = 0, height = 0;
+    char *image;
+
     genScript = new Script(script);
 
     genScript->insertGlobalNumber("width", res.x);
@@ -337,13 +340,61 @@ void HUD::loadHUD(const char *script, vertex2D res)
         {
             continue;
         }
+
         foreach_element
         {
             if(isnumber(CURRENT_ELEMENT))
-                printf("number value: %d\n", LINT());
+            {
+                if(checkkey("x"))
+                {
+                    x = LINT();
+                }
+                else if(checkkey("y"))
+                {
+                    y = LINT();
+                }
+                else if(checkkey("width"))
+                {
+                    width = LINT();
+                }
+                else if(checkkey("height"))
+                {
+                    height = LINT();
+                }
+                else
+                {
+                    fprintf(stderr, "found unknown key in %s\n", script);
+                }
+            }
             else if(isstring(CURRENT_ELEMENT))
-                printf("string value: %s\n", LSTR());
+            {
+                if(checkkey("image"))
+                {
+                    image = LSTR();
+                }
+                else if(checkkey("x"))
+                {
+                    x = ~0;
+                }
+                else if(checkkey("y"))
+                {
+                    y = ~0;
+                }
+                else
+                {
+                    fprintf(stderr, "found unknown key in %s\n", script);
+                }
+            }
         }
 
+        if(x == ~0)
+            x = (res.x / 2) - (width / 2);
+
+        if(y == ~0)
+            y = (res.y / 2) - (height / 2);
+
+        addElement(x, y, width, height, image);
     }
+
+    return;
 }
