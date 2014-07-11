@@ -335,10 +335,8 @@ void HUD::loadHUD(const char *script, vertex2D res)
     {
         if(!istable(CURRENT_ELEMENT))
         {
-            lua_pop(L, 1);
             continue;
         }
-            
         foreach_element
         {
             if(isnumber(CURRENT_ELEMENT))
@@ -347,7 +345,5 @@ void HUD::loadHUD(const char *script, vertex2D res)
                 printf("string value: %s\n", LSTR());
         }
 
-        if(isobject(CURRENT_ELEMENT))
-            lua_pop(L, 1);
     }
 }

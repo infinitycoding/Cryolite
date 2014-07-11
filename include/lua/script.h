@@ -175,6 +175,34 @@ static inline bool is_table(lua_State *L, int index = -1)
     return lua_istable(L, -1);
 }
 
+inline void LUA_SKIP(lua_State *L, int stacktop)
+{
+    if(stacktop == lua_gettop(L))
+        lua_pop(L,1);
+}
+
+inline int NEXT_ELEMENT(lua_State *L, int *stacktop)
+{
+    int r = lua_next(L, -2);
+    *stacktop = lua_gettop(L);
+    return r;
+}
+
+inline bool lua_check_key(lua_State *L, const char *key)
+{
+    const char *table_key = lua_tostring(L, -2);
+    if(!table_key)
+        return false;
+
+    if(strcmp(table_key, key) == 0)
+        return true;
+    return false;
+}
+
+
+// DO NOT USE THE INLINE FUNCTIONS!!! USE THE MACROS!
+
+
 typedef luaL_Reg reg;
 
 #define CBEGIN(NAME) int NAME(lua_State *L){
@@ -241,28 +269,11 @@ typedef luaL_Reg reg;
 
 #define CURRENT_ELEMENT 1
 
-inline bool lua_check_key(lua_State *L, const char *key)
-{
-    const char *table_key = lua_tostring(L, -2);
-    if(!table_key)
-        return false;
-
-    if(strcmp(table_key, key) == 0)
-        return true;
-    return false;
-}
-
 #define ASSOCIATION(CLASS) reg CLASS ##Reg[]{
 #define ENDASSOCIATION {NULL, NULL}};
 #define ALIAS(FUNCTION, NAME) {NAME, FUNCTION},
 #define checkkey(KEY) lua_check_key(L, KEY)
 
-inline int LUA_SKIP(lua_State *L, int stacktop)
-{
-    if(stacktop == lua_gettop(L)+2)
-        lua_pop(L,1);
-    return lua_gettop(L);
-}
-#define foreach_element lua_pushnil(L); for(; (lua_next(L, -2) != 0);)
+#define foreach_element lua_pushnil(L); for(int STACK_TOP; ( NEXT_ELEMENT(L, &STACK_TOP) != 0); LUA_SKIP(L, STACK_TOP))
 
 #endif
