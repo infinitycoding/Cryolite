@@ -10,8 +10,6 @@
 
 using namespace std;
 
-
-
 class Script
 {
     public:

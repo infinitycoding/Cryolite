@@ -28,7 +28,6 @@ bool audioInitiaed = false;
  */
 MediaLayer::MediaLayer(int width, int height, int flags, const char* caption, int multisamples = 0)
 {
-    const SDL_VideoInfo *info = NULL;
     this->screen = NULL;
     this->width = width;
     this->height = height;
@@ -55,21 +54,13 @@ MediaLayer::MediaLayer(int width, int height, int flags, const char* caption, in
         }
     }
 
-    //Query video info
-    info = SDL_GetVideoInfo();
-    if(!info)
-    {
-        cerr<<"Video query failed: "<<SDL_GetError()<<endl;
-        exit(-1);
-    }
+
+    screen = SDL_CreateWindow(caption, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, flags);
+    renderContext =  SDL_GL_CreateContext(screen);
 
 
 
-    SDL_WM_SetCaption(caption, NULL);
-
-    int bpp = info->vfmt->BitsPerPixel;
-
-    if(flags & SDL_OPENGL)
+    if(flags & SDL_WINDOW_OPENGL)
     {
         SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 5 );
         SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 5 );
@@ -81,7 +72,6 @@ MediaLayer::MediaLayer(int width, int height, int flags, const char* caption, in
     }
 
 
-    this->screen = SDL_SetVideoMode( width, height, bpp, flags);
     if( this->screen == NULL ) {
         fprintf( stderr, "Video mode set failed: %s\n", SDL_GetError());
         exit(-1);
@@ -103,7 +93,7 @@ MediaLayer::~MediaLayer()
     alcDestroyContext(context);
     alcCloseDevice(device);
     delete events;
-    SDL_FreeSurface(this->screen);
+    SDL_DestroyWindow(this->screen);
 }
 
 /**
@@ -171,9 +161,9 @@ void MediaLayer::pollEvents()
                     case SDL_MOUSEMOTION:
                         if(currentEvent->types.MouseMotion) currentEvent->handleMouseMotion(&event.motion);
                         break;
-                    /*case SDL_MOUSEWHEEL:
-                        if(currentEvent->types.MouseWheel) currentEvent->handle->handleMouseWheel(event);
-                        break;*/
+                    case SDL_MOUSEWHEEL:
+                        if(currentEvent->types.MouseWheel) currentEvent->handleMouseWheel(&event.wheel);
+                        break;
                     case SDL_QUIT:
                         if(currentEvent->types.Quit) currentEvent->handleQuit();
                         break;
@@ -329,7 +319,7 @@ void EventHandle::handleKeyUp(SDL_KeyboardEvent *e){}
 void EventHandle::handleMouseButtonUp(SDL_MouseButtonEvent *e){}
 void EventHandle::handleMouseButtonDown(SDL_MouseButtonEvent *e){}
 void EventHandle::handleMouseMotion(SDL_MouseMotionEvent *e){}
-//virtual void handleMouseWheel(SDL_MouseWheelEvent *e);
+void EventHandle::handleMouseWheel(SDL_MouseWheelEvent *e){};
 void EventHandle::handleQuit(){};
 EventHandle::~EventHandle(){}
 

@@ -55,8 +55,11 @@ bool EngineSettings::loadSettingsFile(const char *filename)
         return false;
 
     captureMouse = settingsscript.getGlobalBool("catchCourser");
+    if(captureMouse)
+        sdlFlags |= SDL_WINDOW_INPUT_GRABBED;
+
     hud = settingsscript.getGlobalBool("drawHUD");
-    if(settingsscript.getGlobalBool("fullscreen")) sdlFlags |= SDL_FULLSCREEN;
+    if(settingsscript.getGlobalBool("fullscreen")) sdlFlags |= SDL_WINDOW_FULLSCREEN;
     width = settingsscript.getGlobalNumber("width");
     height = settingsscript.getGlobalNumber("height");
     multisamples = settingsscript.getGlobalNumber("multisamples");
@@ -76,12 +79,10 @@ void EngineSettings::activateSettings()
     if(captureMouse)
     {
         SDL_ShowCursor(SDL_DISABLE);
-        SDL_WM_GrabInput( SDL_GRAB_ON );
     }
     else
     {
         SDL_ShowCursor(SDL_ENABLE);
-        SDL_WM_GrabInput( SDL_GRAB_OFF );
     }
 }
 
@@ -92,10 +93,9 @@ void EngineSettings::initSettings()
     hud = true;
     width = 640;
     height = 480;
-    sdlFlags = SDL_OPENGL|SDL_HWSURFACE;
+    sdlFlags = SDL_WINDOW_OPENGL;
     multisamples = 4;
     lineWidth = 1;
     pointSize = 1;
     fov = 80;
 }
-

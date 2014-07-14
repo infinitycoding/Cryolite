@@ -6,6 +6,5 @@
 
 #Peter:
 * Skriptbasierte Leveldateien
-* Skriptbasiertes HUD
 * Shader
 * Partikeleffekte

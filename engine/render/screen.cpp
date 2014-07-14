@@ -40,6 +40,7 @@ void Screen::render()
         i.Next();
     }
     this->renderHUDs();
+    SDL_GL_SwapWindow(this->screen);
 }
 
 

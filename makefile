@@ -1,6 +1,6 @@
 
-LDFLAGS = -lSDL -lGLEW -lGL -lGLU -lSDL_image -lSDL_ttf -lSDL_mixer  -lSDL_net -lalut -lopenal -llua -ldl
-INC = -I ../include -I ../include/game -I ../include/render -I ../include/util -I /usr/include/SDL
+LDFLAGS = -lSDL2 -lGLEW -lGL -lGLU -lSDL2_image -lSDL2_ttf -lSDL2_mixer  -lSDL2_net -lalut -lopenal -llua -ldl
+INC = -I ../include -I ../include/game -I ../include/render -I ../include/util -I/usr/include/SDL2/
 CFLAGS = -std=gnu++0x
 CC = g++
 

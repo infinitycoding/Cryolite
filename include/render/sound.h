@@ -2,12 +2,13 @@
 #define SOUND_H_INCLUDED
 
 
+#include <mediaLayer.h>
 #include <AL/al.h>
 #include <AL/alut.h>
 #include <SDL_mixer.h>
 
 #include <vector.h>
-#include <mediaLayer.h>
+
 
 
 

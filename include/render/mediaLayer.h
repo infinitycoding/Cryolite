@@ -1,9 +1,8 @@
 #ifndef CRYOLITE_SDL_H
 #define CRYOLITE_SDL_H
 
-#ifdef _WIN32
-#include <SDL/SDL.h>
-#endif
+
+
 #include <SDL.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -38,7 +37,7 @@ class EventHandle
         virtual void handleMouseButtonUp(SDL_MouseButtonEvent *e);
         virtual void handleMouseButtonDown(SDL_MouseButtonEvent *e);
         virtual void handleMouseMotion(SDL_MouseMotionEvent *e);
-        //virtual void handleMouseWheel(SDL_MouseWheelEvent *e);
+        virtual void handleMouseWheel(SDL_MouseWheelEvent *e);
         virtual void handleQuit();
 
         EventHandle();
@@ -73,7 +72,8 @@ class MediaLayer
         ALCdevice* device;
         ALCcontext* context;
         List<EventHandle> *events;
-        SDL_Surface *screen;
+        SDL_Window *screen;
+        SDL_GLContext renderContext;
 };
 
 
