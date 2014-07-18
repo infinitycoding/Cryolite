@@ -19,6 +19,7 @@ class Controls : EventHandle
         virtual void handleKeyDown(SDL_KeyboardEvent *e);
         virtual void handleKeyUp(SDL_KeyboardEvent *e);
         virtual void handleMouseMotion(SDL_MouseMotionEvent *e);
+        virtual void handleMouseButtonDown(SDL_MouseButtonEvent *e);
         virtual void screenshot(const char* filename, float width, float height);
 
         virtual void move_cube();

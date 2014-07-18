@@ -10,7 +10,7 @@
 #include <physics/PhysicsEngine.h>
 #include <screen.h>
 
-#define ROTATION_SPEED 0.5
+#define ROTATION_SPEED 0.25
 #define MOVEMENT_SPEED 10
 
 #define ROTATION_WIDTH (ROTATION_SPEED/mainLevel->fps->get())
@@ -30,6 +30,7 @@ Controls::Controls(Screen* window, EngineSettings *settings) : EventHandle()
     types.KeyUp = true;
     types.MouseMotion = true;
     types.Quit = true;
+    types.MouseButtonDown = true;
     window->addHandle(dynamic_cast<EventHandle *>(this));
     right_rotation = 0;
     down_rotation = 0;
@@ -50,6 +51,8 @@ Controls::Controls(Screen* window, EngineSettings *settings) : EventHandle()
     shotSound->play();
     iccube->sounds->PushFront(shotSound);
     options = settings;
+
+    SDL_SetRelativeMouseMode(SDL_TRUE);
 }
 
 void Controls::handleQuit()
@@ -115,9 +118,6 @@ void Controls::handleKeyDown(SDL_KeyboardEvent *e)
         case SDLK_r:
             shotSound->toggleLoop();
             break;
-        case SDLK_LCTRL:
-            fire = true;
-            break;
         default:
             break;
 
@@ -146,6 +146,18 @@ void Controls::handleKeyUp(SDL_KeyboardEvent *e)
             break;
         case SDLK_LSHIFT:
             move_down=false;
+            break;
+        default:
+            break;
+    }
+}
+
+void Controls::handleMouseButtonDown(SDL_MouseButtonEvent *e)
+{
+    switch(e->button)
+    {
+        case SDL_BUTTON_LEFT:
+            fire = true;
             break;
         default:
             break;
