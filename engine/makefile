@@ -1,5 +1,6 @@
 SRCS = $(shell find -name '*.cpp')
 OBJS = $(addsuffix .o,$(basename $(SRCS)))
+INC += -I include -I include/render
 
 all: $(OBJS)
 	ar -rcs engine.a $^

@@ -1,24 +1,31 @@
-#include <glew.h>
-
-#include <SDL.h>
-#include <GL/gl.h>
-#include <AL/al.h>
-#include <AL/alut.h>
-#include <GL/glu.h>
-
-#include <SDL_thread.h>
-#include <SDL_mixer.h>
-
+/*
+     Copyright 2012-2014 Infinitycoding all rights reserved
+     This file is part of the Cryolite Engine.
+ 
+     The Cryolite Engine is free software: you can redistribute it and/or modify
+     it under the terms of the GNU Lesser General Public License as published by
+     the Free Software Foundation, either version 3 of the License, or
+     any later version.
+ 
+     The Cryolite Engine is distributed in the hope that it will be useful,
+     but WITHOUT ANY WARRANTY; without even the implied warranty of
+     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     GNU Lesser General Public License for more details.
+ 
+     You should have received a copy of the GNU Lesser General Public License
+     along with the Cryolite Engine.  If not, see <http://www.gnu.org/licenses/>.
+ */
+#include <util/glew.h>
 #include <mediaLayer.h>
 #include <controls.h>
 #include <models.h>
-#include <general_def.h>
+#include <util/general_def.h>
 #include <font.h>
 #include <level.h>
 #include <light.h>
-#include <settings.h>
-#include <lua/script.h>
-#include <vector.h>
+#include <util/settings.h>
+#include <util/script.h>
+#include <util/vector.h>
 #include <hud.h>
 #include <screen.h>
 
@@ -36,7 +43,6 @@ using namespace std;
 
 extern Object *iccube;
 
-//GLfloat fogcolor[4] = {0.5,0.5,0.5,1};
 
 int main(int argc, char *argv[]){
     EngineSettings engineSettings = EngineSettings("game/scripts/settings.lua");
@@ -72,18 +78,6 @@ int main(int argc, char *argv[]){
     Sun->activate();
     mainLevel->addLamp(Sun);
 
-
-    /*Lamp *Spot = new Lamp();
-    Spot->setDiffuseLight(10, 0, 0, 1.0);
-    Spot->setPosition(vector(0,10,0));
-    //Spot->setCutOf(90);
-    Spot->setQuadAttenaution(0.001);
-
-    Spot->directed(true);
-
-    Spot->activate();
-    mainScene->addLamp(Spot);*/
-
     INIT_Models(mainLevel);
 
     Sun->setRelation(iccube);
@@ -103,14 +97,6 @@ int main(int argc, char *argv[]){
     glEnable(0x809D);//GL_MULTISAMPLE_ARB
     glEnable(GL_COLOR_MATERIAL);
 
-    /*glEnable(GL_FOG);
-    glFogfv(GL_FOG_COLOR, fogcolor);
-    glFogi(GL_FOG_MODE, GL_LINEAR);
-    glFogf(GL_FOG_DENSITY, 0.05);
-    glFogf(GL_FOG_START, 40);
-    glFogf(GL_FOG_END, 50);*/
-
-
 
 
     engineSettings.activateSettings();
@@ -121,10 +107,7 @@ int main(int argc, char *argv[]){
     Texture *sky = Material::TexCache->requestTexture(IMAGE(sky1.jpg));
     alDistanceModel( AL_LINEAR_DISTANCE );
 
-    /*HUD testHUD;
-    testHUD.addElement((engineSettings.width / 2) - 50, (engineSettings.height / 2) - 50, 100, 100, IMAGE(aim.png));
-    testHUD.addElement(engineSettings.width-((engineSettings.width/100)*HOR)-10, engineSettings.height-((engineSettings.height/100)*VERT)-10, ((engineSettings.width/100)*HOR), ((engineSettings.height/100)*VERT), IMAGE(man.png));*/
-
+  
     HUD testHUD("game/scripts/hud.lua", engineSettings.width, engineSettings.height);
 
     //Shader testShader = Shader(SHADER(basicvert.glsl), SHADER(basicfrag.glsl));
