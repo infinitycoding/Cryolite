@@ -33,6 +33,33 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="engine/include/physics/PhysicsEngine.h" />
+		<Unit filename="engine/include/physics/boundobjects.h" />
+		<Unit filename="engine/include/physics/collision.h" />
+		<Unit filename="engine/include/render/camera.h" />
+		<Unit filename="engine/include/render/font.h" />
+		<Unit filename="engine/include/render/fps.h" />
+		<Unit filename="engine/include/render/hud.h" />
+		<Unit filename="engine/include/render/level.h" />
+		<Unit filename="engine/include/render/light.h" />
+		<Unit filename="engine/include/render/material.h" />
+		<Unit filename="engine/include/render/mediaLayer.h" />
+		<Unit filename="engine/include/render/object.h" />
+		<Unit filename="engine/include/render/polygon.h" />
+		<Unit filename="engine/include/render/screen.h" />
+		<Unit filename="engine/include/render/shader.h" />
+		<Unit filename="engine/include/render/sound.h" />
+		<Unit filename="engine/include/render/texture.h" />
+		<Unit filename="engine/include/render/ui.h" />
+		<Unit filename="engine/include/render/vertex.h" />
+		<Unit filename="engine/include/util/List.h" />
+		<Unit filename="engine/include/util/general_def.h" />
+		<Unit filename="engine/include/util/general_structs.h" />
+		<Unit filename="engine/include/util/glew.h" />
+		<Unit filename="engine/include/util/parser.h" />
+		<Unit filename="engine/include/util/script.h" />
+		<Unit filename="engine/include/util/settings.h" />
+		<Unit filename="engine/include/util/vector.h" />
 		<Unit filename="engine/physics/PhysicsEngine.cpp" />
 		<Unit filename="engine/physics/boundobjects.cpp" />
 		<Unit filename="engine/physics/collision.cpp" />
@@ -44,10 +71,9 @@
 		<Unit filename="engine/render/level.cpp" />
 		<Unit filename="engine/render/light.cpp" />
 		<Unit filename="engine/render/material.cpp" />
+		<Unit filename="engine/render/mediaLayer.cpp" />
 		<Unit filename="engine/render/object.cpp" />
 		<Unit filename="engine/render/polygon.cpp" />
-		<Unit filename="engine/render/scene.cpp" />
-		<Unit filename="engine/render/sdl.cpp" />
 		<Unit filename="engine/render/shader.cpp" />
 		<Unit filename="engine/render/sound.cpp" />
 		<Unit filename="engine/render/texture.cpp" />
@@ -68,38 +94,11 @@
 		<Unit filename="engine/wrapper/soundLW.cpp" />
 		<Unit filename="engine/wrapper/uiLW.cpp" />
 		<Unit filename="engine/wrapper/vectorLW.cpp" />
+		<Unit filename="game/include/controls.h" />
+		<Unit filename="game/include/models.h" />
 		<Unit filename="game/src/controls.cpp" />
 		<Unit filename="game/src/main.cpp" />
 		<Unit filename="game/src/models.cpp" />
-		<Unit filename="include/game/controls.h" />
-		<Unit filename="include/game/models.h" />
-		<Unit filename="include/lua/script.h" />
-		<Unit filename="include/physics/PhysicsEngine.h" />
-		<Unit filename="include/physics/boundobjects.h" />
-		<Unit filename="include/physics/collision.h" />
-		<Unit filename="include/physics/forces.h" />
-		<Unit filename="include/render/camera.h" />
-		<Unit filename="include/render/font.h" />
-		<Unit filename="include/render/fps.h" />
-		<Unit filename="include/render/hud.h" />
-		<Unit filename="include/render/level.h" />
-		<Unit filename="include/render/light.h" />
-		<Unit filename="include/render/material.h" />
-		<Unit filename="include/render/object.h" />
-		<Unit filename="include/render/polygon.h" />
-		<Unit filename="include/render/scene.h" />
-		<Unit filename="include/render/sdl.h" />
-		<Unit filename="include/render/shader.h" />
-		<Unit filename="include/render/sound.h" />
-		<Unit filename="include/render/texture.h" />
-		<Unit filename="include/render/ui.h" />
-		<Unit filename="include/render/vertex.h" />
-		<Unit filename="include/util/List.h" />
-		<Unit filename="include/util/general_def.h" />
-		<Unit filename="include/util/general_structs.h" />
-		<Unit filename="include/util/parser.h" />
-		<Unit filename="include/util/settings.h" />
-		<Unit filename="include/util/vector.h" />
 		<Extensions>
 			<code_completion />
 			<debugger />

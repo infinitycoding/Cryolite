@@ -1,17 +1,17 @@
 /*
      Copyright 2012-2014 Infinitycoding all rights reserved
      This file is part of the Cryolite Engine.
- 
+
      The Cryolite Engine is free software: you can redistribute it and/or modify
      it under the terms of the GNU Lesser General Public License as published by
      the Free Software Foundation, either version 3 of the License, or
      any later version.
- 
+
      The Cryolite Engine is distributed in the hope that it will be useful,
      but WITHOUT ANY WARRANTY; without even the implied warranty of
      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
      GNU Lesser General Public License for more details.
- 
+
      You should have received a copy of the GNU Lesser General Public License
      along with the Cryolite Engine.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -84,7 +84,7 @@ int main(int argc, char *argv[]){
 
     Controls playerControls = Controls(mainwindow, &engineSettings);
 
-    mainLevel->GlobalAmbience = new GlobalLight(0.3,0.3,0.3,1);
+    mainLevel->GlobalAmbience = new GlobalLight(0.6,0.6,0.6,1);
 
     //GL Settigs
     glMatrixMode( GL_PROJECTION );
@@ -107,7 +107,7 @@ int main(int argc, char *argv[]){
     Texture *sky = Material::TexCache->requestTexture(IMAGE(sky1.jpg));
     alDistanceModel( AL_LINEAR_DISTANCE );
 
-  
+
     HUD testHUD("game/scripts/hud.lua", engineSettings.width, engineSettings.height);
 
     //Shader testShader = Shader(SHADER(basicvert.glsl), SHADER(basicfrag.glsl));
@@ -118,6 +118,18 @@ int main(int argc, char *argv[]){
     if(engineSettings.hud)
         mainwindow->addHUD(&testHUD);
 
+    SDL_JoystickEventState(SDL_ENABLE);
+    SDL_GameControllerEventState(SDL_ENABLE);
+
+    int noj = SDL_NumJoysticks();
+
+    printf("num of joysticks: %d\n", noj);
+
+    for(int i = 0; i < noj; ++i)
+    {
+        SDL_Joystick *joy = SDL_JoystickOpen(i);
+        printf("nr %d = %s\n", i, SDL_JoystickName(joy));
+    }
 
     while(render){ //render
         if(printFPS)

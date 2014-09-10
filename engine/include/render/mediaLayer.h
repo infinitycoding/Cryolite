@@ -3,17 +3,17 @@
 /*
      Copyright 2012-2014 Infinitycoding all rights reserved
      This file is part of the Cryolite Engine.
- 
+
      The Cryolite Engine is free software: you can redistribute it and/or modify
      it under the terms of the GNU Lesser General Public License as published by
      the Free Software Foundation, either version 3 of the License, or
      any later version.
- 
+
      The Cryolite Engine is distributed in the hope that it will be useful,
      but WITHOUT ANY WARRANTY; without even the implied warranty of
      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
      GNU Lesser General Public License for more details.
- 
+
      You should have received a copy of the GNU Lesser General Public License
      along with the Cryolite Engine.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -30,30 +30,34 @@
 
 #define AUDIORATE 22050
 
-struct usedHandles
-{
-    bool KeyUp;
-    bool KeyDown;
-    bool MouseButtonUp;
-    bool MouseButtonDown;
-    bool MouseMotion;
-    bool MouseWheel;
-    bool Quit;
-};
-
 
 class EventHandle
 {
     public:
-
-        usedHandles types;
-
         virtual void handleKeyDown(SDL_KeyboardEvent *e);
         virtual void handleKeyUp(SDL_KeyboardEvent *e);
         virtual void handleMouseButtonUp(SDL_MouseButtonEvent *e);
         virtual void handleMouseButtonDown(SDL_MouseButtonEvent *e);
         virtual void handleMouseMotion(SDL_MouseMotionEvent *e);
         virtual void handleMouseWheel(SDL_MouseWheelEvent *e);
+        virtual void handleControllerDeviceAdded(SDL_ControllerDeviceEvent *e);
+        virtual void handleControllerDeviceRemoved(SDL_ControllerDeviceEvent *e);
+        virtual void handleControllerDeviceRemapped(SDL_ControllerDeviceEvent *e);
+        virtual void handleControllerButtonUp(SDL_ControllerButtonEvent *e);
+        virtual void handleControllerButtonDown(SDL_ControllerButtonEvent *e);
+        virtual void handleControllerAxis(SDL_ControllerAxisEvent *e);
+        virtual void handleJoystickAxis(SDL_JoyAxisEvent *e);
+        virtual void handleJoystickBall(SDL_JoyBallEvent *e);
+        virtual void handleJoystickHat(SDL_JoyHatEvent *e);
+        virtual void handleJoystickButtonUp(SDL_JoyButtonEvent *e);
+        virtual void handleJoystickButtonDown(SDL_JoyButtonEvent *e);
+        virtual void handleJoystickDeviceAdded(SDL_JoyDeviceEvent *e);
+        virtual void handleJoystickDeviceRemoved(SDL_JoyDeviceEvent *e);
+        virtual void handleTouchUp(SDL_TouchFingerEvent *e);
+        virtual void handleTouchDown(SDL_TouchFingerEvent *e);
+        virtual void handleTouchMotion(SDL_TouchFingerEvent *e);
+        virtual void handleWindow(SDL_WindowEvent *e);
+        virtual void handleTextInput(SDL_TextInputEvent *e);
         virtual void handleQuit();
 
         EventHandle();
