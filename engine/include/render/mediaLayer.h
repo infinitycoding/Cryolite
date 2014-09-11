@@ -31,6 +31,7 @@
 
 
 typedef uint32_t scancode_t;
+typedef uint32_t deviceId_t;
 
 
 enum InputDeviceType
@@ -45,7 +46,7 @@ enum InputDeviceType
 
 struct InputDevice
 {
-    uint32_t id;
+    deviceId_t id;
     const char *name;
     InputDeviceType type;
 };
@@ -54,19 +55,18 @@ struct InputDevice
 class EventHandle
 {
     public:
+        virtual void handleDeviceAdded(InputDevice *device, uint32_t timestamp);
+        virtual void handleDeviceRemoved(InputDevice *device, uint32_t timestamp);
         virtual void handleButtonUp(InputDevice *device, uint32_t timestamp, scancode_t scancode);
         virtual void handleButtonDown(InputDevice *device, uint32_t timestamp, scancode_t scancode);
+
         virtual void handleMouseMotion(SDL_MouseMotionEvent *e);
         virtual void handleMouseWheel(SDL_MouseWheelEvent *e);
-        virtual void handleControllerDeviceAdded(SDL_ControllerDeviceEvent *e);
-        virtual void handleControllerDeviceRemoved(SDL_ControllerDeviceEvent *e);
         virtual void handleControllerDeviceRemapped(SDL_ControllerDeviceEvent *e);
         virtual void handleControllerAxis(SDL_ControllerAxisEvent *e);
         virtual void handleJoystickAxis(SDL_JoyAxisEvent *e);
         virtual void handleJoystickBall(SDL_JoyBallEvent *e);
         virtual void handleJoystickHat(SDL_JoyHatEvent *e);
-        virtual void handleJoystickDeviceAdded(SDL_JoyDeviceEvent *e);
-        virtual void handleJoystickDeviceRemoved(SDL_JoyDeviceEvent *e);
         virtual void handleTouchUp(SDL_TouchFingerEvent *e);
         virtual void handleTouchDown(SDL_TouchFingerEvent *e);
         virtual void handleTouchMotion(SDL_TouchFingerEvent *e);
@@ -101,6 +101,9 @@ class MediaLayer
 
 
     protected:
+        InputDevice *addInputDevice(List<InputDevice> *lst, deviceId_t id);
+        InputDevice *removeInputDevice(List<InputDevice> *lst, deviceId_t id);
+
         int width;
         int height;
         ALCdevice* device;
