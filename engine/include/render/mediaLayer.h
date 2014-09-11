@@ -14,7 +14,6 @@
      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
      GNU Lesser General Public License for more details.
 
-     You should have received a copy of the GNU Lesser General Public License
      along with the Cryolite Engine.  If not, see <http://www.gnu.org/licenses/>.
  */
 
@@ -31,26 +30,41 @@
 #define AUDIORATE 22050
 
 
+typedef uint32_t scancode_t;
+
+
+enum InputDeviceType
+{
+    keyboard,
+    joystick,
+    gamecontroller,
+    mouse,
+    touchscreen
+};
+
+
+struct InputDevice
+{
+    uint32_t id;
+    const char *name;
+    InputDeviceType type;
+};
+
+
 class EventHandle
 {
     public:
-        virtual void handleKeyDown(SDL_KeyboardEvent *e);
-        virtual void handleKeyUp(SDL_KeyboardEvent *e);
-        virtual void handleMouseButtonUp(SDL_MouseButtonEvent *e);
-        virtual void handleMouseButtonDown(SDL_MouseButtonEvent *e);
+        virtual void handleButtonUp(InputDevice *device, uint32_t timestamp, scancode_t scancode);
+        virtual void handleButtonDown(InputDevice *device, uint32_t timestamp, scancode_t scancode);
         virtual void handleMouseMotion(SDL_MouseMotionEvent *e);
         virtual void handleMouseWheel(SDL_MouseWheelEvent *e);
         virtual void handleControllerDeviceAdded(SDL_ControllerDeviceEvent *e);
         virtual void handleControllerDeviceRemoved(SDL_ControllerDeviceEvent *e);
         virtual void handleControllerDeviceRemapped(SDL_ControllerDeviceEvent *e);
-        virtual void handleControllerButtonUp(SDL_ControllerButtonEvent *e);
-        virtual void handleControllerButtonDown(SDL_ControllerButtonEvent *e);
         virtual void handleControllerAxis(SDL_ControllerAxisEvent *e);
         virtual void handleJoystickAxis(SDL_JoyAxisEvent *e);
         virtual void handleJoystickBall(SDL_JoyBallEvent *e);
         virtual void handleJoystickHat(SDL_JoyHatEvent *e);
-        virtual void handleJoystickButtonUp(SDL_JoyButtonEvent *e);
-        virtual void handleJoystickButtonDown(SDL_JoyButtonEvent *e);
         virtual void handleJoystickDeviceAdded(SDL_JoyDeviceEvent *e);
         virtual void handleJoystickDeviceRemoved(SDL_JoyDeviceEvent *e);
         virtual void handleTouchUp(SDL_TouchFingerEvent *e);
@@ -94,6 +108,11 @@ class MediaLayer
         List<EventHandle> *events;
         SDL_Window *screen;
         SDL_GLContext renderContext;
+
+        InputDevice *defaultKeyboard;
+        InputDevice *defaultMouse;
+        List<InputDevice> *joysticks;
+        List<InputDevice> *gamecontrollers;
 };
 
 

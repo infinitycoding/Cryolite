@@ -100,6 +100,62 @@ MediaLayer::MediaLayer(int width, int height, int flags, const char* caption, in
     alcMakeContextCurrent(context);
 
     this->events = new List<EventHandle>;
+
+    defaultKeyboard = new InputDevice;
+    defaultKeyboard->id = 0;
+    defaultKeyboard->name = "default keyboard";
+    defaultKeyboard->type = keyboard;
+
+    defaultMouse = new InputDevice;
+    defaultMouse->id = 0;
+    defaultMouse->name = "default mouse";
+    defaultMouse->type = mouse;
+
+
+    joysticks = new List<InputDevice>;
+    gamecontrollers = new List<InputDevice>;
+
+    int numOfJoysticks = SDL_NumJoysticks();
+
+    for(int i = 0; i < numOfJoysticks; i++)
+    {
+        if(SDL_IsGameController(i))
+        {
+            SDL_GameController *controller = SDL_GameControllerOpen(i);
+            if(controller)
+            {
+                InputDevice *device = new InputDevice;
+                device->id = i;
+                device->type = gamecontroller;
+                device->name = SDL_GameControllerName(controller);
+                SDL_GameControllerEventState(SDL_ENABLE);
+                gamecontrollers->PushFront(device);
+            }
+            else
+            {
+                fprintf(stderr,"Could not open game controller %d : %s\n", i, SDL_GetError());
+            }
+        }
+        else
+        {
+            SDL_Joystick *controller = SDL_JoystickOpen(i);
+            if(controller)
+            {
+                InputDevice *device = new InputDevice;
+                device->id = i;
+                device->type = joystick;
+                device->name = SDL_JoystickName(controller);
+                SDL_JoystickEventState(SDL_ENABLE);
+                joysticks->PushFront(device);
+                printf("joystick %d found!\n", device->id);
+            }
+            else
+            {
+                fprintf(stderr,"Could not open joystick %d : %s\n", i, SDL_GetError());
+            }
+
+        }
+    }
 }
 
 /**
@@ -112,6 +168,10 @@ MediaLayer::~MediaLayer()
     alcCloseDevice(device);
     delete events;
     SDL_DestroyWindow(this->screen);
+    delete defaultKeyboard;
+    delete defaultMouse;
+    delete joysticks;
+    delete gamecontrollers;
 }
 
 /**
@@ -161,20 +221,26 @@ void MediaLayer::pollEvents()
             E.SetFirst();
             while(!E.IsLast())
             {
+                ListIterator<InputDevice> ig = ListIterator<InputDevice>(gamecontrollers);
+                ListIterator<InputDevice> ij = ListIterator<InputDevice>(joysticks);
                 EventHandle* currentEvent = (EventHandle*) E.GetCurrent();
                 switch(event.type)
                 {
                     case SDL_KEYDOWN:
-                        currentEvent->handleKeyDown(&event.key);
+                        currentEvent->handleButtonDown(defaultKeyboard, event.key.timestamp, event.key.keysym.scancode);
                         break;
                     case SDL_KEYUP:
-                        currentEvent->handleKeyUp(&event.key);
+                        currentEvent->handleButtonUp(defaultKeyboard, event.key.timestamp, event.key.keysym.scancode);
                         break;
+                    case SDL_TEXTINPUT:
+                        currentEvent->handleTextInput(&event.text);
+                        break;
+
                     case SDL_MOUSEBUTTONDOWN:
-                        currentEvent->handleMouseButtonDown(&event.button);
+                        currentEvent->handleButtonDown(defaultMouse, event.button.timestamp, event.button.button);
                         break;
                     case  SDL_MOUSEBUTTONUP:
-                        currentEvent->handleMouseButtonUp(&event.button);
+                        currentEvent->handleButtonUp(defaultMouse, event.button.timestamp, event.button.button);
                         break;
                     case SDL_MOUSEMOTION:
                         currentEvent->handleMouseMotion(&event.motion);
@@ -182,6 +248,7 @@ void MediaLayer::pollEvents()
                     case SDL_MOUSEWHEEL:
                         currentEvent->handleMouseWheel(&event.wheel);
                         break;
+
                     case SDL_CONTROLLERDEVICEADDED:
                         currentEvent->handleControllerDeviceAdded(&event.cdevice);
                         break;
@@ -191,15 +258,24 @@ void MediaLayer::pollEvents()
                     case SDL_CONTROLLERDEVICEREMAPPED:
                         currentEvent->handleControllerDeviceRemapped(&event.cdevice);
                         break;
-                    case SDL_CONTROLLERBUTTONDOWN:
-                        currentEvent->handleControllerButtonDown(&event.cbutton);
+                    case SDL_CONTROLLERBUTTONDOWN:;
+                        ig.SetFirst();
+                        while(!ig.IsLast() && ig.GetCurrent()->id != event.cbutton.which) ig.Next();
+                        if(ig.IsLast())
+                            fprintf(stderr,"Signal from unregisterd game controller %d\n", event.cbutton.which);
+                        currentEvent->handleButtonDown(ig.GetCurrent(), event.cbutton.timestamp, event.cbutton.button);
                         break;
                     case SDL_CONTROLLERBUTTONUP:
-                        currentEvent->handleControllerButtonUp(&event.cbutton);
+                        ig.SetFirst();
+                        while(!ig.IsLast() && ig.GetCurrent()->id != event.cbutton.which) ig.Next();
+                        if(ig.IsLast())
+                            fprintf(stderr,"Signal from unregisterd game controller %d\n", event.cbutton.which);
+                        currentEvent->handleButtonUp(ig.GetCurrent(), event.cbutton.timestamp, event.cbutton.button);
                         break;
                     case SDL_CONTROLLERAXISMOTION:
                         currentEvent->handleControllerAxis(&event.caxis);
                         break;
+
                     case SDL_JOYAXISMOTION:
                         currentEvent->handleJoystickAxis(&event.jaxis);
                         break;
@@ -210,10 +286,18 @@ void MediaLayer::pollEvents()
                         currentEvent->handleJoystickHat(&event.jhat);
                         break;
                     case SDL_JOYBUTTONUP:
-                        currentEvent->handleJoystickButtonUp(&event.jbutton);
+                        ij.SetFirst();
+                        while(!ij.IsLast() && ij.GetCurrent()->id != event.jbutton.which) ij.Next();
+                        if(ij.IsLast())
+                            fprintf(stderr,"Signal from unregisterd joystick %d\n", event.jbutton.which);
+                        currentEvent->handleButtonUp(ij.GetCurrent(), event.jbutton.timestamp, event.jbutton.button);
                         break;
                     case SDL_JOYBUTTONDOWN:
-                        currentEvent->handleJoystickButtonDown(&event.jbutton);
+                        ij.SetFirst();
+                        while(!ij.IsLast() && ij.GetCurrent()->id != event.jbutton.which) ij.Next();
+                        if(ij.IsLast())
+                            fprintf(stderr,"Signal from unregisterd joystick %d\n", event.jbutton.which);
+                        currentEvent->handleButtonDown(ij.GetCurrent(), event.jbutton.timestamp, event.jbutton.button);
                         break;
                     case SDL_JOYDEVICEADDED:
                         currentEvent->handleJoystickDeviceAdded(&event.jdevice);
@@ -221,6 +305,7 @@ void MediaLayer::pollEvents()
                     case SDL_JOYDEVICEREMOVED:
                         currentEvent->handleJoystickDeviceRemoved(&event.jdevice);
                         break;
+
                     case SDL_FINGERUP:
                         currentEvent->handleTouchUp(&event.tfinger);
                         break;
@@ -230,12 +315,11 @@ void MediaLayer::pollEvents()
                     case SDL_FINGERMOTION:
                         currentEvent->handleTouchMotion(&event.tfinger);
                         break;
+
                     case SDL_WINDOWEVENT:
                         currentEvent->handleWindow(&event.window);
                         break;
-                    case SDL_TEXTINPUT:
-                        currentEvent->handleTextInput(&event.text);
-                        break;
+
                     case SDL_QUIT:
                         currentEvent->handleQuit();
                         break;
@@ -373,33 +457,28 @@ void MediaLayer::MediaExit()
     SDL_Quit();
     Mix_CloseAudio();
     printf("Application closed \n");
-};
+}
 
 
 EventHandle::EventHandle()  {}
 EventHandle::~EventHandle() {}
 
 
-void EventHandle::handleKeyDown(SDL_KeyboardEvent *e)                           {}
-void EventHandle::handleKeyUp(SDL_KeyboardEvent *e)                             {}
 
-void EventHandle::handleMouseButtonUp(SDL_MouseButtonEvent *e)                  {}
-void EventHandle::handleMouseButtonDown(SDL_MouseButtonEvent *e)                {}
+void EventHandle::handleButtonUp(InputDevice *device, uint32_t timestamp, scancode_t scancode)     {}
+void EventHandle::handleButtonDown(InputDevice *device, uint32_t timestamp, scancode_t scancode)   {}
+
 void EventHandle::handleMouseMotion(SDL_MouseMotionEvent *e)                    {}
 void EventHandle::handleMouseWheel(SDL_MouseWheelEvent *e)                      {}
 
 void EventHandle::handleControllerDeviceAdded(SDL_ControllerDeviceEvent *e)     {}
 void EventHandle::handleControllerDeviceRemoved(SDL_ControllerDeviceEvent *e)   {}
 void EventHandle::handleControllerDeviceRemapped(SDL_ControllerDeviceEvent *e)  {}
-void EventHandle::handleControllerButtonUp(SDL_ControllerButtonEvent *e)        {}
-void EventHandle::handleControllerButtonDown(SDL_ControllerButtonEvent *e)      {}
 void EventHandle::handleControllerAxis(SDL_ControllerAxisEvent *e)              {}
 
 void EventHandle::handleJoystickAxis(SDL_JoyAxisEvent *e)                       {}
 void EventHandle::handleJoystickBall(SDL_JoyBallEvent *e)                       {}
 void EventHandle::handleJoystickHat(SDL_JoyHatEvent *e)                         {}
-void EventHandle::handleJoystickButtonUp(SDL_JoyButtonEvent *e)                 {}
-void EventHandle::handleJoystickButtonDown(SDL_JoyButtonEvent *e)               {}
 void EventHandle::handleJoystickDeviceAdded(SDL_JoyDeviceEvent *e)              {}
 void EventHandle::handleJoystickDeviceRemoved(SDL_JoyDeviceEvent *e)            {}
 

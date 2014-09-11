@@ -88,76 +88,77 @@ void Controls::screenshot(const char* filename, float width, float height)
 
 }
 
-void Controls::handleKeyDown(SDL_KeyboardEvent *e)
+void Controls::handleButtonDown(InputDevice *device, uint32_t timestamp, scancode_t scancode)
 {
-    switch(e->keysym.sym)
+    switch(scancode)
     {
-        case SDLK_ESCAPE:   // Exit programm if Escape is pressed.
+        case SDL_SCANCODE_ESCAPE:   // Exit programm if Escape is pressed.
             handleQuit();
             break;
-        case SDLK_w:
+        case SDL_SCANCODE_W:
             move_foreward=true;
             break;
-        case SDLK_s:
+        case SDL_SCANCODE_S:
             move_backward=true;
             break;
-        case SDLK_a:
+        case SDL_SCANCODE_A:
             move_left=true;
             break;
-        case SDLK_d:
+        case SDL_SCANCODE_D:
             move_right=true;
             break;
-        case SDLK_SPACE:
+        case SDL_SCANCODE_SPACE:
             move_up=true;
             break;
-        case SDLK_LSHIFT:
+        case SDL_SCANCODE_LSHIFT:
             move_down=true;
             break;
-        case SDLK_f:
+        case SDL_SCANCODE_F:
             printFPS = toggle(printFPS);
             break;
-        case SDLK_g:
+        case SDL_SCANCODE_G:
             ghost_mode = toggle(ghost_mode);
             break;
-        case SDLK_h:
+        case SDL_SCANCODE_H:
             options->hud = toggle(options->hud);
             break;
-        case SDLK_e:
-            move_cube();
-            break;
-        case SDLK_p:
+        case SDL_SCANCODE_P:
             screenshot("screenshot.bmp", options->width, options->height);
             break;
-        case SDLK_r:
+        case SDL_SCANCODE_R:
             shotSound->toggleLoop();
             break;
+        case SDL_BUTTON_LEFT:
+            fire = true;
+            break;
         default:
+            printf("scancode: %d\n", scancode);
             break;
 
     }
 }
 
 
-void Controls::handleKeyUp(SDL_KeyboardEvent *e)
+void Controls::handleButtonUp(InputDevice *device, uint32_t timestamp, scancode_t scancode)
 {
-    switch(e->keysym.sym)
+    switch(scancode)
     {
-        case SDLK_w:
+        case SDL_SCANCODE_W:
             move_foreward=false;
             break;
-        case SDLK_s:
+        case SDL_SCANCODE_S:
             move_backward=false;
             break;
-        case SDLK_a:
+        case SDL_SCANCODE_A:
             move_left=false;
             break;
-        case SDLK_d:
+        case SDL_SCANCODE_D:
             move_right=false;
             break;
-        case SDLK_SPACE:
+        case SDL_SCANCODE_SPACE:
             move_up=false;
             break;
-        case SDLK_LSHIFT:
+        case SDL_SCANCODE_LSHIFT:
             move_down=false;
             break;
         default:
@@ -165,17 +166,6 @@ void Controls::handleKeyUp(SDL_KeyboardEvent *e)
     }
 }
 
-void Controls::handleMouseButtonDown(SDL_MouseButtonEvent *e)
-{
-    switch(e->button)
-    {
-        case SDL_BUTTON_LEFT:
-            fire = true;
-            break;
-        default:
-            break;
-    }
-}
 
 void Controls::handleMouseMotion(SDL_MouseMotionEvent *e)
 {
@@ -308,13 +298,6 @@ void Controls::shoot_handler(Camera *cam)
 
         mainLevel->addObject(newObject);
     }
-}
-
-
-void Controls::move_cube()
-{
-    vector *testForce = new vector(3.0, 0, 0);
-    iccube->physObj->addForce(testForce);
 }
 
 

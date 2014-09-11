@@ -118,19 +118,6 @@ int main(int argc, char *argv[]){
     if(engineSettings.hud)
         mainwindow->addHUD(&testHUD);
 
-    SDL_JoystickEventState(SDL_ENABLE);
-    SDL_GameControllerEventState(SDL_ENABLE);
-
-    int noj = SDL_NumJoysticks();
-
-    printf("num of joysticks: %d\n", noj);
-
-    for(int i = 0; i < noj; ++i)
-    {
-        SDL_Joystick *joy = SDL_JoystickOpen(i);
-        printf("nr %d = %s\n", i, SDL_JoystickName(joy));
-    }
-
     while(render){ //render
         if(printFPS)
             mainLevel->fps->print();
