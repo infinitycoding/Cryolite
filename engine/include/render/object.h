@@ -117,6 +117,7 @@ class Object                // the main object
     public:
 
         Object();                                                           // zero-constructor, don't use!
+        Object(const char *objname);                               // constructo only with object name
         Object(const char *filename, const char *objname);               // don't know why somebody should want to do this, but he can!
         Object(const char *filename, const char *objname, vector pos);   // standart constructor
         ~Object();                                                          // destructor

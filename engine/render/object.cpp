@@ -527,11 +527,19 @@ Object::Object()
     initObject();
 }
 
+Object::Object(const char *objname)
+{
+    initObject();
+
+    objType = ObjTypeCache->searchObjectType(objname);
+    if(objType == NULL)
+        fprintf(stderr,"Object type\'%s\'' not found",objname);
+}
+
 
 Object::Object(const char *filename, const char *objname)
 {
     initObject();
-
     objType = ObjTypeCache->requestObjectType(filename, objname);
 }
 
