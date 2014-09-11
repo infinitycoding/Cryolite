@@ -65,8 +65,13 @@ int main(int argc, char *argv[]){
     }
 
     // Create camera, Global light and Input controler
-    Camera *Player = new Camera(NULL, vector(STARTING_X,STARTING_Y,STARTING_Z),vector(0,0,1),STANDART_NEARCLIP,STANDART_FARCLIP,engineSettings.fov,0,0,engineSettings.height,engineSettings.width);
+    Camera *Player = new Camera(NULL, vector(STARTING_X,STARTING_Y,STARTING_Z),vector(0,0,1),STANDART_NEARCLIP,STANDART_FARCLIP,engineSettings.fov);
     mainLevel->addCam(Player);
+
+    Viewport *gameView = new Viewport;
+    gameView->x = 0; gameView->y = 0; gameView->height = 480; gameView->width = 640;
+    gameView->lvl = mainLevel; gameView->cam = Player;
+    mainwindow->addViewport(gameView);
 
     Lamp *Sun = new Lamp();
     Sun->setDiffuseLight(10, 1, 0, 1.0);
